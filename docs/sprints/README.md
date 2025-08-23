@@ -3,33 +3,57 @@
 ## Visão Geral
 Este documento acompanha o desenvolvimento do projeto FalaAtípica através das sprints organizadas por fases.
 
+## 📊 Progresso Atual
+
+### **Status Geral do Projeto:**
+- **Fase Atual**: Fase 1 - KIDS (React Native)
+- **Sprint Atual**: Sprint 1.3 - Jogos e Atividades
+- **Progresso**: 85% da Fase 1 concluída
+
+### **Últimas Atualizações:**
+- ✅ **Sprint 1.1**: Estrutura Base - **100% Concluída**
+- ✅ **Sprint 1.2**: Autenticação e Cadastro - **100% Concluída**
+- 🟡 **Sprint 1.3**: Jogos e Atividades - **80% Concluída**
+
+### **Próximos Passos:**
+1. **Completar Jogo "Adivinha"**: Integrar assets e finalizar lógica
+2. **Implementar Sistema de Progresso**: Tracking de acertos/erros
+3. **Iniciar Fase 2**: TUTORS (React Native)
+
+### **Tarefas Pendentes:**
+- [ ] Assets para jogo "Adivinha" (sombras e imagens)
+- [ ] Lógica completa do jogo "Adivinha"
+- [ ] Sistema de pontuação/progresso
+- [ ] Testes finais da aplicação KIDS
+
 ## Fases do Projeto
 
 ### Fase 1: KIDS (React Native)
-**Status**: Pendente
+**Status**: 🟡 Em Andamento
 **Duração**: 2-3 sprints
 **Objetivo**: Implementar aplicação KIDS completa
 
 #### Sprint 1.1: Estrutura Base
-- [ ] Setup do projeto React Native
-- [ ] Configuração do TypeScript
-- [ ] Estrutura de pastas
-- [ ] Navegação básica
-- [ ] Tela de Início
-- [ ] Tela de Login
+- [x] Setup do projeto React Native
+- [x] Configuração do TypeScript
+- [x] Estrutura de pastas
+- [x] Navegação básica
+- [x] Tela de Início
+- [x] Tela de Login
 
 #### Sprint 1.2: Autenticação e Cadastro
-- [ ] Tela de Solicitar Acesso (Parte 1)
-- [ ] Tela de Solicitar Acesso (Parte 2)
-- [ ] Dashboard inicial
-- [ ] Cartões de jogos
-- [ ] Integração com MOCAP/KIDS
+- [x] Tela de Solicitar Acesso (Parte 1)
+- [x] Tela de Solicitar Acesso (Parte 2)
+- [x] Dashboard inicial
+- [x] Cartões de jogos
+- [x] Integração com Mockup/KIDS
 
 #### Sprint 1.3: Jogos e Atividades
-- [ ] Tela de Categorias
-- [ ] Tela de Itens da categoria
-- [ ] Jogo "Adivinha"
-- [ ] Jogo "Jogo das Palavras"
+- [x] Tela de Categorias
+- [x] Tela de Itens da categoria
+- [x] Jogo "Adivinha" (Layout implementado)
+- [ ] Jogo "Adivinha" (Assets e lógica completa)
+- [x] Jogo "Jogo das Palavras"
 - [ ] Sistema de progresso
 
 ### Fase 2: TUTORS (React Native)
@@ -114,10 +138,10 @@ Este documento acompanha o desenvolvimento do projeto FalaAtípica através das 
 ### Critérios Específicos por Fase
 
 #### Fase 1 (KIDS)
-- [ ] Jogos funcionais e interativos
+- [x] Jogos funcionais e interativos (Parcial - Adivinha precisa de assets)
 - [ ] Progresso sendo registrado
-- [ ] Interface amigável para crianças
-- [ ] Feedback positivo implementado
+- [x] Interface amigável para crianças
+- [x] Feedback positivo implementado (Cores verde/vermelho no Adivinha)
 
 #### Fase 2 (TUTORS)
 - [ ] Relatórios básicos funcionais
