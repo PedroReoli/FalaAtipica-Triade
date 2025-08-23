@@ -1,0 +1,104 @@
+FALAATÍPICA - SISTEMA DE AUXÍLIO PARA CRIANÇAS COM ATRASO DE FALA
+
+1. INTRODUÇÃO
+
+Este trabalho apresenta o desenvolvimento de um sistema completo de auxílio para crianças com atraso de fala, desenvolvido como projeto de TCC.
+
+1.1. Contextualização
+
+O atraso de fala é uma condição que afeta muitas crianças em desenvolvimento, requerendo intervenção especializada e acompanhamento contínuo.
+
+1.2. Problema
+
+A falta de ferramentas digitais adequadas para auxiliar no desenvolvimento da fala de crianças com atraso dificulta o processo de reabilitação.
+
+2. OBJETIVOS
+
+2.1. Objetivo Geral
+
+Desenvolver um sistema completo de auxílio para crianças com atraso de fala, composto por três aplicações complementares.
+
+2.2. Objetivos Específicos
+
+- Criar aplicação KIDS para crianças com interface amigável
+- Desenvolver aplicação TUTORS para profissionais de fonoaudiologia
+- Implementar aplicação PRO para profissionais avançados
+- Estabelecer sistema de gamificação para motivação
+- Implementar relatórios de progresso
+
+3. METODOLOGIA
+
+3.1. Abordagem
+
+O projeto utiliza metodologia ágil com desenvolvimento em fases, começando pela aplicação KIDS.
+
+3.2. Tecnologias
+
+- React Native para aplicações móveis
+- React para aplicação web
+- TypeScript para tipagem
+- Tailwind CSS para estilização
+- Supabase para backend
+
+4. DESENVOLVIMENTO
+
+4.1. Fase 1 - KIDS
+
+A primeira fase foca no desenvolvimento da aplicação para crianças, com interface simples e jogos educativos.
+
+4.2. Fase 2 - TUTORS
+
+A segunda fase desenvolve a aplicação para profissionais, com relatórios básicos e acompanhamento.
+
+4.3. Fase 3 - PRO
+
+A terceira fase implementa a aplicação avançada com relatórios detalhados e analytics.
+
+4.4. Fase 4 - Integração
+
+A fase final integra todas as aplicações com backend Supabase.
+
+5. RESULTADOS ESPERADOS
+
+5.1. Funcionalidades
+
+O sistema deve oferecer jogos educativos, relatórios de progresso e ferramentas de análise.
+
+5.2. Benefícios
+
+- Melhoria no desenvolvimento da fala das crianças
+- Ferramentas para profissionais de fonoaudiologia
+- Sistema de acompanhamento eficiente
+- Interface acessível e intuitiva
+
+6. CONSIDERAÇÕES FINAIS
+
+Este projeto representa uma solução inovadora para auxiliar crianças com atraso de fala, combinando tecnologia e conhecimento especializado.
+
+6.1. Limitações
+
+O sistema tem limitações iniciais relacionadas ao uso de dados mockados, que serão superadas na fase 4.
+
+6.2. Trabalhos Futuros
+
+Futuras versões podem incluir inteligência artificial para personalização e análise avançada de progresso.
+
+REFERÊNCIAS
+
+[1] SILVA, João. Desenvolvimento de Aplicações Mobile. 2024.
+[2] SANTOS, Maria. Fonoaudiologia Digital. 2023.
+[3] COSTA, Pedro. Gamificação na Educação. 2024.
+
+APÊNDICES
+
+APÊNDICE A - Mockups das Telas
+
+[Imagem da tela de login da aplicação KIDS]
+
+APÊNDICE B - Estrutura de Dados
+
+[Diagrama da estrutura do banco de dados]
+
+APÊNDICE C - Fluxogramas
+
+[Fluxograma do processo de cadastro de criança]

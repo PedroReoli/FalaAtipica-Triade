@@ -1,0 +1,104 @@
+[
+  {
+    "id": "child-001",
+    "name": "João Silva",
+    "age": 6,
+    "responsible": "Maria Silva",
+    "contact": "maria.silva@email.com",
+    "tutorId": "tutor-001",
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2024-01-20T14:45:00.000Z",
+    "avatar": "👦",
+    "level": 2,
+    "totalPoints": 150,
+    "lastActivity": "2024-01-20T14:45:00.000Z",
+    "progress": {
+      "completedGames": 12,
+      "totalGames": 20,
+      "averageScore": 85,
+      "streak": 5
+    },
+    "achievements": [
+      {
+        "id": "ach-001",
+        "title": "Primeiro Jogo",
+        "description": "Completou o primeiro jogo",
+        "unlockedAt": "2024-01-16T10:00:00.000Z"
+      },
+      {
+        "id": "ach-002",
+        "title": "Série de Vitórias",
+        "description": "Completou 5 jogos seguidos",
+        "unlockedAt": "2024-01-18T15:30:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "child-002",
+    "name": "Ana Costa",
+    "age": 5,
+    "responsible": "Pedro Costa",
+    "contact": "pedro.costa@email.com",
+    "tutorId": "tutor-002",
+    "createdAt": "2024-01-10T09:15:00.000Z",
+    "updatedAt": "2024-01-18T16:20:00.000Z",
+    "avatar": "👧",
+    "level": 1,
+    "totalPoints": 75,
+    "lastActivity": "2024-01-18T16:20:00.000Z",
+    "progress": {
+      "completedGames": 8,
+      "totalGames": 15,
+      "averageScore": 70,
+      "streak": 2
+    },
+    "achievements": [
+      {
+        "id": "ach-001",
+        "title": "Primeiro Jogo",
+        "description": "Completou o primeiro jogo",
+        "unlockedAt": "2024-01-11T14:20:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "child-003",
+    "name": "Lucas Santos",
+    "age": 7,
+    "responsible": "Fernanda Santos",
+    "contact": "fernanda.santos@email.com",
+    "tutorId": "tutor-001",
+    "createdAt": "2024-01-12T11:00:00.000Z",
+    "updatedAt": "2024-01-19T13:30:00.000Z",
+    "avatar": "👦",
+    "level": 3,
+    "totalPoints": 220,
+    "lastActivity": "2024-01-19T13:30:00.000Z",
+    "progress": {
+      "completedGames": 18,
+      "totalGames": 25,
+      "averageScore": 92,
+      "streak": 8
+    },
+    "achievements": [
+      {
+        "id": "ach-001",
+        "title": "Primeiro Jogo",
+        "description": "Completou o primeiro jogo",
+        "unlockedAt": "2024-01-13T09:45:00.000Z"
+      },
+      {
+        "id": "ach-002",
+        "title": "Série de Vitórias",
+        "description": "Completou 5 jogos seguidos",
+        "unlockedAt": "2024-01-15T16:10:00.000Z"
+      },
+      {
+        "id": "ach-003",
+        "title": "Mestre das Palavras",
+        "description": "Completou todos os jogos de palavras",
+        "unlockedAt": "2024-01-17T11:30:00.000Z"
+      }
+    ]
+  }
+]

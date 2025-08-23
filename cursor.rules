@@ -1,0 +1,238 @@
+# Cursor Rules - FalaAtípica (TCC)
+
+## Project Overview
+Este é um projeto de TCC que desenvolve um sistema completo de auxílio para crianças com atraso de fala. O sistema consiste em três aplicações complementares, cada uma direcionada a um público específico e com funcionalidades adaptadas às suas necessidades.
+
+## Cores da Aplicação - PADRÃO OBRIGATÓRIO
+**EXTREMAMENTE IMPORTANTE**: As cores da aplicação devem ser EXCLUSIVAMENTE:
+
+### Azul
+```jsx
+#1e88e5
+```
+
+### Verde
+```jsx
+#43a047
+```
+
+### Vermelho
+```jsx
+#e53935
+```
+
+### Amarelo
+```jsx
+#fbc02d
+```
+
+### Cor de Fundo - fundo azul
+```jsx
+#054776
+```
+
+### Cor de fundo - Branco geada
+```jsx
+#f4f6ff
+```
+
+### Tipografia
+- **Texto preto**: `#3c3c3c`
+- **Texto branco**: Quando fundo for azul (`#054776`)
+- **Padrão**: Fundo azul = fonte branca
+
+## Project Structure
+```
+FalaAtipica-Triade/
+├── Kids/                    # Aplicação para crianças (React Native)
+├── Pro/                     # Aplicação para profissionais avançados (React)
+├── Tutors/                  # Aplicação para doutores/fonoaudiólogos (React Native)
+├── MOCAP/                   # Dados mockados centralizados
+│   ├── KIDS/               # Mocks específicos para Kids
+│   ├── TUTORS/             # Mocks específicos para Tutors
+│   └── PRO/                # Mocks específicos para Pro
+├── docs/                    # Documentação completa
+│   ├── RegraDeNegocios/    # Regras de negócio
+│   ├── sprints/            # Documentação de sprints
+│   ├── mockups/            # Mockups das telas
+│   ├── api/                # Documentação da API
+│   └── deployment/         # Guias de deploy
+├── auto/                   # Automações em Python e outras ferramentas
+└── .gitattributes
+```
+
+## Development Guidelines
+
+### Code Style
+- Use English for variable names, function names, and code
+- Use Portuguese for comments and documentation
+- Follow camelCase for variables and functions
+- Use PascalCase for components and classes
+- Use kebab-case for file names
+- Use UPPER_SNAKE_CASE for constants
+
+### UI/UX Preferences
+- Use Tailwind CSS as primary styling framework
+- Create transparent cards with border colors
+- Implement hover animations: left-to-right fill
+- **CRÍTICO**: Use EXCLUSIVELY the color palette defined above
+- Prioritize mobile-first responsive design
+- **SEMPRE use uma lib de ícones (Lucide, Heroicons, etc.) - NUNCA use emojis**
+- Prefer compact content layouts
+- Use thicker borders and visible font colors
+- **CRÍTICO**: NÃO execute comandos como "npm run web/dev" automaticamente - APENAS quando o usuário pedir
+
+### Component Structure
+- Create reusable components in each module
+- Use transparent backgrounds with border styling
+- Implement hover effects with color transitions
+- Follow mobile-first responsive breakpoints
+
+### File Organization
+- Keep configuration files in settings/ folder
+- Use logical naming for config files (app.config, server.config)
+- Organize components by functionality
+- Maintain separate documentation for each module
+
+### Development Workflow
+- Make bulk changes all at once without waiting for confirmations
+- Use conventional commits with English prefixes and Portuguese descriptions
+- Follow semantic versioning (MAJOR.MINOR.PATCH)
+- Update documentation after changes
+- Perform post-change code reviews
+
+### Technical Preferences
+- Avoid unit tests unless specifically requested
+- Use Swagger only for robust backends or when requested
+- Prefer integration tests over unit tests
+- Focus on functionality over test coverage
+
+## Documentation Reading Protocol
+
+### Obrigatório Antes de Qualquer Desenvolvimento
+1. **SEMPRE** ler o README.md principal do projeto
+2. **SEMPRE** ler a documentação específica da aplicação em docs/
+3. **SEMPRE** consultar cursor.rules para regras do projeto
+4. **SEMPRE** verificar MOCAP/ para estrutura de dados
+5. **SEMPRE** revisar regras de negócio em docs/RegraDeNegocios/
+
+### Ordem de Leitura
+1. README.md (visão geral)
+2. cursor.rules (regras técnicas)
+3. docs/RegraDeNegocios/ (regras de negócio)
+4. docs/[aplicacao]/README.md (documentação específica)
+5. MOCAP/[aplicacao]/ (dados mockados)
+
+### Automação (Pasta auto/)
+- **SEMPRE** consultar scripts de automação antes de tarefas repetitivas
+- **SEMPRE** usar automações existentes quando disponíveis
+- **SEMPRE** documentar novas automações criadas
+
+## Module-Specific Rules
+
+### Kids Module (React Native)
+- **Público**: Crianças com atraso de fala (3-12 anos)
+- **Foco**: Mínima interação, apenas jogos educativos
+- **Objetivo**: Estimular o desenvolvimento da fala através de atividades lúdicas
+- **Interface**: Amigável para crianças, elementos grandes e coloridos
+- **Jogos**: "Adivinha" e "Jogo das Palavras"
+- **Acessibilidade**: Tamanhos de toque adequados para crianças
+
+### Tutors Module (React Native)
+- **Público**: Doutores/Fonoaudiólogos
+- **Foco**: Relatórios básicos e acompanhamento de conquistas
+- **Objetivo**: Permitir que profissionais acompanhem o progresso das crianças
+- **Interface**: Intuitiva para profissionais não especialistas em tecnologia
+- **Funcionalidades**: Visualização de progresso, relatórios simples, dicas
+
+### Pro Module (React)
+- **Público**: Profissionais avançados
+- **Foco**: Relatórios detalhados e contato direto com desenvolvimento
+- **Objetivo**: Fornecer ferramentas avançadas para análise e acompanhamento
+- **Interface**: Avançada com recursos técnicos
+- **Funcionalidades**: Relatórios detalhados, analytics, configurações avançadas
+
+## Fases de Desenvolvimento
+
+### Fase 1: KIDS (React Native)
+- Setup do projeto React Native com TypeScript
+- Implementação das telas conforme mockups
+- Navegação completa
+- Consumo de dados MOCAP/KIDS
+- Jogos funcionais
+
+### Fase 2: TUTORS (React Native)
+- Setup do projeto React Native com TypeScript
+- Implementação das telas conforme mockups
+- Navegação completa
+- Consumo de dados MOCAP/TUTORS
+- Relatórios básicos
+
+### Fase 3: PRO (React)
+- Setup do projeto React com TypeScript
+- Implementação das telas conforme mockups
+- Navegação e placeholders
+- Consumo de dados MOCAP/PRO
+- Relatórios avançados
+
+### Fase 4: Integração Supabase
+- Substituição do MOCAP por Supabase
+- Implementação de backend
+- Sincronização entre aplicações
+
+## Dados Mockados (MOCAP)
+
+### Estrutura
+- **MOCAP/KIDS/**: Dados específicos para aplicação Kids
+- **MOCAP/TUTORS/**: Dados específicos para aplicação Tutors
+- **MOCAP/PRO/**: Dados específicos para aplicação Pro
+
+### Formato
+- Arquivos JSON simples
+- Nomenclatura: camelCase.json
+- Estrutura consistente entre aplicações
+- IDs únicos para relacionamentos
+
+### Migração
+- Fase 1-3: Consumo de dados MOCAP
+- Fase 4: Substituição por Supabase
+- Manter compatibilidade durante transição
+
+## Regras de Negócio Críticas
+
+### Cores da Aplicação
+**EXTREMAMENTE IMPORTANTE**: As cores da aplicação devem ser EXCLUSIVAMENTE as definidas no início deste documento.
+
+### Hierarquia de Acesso
+- **KIDS**: Acesso apenas aos jogos e atividades
+- **TUTORS**: Acesso aos dados das crianças que acompanham
+- **PRO**: Acesso completo ao sistema e contato com desenvolvimento
+
+### Acessibilidade
+- Elementos de toque com tamanho mínimo de 44px
+- Contraste adequado entre texto e fundo
+- Hierarquia visual clara
+- Textos legíveis e apropriados para a idade
+
+## Documentation
+- Maintain business rules in docs/RegraDeNegocios/
+- Track sprint progress in docs/sprints/
+- Update README for each module
+- Document API changes when applicable
+- Maintain mockups documentation in docs/mockups/
+- Document automation scripts in auto/
+
+## Git Configuration
+- Use .gitattributes for line ending normalization
+- Follow conventional commit format
+- Maintain clean commit history
+- Document breaking changes clearly
+
+## Critérios de Aceite
+- Todas as telas renderizadas conforme mockups
+- Navegação funcional
+- Dados visíveis vindos do MOCAP
+- Sem erros de runtime
+- Acessibilidade básica implementada
+- Respeito às cores definidas
+- Interface responsiva e mobile-first
