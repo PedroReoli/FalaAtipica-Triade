@@ -6,6 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Image } from 'lucide-react-native';
 import { InternalHeader } from '../components/InternalHeader';
 import { BottomNavigation } from '../components/BottomNavigation';
+
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
@@ -119,6 +120,8 @@ export const AdivinhaScreen: React.FC = () => {
         onHome={handleHome}
         homeActive={false}
       />
+      
+
     </SafeAreaView>
   );
 };
