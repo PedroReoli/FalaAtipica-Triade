@@ -1,23 +1,25 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Mail, Smartphone, Star, Users, GraduationCap } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
-import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const contactInfo = [
-  { id: '1', title: 'Email', value: 'suporte@falaatipica.com', icon: '📧' },
-  { id: '2', title: 'Instagram', value: '@falaatipica', icon: '📱' },
+  { id: '1', title: 'Email', value: 'suporte@falaatipica.com', icon: Mail },
+  { id: '2', title: 'Instagram', value: '@falaatipica', icon: Smartphone },
 ];
 
 const badges = [
-  { id: '1', title: 'Suporte Premium', description: 'Atendimento prioritário', icon: '⭐', available: true },
-  { id: '2', title: 'Comunidade', description: 'Grupo de tutores', icon: '👥', available: true },
-  { id: '3', title: 'Webinar', description: 'Treinamentos mensais', icon: '🎓', available: false },
+  { id: '1', title: 'Suporte Premium', description: 'Atendimento prioritário', icon: Star, available: true },
+  { id: '2', title: 'Comunidade', description: 'Grupo de tutores', icon: Users, available: true },
+  { id: '3', title: 'Webinar', description: 'Treinamentos mensais', icon: GraduationCap, available: false },
 ];
 
 export const SupportScreen: React.FC = () => {
@@ -37,9 +39,18 @@ export const SupportScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <InternalHeader title="Suporte" />
+    <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
+      <Navbar 
+        title="Suporte"
+        onBack={handleBack}
+        showBackButton={true}
+        showLogo={true}
+      />
       
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Entre em Contato</Text>
@@ -49,59 +60,62 @@ export const SupportScreen: React.FC = () => {
 
         {/* Informações de Contato */}
         <View style={styles.contactSection}>
-          {contactInfo.map((contact) => (
-            <TouchableOpacity
-              key={contact.id}
-              style={styles.contactCard}
-              onPress={() => handleContactPress(contact.title, contact.value)}
-            >
-              <Text style={styles.contactIcon}>{contact.icon}</Text>
-              <View style={styles.contactInfo}>
-                <Text style={styles.contactTitle}>{contact.title}</Text>
-                <Text style={styles.contactValue}>{contact.value}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          {contactInfo.map((contact) => {
+            const IconComponent = contact.icon;
+            return (
+              <TouchableOpacity
+                key={contact.id}
+                style={styles.contactCard}
+                onPress={() => handleContactPress(contact.title, contact.value)}
+              >
+                <IconComponent size={24} color={COLORS.GREEN} />
+                <View style={styles.contactInfo}>
+                  <Text style={styles.contactTitle}>{contact.title}</Text>
+                  <Text style={styles.contactValue}>{contact.value}</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         <Text style={styles.title}>Recursos</Text>
         
         {/* Lista de Badges */}
         <View style={styles.badgesList}>
-          {badges.map((badge) => (
-            <TouchableOpacity
-              key={badge.id}
-              style={[styles.badgeCard, !badge.available && styles.badgeLocked]}
-              onPress={() => handleBadgePress(badge.id)}
-            >
-              <Text style={styles.badgeIcon}>{badge.icon}</Text>
-              <View style={styles.badgeInfo}>
-                <Text style={[styles.badgeTitle, !badge.available && styles.badgeTitleLocked]}>
-                  {badge.title}
-                </Text>
-                <Text style={[styles.badgeDescription, !badge.available && styles.badgeDescriptionLocked]}>
-                  {badge.description}
-                </Text>
-              </View>
-              {badge.available && <Text style={styles.badgeAvailable}>Disponível</Text>}
-            </TouchableOpacity>
-          ))}
+          {badges.map((badge) => {
+            const IconComponent = badge.icon;
+            return (
+              <TouchableOpacity
+                key={badge.id}
+                style={[styles.badgeCard, !badge.available && styles.badgeLocked]}
+                onPress={() => handleBadgePress(badge.id)}
+              >
+                <IconComponent size={32} color={badge.available ? COLORS.GREEN : COLORS.YELLOW} />
+                <View style={styles.badgeInfo}>
+                  <Text style={[styles.badgeTitle, !badge.available && styles.badgeTitleLocked]}>
+                    {badge.title}
+                  </Text>
+                  <Text style={[styles.badgeDescription, !badge.available && styles.badgeDescriptionLocked]}>
+                    {badge.description}
+                  </Text>
+                </View>
+                {badge.available && <Text style={styles.badgeAvailable}>Disponível</Text>}
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </ScrollView>
 
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
+      <Footer 
+        activeTab="home"
+        onHomePress={handleHome}
+        onProfilesPress={() => {}}
       />
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.BACKGROUND_WHITE,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 24,
@@ -132,12 +146,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  contactIcon: {
-    fontSize: 24,
-    marginRight: 16,
-  },
   contactInfo: {
     flex: 1,
+    marginLeft: 16,
   },
   contactTitle: {
     fontSize: 16,
@@ -165,12 +176,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.YELLOW,
     opacity: 0.6,
   },
-  badgeIcon: {
-    fontSize: 32,
-    marginRight: 16,
-  },
   badgeInfo: {
     flex: 1,
+    marginLeft: 16,
   },
   badgeTitle: {
     fontSize: 16,

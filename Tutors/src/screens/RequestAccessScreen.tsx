@@ -1,143 +1,192 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, SafeAreaView } from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../navigation/AppNavigator';
+import { User, Mail } from 'lucide-react-native';
+import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
+import { Navbar } from '../components/Navbar';
 import { COLORS } from '../constants/colors';
-import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
+import { RootStackParamList } from '../navigation/AppNavigator';
+import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
-type NavigationProp = StackNavigationProp<RootStackParamList>;
+type RequestAccessScreenNavigationProp = StackNavigationProp<RootStackParamList, 'RequestAccess'>;
 
 export const RequestAccessScreen: React.FC = () => {
-  const navigation = useNavigation<NavigationProp>();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [profession, setProfession] = useState('');
+  const navigation = useNavigation<RequestAccessScreenNavigationProp>();
 
-  const handleRequestAccess = () => {
-    // TODO: Implementar lógica de solicitação de acesso
-    navigation.goBack();
-  };
-
-  const handleHome = () => {
-    navigation.navigate('Splash');
+  const handleEmail = () => {
+    const email = 'pedrosousa2160@gmail.com';
+    const subject = 'Solicitação de Acesso - FalaAtípica';
+    const body = 'Olá, sou [Preencha] e quero acesso ao FalaAtípica para acompanhar meu filho';
+    
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    Linking.openURL(mailtoUrl).catch(err => {
+      console.error('Erro ao abrir email:', err);
+    });
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <InternalHeader title="Solicitar Acesso" />
-      
-      <View style={styles.content}>
-        <Text style={styles.title}>Solicitar Acesso</Text>
-        <Text style={styles.subtitle}>
-          Preencha os dados abaixo para solicitar acesso ao FalaAtípica.
-        </Text>
-        
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Nome Completo</Text>
-            <TextInput
-              style={styles.input}
-              value={name}
-              onChangeText={setName}
-              placeholder="Digite seu nome completo"
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Digite seu email"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Profissão</Text>
-            <TextInput
-              style={styles.input}
-              value={profession}
-              onChangeText={setProfession}
-              placeholder="Ex: Fonoaudiólogo, Psicólogo"
-            />
-          </View>
-
-          <TouchableOpacity
-            style={styles.requestButton}
-            onPress={handleRequestAccess}
-          >
-            <Text style={styles.requestButtonText}>Solicitar Acesso</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
+    <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
+      {/* Navbar Component */}
+      <Navbar 
+        title="Solicitar Acesso"
+        onBack={() => navigation.goBack()}
+        showBackButton={true}
+        showLogo={true}
       />
-    </SafeAreaView>
+
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
+        {/* Título Principal */}
+        <Text style={styles.mainTitle}>Solicite seu Acesso ao FalaAtípica</Text>
+
+        {/* Card do CEO - ENTRE TÍTULO E TEXTO */}
+        <View style={styles.ceoCard}>
+          <View style={styles.ceoImage}>
+            <User size={24} color={COLORS.TEXT_WHITE} />
+          </View>
+          <View style={styles.ceoInfo}>
+            <Text style={styles.ceoTitle}>CEO</Text>
+            <Text style={styles.ceoName}>Pedro Lucas Reis</Text>
+          </View>
+        </View>
+
+        {/* Texto Explicativo */}
+        <Text style={styles.explanationText}>
+          Sabemos da importância e da sensibilidade envolvidas nesse processo. Por isso, o acesso à área de tutores não é liberado automaticamente. Essa etapa garante que o aplicativo seja utilizado de forma segura, consciente e alinhada ao seu propósito original:
+        </Text>
+
+        {/* Bullet Points */}
+        <View style={styles.bulletPoints}>
+          <Text style={styles.bulletPoint}>• Não substituímos terapias clínicas.</Text>
+          <Text style={styles.bulletPoint}>• Não somos um tratamento médico.</Text>
+          <Text style={styles.bulletPoint}>• Somos um apoio educacional e comunicacional.</Text>
+        </View>
+
+        {/* Instruções */}
+        <Text style={styles.instructionsText}>
+          Para solicitar acesso, clique no botão abaixo e nos envie um e-mail explicando brevemente como pretende usar o Fala Atípica.
+        </Text>
+
+        {/* Card de Email */}
+        <TouchableOpacity style={styles.emailCard} onPress={handleEmail}>
+          <View style={styles.emailIcon}>
+            <Mail size={24} color={COLORS.TEXT_WHITE} />
+          </View>
+          <View style={styles.emailInfo}>
+            <Text style={styles.emailLabel}>Solicitar Acesso</Text>
+            <Text style={styles.emailAddress}>Clique aqui para enviar sua solicitação</Text>
+          </View>
+        </TouchableOpacity>
+      </ScrollView>
+
+      <Footer 
+        activeTab="home"
+        onHomePress={() => navigation.navigate('Dashboard')}
+        onProfilesPress={() => {}}
+      />
+    </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  scrollView: {
     flex: 1,
-    backgroundColor: COLORS.BACKGROUND_WHITE,
   },
-  content: {
-    flex: 1,
+  contentContainer: {
     paddingHorizontal: 24,
-    paddingTop: 32,
+    paddingTop: 24,
+    paddingBottom: 24,
   },
-  title: {
+  mainTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 16,
     textAlign: 'center',
+    marginBottom: 20,
   },
-  subtitle: {
-    fontSize: 16,
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 32,
-    textAlign: 'center',
-    lineHeight: 24,
-  },
-  form: {
-    gap: 20,
-  },
-  inputContainer: {
-    gap: 8,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: COLORS.TEXT_BLACK,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: COLORS.GREEN,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 16,
-    backgroundColor: COLORS.TEXT_WHITE,
-  },
-  requestButton: {
-    backgroundColor: COLORS.BLUE,
-    paddingVertical: 16,
-    borderRadius: 8,
+  ceoCard: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 16,
+    backgroundColor: COLORS.BACKGROUND_BLUE,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
   },
-  requestButtonText: {
+  ceoImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: COLORS.BLUE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  ceoInfo: {
+    flex: 1,
+  },
+  ceoTitle: {
+    fontSize: 14,
     color: COLORS.TEXT_WHITE,
+    marginBottom: 4,
+  },
+  ceoName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: COLORS.TEXT_WHITE,
+  },
+  explanationText: {
     fontSize: 16,
-    fontWeight: '600',
+    color: COLORS.TEXT_BLACK,
+    lineHeight: 24,
+    marginBottom: 16,
+  },
+  bulletPoints: {
+    marginBottom: 20,
+  },
+  bulletPoint: {
+    fontSize: 16,
+    color: COLORS.TEXT_BLACK,
+    marginBottom: 8,
+    lineHeight: 22,
+  },
+  instructionsText: {
+    fontSize: 16,
+    color: COLORS.TEXT_BLACK,
+    lineHeight: 24,
+    marginBottom: 24,
+  },
+  emailCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 3,
+    borderColor: COLORS.BLUE,
+  },
+  emailIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: COLORS.BACKGROUND_BLUE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  emailInfo: {
+    flex: 1,
+  },
+  emailLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: COLORS.TEXT_BLACK,
+    marginBottom: 4,
+  },
+  emailAddress: {
+    fontSize: 14,
+    color: COLORS.TEXT_BLACK,
   },
 });
+

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Linking } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Mail } from 'lucide-react-native';
-import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
-import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+import { COLORS } from '../constants/colors';
+import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -37,9 +37,18 @@ export const LoginScreen: React.FC = () => {
     });
   };
 
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <InternalHeader title="Login" />
+    <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
+      <Navbar 
+        title="Login"
+        onBack={handleBack}
+        showBackButton={true}
+        showLogo={true}
+      />
 
       {/* Formulário de Login */}
       <View style={styles.formContainer}>
@@ -84,19 +93,16 @@ export const LoginScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
+      <Footer 
+        activeTab="home"
+        onHomePress={handleHome}
+        onProfilesPress={() => {}}
       />
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.BACKGROUND_WHITE,
-  },
   formContainer: {
     flex: 1,
     justifyContent: 'center',

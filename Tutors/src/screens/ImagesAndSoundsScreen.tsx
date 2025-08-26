@@ -1,21 +1,23 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Apple, Dog, Shirt, Toy, Running, Users, Star, Utensils, Heart, Baby, Activity } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
-import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const categories = [
-  { id: '1', title: 'Comidas', icon: '🍎', color: COLORS.BLUE },
-  { id: '2', title: 'Animais', icon: '🐶', color: COLORS.GREEN },
-  { id: '3', title: 'Roupas', icon: '👕', color: COLORS.RED },
-  { id: '4', title: 'Brinquedos', icon: '🧸', color: COLORS.YELLOW },
-  { id: '5', title: 'Ações', icon: '🏃', color: COLORS.BLUE },
-  { id: '6', title: 'Família', icon: '👨‍👩‍👧‍👦', color: COLORS.GREEN },
+  { id: '1', title: 'Comidas', icon: Utensils, color: COLORS.BLUE },
+  { id: '2', title: 'Animais', icon: Dog, color: COLORS.GREEN },
+  { id: '3', title: 'Roupas', icon: Shirt, color: COLORS.RED },
+  { id: '4', title: 'Brinquedos', icon: Baby, color: COLORS.YELLOW },
+  { id: '5', title: 'Ações', icon: Activity, color: COLORS.BLUE },
+  { id: '6', title: 'Família', icon: Heart, color: COLORS.GREEN },
 ];
 
 export const ImagesAndSoundsScreen: React.FC = () => {
@@ -35,28 +37,35 @@ export const ImagesAndSoundsScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <InternalHeader title="Imagens e Sons" />
+    <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
+      <Navbar 
+        title="Imagens e Sons"
+        onBack={handleBack}
+        showBackButton={true}
+        showLogo={true}
+      />
       
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Categorias</Text>
-        <Text style={styles.subtitle}>
-          Selecione uma categoria para acessar imagens e sons educativos.
-        </Text>
-
         {/* Grid de Categorias */}
         <View style={styles.categoriesGrid}>
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={[styles.categoryCard, { borderColor: category.color }]}
-              onPress={() => handleCategoryPress(category.id)}
-            >
-              <Text style={styles.categoryIcon}>{category.icon}</Text>
-              <Text style={styles.categoryTitle}>{category.title}</Text>
-            </TouchableOpacity>
-          ))}
+          {categories.map((category) => {
+            const IconComponent = category.icon;
+            return (
+              <TouchableOpacity
+                key={category.id}
+                style={[styles.categoryCard, { borderColor: category.color }]}
+                onPress={() => handleCategoryPress(category.id)}
+              >
+                <IconComponent size={32} color={category.color} />
+                <Text style={styles.categoryTitle}>{category.title}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         {/* Botão Premium */}
@@ -65,7 +74,7 @@ export const ImagesAndSoundsScreen: React.FC = () => {
             style={styles.premiumButton}
             onPress={handlePremiumPress}
           >
-            <Text style={styles.premiumIcon}>⭐</Text>
+            <Star size={32} color={COLORS.TEXT_BLACK} />
             <Text style={styles.premiumTitle}>Versão Premium</Text>
             <Text style={styles.premiumSubtitle}>
               Acesse conteúdo exclusivo e recursos avançados
@@ -74,35 +83,20 @@ export const ImagesAndSoundsScreen: React.FC = () => {
         </View>
       </ScrollView>
 
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
+      <Footer 
+        activeTab="home"
+        onHomePress={handleHome}
+        onProfilesPress={() => {}}
       />
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.BACKGROUND_WHITE,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 24,
     paddingTop: 24,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 24,
-    lineHeight: 24,
   },
   categoriesGrid: {
     flexDirection: 'row',
@@ -120,15 +114,12 @@ const styles = StyleSheet.create({
     minHeight: 120,
     justifyContent: 'center',
   },
-  categoryIcon: {
-    fontSize: 40,
-    marginBottom: 12,
-  },
   categoryTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: COLORS.TEXT_BLACK,
     textAlign: 'center',
+    marginTop: 12,
   },
   premiumSection: {
     marginBottom: 24,
@@ -141,14 +132,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.BLUE,
   },
-  premiumIcon: {
-    fontSize: 32,
-    marginBottom: 8,
-  },
   premiumTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: COLORS.TEXT_BLACK,
+    marginTop: 8,
     marginBottom: 4,
   },
   premiumSubtitle: {

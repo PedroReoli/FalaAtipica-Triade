@@ -1,207 +1,219 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Edit, Key, Smartphone, FileText, Shield, ChevronRight } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
-import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-const generalSettings = [
-  { id: '1', title: 'Alterar Senha', icon: '🔒', action: 'changePassword' },
-  { id: '2', title: 'Nova Conta', icon: '➕', action: 'newAccount' },
-  { id: '3', title: 'Sobre o App', icon: 'ℹ️', action: 'aboutApp' },
-  { id: '4', title: 'Termos de Uso', icon: '📄', action: 'terms' },
-  { id: '5', title: 'Assinatura', icon: '💳', action: 'subscription' },
-];
-
-const children = [
-  { id: '1', name: 'João Silva', age: 8, lastActivity: '2 horas atrás' },
-  { id: '2', name: 'Maria Santos', age: 6, lastActivity: '1 dia atrás' },
-  { id: '3', name: 'Pedro Costa', age: 7, lastActivity: '3 dias atrás' },
+const menuItems = [
+  {
+    id: '1',
+    title: 'Change Password',
+    icon: Key,
+    route: 'ChangePassword' as keyof RootStackParamList,
+  },
+  {
+    id: '2',
+    title: 'Cadastrar nova conta',
+    icon: Smartphone,
+    route: 'RegisterDevice' as keyof RootStackParamList,
+  },
+  {
+    id: '3',
+    title: 'Sobre o App',
+    icon: Smartphone,
+    route: 'AboutApp' as keyof RootStackParamList,
+  },
+  {
+    id: '4',
+    title: 'Termos e Privacidade',
+    icon: FileText,
+    route: 'TermsPrivacy' as keyof RootStackParamList,
+  },
+  {
+    id: '5',
+    title: 'Minha Assinatura',
+    icon: Shield,
+    route: 'Subscription' as keyof RootStackParamList,
+  },
 ];
 
 export const ProfileScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  const handleSettingPress = (action: string) => {
-    // TODO: Implementar ações das configurações
-    console.log('Configuração selecionada:', action);
-  };
-
-  const handleChildPress = (childId: string) => {
-    navigation.navigate('ChildProfile', { childId });
+  const handleMenuPress = (route: keyof RootStackParamList) => {
+    navigation.navigate(route);
   };
 
   const handleHome = () => {
     navigation.navigate('Dashboard');
   };
 
-  const renderSetting = ({ item }: { item: typeof generalSettings[0] }) => (
-    <TouchableOpacity
-      style={styles.settingCard}
-      onPress={() => handleSettingPress(item.action)}
-    >
-      <Text style={styles.settingIcon}>{item.icon}</Text>
-      <Text style={styles.settingTitle}>{item.title}</Text>
-      <Text style={styles.settingArrow}>→</Text>
-    </TouchableOpacity>
-  );
+  const handleBack = () => {
+    navigation.goBack();
+  };
 
-  const renderChild = ({ item }: { item: typeof children[0] }) => (
-    <TouchableOpacity
-      style={styles.childCard}
-      onPress={() => handleChildPress(item.id)}
-    >
-      <View style={styles.childInfo}>
-        <Text style={styles.childName}>{item.name}</Text>
-        <Text style={styles.childAge}>{item.age} anos</Text>
-      </View>
-      <Text style={styles.childActivity}>{item.lastActivity}</Text>
-    </TouchableOpacity>
-  );
+  const handleEditProfile = () => {
+    // TODO: Implementar edição de perfil
+    console.log('Editar perfil');
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <InternalHeader title="Perfil" />
+    <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
+      <Navbar 
+        title="Perfil"
+        onBack={handleBack}
+        showBackButton={true}
+        showLogo={true}
+      />
       
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Informações do Usuário */}
+      <View style={styles.content}>
+        {/* Seção do Usuário */}
         <View style={styles.userSection}>
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>Dr. Ana Silva</Text>
-            <Text style={styles.userRole}>Fonoaudióloga</Text>
-            <Text style={styles.userEmail}>ana.silva@email.com</Text>
+          <View style={styles.profileContainer}>
+            <View style={styles.profileImageContainer}>
+              <View style={styles.profileImage}>
+                {/* Placeholder para foto do usuário */}
+                <Text style={styles.profileInitial}>U</Text>
+              </View>
+              <TouchableOpacity 
+                style={styles.editButton}
+                onPress={handleEditProfile}
+              >
+                <Edit size={16} color={COLORS.TEXT_WHITE} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.userName}>[NOME DO USUARIO]</Text>
+            <Text style={styles.userEmail}>EMAIL DO USUARIO</Text>
           </View>
         </View>
 
         {/* Configurações Gerais */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Configurações Gerais</Text>
-          <FlatList
-            data={generalSettings}
-            renderItem={renderSetting}
-            keyExtractor={(item) => item.id}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-          />
+        <View style={styles.settingsHeader}>
+          <Text style={styles.settingsTitle}>Configuracoes Gerais</Text>
         </View>
 
-        {/* Lista de Crianças */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Crianças</Text>
-          <FlatList
-            data={children}
-            renderItem={renderChild}
-            keyExtractor={(item) => item.id}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-          />
+        {/* Menu de Opções */}
+        <View style={styles.menuSection}>
+          {menuItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.menuItem}
+                onPress={() => handleMenuPress(item.route)}
+              >
+                <View style={styles.menuItemLeft}>
+                  <IconComponent size={20} color={COLORS.TEXT_BLACK} />
+                  <Text style={styles.menuItemText}>{item.title}</Text>
+                </View>
+                <ChevronRight size={20} color={COLORS.TEXT_BLACK} />
+              </TouchableOpacity>
+            );
+          })}
         </View>
-      </ScrollView>
+      </View>
 
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
+      <Footer 
+        activeTab="profiles"
+        onHomePress={handleHome}
+        onProfilesPress={() => {}}
       />
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     flex: 1,
     backgroundColor: COLORS.BACKGROUND_WHITE,
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
   userSection: {
+    paddingHorizontal: 20,
     paddingVertical: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.YELLOW,
-    marginBottom: 24,
-  },
-  userInfo: {
     alignItems: 'center',
   },
-  userName: {
-    fontSize: 24,
+  profileContainer: {
+    alignItems: 'center',
+  },
+  profileImageContainer: {
+    position: 'relative',
+    marginBottom: 16,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#E0E0E0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInitial: {
+    fontSize: 32,
     fontWeight: 'bold',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 4,
   },
-  userRole: {
-    fontSize: 16,
-    color: COLORS.GREEN,
-    marginBottom: 8,
+  editButton: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: COLORS.BLUE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.BACKGROUND_WHITE,
   },
-  userEmail: {
-    fontSize: 14,
-    color: COLORS.BLUE,
-  },
-  section: {
-    marginBottom: 32,
-  },
-  sectionTitle: {
+  userName: {
     fontSize: 18,
     fontWeight: 'bold',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 16,
+    marginBottom: 4,
+    textTransform: 'uppercase',
   },
-  settingCard: {
-    backgroundColor: COLORS.TEXT_WHITE,
-    borderWidth: 1,
-    borderColor: COLORS.GREEN,
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
+  userEmail: {
+    fontSize: 14,
+    color: '#666666',
   },
-  settingIcon: {
-    fontSize: 20,
-    marginRight: 16,
+  settingsHeader: {
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
   },
-  settingTitle: {
+  settingsTitle: {
     fontSize: 16,
-    fontWeight: '500',
-    color: COLORS.TEXT_BLACK,
+    fontWeight: '600',
+    color: '#666666',
+  },
+  menuSection: {
     flex: 1,
   },
-  settingArrow: {
-    fontSize: 16,
-    color: COLORS.GREEN,
-  },
-  childCard: {
-    backgroundColor: COLORS.TEXT_WHITE,
-    borderWidth: 1,
-    borderColor: COLORS.YELLOW,
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 8,
+  menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
   },
-  childInfo: {
+  menuItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
   },
-  childName: {
+  menuItemText: {
     fontSize: 16,
-    fontWeight: '600',
     color: COLORS.TEXT_BLACK,
-  },
-  childAge: {
-    fontSize: 14,
-    color: COLORS.GREEN,
-    marginTop: 2,
-  },
-  childActivity: {
-    fontSize: 12,
-    color: COLORS.GREEN,
+    marginLeft: 16,
   },
 });

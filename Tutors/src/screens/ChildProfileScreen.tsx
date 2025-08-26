@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Trash2, Check } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
-import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 type ChildProfileRouteProp = RouteProp<RootStackParamList, 'ChildProfile'>;
 
 const generalSettings = [
-  { id: '1', title: 'Solicitar Exclusão', icon: '🗑️', action: 'requestDeletion' },
+  { id: '1', title: 'Solicitar Exclusão', icon: Trash2, action: 'requestDeletion' },
 ];
 
 const connectedDevices = [
@@ -47,16 +49,23 @@ export const ChildProfileScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
-  const renderSetting = ({ item }: { item: typeof generalSettings[0] }) => (
-    <TouchableOpacity
-      style={styles.settingCard}
-      onPress={() => handleSettingPress(item.action)}
-    >
-      <Text style={styles.settingIcon}>{item.icon}</Text>
-      <Text style={styles.settingTitle}>{item.title}</Text>
-      <Text style={styles.settingArrow}>→</Text>
-    </TouchableOpacity>
-  );
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
+  const renderSetting = ({ item }: { item: typeof generalSettings[0] }) => {
+    const IconComponent = item.icon;
+    return (
+      <TouchableOpacity
+        style={styles.settingCard}
+        onPress={() => handleSettingPress(item.action)}
+      >
+        <IconComponent size={20} color={COLORS.GREEN} />
+        <Text style={styles.settingTitle}>{item.title}</Text>
+        <Text style={styles.settingArrow}>→</Text>
+      </TouchableOpacity>
+    );
+  };
 
   const renderDevice = ({ item }: { item: typeof connectedDevices[0] }) => (
     <TouchableOpacity
@@ -72,8 +81,13 @@ export const ChildProfileScreen: React.FC = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <InternalHeader title="Perfil da Criança" />
+    <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
+      <Navbar 
+        title="Perfil da Criança"
+        onBack={handleBack}
+        showBackButton={true}
+        showLogo={true}
+      />
       
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Informações da Criança */}
@@ -122,19 +136,16 @@ export const ChildProfileScreen: React.FC = () => {
         </View>
       </ScrollView>
 
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
+      <Footer 
+        activeTab="profiles"
+        onHomePress={handleHome}
+        onProfilesPress={() => {}}
       />
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.BACKGROUND_WHITE,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 24,
@@ -209,15 +220,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  settingIcon: {
-    fontSize: 20,
-    marginRight: 16,
-  },
   settingTitle: {
     fontSize: 16,
     fontWeight: '500',
     color: COLORS.TEXT_BLACK,
     flex: 1,
+    marginLeft: 16,
   },
   settingArrow: {
     fontSize: 16,

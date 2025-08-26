@@ -12,6 +12,11 @@ import { SupportScreen } from '../screens/SupportScreen';
 import { TipsScreen } from '../screens/TipsScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { ChildProfileScreen } from '../screens/ChildProfileScreen';
+import { ChangePasswordScreen } from '../screens/ChangePasswordScreen';
+import { RegisterDeviceScreen } from '../screens/RegisterDeviceScreen';
+import { AboutAppScreen } from '../screens/AboutAppScreen';
+import { TermsPrivacyScreen } from '../screens/TermsPrivacyScreen';
+import { SubscriptionScreen } from '../screens/SubscriptionScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -25,6 +30,11 @@ export type RootStackParamList = {
   Tips: undefined;
   Profile: undefined;
   ChildProfile: { childId: string };
+  ChangePassword: undefined;
+  RegisterDevice: undefined;
+  AboutApp: undefined;
+  TermsPrivacy: undefined;
+  Subscription: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -49,6 +59,11 @@ export const AppNavigator: React.FC = () => {
         <Stack.Screen name="Tips" component={TipsScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="ChildProfile" component={ChildProfileScreen} />
+        <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+        <Stack.Screen name="RegisterDevice" component={RegisterDeviceScreen} />
+        <Stack.Screen name="AboutApp" component={AboutAppScreen} />
+        <Stack.Screen name="TermsPrivacy" component={TermsPrivacyScreen} />
+        <Stack.Screen name="Subscription" component={SubscriptionScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

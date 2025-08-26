@@ -1,112 +1,111 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
-import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
+import { Logo } from '../components/Logo';
+import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
-type NavigationProp = StackNavigationProp<RootStackParamList>;
+type SplashScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Splash'>;
 
 export const SplashScreen: React.FC = () => {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<SplashScreenNavigationProp>();
 
-  const handleHome = () => {
-    // Já estamos na splash, não faz nada
+  const handleEnter = () => {
+    navigation.navigate('Login');
+  };
+
+  const handleRequestAccess = () => {
+    navigation.navigate('RequestAccess');
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <InternalHeader title="FalaAtípica" />
-      
-      <View style={styles.content}>
-        {/* Logo */}
-        <View style={styles.logoContainer}>
-          <Text style={styles.appName}>FalaAtípica</Text>
-          <Text style={styles.subtitle}>Tutores</Text>
-        </View>
-
-        {/* Botões */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={() => navigation.navigate('Login')}
-          >
-            <Text style={styles.loginButtonText}>Fazer Login</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.requestButton}
-            onPress={() => navigation.navigate('RequestAccess')}
-          >
-            <Text style={styles.requestButtonText}>Solicitar Acesso</Text>
-          </TouchableOpacity>
-        </View>
+    <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_BLUE}>
+      {/* Logo e Título */}
+      <View style={styles.logoSection}>
+        <Logo size="large" showText={true} color={COLORS.TEXT_WHITE} />
+        <Text style={styles.slogan}>Aprender, expressar e celebrar</Text>
       </View>
 
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={true}
-      />
-    </SafeAreaView>
+      {/* Botões */}
+      <View style={styles.buttonSection}>
+        <TouchableOpacity style={styles.primaryButton} onPress={handleEnter}>
+          <Text style={styles.primaryButtonText}>Entrar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.secondaryButton} onPress={handleRequestAccess}>
+          <Text style={styles.secondaryButtonText}>Solicitar Acesso</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.infoText}>
+          Entenda mais sobre{' '}
+          <Text style={styles.linkText} onPress={handleRequestAccess}>
+            "Solicitar Acesso"
+          </Text>
+        </Text>
+      </View>
+    </SafeAreaWrapper>
   );
 };
 
+const { width, height } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.BACKGROUND_WHITE,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: 32,
-    paddingVertical: 40,
-  },
-  logoContainer: {
+  logoSection: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 60,
+    paddingHorizontal: 20,
   },
-  appName: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: COLORS.BLUE,
-    marginTop: 16,
+  slogan: {
+    fontSize: 16,
+    color: COLORS.TEXT_WHITE,
+    marginTop: 20,
+    textAlign: 'center',
   },
-  subtitle: {
-    fontSize: 18,
-    color: COLORS.GREEN,
-    marginTop: 8,
-  },
-  buttonContainer: {
+  buttonSection: {
+    paddingHorizontal: 32,
+    paddingBottom: 60,
     gap: 16,
+    alignItems: 'center',
   },
-  loginButton: {
+  primaryButton: {
     backgroundColor: COLORS.BLUE,
     paddingVertical: 16,
     paddingHorizontal: 32,
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: 'center',
+    width: '100%',
   },
-  loginButtonText: {
+  primaryButtonText: {
     color: COLORS.TEXT_WHITE,
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  requestButton: {
-    backgroundColor: 'transparent',
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 8,
+  secondaryButton: {
     borderWidth: 2,
     borderColor: COLORS.BLUE,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
     alignItems: 'center',
+    width: '100%',
   },
-  requestButtonText: {
-    color: COLORS.BLUE,
-    fontSize: 16,
-    fontWeight: '600',
+  secondaryButtonText: {
+    color: COLORS.TEXT_WHITE,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  infoText: {
+    fontSize: 14,
+    color: COLORS.TEXT_WHITE,
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  linkText: {
+    textDecorationLine: 'underline',
+    fontWeight: 'bold',
   },
 });

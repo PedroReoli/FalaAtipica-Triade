@@ -18,7 +18,7 @@ export const Logo: React.FC<LogoProps> = ({
       case 'small':
         return { icon: 24, text: 16 };
       case 'large':
-        return { icon: 48, text: 24 };
+        return { icon: 48, text: 28 };
       default:
         return { icon: 32, text: 20 };
     }
