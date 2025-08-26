@@ -29,6 +29,10 @@ export const TipsScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
+  };
+
   const handleBack = () => {
     navigation.goBack();
   };
@@ -84,7 +88,7 @@ export const TipsScreen: React.FC = () => {
       <Footer 
         activeTab="home"
         onHomePress={handleHome}
-        onProfilesPress={() => {}}
+        onProfilesPress={handleProfiles}
       />
     </SafeAreaWrapper>
   );

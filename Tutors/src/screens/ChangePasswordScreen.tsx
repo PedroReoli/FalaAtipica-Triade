@@ -46,6 +46,10 @@ export const ChangePasswordScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
+  };
+
   const handleBack = () => {
     navigation.goBack();
   };
@@ -60,10 +64,6 @@ export const ChangePasswordScreen: React.FC = () => {
       />
       
       <View style={styles.content}>
-        <Text style={styles.title}>Alterar Senha</Text>
-        <Text style={styles.subtitle}>
-          Digite sua senha atual e a nova senha desejada.
-        </Text>
 
         {/* Senha Atual */}
         <View style={styles.inputContainer}>
@@ -153,7 +153,7 @@ export const ChangePasswordScreen: React.FC = () => {
       <Footer 
         activeTab="profiles"
         onHomePress={handleHome}
-        onProfilesPress={() => {}}
+        onProfilesPress={handleProfiles}
       />
     </SafeAreaWrapper>
   );
@@ -164,18 +164,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 24,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 32,
-    lineHeight: 24,
   },
   inputContainer: {
     marginBottom: 24,
@@ -220,3 +208,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+

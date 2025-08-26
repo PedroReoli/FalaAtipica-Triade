@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { User, Mail } from 'lucide-react-native';
 import { Header } from '../components/Header';
-import { Footer } from '../components/Footer';
+
 import { Navbar } from '../components/Navbar';
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -81,11 +81,7 @@ export const RequestAccessScreen: React.FC = () => {
         </TouchableOpacity>
       </ScrollView>
 
-      <Footer 
-        activeTab="home"
-        onHomePress={() => navigation.navigate('Dashboard')}
-        onProfilesPress={() => {}}
-      />
+
     </SafeAreaWrapper>
   );
 };

@@ -8,6 +8,7 @@ import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { DynamicYear } from '../components/DynamicYear';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -16,6 +17,10 @@ export const AboutAppScreen: React.FC = () => {
 
   const handleHome = () => {
     navigation.navigate('Dashboard');
+  };
+
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
   };
 
   const handleBack = () => {
@@ -31,101 +36,64 @@ export const AboutAppScreen: React.FC = () => {
         showLogo={true}
       />
       
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.headerSection}>
-          <Info size={64} color={COLORS.BLUE} />
-          <Text style={styles.appName}>FalaAtípica Tutors</Text>
-          <Text style={styles.version}>Versão 1.0.0</Text>
-        </View>
+             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+         {/* Recursos */}
+         <View style={styles.featuresGrid}>
+           <View style={styles.featureCard}>
+             <Heart size={32} color={COLORS.RED} />
+             <Text style={styles.featureTitle}>Acompanhamento Personalizado</Text>
+             <Text style={styles.featureDescription}>
+               Acompanhe o progresso de cada criança de forma individualizada
+             </Text>
+           </View>
 
-        {/* Descrição */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Sobre o Aplicativo</Text>
-          <Text style={styles.description}>
-            O FalaAtípica Tutors é um aplicativo desenvolvido para auxiliar pais e responsáveis 
-            no desenvolvimento da fala e linguagem de crianças com atrasos no desenvolvimento. 
-            Nossa missão é proporcionar ferramentas educativas e recursos que facilitem o 
-            processo de estimulação da comunicação.
-          </Text>
-        </View>
+           <View style={styles.featureCard}>
+             <Users size={32} color={COLORS.BLUE} />
+             <Text style={styles.featureTitle}>Múltiplos Perfis</Text>
+             <Text style={styles.featureDescription}>
+               Gerencie perfis para diferentes crianças na mesma conta
+             </Text>
+           </View>
 
-        {/* Recursos */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Principais Recursos</Text>
-          
-          <View style={styles.featureItem}>
-            <Heart size={24} color={COLORS.RED} />
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Acompanhamento Personalizado</Text>
-              <Text style={styles.featureDescription}>
-                Acompanhe o progresso de cada criança de forma individualizada
-              </Text>
-            </View>
+           <View style={styles.featureCard}>
+             <Award size={32} color={COLORS.YELLOW} />
+             <Text style={styles.featureTitle}>Sistema de Conquistas</Text>
+             <Text style={styles.featureDescription}>
+               Motive as crianças com badges e progresso visual
+             </Text>
+           </View>
+
+           <View style={styles.featureCard}>
+             <Smartphone size={32} color={COLORS.GREEN} />
+             <Text style={styles.featureTitle}>Recursos Multimídia</Text>
+             <Text style={styles.featureDescription}>
+               Acesse imagens, sons e atividades educativas
+             </Text>
+           </View>
+         </View>
+
+         {/* Contato */}
+         <View style={styles.contactCard}>
+           <Text style={styles.contactText}>
+             Para dúvidas, sugestões ou suporte técnico:
+           </Text>
+           <Text style={styles.contactEmail}>contato@falaatipica.com</Text>
+         </View>
+
+                   {/* Copyright */}
+          <View style={styles.copyrightSection}>
+            <DynamicYear 
+              prefix="© "
+              suffix=" FalaAtípica. Todos os direitos reservados."
+              style={styles.copyrightText}
+            />
           </View>
-
-          <View style={styles.featureItem}>
-            <Users size={24} color={COLORS.BLUE} />
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Múltiplos Perfis</Text>
-              <Text style={styles.featureDescription}>
-                Gerencie perfis para diferentes crianças na mesma conta
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.featureItem}>
-            <Award size={24} color={COLORS.YELLOW} />
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Sistema de Conquistas</Text>
-              <Text style={styles.featureDescription}>
-                Motive as crianças com badges e progresso visual
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.featureItem}>
-            <Smartphone size={24} color={COLORS.GREEN} />
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Recursos Multimídia</Text>
-              <Text style={styles.featureDescription}>
-                Acesse imagens, sons e atividades educativas
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Equipe */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Nossa Equipe</Text>
-          <Text style={styles.teamDescription}>
-            Desenvolvido por uma equipe dedicada de profissionais da área de fonoaudiologia 
-            e tecnologia, comprometidos em criar soluções inovadoras para o desenvolvimento 
-            infantil.
-          </Text>
-        </View>
-
-        {/* Contato */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Contato</Text>
-          <Text style={styles.contactText}>
-            Para dúvidas, sugestões ou suporte técnico:
-          </Text>
-          <Text style={styles.contactEmail}>contato@falaatipica.com</Text>
-        </View>
-
-        {/* Copyright */}
-        <View style={styles.copyrightSection}>
-          <Text style={styles.copyrightText}>
-            © 2024 FalaAtípica. Todos os direitos reservados.
-          </Text>
-        </View>
-      </ScrollView>
+       </ScrollView>
 
       <Footer 
         activeTab="profiles"
         onHomePress={handleHome}
-        onProfilesPress={() => {}}
+        onProfilesPress={handleProfiles}
       />
     </SafeAreaWrapper>
   );
@@ -137,81 +105,83 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 24,
   },
-  headerSection: {
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  appName: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  version: {
-    fontSize: 16,
-    color: '#666',
-  },
-  section: {
-    marginBottom: 32,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 16,
-  },
-  description: {
-    fontSize: 16,
-    color: COLORS.TEXT_BLACK,
-    lineHeight: 24,
-  },
-  featureItem: {
+  featuresGrid: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 20,
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 24,
   },
-  featureText: {
-    flex: 1,
-    marginLeft: 16,
+  featureCard: {
+    width: '48%',
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: COLORS.BLUE,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   featureTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 4,
+    marginTop: 12,
+    marginBottom: 8,
+    textAlign: 'center',
   },
   featureDescription: {
-    fontSize: 14,
+    fontSize: 12,
     color: COLORS.TEXT_BLACK,
-    lineHeight: 20,
+    lineHeight: 16,
+    textAlign: 'center',
   },
-  teamDescription: {
-    fontSize: 16,
-    color: COLORS.TEXT_BLACK,
-    lineHeight: 24,
+  contactCard: {
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+    borderWidth: 2,
+    borderColor: COLORS.GREEN,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   contactText: {
-    fontSize: 16,
+    fontSize: 14,
     color: COLORS.TEXT_BLACK,
     marginBottom: 8,
+    textAlign: 'center',
   },
   contactEmail: {
     fontSize: 16,
     color: COLORS.BLUE,
     fontWeight: '600',
+    textAlign: 'center',
   },
   copyrightSection: {
     alignItems: 'center',
-    marginTop: 32,
     marginBottom: 24,
-    paddingTop: 24,
+    paddingTop: 16,
     borderTopWidth: 1,
     borderTopColor: '#E0E0E0',
   },
   copyrightText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
     textAlign: 'center',
   },
 });
+

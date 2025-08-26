@@ -139,14 +139,14 @@ FalaAtipica-Triade/
 - **Acessibilidade**: Tamanhos de toque adequados para crianças
 
 ### Tutors Module (React Native)
-- **Público**: Doutores/Fonoaudiólogos
+- **Público**: Pais/Responsáveis
 - **Foco**: Relatórios básicos e acompanhamento de conquistas
-- **Objetivo**: Permitir que profissionais acompanhem o progresso das crianças
-- **Interface**: Intuitiva para profissionais não especialistas em tecnologia
+- **Objetivo**: Permitir que pais/responsáveis acompanhem o progresso das crianças
+- **Interface**: Intuitiva para pais/responsáveis não especialistas em tecnologia
 - **Funcionalidades**: Visualização de progresso, relatórios simples, dicas
 
 ### Pro Module (React)
-- **Público**: Profissionais avançados
+- **Público**: Fonoaudiólogos/Profissionais avançados
 - **Foco**: Relatórios detalhados e contato direto com desenvolvimento
 - **Objetivo**: Fornecer ferramentas avançadas para análise e acompanhamento
 - **Interface**: Avançada com recursos técnicos
@@ -166,14 +166,14 @@ FalaAtipica-Triade/
 - Implementação das telas conforme mockups
 - Navegação completa
 - Consumo de dados MOCAP/TUTORS
-- Relatórios básicos
+- Relatórios básicos para pais/responsáveis
 
 ### Fase 3: PRO (React)
 - Setup do projeto React com TypeScript
 - Implementação das telas conforme mockups
 - Navegação e placeholders
 - Consumo de dados MOCAP/PRO
-- Relatórios avançados
+- Relatórios avançados para fonoaudiólogos
 
 ### Fase 4: Integração Supabase
 - Substituição do MOCAP por Supabase
@@ -205,8 +205,8 @@ FalaAtipica-Triade/
 
 ### Hierarquia de Acesso
 - **KIDS**: Acesso apenas aos jogos e atividades
-- **TUTORS**: Acesso aos dados das crianças que acompanham
-- **PRO**: Acesso completo ao sistema e contato com desenvolvimento
+- **TUTORS**: Acesso aos dados das crianças que acompanham (pais/responsáveis)
+- **PRO**: Acesso completo ao sistema e contato com desenvolvimento (fonoaudiólogos)
 
 ### Acessibilidade
 - Elementos de toque com tamanho mínimo de 44px

@@ -14,7 +14,7 @@ type NavigationProp = StackNavigationProp<RootStackParamList>;
 const menuItems = [
   {
     id: '1',
-    title: 'Change Password',
+    title: 'Mudar a senha',
     icon: Key,
     route: 'ChangePassword' as keyof RootStackParamList,
   },
@@ -53,6 +53,10 @@ export const ProfileScreen: React.FC = () => {
 
   const handleHome = () => {
     navigation.navigate('Dashboard');
+  };
+
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
   };
 
   const handleBack = () => {
@@ -94,11 +98,6 @@ export const ProfileScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Configurações Gerais */}
-        <View style={styles.settingsHeader}>
-          <Text style={styles.settingsTitle}>Configuracoes Gerais</Text>
-        </View>
-
         {/* Menu de Opções */}
         <View style={styles.menuSection}>
           {menuItems.map((item) => {
@@ -110,7 +109,7 @@ export const ProfileScreen: React.FC = () => {
                 onPress={() => handleMenuPress(item.route)}
               >
                 <View style={styles.menuItemLeft}>
-                  <IconComponent size={20} color={COLORS.TEXT_BLACK} />
+                  <IconComponent size={24} color={COLORS.BLUE} />
                   <Text style={styles.menuItemText}>{item.title}</Text>
                 </View>
                 <ChevronRight size={20} color={COLORS.TEXT_BLACK} />
@@ -123,7 +122,7 @@ export const ProfileScreen: React.FC = () => {
       <Footer 
         activeTab="profiles"
         onHomePress={handleHome}
-        onProfilesPress={() => {}}
+        onProfilesPress={handleProfiles}
       />
     </SafeAreaWrapper>
   );
@@ -183,28 +182,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
   },
-  settingsHeader: {
-    backgroundColor: '#F5F5F5',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-  },
-  settingsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#666666',
-  },
   menuSection: {
     flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 24,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: COLORS.TEXT_WHITE,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderRadius: 12,
+    marginBottom: 12,
+    borderWidth: 2,
+    borderColor: COLORS.BLUE,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   menuItemLeft: {
     flexDirection: 'row',
@@ -213,6 +214,7 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 16,
+    fontWeight: '600',
     color: COLORS.TEXT_BLACK,
     marginLeft: 16,
   },

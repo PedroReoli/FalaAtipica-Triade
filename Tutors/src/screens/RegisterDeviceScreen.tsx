@@ -47,6 +47,10 @@ export const RegisterDeviceScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
+  };
+
   const handleBack = () => {
     navigation.goBack();
   };
@@ -60,14 +64,7 @@ export const RegisterDeviceScreen: React.FC = () => {
         showLogo={true}
       />
       
-      <View style={styles.content}>
-        <View style={styles.headerSection}>
-          <Smartphone size={48} color={COLORS.BLUE} />
-          <Text style={styles.title}>Cadastrar Novo Aparelho</Text>
-          <Text style={styles.subtitle}>
-            Adicione um novo dispositivo para acessar a conta.
-          </Text>
-        </View>
+             <View style={styles.content}>
 
         {/* Nome do Dispositivo */}
         <View style={styles.inputContainer}>
@@ -132,7 +129,7 @@ export const RegisterDeviceScreen: React.FC = () => {
       <Footer 
         activeTab="profiles"
         onHomePress={handleHome}
-        onProfilesPress={() => {}}
+        onProfilesPress={handleProfiles}
       />
     </SafeAreaWrapper>
   );
@@ -143,23 +140,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 24,
-  },
-  headerSection: {
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: COLORS.TEXT_BLACK,
-    textAlign: 'center',
-    lineHeight: 24,
   },
   inputContainer: {
     marginBottom: 24,
@@ -243,3 +223,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+

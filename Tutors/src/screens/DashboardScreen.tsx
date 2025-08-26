@@ -27,6 +27,14 @@ export const DashboardScreen: React.FC = () => {
     }
   };
 
+  const handleHome = () => {
+    navigation.navigate('Dashboard');
+  };
+
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
+  };
+
   return (
     <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
       {/* Header Section */}
@@ -127,8 +135,8 @@ export const DashboardScreen: React.FC = () => {
       {/* Footer */}
       <Footer 
         activeTab="home"
-        onHomePress={() => {}}
-        onProfilesPress={() => {}}
+        onHomePress={handleHome}
+        onProfilesPress={handleProfiles}
       />
     </SafeAreaWrapper>
   );

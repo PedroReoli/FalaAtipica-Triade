@@ -42,6 +42,10 @@ export const SubscriptionScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
+  };
+
   const handleBack = () => {
     navigation.goBack();
   };
@@ -55,112 +59,80 @@ export const SubscriptionScreen: React.FC = () => {
         showLogo={true}
       />
       
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.headerSection}>
-          <Shield size={64} color={COLORS.BLUE} />
-          <Text style={styles.title}>Minha Assinatura</Text>
-          <Text style={styles.subtitle}>
-            Gerencie seu plano e aproveite todos os recursos
-          </Text>
-        </View>
+             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+         {/* Plano Free */}
+         <View style={[
+           styles.planCard,
+           currentPlan === 'free' && styles.currentPlanCard
+         ]}>
+           {currentPlan === 'free' && (
+             <View style={styles.currentBadge}>
+               <Text style={styles.currentBadgeText}>PLANO ATUAL</Text>
+             </View>
+           )}
+           <View style={styles.planHeader}>
+             <Shield size={32} color={COLORS.BLUE} />
+             <View style={styles.planInfo}>
+               <Text style={styles.planName}>Free</Text>
+               <Text style={styles.planPrice}>Grátis</Text>
+             </View>
+           </View>
+           <View style={styles.featuresList}>
+             {freeFeatures.map((feature, index) => (
+               <View key={index} style={styles.featureItem}>
+                 <Check size={16} color={COLORS.GREEN} />
+                 <Text style={styles.featureText}>{feature}</Text>
+               </View>
+             ))}
+           </View>
+         </View>
 
-        {/* Plano Atual */}
-        <View style={styles.currentPlanSection}>
-          <Text style={styles.currentPlanTitle}>Seu Plano Atual</Text>
-          <View style={[
-            styles.planCard,
-            currentPlan === 'premium' ? styles.premiumCard : styles.freeCard
-          ]}>
-            <View style={styles.planHeader}>
-              {currentPlan === 'premium' ? (
-                <Crown size={32} color={COLORS.YELLOW} />
-              ) : (
-                <Shield size={32} color={COLORS.BLUE} />
-              )}
-              <View style={styles.planInfo}>
-                <Text style={styles.planName}>
-                  {currentPlan === 'premium' ? 'Premium' : 'Free'}
-                </Text>
-                <Text style={styles.planStatus}>
-                  {currentPlan === 'premium' ? 'Ativo' : 'Gratuito'}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        {/* Comparação de Planos */}
-        <View style={styles.comparisonSection}>
-          <Text style={styles.comparisonTitle}>Comparar Planos</Text>
-          
-          {/* Plano Free */}
-          <View style={styles.planComparisonCard}>
-            <View style={styles.planComparisonHeader}>
-              <Shield size={24} color={COLORS.BLUE} />
-              <Text style={styles.planComparisonName}>Free</Text>
-              <Text style={styles.planComparisonPrice}>Grátis</Text>
-            </View>
-            <View style={styles.featuresList}>
-              {freeFeatures.map((feature, index) => (
-                <View key={index} style={styles.featureItem}>
-                  <Check size={16} color={COLORS.GREEN} />
-                  <Text style={styles.featureText}>{feature}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-
-          {/* Plano Premium */}
-          <View style={[styles.planComparisonCard, styles.premiumComparisonCard]}>
-            <View style={styles.premiumBadge}>
-              <Star size={16} color={COLORS.TEXT_WHITE} />
-              <Text style={styles.premiumBadgeText}>RECOMENDADO</Text>
-            </View>
-            <View style={styles.planComparisonHeader}>
-              <Crown size={24} color={COLORS.YELLOW} />
-              <Text style={styles.planComparisonName}>Premium</Text>
-              <Text style={styles.planComparisonPrice}>R$ 19,90/mês</Text>
-            </View>
-            <View style={styles.featuresList}>
-              {premiumFeatures.map((feature, index) => (
-                <View key={index} style={styles.featureItem}>
-                  <Check size={16} color={COLORS.GREEN} />
-                  <Text style={styles.featureText}>{feature}</Text>
-                </View>
-              ))}
-            </View>
-            {currentPlan === 'free' && (
-              <TouchableOpacity
-                style={styles.upgradeButton}
-                onPress={handleUpgradeToPremium}
-              >
-                <Crown size={20} color={COLORS.TEXT_WHITE} />
-                <Text style={styles.upgradeButtonText}>Fazer Upgrade</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-
-        {/* Informações Adicionais */}
-        <View style={styles.infoSection}>
-          <Text style={styles.infoTitle}>Informações Importantes</Text>
-          <Text style={styles.infoText}>
-            • Você pode cancelar sua assinatura a qualquer momento
-          </Text>
-          <Text style={styles.infoText}>
-            • O pagamento é processado de forma segura
-          </Text>
-          <Text style={styles.infoText}>
-            • Acesso imediato após a confirmação do pagamento
-          </Text>
-        </View>
-      </ScrollView>
+         {/* Plano Premium */}
+         <View style={[
+           styles.planCard,
+           styles.premiumCard,
+           currentPlan === 'premium' && styles.currentPlanCard
+         ]}>
+           {currentPlan === 'premium' && (
+             <View style={styles.currentBadge}>
+               <Text style={styles.currentBadgeText}>PLANO ATUAL</Text>
+             </View>
+           )}
+           <View style={styles.premiumBadge}>
+             <Star size={16} color={COLORS.TEXT_WHITE} />
+             <Text style={styles.premiumBadgeText}>RECOMENDADO</Text>
+           </View>
+           <View style={styles.planHeader}>
+             <Crown size={32} color={COLORS.YELLOW} />
+             <View style={styles.planInfo}>
+               <Text style={styles.planName}>Premium</Text>
+               <Text style={styles.planPrice}>R$ 19,90/mês</Text>
+             </View>
+           </View>
+           <View style={styles.featuresList}>
+             {premiumFeatures.map((feature, index) => (
+               <View key={index} style={styles.featureItem}>
+                 <Check size={16} color={COLORS.GREEN} />
+                 <Text style={styles.featureText}>{feature}</Text>
+               </View>
+             ))}
+           </View>
+           {currentPlan === 'free' && (
+             <TouchableOpacity
+               style={styles.upgradeButton}
+               onPress={handleUpgradeToPremium}
+             >
+               <Crown size={20} color={COLORS.TEXT_WHITE} />
+               <Text style={styles.upgradeButtonText}>Fazer Upgrade</Text>
+             </TouchableOpacity>
+           )}
+         </View>
+       </ScrollView>
 
       <Footer 
         activeTab="profiles"
         onHomePress={handleHome}
-        onProfilesPress={() => {}}
+        onProfilesPress={handleProfiles}
       />
     </SafeAreaWrapper>
   );
@@ -172,119 +144,86 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 24,
   },
-  headerSection: {
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: COLORS.TEXT_BLACK,
-    textAlign: 'center',
-    lineHeight: 24,
-  },
-  currentPlanSection: {
-    marginBottom: 32,
-  },
-  currentPlanTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 16,
-  },
   planCard: {
-    borderRadius: 12,
-    padding: 20,
-    borderWidth: 2,
-  },
-  freeCard: {
     backgroundColor: COLORS.TEXT_WHITE,
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 2,
     borderColor: COLORS.BLUE,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    position: 'relative',
   },
   premiumCard: {
     backgroundColor: '#FFF8E1',
     borderColor: COLORS.YELLOW,
   },
+  currentPlanCard: {
+    borderColor: COLORS.GREEN,
+    borderWidth: 3,
+  },
+  currentBadge: {
+    position: 'absolute',
+    top: -10,
+    left: 16,
+    backgroundColor: COLORS.GREEN,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    zIndex: 1,
+  },
+  currentBadgeText: {
+    color: COLORS.TEXT_WHITE,
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  premiumBadge: {
+    position: 'absolute',
+    top: -10,
+    right: 16,
+    backgroundColor: COLORS.YELLOW,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    zIndex: 1,
+  },
+  premiumBadgeText: {
+    color: COLORS.TEXT_WHITE,
+    fontSize: 10,
+    fontWeight: 'bold',
+    marginLeft: 4,
+  },
   planHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 16,
   },
   planInfo: {
     marginLeft: 16,
+    flex: 1,
   },
   planName: {
     fontSize: 20,
     fontWeight: 'bold',
     color: COLORS.TEXT_BLACK,
   },
-  planStatus: {
-    fontSize: 14,
-    color: '#666',
+  planPrice: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.BLUE,
     marginTop: 4,
   },
-  comparisonSection: {
-    marginBottom: 32,
-  },
-  comparisonTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 16,
-  },
-  planComparisonCard: {
-    backgroundColor: COLORS.TEXT_WHITE,
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    borderWidth: 2,
-    borderColor: '#E0E0E0',
-  },
-  premiumComparisonCard: {
-    borderColor: COLORS.YELLOW,
-    position: 'relative',
-  },
-  premiumBadge: {
-    position: 'absolute',
-    top: -12,
-    right: 20,
-    backgroundColor: COLORS.YELLOW,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  premiumBadgeText: {
-    color: COLORS.TEXT_WHITE,
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginLeft: 4,
-  },
-  planComparisonHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  planComparisonName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginLeft: 12,
-    flex: 1,
-  },
-  planComparisonPrice: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: COLORS.BLUE,
-  },
   featuresList: {
-    marginBottom: 16,
+    marginBottom: 12,
   },
   featureItem: {
     flexDirection: 'row',
@@ -292,10 +231,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   featureText: {
-    fontSize: 14,
+    fontSize: 13,
     color: COLORS.TEXT_BLACK,
-    marginLeft: 12,
+    marginLeft: 10,
     flex: 1,
+    lineHeight: 18,
   },
   upgradeButton: {
     backgroundColor: COLORS.YELLOW,
@@ -303,30 +243,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 10,
+    marginTop: 8,
   },
   upgradeButtonText: {
     color: COLORS.TEXT_WHITE,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     marginLeft: 8,
   },
-  infoSection: {
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-  },
-  infoTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 12,
-  },
-  infoText: {
-    fontSize: 14,
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 8,
-    lineHeight: 20,
-  },
 });
+

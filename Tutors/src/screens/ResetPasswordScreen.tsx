@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
-import { Navbar } from '../components/Navbar';
-import { Footer } from '../components/Footer';
-import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { InternalHeader } from '../components/InternalHeader';
+import { BottomNavigation } from '../components/BottomNavigation';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -23,18 +22,9 @@ export const ResetPasswordScreen: React.FC = () => {
     navigation.navigate('Splash');
   };
 
-  const handleBack = () => {
-    navigation.goBack();
-  };
-
   return (
-    <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
-      <Navbar 
-        title="Redefinir Senha"
-        onBack={handleBack}
-        showBackButton={true}
-        showLogo={true}
-      />
+    <SafeAreaView style={styles.container}>
+      <InternalHeader title="Redefinir Senha" />
       
       <View style={styles.content}>
         <Text style={styles.title}>Esqueceu sua senha?</Text>
@@ -64,16 +54,19 @@ export const ResetPasswordScreen: React.FC = () => {
         </View>
       </View>
 
-      <Footer 
-        activeTab="home"
-        onHomePress={handleHome}
-        onProfilesPress={() => {}}
+      <BottomNavigation 
+        onHome={handleHome}
+        homeActive={false}
       />
-    </SafeAreaWrapper>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.BACKGROUND_WHITE,
+  },
   content: {
     flex: 1,
     paddingHorizontal: 24,

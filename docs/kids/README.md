@@ -180,7 +180,7 @@ Kids/
 
 ### Sincronização com TUTORS
 - Dados de progresso compartilhados
-- Conquistas visíveis para tutores
+- Conquistas visíveis para pais/responsáveis
 - Relatórios automáticos
 - Comunicação via MOCAP
 

@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Mail } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { Navbar } from '../components/Navbar';
-import { Footer } from '../components/Footer';
+
 import { COLORS } from '../constants/colors';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
@@ -19,10 +19,6 @@ export const LoginScreen: React.FC = () => {
   const handleLogin = () => {
     // Login mockado - qualquer email/senha funciona
     navigation.navigate('Dashboard');
-  };
-
-  const handleHome = () => {
-    navigation.navigate('Splash');
   };
 
   const handleSupport = () => {
@@ -93,11 +89,7 @@ export const LoginScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <Footer 
-        activeTab="home"
-        onHomePress={handleHome}
-        onProfilesPress={() => {}}
-      />
+
     </SafeAreaWrapper>
   );
 };

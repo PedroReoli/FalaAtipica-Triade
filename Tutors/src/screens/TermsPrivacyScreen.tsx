@@ -18,6 +18,10 @@ export const TermsPrivacyScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
+  };
+
   const handleBack = () => {
     navigation.goBack();
   };
@@ -31,130 +35,56 @@ export const TermsPrivacyScreen: React.FC = () => {
         showLogo={true}
       />
       
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.headerSection}>
-          <FileText size={64} color={COLORS.BLUE} />
-          <Text style={styles.title}>Termos de Uso e Política de Privacidade</Text>
-          <Text style={styles.subtitle}>
-            Última atualização: Janeiro 2024
-          </Text>
-        </View>
+             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+         {/* Termos de Uso */}
+         <View style={styles.termsCard}>
+           <View style={styles.cardHeader}>
+             <FileText size={24} color={COLORS.BLUE} />
+             <Text style={styles.cardTitle}>Termos de Uso</Text>
+           </View>
+           <Text style={styles.cardText}>
+             O FalaAtípica Tutors é destinado exclusivamente para uso educacional e de desenvolvimento infantil. 
+             Os pais e responsáveis são responsáveis pelo uso adequado do aplicativo pelas crianças sob sua supervisão.
+           </Text>
+         </View>
 
-        {/* Termos de Uso */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <FileText size={24} color={COLORS.BLUE} />
-            <Text style={styles.sectionTitle}>Termos de Uso</Text>
-          </View>
-          
-          <Text style={styles.paragraph}>
-            Ao usar o aplicativo FalaAtípica Tutors, você concorda com os seguintes termos:
-          </Text>
+         {/* Política de Privacidade */}
+         <View style={styles.termsCard}>
+           <View style={styles.cardHeader}>
+             <Shield size={24} color={COLORS.GREEN} />
+             <Text style={styles.cardTitle}>Política de Privacidade</Text>
+           </View>
+           <Text style={styles.cardText}>
+             Coletamos apenas informações necessárias para o funcionamento do aplicativo. 
+             Não vendemos, alugamos ou compartilhamos suas informações pessoais com terceiros.
+           </Text>
+         </View>
 
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>1. Uso do Aplicativo:</Text> O FalaAtípica Tutors é destinado 
-            exclusivamente para uso educacional e de desenvolvimento infantil. O uso deve ser 
-            responsável e adequado à idade das crianças.
-          </Text>
+         {/* Proteção de Dados */}
+         <View style={styles.termsCard}>
+           <View style={styles.cardHeader}>
+             <Lock size={24} color={COLORS.RED} />
+             <Text style={styles.cardTitle}>Proteção de Dados</Text>
+           </View>
+           <Text style={styles.cardText}>
+             Todos os dados são criptografados durante a transmissão e armazenamento. 
+             Apenas funcionários autorizados têm acesso aos dados, e apenas quando necessário.
+           </Text>
+         </View>
 
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>2. Responsabilidade:</Text> Os pais e responsáveis são 
-            responsáveis pelo uso adequado do aplicativo pelas crianças sob sua supervisão.
-          </Text>
-
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>3. Conteúdo:</Text> Todo o conteúdo educativo é fornecido 
-            "como está" e não substitui a orientação profissional de fonoaudiólogos ou outros 
-            especialistas.
-          </Text>
-
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>4. Modificações:</Text> Reservamo-nos o direito de modificar 
-            estes termos a qualquer momento, notificando os usuários sobre mudanças significativas.
-          </Text>
-        </View>
-
-        {/* Política de Privacidade */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Shield size={24} color={COLORS.GREEN} />
-            <Text style={styles.sectionTitle}>Política de Privacidade</Text>
-          </View>
-
-          <Text style={styles.paragraph}>
-            Sua privacidade é importante para nós. Esta política descreve como coletamos, 
-            usamos e protegemos suas informações:
-          </Text>
-
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>1. Informações Coletadas:</Text> Coletamos apenas informações 
-            necessárias para o funcionamento do aplicativo, como dados de perfil das crianças 
-            e progresso educacional.
-          </Text>
-
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>2. Uso das Informações:</Text> Utilizamos suas informações 
-            exclusivamente para fornecer e melhorar nossos serviços educacionais.
-          </Text>
-
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>3. Compartilhamento:</Text> Não vendemos, alugamos ou 
-            compartilhamos suas informações pessoais com terceiros, exceto quando exigido por lei.
-          </Text>
-
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>4. Segurança:</Text> Implementamos medidas de segurança 
-            adequadas para proteger suas informações contra acesso não autorizado.
-          </Text>
-        </View>
-
-        {/* Proteção de Dados */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Lock size={24} color={COLORS.RED} />
-            <Text style={styles.sectionTitle}>Proteção de Dados</Text>
-          </View>
-
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>Criptografia:</Text> Todos os dados são criptografados 
-            durante a transmissão e armazenamento.
-          </Text>
-
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>Acesso Limitado:</Text> Apenas funcionários autorizados 
-            têm acesso aos dados, e apenas quando necessário.
-          </Text>
-
-          <Text style={styles.paragraph}>
-            <Text style={styles.bold}>Backup Seguro:</Text> Realizamos backups regulares e 
-            seguros de todos os dados.
-          </Text>
-        </View>
-
-        {/* Contato */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Contato</Text>
-          <Text style={styles.paragraph}>
-            Se você tiver dúvidas sobre estes termos ou nossa política de privacidade, 
-            entre em contato conosco:
-          </Text>
-          <Text style={styles.contactEmail}>privacidade@falaatipica.com</Text>
-        </View>
-
-        {/* Aceitação */}
-        <View style={styles.acceptanceSection}>
-          <Text style={styles.acceptanceText}>
-            Ao continuar usando o aplicativo, você confirma que leu, entendeu e concorda 
-            com estes Termos de Uso e Política de Privacidade.
-          </Text>
-        </View>
-      </ScrollView>
+         {/* Contato */}
+         <View style={styles.contactCard}>
+           <Text style={styles.contactText}>
+             Se você tiver dúvidas sobre estes termos ou nossa política de privacidade:
+           </Text>
+           <Text style={styles.contactEmail}>privacidade@falaatipica.com</Text>
+         </View>
+       </ScrollView>
 
       <Footer 
         activeTab="profiles"
         onHomePress={handleHome}
-        onProfilesPress={() => {}}
+        onProfilesPress={handleProfiles}
       />
     </SafeAreaWrapper>
   );
@@ -166,62 +96,65 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 24,
   },
-  headerSection: {
-    alignItems: 'center',
-    marginBottom: 32,
+  termsCard: {
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: COLORS.BLUE,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_BLACK,
-    marginTop: 16,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#666',
-  },
-  section: {
-    marginBottom: 32,
-  },
-  sectionHeader: {
+  cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
-  sectionTitle: {
-    fontSize: 20,
+  cardTitle: {
+    fontSize: 16,
     fontWeight: 'bold',
     color: COLORS.TEXT_BLACK,
     marginLeft: 12,
   },
-  paragraph: {
-    fontSize: 16,
+  cardText: {
+    fontSize: 14,
     color: COLORS.TEXT_BLACK,
-    lineHeight: 24,
-    marginBottom: 16,
+    lineHeight: 20,
   },
-  bold: {
-    fontWeight: 'bold',
+  contactCard: {
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+    borderWidth: 2,
+    borderColor: COLORS.GREEN,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  contactText: {
+    fontSize: 14,
+    color: COLORS.TEXT_BLACK,
+    marginBottom: 8,
+    textAlign: 'center',
   },
   contactEmail: {
     fontSize: 16,
     color: COLORS.BLUE,
     fontWeight: '600',
-    marginTop: 8,
-  },
-  acceptanceSection: {
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-  },
-  acceptanceText: {
-    fontSize: 14,
-    color: COLORS.TEXT_BLACK,
     textAlign: 'center',
-    fontStyle: 'italic',
-    lineHeight: 20,
   },
 });
+

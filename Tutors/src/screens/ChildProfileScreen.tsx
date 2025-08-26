@@ -8,6 +8,7 @@ import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { getCurrentYear } from '../utils/dateUtils';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 type ChildProfileRouteProp = RouteProp<RootStackParamList, 'ChildProfile'>;
@@ -25,13 +26,14 @@ export const ChildProfileScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<ChildProfileRouteProp>();
   const { childId } = route.params;
+  const currentYear = getCurrentYear();
 
   // Mock data - em uma aplicação real, buscaríamos os dados baseado no childId
   const childData = {
     name: 'João Silva',
     age: 8,
     diagnosis: 'Transtorno do Espectro Autista',
-    startDate: '15/03/2024',
+    startDate: `15/03/${currentYear}`,
     totalSessions: 47,
   };
 
@@ -47,6 +49,10 @@ export const ChildProfileScreen: React.FC = () => {
 
   const handleHome = () => {
     navigation.navigate('Dashboard');
+  };
+
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
   };
 
   const handleBack = () => {
@@ -139,7 +145,7 @@ export const ChildProfileScreen: React.FC = () => {
       <Footer 
         activeTab="profiles"
         onHomePress={handleHome}
-        onProfilesPress={() => {}}
+        onProfilesPress={handleProfiles}
       />
     </SafeAreaWrapper>
   );

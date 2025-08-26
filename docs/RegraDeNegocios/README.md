@@ -11,8 +11,8 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 - **Necessidades**: Estimulação lúdica e educativa
 - **Interação**: Mínima, focada em jogos
 
-### 2. Doutores/Fonoaudiólogos (TUTORS)
-- **Perfil**: Profissionais de fonoaudiologia
+### 2. Pais/Responsáveis (TUTORS)
+- **Perfil**: Pais e responsáveis pelas crianças
 - **Necessidades**: Acompanhamento básico de progresso
 - **Limitações**: Não são especialistas em tecnologia
 - **Foco**: Relatórios simples e conquistas
@@ -27,7 +27,7 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 
 ### RN001 - Hierarquia de Acesso
 - **KIDS**: Acesso apenas aos jogos e atividades
-- **TUTORS**: Acesso aos dados das crianças que acompanham
+- **TUTORS**: Acesso aos dados das crianças que acompanham (pais/responsáveis)
 - **PRO**: Acesso completo ao sistema e contato com desenvolvimento
 
 ### RN002 - Dados das Crianças
@@ -73,7 +73,7 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 ### FBN002 - Acompanhamento de Progresso
 1. Criança joga em KIDS
 2. Dados são registrados no sistema
-3. TUTORS visualiza progresso
+3. TUTORS (pais/responsáveis) visualiza progresso
 4. PRO analisa dados detalhados
 5. Relatórios são gerados
 
@@ -81,7 +81,7 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 1. Criança completa atividades
 2. Conquistas são desbloqueadas
 3. Progresso é atualizado
-4. TUTORS visualiza conquistas
+4. TUTORS (pais/responsáveis) visualiza conquistas
 5. Motivação é mantida
 
 ## Restrições Técnicas
@@ -112,7 +112,7 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 ### V002 - Acesso de TUTORS
 - Credenciais válidas
 - Aprovação de solicitação
-- Limitação de acesso por criança
+- Limitação de acesso por criança (pais/responsáveis)
 
 ### V003 - Jogos
 - Dificuldade apropriada para idade
@@ -132,6 +132,6 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 - Evolução por categoria
 
 ### MS003 - Satisfação
-- Feedback de TUTORS
+- Feedback de TUTORS (pais/responsáveis)
 - Uso contínuo da plataforma
-- Recomendação para outros profissionais
+- Recomendação para outros pais/responsáveis
