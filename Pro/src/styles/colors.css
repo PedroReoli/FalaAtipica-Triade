@@ -1,0 +1,22 @@
+/* ========================================
+   CORES DO PROJETO FALAATÍPICA PRO
+   ======================================== */
+
+:root {
+  /* Cores principais */
+  --blue: #1e88e5;
+  --green: #43a047;
+  --red: #e53935;
+  --yellow: #fbc02d;
+  
+  /* Cores de fundo */
+  --background-blue: #054776;
+  --background-white: #f4f6ff;
+  
+  /* Tipografia */
+  --text-black: #3c3c3c;
+  --text-white: #ffffff;
+  
+  /* Transparências */
+  --transparent: transparent;
+}
