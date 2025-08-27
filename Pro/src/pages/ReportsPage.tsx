@@ -138,9 +138,17 @@ export const ReportsPage: React.FC = () => {
             </div>
             <div className="flex items-center space-x-3">
               <button
-                onClick={() => navigate("/reports/generate")}
+                onClick={() => navigate("/reports/detailed")}
                 className="flex items-center space-x-2 p-3 rounded-lg text-white font-medium transition-colors"
                 style={{ backgroundColor: getProfessionalColor() }}
+              >
+                <BarChart3 size={18} />
+                <span>Relatórios Detalhados</span>
+              </button>
+              <button
+                onClick={() => navigate("/reports/generate")}
+                className="flex items-center space-x-2 p-3 rounded-lg border-2 font-medium transition-colors"
+                style={{ borderColor: getProfessionalColor(), color: getProfessionalColor() }}
               >
                 <BarChart3 size={18} />
                 <span>Gerar Relatório</span>

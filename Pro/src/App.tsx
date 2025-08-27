@@ -12,6 +12,7 @@ import { ReportsPage } from './pages/ReportsPage';
 import { MedicationsPage } from './pages/MedicationsPage';
 import { PrescriptionsPage } from './pages/PrescriptionsPage';
 import { FullCalendarPage } from './pages/FullCalendarPage';
+import { DetailedReportsPage } from './pages/DetailedReportsPage';
 import { ProfessionalProvider } from './contexts/ProfessionalContext';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
               
                                  {/* Rotas de Relatórios */}
                    <Route path="/reports" element={<ReportsPage />} />
+                   <Route path="/reports/detailed" element={<DetailedReportsPage />} />
                    <Route path="/reports/generate" element={<div className="p-8 text-center">Gerar Relatório - Em desenvolvimento</div>} />
                    <Route path="/reports/:id" element={<div className="p-8 text-center">Visualizar Relatório - Em desenvolvimento</div>} />
 

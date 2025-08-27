@@ -10,25 +10,32 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 - **Características**: Crianças com atraso de fala
 - **Necessidades**: Estimulação lúdica e educativa
 - **Interação**: Mínima, focada em jogos
+- **Plataforma**: React Native com TypeScript
 
 ### 2. Pais/Responsáveis (TUTORS)
 - **Perfil**: Pais e responsáveis pelas crianças
 - **Necessidades**: Acompanhamento básico de progresso
 - **Limitações**: Não são especialistas em tecnologia
 - **Foco**: Relatórios simples e conquistas
+- **Plataforma**: React Native com TypeScript
 
-### 3. Profissionais Avançados (PRO)
-- **Perfil**: Profissionais com conhecimento técnico
-- **Necessidades**: Relatórios detalhados e análise avançada
-- **Recursos**: Contato direto com desenvolvimento
-- **Foco**: Ferramentas avançadas de análise
+### 3. Profissionais da Saúde (PRO)
+- **Perfil**: Fonoaudiólogos, Psicólogos e Psiquiatras
+- **Necessidades**: Gestão completa de pacientes e sessões
+- **Recursos**: Dashboard avançado, agenda, relatórios detalhados
+- **Foco**: Ferramentas profissionais para acompanhamento clínico
+- **Plataforma**: React com TypeScript
+- **Funcionalidades Específicas**:
+  - **Fonoaudiólogos**: Gestão de sessões de fonoaudiologia
+  - **Psicólogos**: Gestão de sessões de psicologia
+  - **Psiquiatras**: Gestão de consultas, medicações e prescrições
 
 ## Regras Principais
 
 ### RN001 - Hierarquia de Acesso
 - **KIDS**: Acesso apenas aos jogos e atividades
 - **TUTORS**: Acesso aos dados das crianças que acompanham (pais/responsáveis)
-- **PRO**: Acesso completo ao sistema e contato com desenvolvimento
+- **PRO**: Acesso completo ao sistema com funcionalidades específicas por especialidade
 
 ### RN002 - Dados das Crianças
 - Cada criança deve ter um perfil único
@@ -44,22 +51,32 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 
 ### RN004 - Relatórios
 - **TUTORS**: Relatórios básicos e visuais
-- **PRO**: Relatórios detalhados com métricas avançadas
+- **PRO**: Relatórios detalhados com métricas avançadas e funcionalidades específicas por especialidade
 - Dados devem ser exportáveis
 - Histórico deve ser mantido
 
-### RN005 - Cores da Aplicação
-**CRÍTICO**: Apenas as seguintes cores podem ser utilizadas:
-- Verde Escuro: `#44624a`
-- Verde Médio: `#8ba888`
-- Verde Claro: `#c0cfb2`
-- Bege: `#f1ebe1`
+### RN005 - Sistema de Cores
+**PALETA OFICIAL DO PROJETO**:
+- **Azul**: `#1e88e5` (cor principal)
+- **Verde**: `#43a047` (fonoaudiólogos)
+- **Vermelho**: `#e53935` (psiquiatras)
+- **Amarelo**: `#fbc02d` (acessórios)
+- **Azul Escuro**: `#054776` (fundo)
+- **Branco**: `#f4f6ff` (fundo claro)
+- **Preto**: `#3c3c3c` (texto)
+- **Branco**: `#ffffff` (texto claro)
 
 ### RN006 - Acessibilidade
 - Elementos de toque devem ter tamanho mínimo de 44px
 - Contraste adequado entre texto e fundo
 - Hierarquia visual clara
 - Textos legíveis e apropriados para a idade
+
+### RN007 - Sistema Modular PRO
+- Interface adaptativa baseada no tipo de profissional
+- Funcionalidades específicas por especialidade
+- Dashboard personalizado com dados relevantes
+- Sistema de cores diferenciado por profissional
 
 ## Fluxos de Negócio
 
@@ -77,7 +94,14 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 4. PRO analisa dados detalhados
 5. Relatórios são gerados
 
-### FBN003 - Gamificação
+### FBN003 - Gestão Profissional (PRO)
+1. Profissional faz login no sistema
+2. Sistema identifica tipo de profissional
+3. Interface é adaptada à especialidade
+4. Dashboard mostra dados relevantes
+5. Funcionalidades específicas são disponibilizadas
+
+### FBN004 - Gamificação
 1. Criança completa atividades
 2. Conquistas são desbloqueadas
 3. Progresso é atualizado
@@ -93,13 +117,19 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 
 ### RT002 - Comunicação
 - KIDS e TUTORS: Comunicação via dados compartilhados
-- PRO: Contato direto com desenvolvimento
+- PRO: Sistema independente com funcionalidades avançadas
 - Sincronização: Conceitual na fase inicial
 
 ### RT003 - Performance
 - Aplicações devem carregar rapidamente
 - Dados devem ser otimizados para mobile
 - Interface deve ser responsiva
+
+### RT004 - Sistema PRO
+- Interface responsiva para desktop
+- Navegação intuitiva entre funcionalidades
+- Sistema de cores consistente
+- Componentes reutilizáveis
 
 ## Validações
 
@@ -114,7 +144,12 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 - Aprovação de solicitação
 - Limitação de acesso por criança (pais/responsáveis)
 
-### V003 - Jogos
+### V003 - Acesso de PRO
+- Credenciais válidas
+- Identificação do tipo de profissional
+- Acesso às funcionalidades específicas da especialidade
+
+### V004 - Jogos
 - Dificuldade apropriada para idade
 - Conteúdo adequado
 - Feedback positivo
@@ -135,3 +170,30 @@ Este documento define as regras de negócio fundamentais do sistema FalaAtípica
 - Feedback de TUTORS (pais/responsáveis)
 - Uso contínuo da plataforma
 - Recomendação para outros pais/responsáveis
+
+### MS004 - Eficiência Profissional (PRO)
+- Tempo de gestão de pacientes
+- Qualidade dos relatórios gerados
+- Satisfação dos profissionais
+- Uso das funcionalidades específicas
+
+## Funcionalidades Específicas por Profissional
+
+### Fonoaudiólogos
+- Dashboard com foco em sessões de fonoaudiologia
+- Gestão de pacientes com atraso de fala
+- Relatórios de progresso da fala
+- Agenda de sessões
+
+### Psicólogos
+- Dashboard com foco em sessões de psicologia
+- Gestão de pacientes com aspectos psicológicos
+- Relatórios de desenvolvimento emocional
+- Agenda de sessões
+
+### Psiquiatras
+- Dashboard com foco em consultas psiquiátricas
+- Gestão de medicações e prescrições
+- Relatórios de evolução clínica
+- Biblioteca de medicamentos
+- Sistema de prescrições

@@ -12,16 +12,16 @@ Sistema completo de auxílio para crianças com atraso de fala, desenvolvido com
 - **Objetivo**: Estimular o desenvolvimento da fala através de atividades lúdicas
 
 ### Aplicação TUTORS
-- **Público**: Doutores/Fonoaudiólogos
+- **Público**: Pais/Responsáveis pelas crianças
 - **Plataforma**: React Native com TypeScript
-- **Foco**: Relatórios básicos e acompanhamento de conquistas
-- **Objetivo**: Permitir que profissionais acompanhem o progresso das crianças
+- **Foco**: Acompanhamento básico de progresso e conquistas
+- **Objetivo**: Permitir que pais/responsáveis acompanhem o progresso das crianças
 
 ### Aplicação PRO
-- **Público**: Profissionais avançados
+- **Público**: Fonoaudiólogos, Psicólogos e Psiquiatras
 - **Plataforma**: React com TypeScript
-- **Foco**: Relatórios detalhados e contato direto com desenvolvimento
-- **Objetivo**: Fornecer ferramentas avançadas para análise e acompanhamento
+- **Foco**: Gestão completa de pacientes, sessões e relatórios detalhados
+- **Objetivo**: Fornecer ferramentas profissionais para acompanhamento clínico
 
 ## Estrutura do Projeto
 ```
@@ -43,11 +43,15 @@ FalaAtipica-Triade/
 ```
 
 ## Paleta de Cores
-**IMPORTANTE**: As cores da aplicação devem ser EXCLUSIVAMENTE as seguintes:
-- **Verde Escuro**: `#44624a`
-- **Verde Médio**: `#8ba888`
-- **Verde Claro**: `#c0cfb2`
-- **Bege**: `#f1ebe1`
+**PALETA OFICIAL DO PROJETO**:
+- **Azul**: `#1e88e5` (cor principal)
+- **Verde**: `#43a047` (fonoaudiólogos)
+- **Vermelho**: `#e53935` (psiquiatras)
+- **Amarelo**: `#fbc02d` (acessórios)
+- **Azul Escuro**: `#054776` (fundo)
+- **Branco**: `#f4f6ff` (fundo claro)
+- **Preto**: `#3c3c3c` (texto)
+- **Branco**: `#ffffff` (texto claro)
 
 ## Tecnologias
 - **Frontend Mobile**: React Native com TypeScript
