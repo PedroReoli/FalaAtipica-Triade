@@ -33,6 +33,11 @@
 - [Documentação PRO](./pro/README.md) - Documentação específica da aplicação Pro
 - [Telas PRO](./pro/telas.md) - Lista e descrição das telas
 - [Componentes PRO](./pro/componentes.md) - Componentes específicos
+- [Regras de Negócio PRO](./pro/regras-negocio-pro.md) - Regras de negócio por profissional
+- [Páginas Pendentes PRO](./pro/paginas-pendentes.md) - Lista de páginas não desenvolvidas completamente
+- [Componentes Morfos PRO](./pro/componentes-morfos.md) - Componentes adaptativos por profissional
+- [Implementações Realizadas PRO](./pro/implementacoes-realizadas.md) - Documentação completa das implementações
+- [Expansão de Profissionais](./pro/expansao-profissionais.md) - Plano de expansão para pedagogos e psicopedagogos
 
 ## Dados Mockados
 
@@ -42,6 +47,9 @@
 - [Exemplos de Dados](./mocap/examples.md) - Exemplos de dados mockados
 
 ## Desenvolvimento
+
+### 🎨 Design System
+- [Paleta de Cores](./cores.md) - Documentação completa da paleta de cores do projeto
 
 ### 🔧 Configurações
 - [Configurações do Projeto](../cursor.rules) - Regras e configurações do Cursor IDE
