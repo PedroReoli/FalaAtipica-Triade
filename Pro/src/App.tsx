@@ -12,6 +12,9 @@ import { ReportsPage } from './pages/ReportsPage';
 import { MedicationsPage } from './pages/MedicationsPage';
 import { PrescriptionsPage } from './pages/PrescriptionsPage';
 import { FullCalendarPage } from './pages/FullCalendarPage';
+import { PatientsPage } from './pages/PatientsPage';
+import { SessionsPage } from './pages/SessionsPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { DetailedReportsPage } from './pages/DetailedReportsPage';
 import { ProfessionalProvider } from './contexts/ProfessionalContext';
 
@@ -62,12 +65,14 @@ function App() {
               <Route path="/prescriptions/new" element={<div className="p-8 text-center">Nova Prescrição - Em desenvolvimento</div>} />
               <Route path="/prescriptions/:id" element={<div className="p-8 text-center">Visualizar Prescrição - Em desenvolvimento</div>} />
               
+              {/* Rotas implementadas */}
+              <Route path="/patients" element={<PatientsPage />} />
+              <Route path="/sessions" element={<SessionsPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              
               {/* Rotas placeholder para outras páginas */}
-              <Route path="/patients" element={<div className="p-8 text-center">Página de Pacientes - Em desenvolvimento</div>} />
-              <Route path="/sessions" element={<div className="p-8 text-center">Página de Sessões - Em desenvolvimento</div>} />
               <Route path="/settings" element={<div className="p-8 text-center">Página de Configurações - Em desenvolvimento</div>} />
               <Route path="/contact" element={<div className="p-8 text-center">Página de Contato - Em desenvolvimento</div>} />
-              <Route path="/profile" element={<div className="p-8 text-center">Página de Perfil - Em desenvolvimento</div>} />
             </Route>
           </Route>
         </Routes>

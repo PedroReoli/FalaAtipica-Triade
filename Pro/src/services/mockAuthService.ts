@@ -37,6 +37,24 @@ export const mockUsers: MockUser[] = [
     type: 'psiquiatra',
     license: 'CRM 54321',
     specialty: 'Psiquiatria Infantil'
+  },
+  // Pedagogo
+  {
+    email: 'pedagogo@teste.com',
+    password: '123456',
+    name: 'Prof. Maria Santos',
+    type: 'pedagogo',
+    license: 'CREF 12345',
+    specialty: 'Pedagogia Infantil'
+  },
+  // Psicopedagogo
+  {
+    email: 'psicopedagogo@teste.com',
+    password: '123456',
+    name: 'Dra. Ana Costa',
+    type: 'psicopedagogo',
+    license: 'CRP 67890',
+    specialty: 'Psicopedagogia Clínica'
   }
 ];
 

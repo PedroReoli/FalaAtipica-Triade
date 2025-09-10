@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain, Heart, Pill } from 'lucide-react';
+import { Brain, Heart, Pill, BookOpen, Mic } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import type { ProfessionalType } from '../types';
 
@@ -20,8 +20,8 @@ export const ProfessionalTypeSelector: React.FC = () => {
       type: 'fonoaudiologo',
       name: 'Fonoaudiólogo',
       description: 'Especialista em comunicação e linguagem',
-      icon: Brain,
-      color: 'bg-verde-escuro',
+      icon: Mic,
+      color: 'bg-green-600',
       features: [
         'Avaliação de linguagem',
         'Terapia de fala',
@@ -47,12 +47,38 @@ export const ProfessionalTypeSelector: React.FC = () => {
       name: 'Psiquiatra',
       description: 'Especialista em saúde mental e medicamentos',
       icon: Pill,
-      color: 'bg-purple-600',
+      color: 'bg-red-600',
       features: [
         'Avaliação psiquiátrica',
         'Prescrição medicamentosa',
         'Biblioteca de receitas',
         'Acompanhamento clínico'
+      ]
+    },
+    {
+      type: 'pedagogo',
+      name: 'Pedagogo',
+      description: 'Especialista em educação e desenvolvimento acadêmico',
+      icon: BookOpen,
+      color: 'bg-yellow-600',
+      features: [
+        'Avaliação educacional',
+        'Intervenção pedagógica',
+        'Desenvolvimento acadêmico',
+        'Relatórios educacionais'
+      ]
+    },
+    {
+      type: 'psicopedagogo',
+      name: 'Psicopedagogo',
+      description: 'Especialista em dificuldades de aprendizagem',
+      icon: Brain,
+      color: 'bg-purple-600',
+      features: [
+        'Avaliação psicopedagógica',
+        'Intervenção em dificuldades',
+        'Estratégias de aprendizagem',
+        'Relatórios de superação'
       ]
     }
   ];
@@ -68,7 +94,7 @@ export const ProfessionalTypeSelector: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         {professionalTypes.map((option) => (
           <div
             key={option.type}

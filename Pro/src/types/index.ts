@@ -1,5 +1,5 @@
 // Tipos de usuário/profissional
-export type ProfessionalType = 'fonoaudiologo' | 'psicologo' | 'psiquiatra';
+export type ProfessionalType = 'fonoaudiologo' | 'psicologo' | 'psiquiatra' | 'pedagogo' | 'psicopedagogo';
 
 export interface Professional {
   id: string;

@@ -48,13 +48,31 @@ export const ProfessionalProvider: React.FC<ProfessionalProviderProps> = ({ chil
   // Atualizar dados quando o tipo de profissional mudar
   useEffect(() => {
     if (currentUser) {
+      const getProfessionalData = (type: ProfessionalType) => {
+        switch (type) {
+          case 'fonoaudiologo':
+            return { patients: 24, sessions: 156 };
+          case 'psicologo':
+            return { patients: 18, sessions: 89 };
+          case 'psiquiatra':
+            return { patients: 32, sessions: 124 };
+          case 'pedagogo':
+            return { patients: 28, sessions: 142 };
+          case 'psicopedagogo':
+            return { patients: 22, sessions: 98 };
+          default:
+            return { patients: 18, sessions: 89 };
+        }
+      };
+
+      const data = getProfessionalData(professionalType);
       setProfessionalData(prev => ({
         ...prev,
         name: currentUser.name,
         license: currentUser.license,
         specialty: currentUser.specialty,
-        patients: professionalType === 'fonoaudiologo' ? 24 : professionalType === 'psicologo' ? 18 : 32,
-        sessions: professionalType === 'fonoaudiologo' ? 156 : professionalType === 'psicologo' ? 89 : 124,
+        patients: data.patients,
+        sessions: data.sessions,
       }));
     }
   }, [professionalType, currentUser]);

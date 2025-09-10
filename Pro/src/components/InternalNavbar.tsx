@@ -16,6 +16,10 @@ export const InternalNavbar: React.FC = () => {
         return 'var(--blue)';
       case 'psiquiatra':
         return 'var(--red)';
+      case 'pedagogo':
+        return 'var(--yellow)';
+      case 'psicopedagogo':
+        return 'var(--purple)';
       default:
         return 'var(--blue)';
     }
@@ -65,6 +69,20 @@ export const InternalNavbar: React.FC = () => {
           Apps
         </button>
         <button
+          onClick={() => navigate('/patients')}
+          className="text-sm font-medium hover:text-blue-600 transition-colors"
+          style={{ color: 'var(--text-black)' }}
+        >
+          {professionalData.type === 'pedagogo' ? 'Alunos' : 'Pacientes'}
+        </button>
+        <button
+          onClick={() => navigate('/sessions')}
+          className="text-sm font-medium hover:text-blue-600 transition-colors"
+          style={{ color: 'var(--text-black)' }}
+        >
+          {professionalData.type === 'psiquiatra' ? 'Consultas' : 'Sessões'}
+        </button>
+        <button
           onClick={() => navigate('/reports')}
           className="text-sm font-medium hover:text-blue-600 transition-colors"
           style={{ color: 'var(--text-black)' }}
@@ -82,9 +100,10 @@ export const InternalNavbar: React.FC = () => {
           <p className="text-xs text-gray-500">{professionalData.license}</p>
         </div>
         <button
-          onClick={handleLogout}
-          className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium"
+          onClick={() => navigate('/profile')}
+          className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium hover:opacity-80 transition-opacity"
           style={{ backgroundColor: getProfessionalColor() }}
+          title="Ver Perfil"
         >
           {professionalData.name.charAt(0)}
         </button>

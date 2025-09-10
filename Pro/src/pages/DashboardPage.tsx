@@ -18,6 +18,8 @@ import {
 } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
 import { ProgressSection, WeeklySchedule, QuickActions, DataSummary } from "../components/dashboardComponents"
+import { DashboardWidget } from "../components/morph"
+import { useProfessionalMetrics } from "../hooks/useProfessionalMetrics"
 
 // Dados mockados para os gráficos
 const progressData = [
@@ -256,6 +258,140 @@ export const DashboardPage: React.FC = () => {
               description: "Gerenciar apps",
               icon: Settings,
               color: "var(--red)",
+              onClick: () => navigate("/apps"),
+            },
+          ],
+        }
+
+      case "pedagogo":
+        return {
+          title: "Pedagogo",
+          icon: BookOpen,
+          color: "var(--yellow)",
+          stats: [
+            {
+              title: "Alunos",
+              value: "28",
+              icon: Users,
+              color: "var(--yellow)",
+              change: "+15%",
+            },
+            {
+              title: "Sessões",
+              value: "142",
+              icon: Calendar,
+              color: "var(--yellow)",
+              change: "+12%",
+            },
+            {
+              title: "Progresso",
+              value: "85%",
+              icon: TrendingUp,
+              color: "var(--yellow)",
+              change: "+8%",
+            },
+            {
+              title: "Relatórios",
+              value: "38",
+              icon: FileText,
+              color: "var(--yellow)",
+              change: "+20%",
+            },
+          ],
+          quickActions: [
+            {
+              title: "Nova Sessão",
+              description: "Registrar sessão",
+              icon: Calendar,
+              color: "var(--yellow)",
+              onClick: () => navigate("/sessions/new"),
+            },
+            {
+              title: "Avaliação",
+              description: "Avaliar aluno",
+              icon: Activity,
+              color: "var(--yellow)",
+              onClick: () => navigate("/assessments"),
+            },
+            {
+              title: "Relatórios",
+              description: "Ver relatórios",
+              icon: BarChart3,
+              color: "var(--yellow)",
+              onClick: () => navigate("/reports"),
+            },
+            {
+              title: "Apps",
+              description: "Gerenciar apps",
+              icon: Settings,
+              color: "var(--yellow)",
+              onClick: () => navigate("/apps"),
+            },
+          ],
+        }
+
+      case "psicopedagogo":
+        return {
+          title: "Psicopedagogo",
+          icon: Brain,
+          color: "var(--purple)",
+          stats: [
+            {
+              title: "Pacientes",
+              value: "22",
+              icon: Users,
+              color: "var(--purple)",
+              change: "+10%",
+            },
+            {
+              title: "Sessões",
+              value: "98",
+              icon: Calendar,
+              color: "var(--purple)",
+              change: "+8%",
+            },
+            {
+              title: "Progresso",
+              value: "78%",
+              icon: TrendingUp,
+              color: "var(--purple)",
+              change: "+6%",
+            },
+            {
+              title: "Avaliações",
+              value: "29",
+              icon: FileText,
+              color: "var(--purple)",
+              change: "+18%",
+            },
+          ],
+          quickActions: [
+            {
+              title: "Nova Sessão",
+              description: "Registrar sessão",
+              icon: Calendar,
+              color: "var(--purple)",
+              onClick: () => navigate("/sessions/new"),
+            },
+            {
+              title: "Avaliação",
+              description: "Avaliar dificuldades",
+              icon: Target,
+              color: "var(--purple)",
+              onClick: () => navigate("/assessments"),
+            },
+            {
+              title: "Relatórios",
+              description: "Ver relatórios",
+              icon: BarChart3,
+              color: "var(--purple)",
+              onClick: () => navigate("/reports"),
+            },
+            {
+              title: "Apps",
+              description: "Gerenciar apps",
+              icon: Settings,
+              color: "var(--purple)",
               onClick: () => navigate("/apps"),
             },
           ],
