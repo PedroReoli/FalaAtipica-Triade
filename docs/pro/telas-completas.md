@@ -106,8 +106,24 @@
 ### 13. PatientsPage
 - **Rota**: `/patients`
 - **Arquivo**: `Pro/src/pages/PatientsPage.tsx`
-- **Status**: ⏳ Pendente
+- **Status**: ⚠️ Ajustes Pendentes
 - **Descrição**: Gestão de pacientes/alunos
+- **Melhorias Aplicadas**: 
+  - ✅ Layout padrão da dashboard aplicado
+  - ✅ Cards compactos e responsivos
+  - ✅ Informações do tutor adicionadas
+  - ✅ Cores adaptativas por profissional
+  - ✅ Layout mobile otimizado
+  - ✅ Gráfico de pizza nas estatísticas
+  - ✅ Ícones nos status (Ativos, Pendentes, Inativos)
+  - ✅ Input de search maior e filtro menor
+  - ✅ Dados simplificados (apenas nome/idade para pacientes)
+  - ✅ Datas das sessões aproximadas
+- **Ajustes Pendentes**:
+  - ⚠️ **Rota `/patients/:id`**: Não implementada
+  - ⚠️ **Rota `/patients/new`**: Não implementada
+  - ⚠️ **Funcionalidade**: Cards clicáveis não funcionam
+  - ⚠️ **Navegação**: Botão "Novo Paciente" não funciona
 
 ### 14. SessionsPage
 - **Rota**: `/sessions`
