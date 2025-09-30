@@ -17,15 +17,15 @@ interface QuickActionsProps {
 
 export const QuickActions: React.FC<QuickActionsProps> = ({ actions }) => {
   return (
-    <div className="mb-2">
+    <div className="w-full">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {actions.map((action, index) => (
-                     <button
-             key={index}
-             onClick={action.onClick}
-             className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200"
-             style={{ border: `2px solid ${action.color}` }}
-           >
+          <button
+            key={index}
+            onClick={action.onClick}
+            className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200 w-full"
+            style={{ border: `2px solid ${action.color}` }}
+          >
             <div className="flex items-center space-x-3">
               <div
                 className="w-12 h-12 rounded-lg flex items-center justify-center shadow-sm"
