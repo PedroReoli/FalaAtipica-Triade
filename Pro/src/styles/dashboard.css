@@ -1,0 +1,340 @@
+/* Estilos específicos para a Dashboard */
+
+/* Container principal da dashboard */
+.dashboard-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Conteúdo principal */
+.dashboard-content {
+  min-height: 100vh;
+  width: 100%;
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .dashboard-content {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-content {
+    padding: 2rem;
+  }
+}
+
+/* Grid principal da dashboard */
+.dashboard-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 1280px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 3fr;
+  }
+}
+
+/* Componentes da dashboard */
+.dashboard-component {
+  width: 100%;
+  min-height: 400px;
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 2px solid;
+}
+
+/* Resumos horizontais */
+.summary-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .summary-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Cards de resumo */
+.summary-card {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summary-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+.summary-card-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.summary-card-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.summary-card-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0;
+}
+
+.summary-card-change {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #16a34a;
+  margin: 0;
+}
+
+.summary-card-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  text-align: right;
+}
+
+/* Botões de ação rápida */
+.quick-action-button {
+  width: 100%;
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 2px solid;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.quick-action-button:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Seção de progresso */
+.progress-section {
+  width: 100%;
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 2px solid;
+}
+
+/* Gráficos responsivos */
+.chart-container {
+  width: 100%;
+  height: 12rem;
+}
+
+@media (min-width: 640px) {
+  .chart-container {
+    height: 14rem;
+  }
+}
+
+/* Agenda semanal */
+.weekly-schedule {
+  width: 100%;
+  min-height: 400px;
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 2px solid;
+}
+
+.weekly-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+/* Resumo de dados */
+.data-summary {
+  width: 100%;
+  min-height: 400px;
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 2px solid;
+}
+
+/* Estatísticas */
+.stat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.stat-item:hover {
+  background-color: #f9fafb;
+}
+
+/* Responsividade para telas muito pequenas */
+@media (max-width: 640px) {
+  .dashboard-content {
+    padding: 0.5rem;
+  }
+  
+  .dashboard-component {
+    min-height: 300px;
+  }
+  
+  .chart-container {
+    height: 10rem;
+  }
+  
+  /* Mobile: Layout mais compacto */
+  .summary-grid {
+    gap: 0.5rem;
+  }
+  
+  .summary-card {
+    padding: 0.5rem;
+  }
+  
+  .summary-card-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .summary-card-value {
+    font-size: 1.25rem;
+  }
+}
+
+/* Garantir que o conteúdo sempre caiba na tela */
+.dashboard-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Espaçamento consistente */
+.dashboard-spacing {
+  margin-bottom: 1rem;
+}
+
+.dashboard-spacing:last-child {
+  margin-bottom: 0;
+}
+
+/* Layout compacto para desktop (acima de 1200px) */
+@media (min-width: 1200px) {
+  .dashboard-content {
+    padding: 0.75rem;
+  }
+  
+  .dashboard-spacing {
+    margin-bottom: 0.5rem;
+  }
+  
+  .summary-grid {
+    gap: 0.5rem;
+  }
+  
+  .dashboard-component {
+    min-height: 300px;
+    padding: 0.75rem;
+  }
+  
+  .weekly-schedule {
+    min-height: 300px;
+    padding: 1rem;
+  }
+  
+  .data-summary {
+    min-height: 300px;
+    padding: 0.75rem;
+  }
+  
+  .progress-section {
+    min-height: 300px;
+    padding: 0.75rem;
+  }
+  
+  .chart-container {
+    height: 10rem;
+  }
+}
+
+/* Layout ultra compacto para telas muito grandes */
+@media (min-width: 1400px) {
+  .dashboard-content {
+    padding: 0.5rem;
+  }
+  
+  .dashboard-spacing {
+    margin-bottom: 0.25rem;
+  }
+  
+  .dashboard-component {
+    min-height: 250px;
+    padding: 0.5rem;
+  }
+  
+  .weekly-schedule {
+    min-height: 250px;
+    padding: 0.75rem;
+  }
+  
+  .data-summary {
+    min-height: 250px;
+    padding: 0.5rem;
+  }
+  
+  .progress-section {
+    min-height: 250px;
+    padding: 0.5rem;
+  }
+  
+  .chart-container {
+    height: 8rem;
+  }
+}

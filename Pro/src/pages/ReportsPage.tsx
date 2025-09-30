@@ -115,152 +115,158 @@ export const ReportsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--background-white)" }}>
-      <div className="flex-1 p-4 md:p-6 overflow-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => navigate("/dashboard")}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <ArrowLeft size={20} style={{ color: "var(--text-black)" }} />
-              </button>
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold" style={{ color: "var(--text-black)" }}>
-                  Relatórios
-                </h1>
-                <p className="text-sm md:text-base text-gray-600 mt-1">
-                  Visualize e baixe relatórios dos seus pacientes
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => navigate("/reports/detailed")}
-                className="flex items-center space-x-2 p-3 rounded-lg text-white font-medium transition-colors"
-                style={{ backgroundColor: getProfessionalColor() }}
-              >
-                <BarChart3 size={18} />
-                <span>Relatórios Detalhados</span>
-              </button>
-              <button
-                onClick={() => navigate("/reports/generate")}
-                className="flex items-center space-x-2 p-3 rounded-lg border-2 font-medium transition-colors"
-                style={{ borderColor: getProfessionalColor(), color: getProfessionalColor() }}
-              >
-                <BarChart3 size={18} />
-                <span>Gerar Relatório</span>
-              </button>
-              <div
-                className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: getProfessionalColor() }}
-              >
-                <BarChart3 size={20} className="text-white" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Filtros e Busca */}
-        <div className="mb-6">
-          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Buscar relatórios..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Filter size={20} className="text-gray-400" />
-                <select
-                  value={filterType}
-                  onChange={(e) => setFilterType(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">Todos os Tipos</option>
-                  <option value="Progresso">Progresso</option>
-                  <option value="Avaliação">Avaliação</option>
-                  <option value="Mensal">Mensal</option>
-                  <option value="Análise">Análise</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Lista de Relatórios */}
-        <div className="space-y-4">
-          {filteredReports.map((report) => (
-            <div key={report.id} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+    <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
+      <div className="dashboard-content">
+        <div className="w-full min-h-full flex flex-col space-y-2">
+          {/* Header */}
+          <div className="dashboard-spacing">
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center"
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => navigate("/dashboard")}
+                    className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <ArrowLeft size={20} style={{ color: "var(--text-black)" }} />
+                  </button>
+                  <div>
+                    <h1 className="text-xl font-bold" style={{ color: "var(--text-black)" }}>
+                      Relatórios
+                    </h1>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Visualize e baixe relatórios dos seus pacientes
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => navigate("/reports/detailed")}
+                    className="flex items-center space-x-2 px-3 py-2 rounded-lg text-white text-sm font-medium transition-colors"
                     style={{ backgroundColor: getProfessionalColor() }}
                   >
-                    <BarChart3 size={24} className="text-white" />
+                    <BarChart3 size={16} />
+                    <span>Detalhados</span>
+                  </button>
+                  <button
+                    onClick={() => navigate("/reports/generate")}
+                    className="flex items-center space-x-2 px-3 py-2 rounded-lg border-2 text-sm font-medium transition-colors"
+                    style={{ borderColor: getProfessionalColor(), color: getProfessionalColor() }}
+                  >
+                    <BarChart3 size={16} />
+                    <span>Gerar</span>
+                  </button>
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: getProfessionalColor() }}
+                  >
+                    <BarChart3 size={20} className="text-white" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold" style={{ color: "var(--text-black)" }}>
-                      {report.title}
-                    </h3>
-                    <div className="flex items-center space-x-4 mt-1">
-                      <div className="flex items-center space-x-1">
-                        <User size={14} className="text-gray-400" />
-                        <span className="text-sm text-gray-600">{report.patient}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Filtros e Busca */}
+          <div className="dashboard-spacing">
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Buscar relatórios..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Filter size={20} className="text-gray-400" />
+                  <select
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="all">Todos os Tipos</option>
+                    <option value="Progresso">Progresso</option>
+                    <option value="Avaliação">Avaliação</option>
+                    <option value="Mensal">Mensal</option>
+                    <option value="Análise">Análise</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Lista de Relatórios */}
+          <div className="dashboard-spacing">
+            <div className="space-y-3">
+              {filteredReports.map((report) => (
+                <div key={report.id} className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: getProfessionalColor() }}
+                      >
+                        <BarChart3 size={20} className="text-white" />
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <Calendar size={14} className="text-gray-400" />
-                        <span className="text-sm text-gray-600">{report.date}</span>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold" style={{ color: "var(--text-black)" }}>
+                          {report.title}
+                        </h3>
+                        <div className="flex items-center space-x-4 mt-1">
+                          <div className="flex items-center space-x-1">
+                            <User size={14} className="text-gray-400" />
+                            <span className="text-sm text-gray-600">{report.patient}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Calendar size={14} className="text-gray-400" />
+                            <span className="text-sm text-gray-600">{report.date}</span>
+                          </div>
+                          {report.size && (
+                            <span className="text-sm text-gray-500">{report.size}</span>
+                          )}
+                        </div>
                       </div>
-                      {report.size && (
-                        <span className="text-sm text-gray-500">{report.size}</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
+                        {getStatusText(report.status)}
+                      </span>
+                      {report.status === "ready" && (
+                        <button
+                          onClick={() => handleDownload(report)}
+                          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                          title="Baixar relatório"
+                        >
+                          <Download size={18} style={{ color: getProfessionalColor() }} />
+                        </button>
                       )}
+                      <button
+                        onClick={() => navigate(`/reports/${report.id}`)}
+                        className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                        title="Visualizar relatório"
+                      >
+                        <BarChart3 size={18} style={{ color: getProfessionalColor() }} />
+                      </button>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
-                    {getStatusText(report.status)}
-                  </span>
-                  {report.status === "ready" && (
-                    <button
-                      onClick={() => handleDownload(report)}
-                      className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                      title="Baixar relatório"
-                    >
-                      <Download size={18} style={{ color: getProfessionalColor() }} />
-                    </button>
-                  )}
-                  <button
-                    onClick={() => navigate(`/reports/${report.id}`)}
-                    className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                    title="Visualizar relatório"
-                  >
-                    <BarChart3 size={18} style={{ color: getProfessionalColor() }} />
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {filteredReports.length === 0 && (
-          <div className="text-center py-12">
-            <BarChart3 size={48} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-600 mb-2">Nenhum relatório encontrado</h3>
-            <p className="text-sm text-gray-500">Tente ajustar os filtros ou gerar um novo relatório</p>
+            {filteredReports.length === 0 && (
+              <div className="text-center py-12">
+                <BarChart3 size={48} className="mx-auto text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-600 mb-2">Nenhum relatório encontrado</h3>
+                <p className="text-sm text-gray-500">Tente ajustar os filtros ou gerar um novo relatório</p>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

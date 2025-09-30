@@ -5,6 +5,7 @@
 /* Importação dos arquivos de estilo */
 @import './colors.css';
 @import './fonts.css';
+@import './dashboard.css';
 
 /* Tailwind CSS */
 @tailwind base;

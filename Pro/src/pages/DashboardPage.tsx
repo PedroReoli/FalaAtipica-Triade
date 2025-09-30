@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import {
   Users,
@@ -15,9 +16,10 @@ import {
   Activity,
   Heart,
   Target,
+  Filter,
 } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
-import { ProgressSection, WeeklySchedule, QuickActions, DataSummary } from "../components/dashboardComponents"
+import { ProgressSection, WeeklySchedule, DataSummary } from "../components/dashboardComponents"
 import { DashboardWidget } from "../components/morph"
 import { useProfessionalMetrics } from "../hooks/useProfessionalMetrics"
 
@@ -58,6 +60,7 @@ const appointmentsData = [
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
+  const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'quarter'>('week')
 
   // Configurações específicas por tipo de profissional
   const getProfessionalConfig = () => {
@@ -97,36 +100,6 @@ export const DashboardPage: React.FC = () => {
               change: "+15%",
             },
           ],
-          quickActions: [
-            {
-              title: "Nova Sessão",
-              description: "Registrar sessão",
-              icon: Calendar,
-              color: "var(--green)",
-              onClick: () => navigate("/sessions/new"),
-            },
-            {
-              title: "Avaliação",
-              description: "Avaliar paciente",
-              icon: Activity,
-              color: "var(--green)",
-              onClick: () => navigate("/assessments"),
-            },
-            {
-              title: "Relatórios",
-              description: "Ver relatórios",
-              icon: BarChart3,
-              color: "var(--green)",
-              onClick: () => navigate("/reports"),
-            },
-            {
-              title: "Apps",
-              description: "Gerenciar apps",
-              icon: Settings,
-              color: "var(--green)",
-              onClick: () => navigate("/apps"),
-            },
-          ],
         }
 
       case "psicologo":
@@ -162,36 +135,6 @@ export const DashboardPage: React.FC = () => {
               icon: FileText,
               color: "var(--blue)",
               change: "+20%",
-            },
-          ],
-          quickActions: [
-            {
-              title: "Nova Sessão",
-              description: "Registrar sessão",
-              icon: Calendar,
-              color: "var(--blue)",
-              onClick: () => navigate("/sessions/new"),
-            },
-            {
-              title: "Avaliação",
-              description: "Avaliar paciente",
-              icon: Target,
-              color: "var(--blue)",
-              onClick: () => navigate("/assessments"),
-            },
-            {
-              title: "Relatórios",
-              description: "Ver relatórios",
-              icon: BarChart3,
-              color: "var(--blue)",
-              onClick: () => navigate("/reports"),
-            },
-            {
-              title: "Apps",
-              description: "Gerenciar apps",
-              icon: Settings,
-              color: "var(--blue)",
-              onClick: () => navigate("/apps"),
             },
           ],
         }
@@ -231,36 +174,6 @@ export const DashboardPage: React.FC = () => {
               change: "+25%",
             },
           ],
-          quickActions: [
-            {
-              title: "Nova Consulta",
-              description: "Registrar consulta",
-              icon: Calendar,
-              color: "var(--red)",
-              onClick: () => navigate("/sessions/new"),
-            },
-            {
-              title: "Medicações",
-              description: "Gerenciar meds",
-              icon: Pill,
-              color: "var(--red)",
-              onClick: () => navigate("/medications"),
-            },
-            {
-              title: "Prescrições",
-              description: "Ver prescrições",
-              icon: BookOpen,
-              color: "var(--red)",
-              onClick: () => navigate("/prescriptions"),
-            },
-            {
-              title: "Apps",
-              description: "Gerenciar apps",
-              icon: Settings,
-              color: "var(--red)",
-              onClick: () => navigate("/apps"),
-            },
-          ],
         }
 
       case "pedagogo":
@@ -296,36 +209,6 @@ export const DashboardPage: React.FC = () => {
               icon: FileText,
               color: "var(--yellow)",
               change: "+20%",
-            },
-          ],
-          quickActions: [
-            {
-              title: "Nova Sessão",
-              description: "Registrar sessão",
-              icon: Calendar,
-              color: "var(--yellow)",
-              onClick: () => navigate("/sessions/new"),
-            },
-            {
-              title: "Avaliação",
-              description: "Avaliar aluno",
-              icon: Activity,
-              color: "var(--yellow)",
-              onClick: () => navigate("/assessments"),
-            },
-            {
-              title: "Relatórios",
-              description: "Ver relatórios",
-              icon: BarChart3,
-              color: "var(--yellow)",
-              onClick: () => navigate("/reports"),
-            },
-            {
-              title: "Apps",
-              description: "Gerenciar apps",
-              icon: Settings,
-              color: "var(--yellow)",
-              onClick: () => navigate("/apps"),
             },
           ],
         }
@@ -365,36 +248,6 @@ export const DashboardPage: React.FC = () => {
               change: "+18%",
             },
           ],
-          quickActions: [
-            {
-              title: "Nova Sessão",
-              description: "Registrar sessão",
-              icon: Calendar,
-              color: "var(--purple)",
-              onClick: () => navigate("/sessions/new"),
-            },
-            {
-              title: "Avaliação",
-              description: "Avaliar dificuldades",
-              icon: Target,
-              color: "var(--purple)",
-              onClick: () => navigate("/assessments"),
-            },
-            {
-              title: "Relatórios",
-              description: "Ver relatórios",
-              icon: BarChart3,
-              color: "var(--purple)",
-              onClick: () => navigate("/reports"),
-            },
-            {
-              title: "Apps",
-              description: "Gerenciar apps",
-              icon: Settings,
-              color: "var(--purple)",
-              onClick: () => navigate("/apps"),
-            },
-          ],
         }
 
       default:
@@ -403,43 +256,105 @@ export const DashboardPage: React.FC = () => {
           icon: Users,
           color: "var(--blue)",
           stats: [],
-          quickActions: [],
         }
     }
   }
 
   const config = getProfessionalConfig()
 
+  // Dados de resumo por período
+  const getSummaryData = () => {
+    const baseStats = config.stats
+    const periodMultiplier = selectedPeriod === 'week' ? 1 : selectedPeriod === 'month' ? 4 : 12
+    
+    return baseStats.map(stat => ({
+      ...stat,
+      value: selectedPeriod === 'week' 
+        ? stat.value 
+        : selectedPeriod === 'month' 
+          ? Math.round(parseInt(stat.value) * 1.2).toString()
+          : Math.round(parseInt(stat.value) * 1.5).toString()
+    }))
+  }
+
+  const getPeriodLabel = () => {
+    switch (selectedPeriod) {
+      case 'week': return 'Esta Semana'
+      case 'month': return 'Este Mês'
+      case 'quarter': return 'Este Trimestre'
+      default: return 'Este Período'
+    }
+  }
+
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: "var(--background-white)" }}>
+    <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
       {/* Conteúdo Principal - Sempre ocupa altura total da tela */}
-      <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8">
-        <div className="w-full min-h-full flex flex-col space-y-4">
-          {/* Ações Rápidas - Topo */}
-          <div className="w-full">
-            <QuickActions actions={config.quickActions} />
+      <div className="dashboard-content">
+        <div className="w-full min-h-full flex flex-col space-y-2">
+          {/* Resumos - Topo */}
+          <div className="dashboard-spacing">
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${config.color}` }}>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold" style={{ color: "var(--text-black)" }}>
+                  Resumos - {getPeriodLabel()}
+                </h2>
+                <div className="flex items-center space-x-2">
+                  <Filter size={18} className="text-gray-500" />
+                  <select
+                    value={selectedPeriod}
+                    onChange={(e) => setSelectedPeriod(e.target.value as 'week' | 'month' | 'quarter')}
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    style={{ borderColor: config.color }}
+                  >
+                    <option value="week">Esta Semana</option>
+                    <option value="month">Este Mês</option>
+                    <option value="quarter">Este Trimestre</option>
+                  </select>
+                </div>
+              </div>
+              
+              {/* Resumos em Grid Horizontal */}
+              <div className="summary-grid">
+                {getSummaryData().map((stat, index) => (
+                  <div
+                    key={index}
+                    className="summary-card"
+                  >
+                    <div className="summary-card-content">
+                      <div
+                        className="summary-card-icon"
+                        style={{ backgroundColor: stat.color }}
+                      >
+                        <stat.icon size={18} className="text-white" />
+                      </div>
+                      <div className="summary-card-info">
+                        <p className="summary-card-title">{stat.title}</p>
+                        {stat.change && <p className="summary-card-change">{stat.change}</p>}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="summary-card-value">
+                        {stat.value}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Layout Principal - Resumo e Agenda lado a lado */}
-          <div className="w-full grid grid-cols-1 xl:grid-cols-4 gap-4">
-            {/* Resumo dos Dados - Esquerda (1/4 da tela) */}
-            <div className="xl:col-span-1">
-              <DataSummary stats={config.stats} color={config.color} />
-            </div>
-
-            {/* Agenda Semanal - Direita (3/4 da tela) */}
-            <div className="xl:col-span-3">
-              <WeeklySchedule
-                appointments={appointmentsData}
-                professionalType={professionalType}
-                color={config.color}
-                onViewFullCalendar={() => navigate("/full-calendar")}
-              />
-            </div>
+          {/* Layout Principal - Agenda Completa */}
+          <div className="dashboard-spacing">
+            <WeeklySchedule
+              appointments={appointmentsData}
+              professionalType={professionalType}
+              color={config.color}
+              onViewFullCalendar={() => navigate("/full-calendar")}
+            />
           </div>
 
           {/* Seção de Progresso - Abaixo */}
-          <div className="w-full">
+          <div className="dashboard-spacing">
             <ProgressSection
               progressData={progressData}
               sessionData={sessionData}

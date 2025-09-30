@@ -34,7 +34,7 @@ export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ appointments, pr
   }
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm h-full min-h-[400px]" style={{ border: `2px solid ${color}` }}>
+    <div className="weekly-schedule" style={{ borderColor: color }}>
       <div className="flex items-center space-x-2 mb-4">
         <Calendar size={20} style={{ color }} />
         <h3 className="text-lg font-semibold" style={{ color: "var(--text-black)" }}>
@@ -42,7 +42,8 @@ export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ appointments, pr
         </h3>
       </div>
 
-      <div className="grid grid-cols-7 gap-2 mb-4">
+      {/* Desktop: Grid 7 colunas */}
+      <div className="hidden lg:grid weekly-grid">
         {daysOfWeek.map((day, index) => {
           const dayAppointments = getDayAppointments(index)
           const isToday = index === currentDay
@@ -88,6 +89,202 @@ export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ appointments, pr
             </div>
           )
         })}
+      </div>
+
+      {/* Mobile: Layout Vertical */}
+      <div className="lg:hidden space-y-4">
+        {/* Segunda e Terça */}
+        <div className="grid grid-cols-2 gap-3">
+          {[0, 1].map((index) => {
+            const dayAppointments = getDayAppointments(index)
+            const isToday = index === currentDay
+            const dayName = daysOfWeek[index]
+
+            return (
+              <div key={dayName} className="bg-gray-50 rounded-lg p-3">
+                <div
+                  className={`text-center py-2 px-2 rounded-lg text-sm font-medium mb-3 ${
+                    isToday ? "text-white" : "text-gray-600"
+                  }`}
+                  style={{
+                    backgroundColor: isToday ? color : "#f3f4f6",
+                  }}
+                >
+                  {getCurrentDayName(index)}
+                </div>
+
+                <div className="space-y-2">
+                  {dayAppointments.length > 0 ? (
+                    dayAppointments.map((appointment) => (
+                      <div
+                        key={appointment.id}
+                        className="bg-white rounded-md p-2 shadow-sm border border-gray-100"
+                      >
+                        <div className="flex items-center space-x-1 mb-1">
+                          <Clock size={10} className="text-gray-500" />
+                          <span className="text-xs font-medium text-gray-700">{appointment.time}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <User size={10} className="text-gray-500" />
+                          <span className="text-xs text-gray-600 truncate">{appointment.patient}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-2">
+                      <span className="text-xs text-gray-400">Livre</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Quarta e Quinta */}
+        <div className="grid grid-cols-2 gap-3">
+          {[2, 3].map((index) => {
+            const dayAppointments = getDayAppointments(index)
+            const isToday = index === currentDay
+            const dayName = daysOfWeek[index]
+
+            return (
+              <div key={dayName} className="bg-gray-50 rounded-lg p-3">
+                <div
+                  className={`text-center py-2 px-2 rounded-lg text-sm font-medium mb-3 ${
+                    isToday ? "text-white" : "text-gray-600"
+                  }`}
+                  style={{
+                    backgroundColor: isToday ? color : "#f3f4f6",
+                  }}
+                >
+                  {getCurrentDayName(index)}
+                </div>
+
+                <div className="space-y-2">
+                  {dayAppointments.length > 0 ? (
+                    dayAppointments.map((appointment) => (
+                      <div
+                        key={appointment.id}
+                        className="bg-white rounded-md p-2 shadow-sm border border-gray-100"
+                      >
+                        <div className="flex items-center space-x-1 mb-1">
+                          <Clock size={10} className="text-gray-500" />
+                          <span className="text-xs font-medium text-gray-700">{appointment.time}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <User size={10} className="text-gray-500" />
+                          <span className="text-xs text-gray-600 truncate">{appointment.patient}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-2">
+                      <span className="text-xs text-gray-400">Livre</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Sexta e Sábado */}
+        <div className="grid grid-cols-2 gap-3">
+          {[4, 5].map((index) => {
+            const dayAppointments = getDayAppointments(index)
+            const isToday = index === currentDay
+            const dayName = daysOfWeek[index]
+
+            return (
+              <div key={dayName} className="bg-gray-50 rounded-lg p-3">
+                <div
+                  className={`text-center py-2 px-2 rounded-lg text-sm font-medium mb-3 ${
+                    isToday ? "text-white" : "text-gray-600"
+                  }`}
+                  style={{
+                    backgroundColor: isToday ? color : "#f3f4f6",
+                  }}
+                >
+                  {getCurrentDayName(index)}
+                </div>
+
+                <div className="space-y-2">
+                  {dayAppointments.length > 0 ? (
+                    dayAppointments.map((appointment) => (
+                      <div
+                        key={appointment.id}
+                        className="bg-white rounded-md p-2 shadow-sm border border-gray-100"
+                      >
+                        <div className="flex items-center space-x-1 mb-1">
+                          <Clock size={10} className="text-gray-500" />
+                          <span className="text-xs font-medium text-gray-700">{appointment.time}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <User size={10} className="text-gray-500" />
+                          <span className="text-xs text-gray-600 truncate">{appointment.patient}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-2">
+                      <span className="text-xs text-gray-400">Livre</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Domingo - Sozinho */}
+        <div className="grid grid-cols-1">
+          {(() => {
+            const index = 6 // Domingo
+            const dayAppointments = getDayAppointments(index)
+            const isToday = index === currentDay
+            const dayName = daysOfWeek[index]
+
+            return (
+              <div className="bg-gray-50 rounded-lg p-3">
+                <div
+                  className={`text-center py-2 px-2 rounded-lg text-sm font-medium mb-3 ${
+                    isToday ? "text-white" : "text-gray-600"
+                  }`}
+                  style={{
+                    backgroundColor: isToday ? color : "#f3f4f6",
+                  }}
+                >
+                  {getCurrentDayName(index)}
+                </div>
+
+                <div className="space-y-2">
+                  {dayAppointments.length > 0 ? (
+                    dayAppointments.map((appointment) => (
+                      <div
+                        key={appointment.id}
+                        className="bg-white rounded-md p-2 shadow-sm border border-gray-100"
+                      >
+                        <div className="flex items-center space-x-1 mb-1">
+                          <Clock size={10} className="text-gray-500" />
+                          <span className="text-xs font-medium text-gray-700">{appointment.time}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <User size={10} className="text-gray-500" />
+                          <span className="text-xs text-gray-600 truncate">{appointment.patient}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-2">
+                      <span className="text-xs text-gray-400">Livre</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
+        </div>
       </div>
 
              <div className="pt-4 border-t border-gray-200">

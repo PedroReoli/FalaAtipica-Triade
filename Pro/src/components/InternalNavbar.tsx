@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { ProfessionalTypeSelector } from './common/ProfessionalTypeSelector';
 import { mockAuthService } from '../services/mockAuthService';
+import { Menu, X } from 'lucide-react';
 
 export const InternalNavbar: React.FC = () => {
   const navigate = useNavigate();
   const { professionalData } = useProfessional();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const getProfessionalColor = () => {
     switch (professionalData.type) {
@@ -30,91 +32,195 @@ export const InternalNavbar: React.FC = () => {
     navigate('/login');
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
+  const navigationItems = [
+    { path: '/dashboard', label: 'Home' },
+    { path: '/apps', label: 'Apps' },
+    { 
+      path: '/patients', 
+      label: professionalData.type === 'pedagogo' ? 'Alunos' : 'Pacientes' 
+    },
+    { 
+      path: '/sessions', 
+      label: professionalData.type === 'psiquiatra' ? 'Consultas' : 'Sessões' 
+    },
+    { path: '/reports', label: 'Relatórios' },
+    { path: '/settings', label: 'Configurações' }
+  ];
+
   return (
-    <nav className="h-14 bg-white shadow-sm border-b border-gray-200 flex items-center justify-between px-4">
-      {/* Logo e Seletor */}
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
-          <img 
-            src="/assets/logo/falaatipica-logo.png" 
-            alt="FalaAtípica" 
-            className="w-8 h-8"
-          />
-          <span 
-            className="text-lg font-bold"
-            style={{ color: 'var(--blue)' }}
+    <>
+      {/* Navbar Principal */}
+      <nav className="h-14 bg-white shadow-sm border-b border-gray-200 flex items-center justify-between px-4 relative z-50">
+        {/* Mobile: Hambúrguer + Logo + FalaAtípica */}
+        <div className="flex items-center space-x-3">
+          {/* Hambúrguer Menu - Mobile */}
+          <button
+            onClick={toggleSidebar}
+            className="lg:hidden p-2 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Abrir menu"
           >
-            FalaAtípica
-          </span>
-        </div>
-        
-        {/* Seletor de Tipo de Profissional */}
-        <ProfessionalTypeSelector />
-      </div>
+            <Menu size={20} className="text-gray-600" />
+          </button>
 
-      {/* Navegação */}
-      <div className="flex items-center space-x-6">
-        <button
-          onClick={() => navigate('/dashboard')}
-          className="text-sm font-medium hover:text-blue-600 transition-colors"
-          style={{ color: 'var(--text-black)' }}
-        >
-          Home
-        </button>
-        <button
-          onClick={() => navigate('/apps')}
-          className="text-sm font-medium hover:text-blue-600 transition-colors"
-          style={{ color: 'var(--text-black)' }}
-        >
-          Apps
-        </button>
-        <button
-          onClick={() => navigate('/patients')}
-          className="text-sm font-medium hover:text-blue-600 transition-colors"
-          style={{ color: 'var(--text-black)' }}
-        >
-          {professionalData.type === 'pedagogo' ? 'Alunos' : 'Pacientes'}
-        </button>
-        <button
-          onClick={() => navigate('/sessions')}
-          className="text-sm font-medium hover:text-blue-600 transition-colors"
-          style={{ color: 'var(--text-black)' }}
-        >
-          {professionalData.type === 'psiquiatra' ? 'Consultas' : 'Sessões'}
-        </button>
-        <button
-          onClick={() => navigate('/reports')}
-          className="text-sm font-medium hover:text-blue-600 transition-colors"
-          style={{ color: 'var(--text-black)' }}
-        >
-          Relatórios
-        </button>
-        <button
-          onClick={() => navigate('/settings')}
-          className="text-sm font-medium hover:text-blue-600 transition-colors"
-          style={{ color: 'var(--text-black)' }}
-        >
-          Configurações
-        </button>
-      </div>
-
-      {/* Perfil */}
-      <div className="flex items-center space-x-3">
-        <div className="text-right">
-          <p className="text-xs font-medium" style={{ color: 'var(--text-black)' }}>
-            {professionalData.name}
-          </p>
-          <p className="text-xs text-gray-500">{professionalData.license}</p>
+          {/* Logo e Nome */}
+          <div className="flex items-center space-x-2">
+            <img 
+              src="/assets/logo/falaatipica-logo.png" 
+              alt="FalaAtípica" 
+              className="w-8 h-8"
+            />
+            <span 
+              className="text-lg font-bold"
+              style={{ color: 'var(--blue)' }}
+            >
+              FalaAtípica
+            </span>
+          </div>
         </div>
-        <button
-          onClick={() => navigate('/profile')}
-          className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium hover:opacity-80 transition-opacity"
-          style={{ backgroundColor: getProfessionalColor() }}
-          title="Ver Perfil"
-        >
-          {professionalData.name.charAt(0)}
-        </button>
-      </div>
-    </nav>
+
+        {/* Desktop: Navegação + Perfil */}
+        <div className="hidden lg:flex items-center space-x-6">
+          {navigationItems.map((item) => (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className="text-sm font-medium hover:text-blue-600 transition-colors"
+              style={{ color: 'var(--text-black)' }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Desktop: Perfil */}
+        <div className="hidden lg:flex items-center space-x-3">
+          <div className="text-right">
+            <p className="text-xs font-medium" style={{ color: 'var(--text-black)' }}>
+              {professionalData.name}
+            </p>
+            <p className="text-xs text-gray-500">{professionalData.license}</p>
+          </div>
+          <button
+            onClick={() => navigate('/profile')}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium hover:opacity-80 transition-opacity"
+            style={{ backgroundColor: getProfessionalColor() }}
+            title="Ver Perfil"
+          >
+            {professionalData.name.charAt(0)}
+          </button>
+        </div>
+
+        {/* Mobile: Perfil */}
+        <div className="lg:hidden">
+          <button
+            onClick={() => navigate('/profile')}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium hover:opacity-80 transition-opacity"
+            style={{ backgroundColor: getProfessionalColor() }}
+            title="Ver Perfil"
+          >
+            {professionalData.name.charAt(0)}
+          </button>
+        </div>
+      </nav>
+
+      {/* Sidebar Mobile */}
+      {isSidebarOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Overlay */}
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50"
+            onClick={closeSidebar}
+          />
+          
+          {/* Sidebar */}
+          <div className="fixed top-0 left-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
+            {/* Header da Sidebar */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <div className="flex items-center space-x-2">
+                <img 
+                  src="/assets/logo/falaatipica-logo.png" 
+                  alt="FalaAtípica" 
+                  className="w-8 h-8"
+                />
+                <span 
+                  className="text-lg font-bold"
+                  style={{ color: 'var(--blue)' }}
+                >
+                  FalaAtípica
+                </span>
+              </div>
+              <button
+                onClick={closeSidebar}
+                className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+                aria-label="Fechar menu"
+              >
+                <X size={20} className="text-gray-600" />
+              </button>
+            </div>
+
+            {/* Seletor de Profissional */}
+            <div className="p-4 border-b border-gray-200">
+              <ProfessionalTypeSelector />
+            </div>
+
+            {/* Navegação */}
+            <div className="p-4 space-y-2">
+              {navigationItems.map((item) => (
+                <button
+                  key={item.path}
+                  onClick={() => {
+                    navigate(item.path);
+                    closeSidebar();
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium"
+                  style={{ color: 'var(--text-black)' }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Perfil */}
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => {
+                    navigate('/profile');
+                    closeSidebar();
+                  }}
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-medium hover:opacity-80 transition-opacity"
+                  style={{ backgroundColor: getProfessionalColor() }}
+                >
+                  {professionalData.name.charAt(0)}
+                </button>
+                <div>
+                  <p className="text-sm font-medium" style={{ color: 'var(--text-black)' }}>
+                    {professionalData.name}
+                  </p>
+                  <p className="text-xs text-gray-500">{professionalData.license}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  closeSidebar();
+                }}
+                className="w-full mt-4 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              >
+                Sair
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };

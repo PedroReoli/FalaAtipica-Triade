@@ -18,7 +18,7 @@ interface DataSummaryProps {
 
 export const DataSummary: React.FC<DataSummaryProps> = ({ stats, color }) => {
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm h-full min-h-[400px]" style={{ border: `2px solid ${color}` }}>
+    <div className="data-summary" style={{ borderColor: color }}>
       <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-black)" }}>
         Resumo
       </h3>
@@ -26,7 +26,7 @@ export const DataSummary: React.FC<DataSummaryProps> = ({ stats, color }) => {
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors border border-gray-100"
+            className="stat-item"
           >
             <div className="flex items-center space-x-3">
               <div
