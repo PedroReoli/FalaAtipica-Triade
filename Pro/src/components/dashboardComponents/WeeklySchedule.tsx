@@ -34,7 +34,7 @@ export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ appointments, pr
   }
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm h-full" style={{ border: `2px solid ${color}` }}>
+    <div className="bg-white rounded-xl p-6 shadow-sm h-full min-h-[400px]" style={{ border: `2px solid ${color}` }}>
       <div className="flex items-center space-x-2 mb-4">
         <Calendar size={20} style={{ color }} />
         <h3 className="text-lg font-semibold" style={{ color: "var(--text-black)" }}>
