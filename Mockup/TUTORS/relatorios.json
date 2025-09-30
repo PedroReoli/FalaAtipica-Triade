@@ -1,0 +1,92 @@
+{
+  "relatorios": [
+    {
+      "id": "relatorio_001",
+      "criancaId": "crianca_001",
+      "criancaNome": "João Silva",
+      "data": "2024-01-20",
+      "tipo": "semanal",
+      "resumo": {
+        "progressoGeral": 75,
+        "categoriasCompletas": 1,
+        "novasConquistas": 2,
+        "tempoJogado": 15
+      },
+      "detalhes": {
+        "categorias": [
+          {
+            "nome": "Animais",
+            "progresso": 80,
+            "melhoria": "+10%",
+            "observacoes": "Excelente progresso na identificação de animais"
+          },
+          {
+            "nome": "Objetos",
+            "progresso": 60,
+            "melhoria": "+5%",
+            "observacoes": "Bom desenvolvimento na categoria objetos"
+          }
+        ],
+        "conquistas": [
+          {
+            "nome": "Mestre dos Animais",
+            "data": "2024-01-20",
+            "descricao": "Completou todos os jogos de animais"
+          }
+        ],
+        "recomendacoes": [
+          "Continue incentivando o uso da aplicação",
+          "Foque na categoria 'Objetos' para melhorar o progresso",
+          "Parabéns pelo excelente desempenho!"
+        ]
+      }
+    },
+    {
+      "id": "relatorio_002",
+      "criancaId": "crianca_002",
+      "criancaNome": "Ana Costa",
+      "data": "2024-01-21",
+      "tipo": "semanal",
+      "resumo": {
+        "progressoGeral": 60,
+        "categoriasCompletas": 0,
+        "novasConquistas": 1,
+        "tempoJogado": 12
+      },
+      "detalhes": {
+        "categorias": [
+          {
+            "nome": "Animais",
+            "progresso": 70,
+            "melhoria": "+15%",
+            "observacoes": "Bom progresso na identificação de animais"
+          },
+          {
+            "nome": "Objetos",
+            "progresso": 50,
+            "melhoria": "+8%",
+            "observacoes": "Desenvolvimento constante na categoria objetos"
+          }
+        ],
+        "conquistas": [
+          {
+            "nome": "Primeira Estrela",
+            "data": "2024-01-21",
+            "descricao": "Completou o primeiro jogo"
+          }
+        ],
+        "recomendacoes": [
+          "Continue praticando diariamente",
+          "Tente completar mais jogos da categoria 'Objetos'",
+          "Ótimo trabalho!"
+        ]
+      }
+    }
+  ],
+  "estatisticasGerais": {
+    "totalCriancas": 2,
+    "progressoMedio": 67.5,
+    "conquistasTotais": 3,
+    "tempoTotalJogado": 27
+  }
+}

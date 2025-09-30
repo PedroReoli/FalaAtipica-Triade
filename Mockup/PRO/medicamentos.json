@@ -1,0 +1,106 @@
+{
+  "medicamentos": [
+    {
+      "id": "med_001",
+      "nome": "Ritalina",
+      "principioAtivo": "Metilfenidato",
+      "dosagem": "10mg",
+      "forma": "Comprimido",
+      "indicacao": "TDAH",
+      "contraindicacoes": [
+        "Glaucoma",
+        "Hipertensão arterial",
+        "Hipertireoidismo"
+      ],
+      "efeitosColaterais": [
+        "Insônia",
+        "Perda de apetite",
+        "Irritabilidade"
+      ],
+      "posologia": "1 comprimido pela manhã",
+      "observacoes": "Medicamento controlado. Prescrição obrigatória."
+    },
+    {
+      "id": "med_002",
+      "nome": "Fluoxetina",
+      "principioAtivo": "Fluoxetina",
+      "dosagem": "20mg",
+      "forma": "Cápsula",
+      "indicacao": "Depressão e ansiedade",
+      "contraindicacoes": [
+        "Uso de IMAO",
+        "Gravidez",
+        "Amamentação"
+      ],
+      "efeitosColaterais": [
+        "Náusea",
+        "Dor de cabeça",
+        "Insônia"
+      ],
+      "posologia": "1 cápsula pela manhã",
+      "observacoes": "Efeito terapêutico em 2-4 semanas"
+    },
+    {
+      "id": "med_003",
+      "nome": "Risperidona",
+      "principioAtivo": "Risperidona",
+      "dosagem": "0.5mg",
+      "forma": "Comprimido",
+      "indicacao": "Transtornos do espectro autista",
+      "contraindicacoes": [
+        "Demência",
+        "Parkinson",
+        "Alergia ao medicamento"
+      ],
+      "efeitosColaterais": [
+        "Sonolência",
+        "Aumento de peso",
+        "Tremores"
+      ],
+      "posologia": "0.5mg 2x ao dia",
+      "observacoes": "Monitorar peso e glicemia"
+    }
+  ],
+  "prescricoes": [
+    {
+      "id": "presc_001",
+      "pacienteId": "paciente_003",
+      "pacienteNome": "Carlos Oliveira",
+      "profissionalId": "prof_003",
+      "profissionalNome": "Dra. Ana Costa",
+      "data": "2024-01-21",
+      "medicamentos": [
+        {
+          "medicamentoId": "med_001",
+          "nome": "Ritalina",
+          "dosagem": "10mg",
+          "frequencia": "1x ao dia",
+          "duracao": "30 dias",
+          "observacoes": "Tomar pela manhã com café da manhã"
+        }
+      ],
+      "observacoes": "Prescrição para TDAH. Reavaliação em 30 dias.",
+      "status": "ativa"
+    },
+    {
+      "id": "presc_002",
+      "pacienteId": "paciente_002",
+      "pacienteNome": "Ana Costa",
+      "profissionalId": "prof_002",
+      "profissionalNome": "Dr. João Santos",
+      "data": "2024-01-19",
+      "medicamentos": [
+        {
+          "medicamentoId": "med_002",
+          "nome": "Fluoxetina",
+          "dosagem": "20mg",
+          "frequencia": "1x ao dia",
+          "duracao": "60 dias",
+          "observacoes": "Tomar pela manhã com água"
+        }
+      ],
+      "observacoes": "Prescrição para ansiedade. Reavaliação em 60 dias.",
+      "status": "ativa"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "categorias": [
+    {
+      "id": "faq",
+      "nome": "Perguntas Frequentes",
+      "icone": "help-circle",
+      "perguntas": [
+        {
+          "id": "faq_001",
+          "pergunta": "Como acompanhar o progresso da criança?",
+          "resposta": "Você pode acompanhar o progresso através da seção 'Progresso' no menu principal. Lá você encontrará relatórios detalhados sobre o desempenho da criança.",
+          "categoria": "progresso"
+        },
+        {
+          "id": "faq_002",
+          "pergunta": "A aplicação funciona offline?",
+          "resposta": "Sim, a aplicação funciona offline. Os dados são sincronizados quando há conexão com a internet.",
+          "categoria": "tecnica"
+        },
+        {
+          "id": "faq_003",
+          "pergunta": "Como adicionar uma nova criança?",
+          "resposta": "Para adicionar uma nova criança, vá em 'Perfil' > 'Gerenciar Crianças' > 'Adicionar Nova Criança'.",
+          "categoria": "perfil"
+        },
+        {
+          "id": "faq_004",
+          "pergunta": "Posso usar a aplicação em múltiplos dispositivos?",
+          "resposta": "Sim, você pode usar a aplicação em diferentes dispositivos. Seus dados serão sincronizados automaticamente.",
+          "categoria": "tecnica"
+        }
+      ]
+    },
+    {
+      "id": "problemas",
+      "nome": "Problemas Comuns",
+      "icone": "alert-triangle",
+      "problemas": [
+        {
+          "id": "problema_001",
+          "titulo": "Aplicação não abre",
+          "descricao": "Se a aplicação não abrir, tente reiniciar o dispositivo e verificar se há atualizações disponíveis.",
+          "solucao": "Reinicie o dispositivo e verifique atualizações na loja de aplicativos.",
+          "categoria": "tecnica"
+        },
+        {
+          "id": "problema_002",
+          "titulo": "Dados não sincronizam",
+          "descricao": "Se os dados não estão sincronizando, verifique sua conexão com a internet.",
+          "solucao": "Verifique a conexão com a internet e tente novamente em alguns minutos.",
+          "categoria": "sincronizacao"
+        },
+        {
+          "id": "problema_003",
+          "titulo": "Jogos travam",
+          "descricao": "Se os jogos estão travando, pode ser um problema de memória do dispositivo.",
+          "solucao": "Feche outros aplicativos e reinicie a aplicação.",
+          "categoria": "performance"
+        }
+      ]
+    },
+    {
+      "id": "contato",
+      "nome": "Contato",
+      "icone": "mail",
+      "opcoes": [
+        {
+          "id": "contato_001",
+          "tipo": "email",
+          "titulo": "Suporte por Email",
+          "descricao": "Envie suas dúvidas por email",
+          "contato": "suporte@falaatipica.com",
+          "horario": "Segunda a Sexta, 9h às 18h"
+        },
+        {
+          "id": "contato_002",
+          "tipo": "telefone",
+          "titulo": "Suporte por Telefone",
+          "descricao": "Ligue para nosso suporte",
+          "contato": "(11) 3333-4444",
+          "horario": "Segunda a Sexta, 9h às 18h"
+        },
+        {
+          "id": "contato_003",
+          "tipo": "chat",
+          "titulo": "Chat Online",
+          "descricao": "Converse com nosso suporte em tempo real",
+          "contato": "Disponível no app",
+          "horario": "Segunda a Sexta, 9h às 18h"
+        }
+      ]
+    }
+  ],
+  "versao": "1.0.0",
+  "ultimaAtualizacao": "2024-01-21"
+}

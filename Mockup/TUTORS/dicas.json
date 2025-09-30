@@ -1,0 +1,125 @@
+{
+  "categorias": [
+    {
+      "id": "geral",
+      "nome": "Dicas Gerais",
+      "icone": "lightbulb",
+      "dicas": [
+        {
+          "id": "dica_001",
+          "titulo": "Crie uma rotina diária",
+          "descricao": "Estabeleça um horário fixo para a criança usar a aplicação. Isso ajuda a criar o hábito e melhora o aprendizado.",
+          "categoria": "rotina",
+          "prioridade": "alta"
+        },
+        {
+          "id": "dica_002",
+          "titulo": "Celebre as conquistas",
+          "descricao": "Sempre comemore quando a criança completa um jogo ou ganha uma conquista. Isso motiva e reforça o comportamento positivo.",
+          "categoria": "motivacao",
+          "prioridade": "alta"
+        },
+        {
+          "id": "dica_003",
+          "titulo": "Seja paciente",
+          "descricao": "Cada criança tem seu próprio ritmo. Não pressione e permita que ela explore no seu tempo.",
+          "categoria": "comportamento",
+          "prioridade": "media"
+        }
+      ]
+    },
+    {
+      "id": "jogos",
+      "nome": "Dicas para Jogos",
+      "icone": "gamepad",
+      "dicas": [
+        {
+          "id": "dica_004",
+          "titulo": "Jogue junto com a criança",
+          "descricao": "Participe dos jogos, faça perguntas e ajude quando necessário. Isso fortalece o vínculo e melhora o aprendizado.",
+          "categoria": "interacao",
+          "prioridade": "alta"
+        },
+        {
+          "id": "dica_005",
+          "titulo": "Explique as regras",
+          "descricao": "Antes de começar, explique como funciona o jogo. Use linguagem simples e adequada para a idade.",
+          "categoria": "comunicacao",
+          "prioridade": "media"
+        },
+        {
+          "id": "dica_006",
+          "titulo": "Varie os jogos",
+          "descricao": "Não fique apenas em uma categoria. Explore diferentes tipos de jogos para desenvolver várias habilidades.",
+          "categoria": "variedade",
+          "prioridade": "media"
+        }
+      ]
+    },
+    {
+      "id": "progresso",
+      "nome": "Acompanhamento de Progresso",
+      "icone": "trending-up",
+      "dicas": [
+        {
+          "id": "dica_007",
+          "titulo": "Monitore o progresso",
+          "descricao": "Acompanhe regularmente o progresso da criança através dos relatórios. Isso ajuda a identificar pontos fortes e fracos.",
+          "categoria": "monitoramento",
+          "prioridade": "alta"
+        },
+        {
+          "id": "dica_008",
+          "titulo": "Compartilhe com profissionais",
+          "descricao": "Compartilhe os relatórios com fonoaudiólogos e outros profissionais que acompanham a criança.",
+          "categoria": "profissional",
+          "prioridade": "alta"
+        },
+        {
+          "id": "dica_009",
+          "titulo": "Estabeleça metas",
+          "descricao": "Defina metas pequenas e alcançáveis. Comemore cada conquista, por menor que seja.",
+          "categoria": "objetivos",
+          "prioridade": "media"
+        }
+      ]
+    },
+    {
+      "id": "tecnologia",
+      "nome": "Uso da Tecnologia",
+      "icone": "smartphone",
+      "dicas": [
+        {
+          "id": "dica_010",
+          "titulo": "Controle o tempo de uso",
+          "descricao": "Estabeleça limites de tempo para o uso da aplicação. Recomendamos 15-30 minutos por sessão.",
+          "categoria": "tempo",
+          "prioridade": "alta"
+        },
+        {
+          "id": "dica_011",
+          "titulo": "Use em ambiente calmo",
+          "descricao": "Escolha um local tranquilo, sem distrações, para a criança usar a aplicação.",
+          "categoria": "ambiente",
+          "prioridade": "media"
+        },
+        {
+          "id": "dica_012",
+          "titulo": "Mantenha o dispositivo carregado",
+          "descricao": "Certifique-se de que o dispositivo está carregado antes de começar a jogar.",
+          "categoria": "tecnica",
+          "prioridade": "baixa"
+        }
+      ]
+    }
+  ],
+  "dicasEspeciais": [
+    {
+      "id": "dica_especial_001",
+      "titulo": "Dica do Dia",
+      "descricao": "Lembre-se: cada criança é única. O progresso pode variar, mas o importante é manter a motivação e o interesse.",
+      "tipo": "motivacional",
+      "data": "2024-01-21"
+    }
+  ]
+}

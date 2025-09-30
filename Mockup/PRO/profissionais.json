@@ -1,0 +1,139 @@
+{
+  "profissionais": [
+    {
+      "id": "prof_001",
+      "nome": "Dra. Maria Silva",
+      "email": "fono@teste.com",
+      "tipo": "fonoaudiologo",
+      "licenca": "CRFa 12345",
+      "especialidade": "Fonoaudiologia Infantil",
+      "experiencia": 8,
+      "telefone": "(11) 99999-1111",
+      "endereco": {
+        "rua": "Rua das Flores, 123",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01234-567"
+      },
+      "configuracoes": {
+        "notificacoes": true,
+        "relatoriosAutomaticos": true,
+        "tema": "claro"
+      },
+      "estatisticas": {
+        "pacientes": 24,
+        "sessoes": 156,
+        "progressoMedio": 78,
+        "relatorios": 42
+      }
+    },
+    {
+      "id": "prof_002",
+      "nome": "Dr. João Santos",
+      "email": "psico@teste.com",
+      "tipo": "psicologo",
+      "licenca": "CRP 67890",
+      "especialidade": "Psicologia Infantil",
+      "experiencia": 6,
+      "telefone": "(11) 99999-2222",
+      "endereco": {
+        "rua": "Av. Paulista, 456",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01310-100"
+      },
+      "configuracoes": {
+        "notificacoes": true,
+        "relatoriosAutomaticos": false,
+        "tema": "escuro"
+      },
+      "estatisticas": {
+        "pacientes": 18,
+        "sessoes": 89,
+        "progressoMedio": 82,
+        "avaliacoes": 31
+      }
+    },
+    {
+      "id": "prof_003",
+      "nome": "Dra. Ana Costa",
+      "email": "psiqui@teste.com",
+      "tipo": "psiquiatra",
+      "licenca": "CRM 54321",
+      "especialidade": "Psiquiatria Infantil",
+      "experiencia": 10,
+      "telefone": "(11) 99999-3333",
+      "endereco": {
+        "rua": "Rua Augusta, 789",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01305-000"
+      },
+      "configuracoes": {
+        "notificacoes": true,
+        "relatoriosAutomaticos": true,
+        "tema": "claro"
+      },
+      "estatisticas": {
+        "pacientes": 32,
+        "consultas": 124,
+        "prescricoes": 67,
+        "relatorios": 28
+      }
+    },
+    {
+      "id": "prof_004",
+      "nome": "Prof. Maria Santos",
+      "email": "pedagogo@teste.com",
+      "tipo": "pedagogo",
+      "licenca": "CREF 12345",
+      "especialidade": "Pedagogia Infantil",
+      "experiencia": 5,
+      "telefone": "(11) 99999-4444",
+      "endereco": {
+        "rua": "Rua da Consolação, 321",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01302-000"
+      },
+      "configuracoes": {
+        "notificacoes": true,
+        "relatoriosAutomaticos": true,
+        "tema": "claro"
+      },
+      "estatisticas": {
+        "alunos": 28,
+        "sessoes": 142,
+        "progressoMedio": 85,
+        "relatorios": 38
+      }
+    },
+    {
+      "id": "prof_005",
+      "nome": "Dra. Ana Costa",
+      "email": "psicopedagogo@teste.com",
+      "tipo": "psicopedagogo",
+      "licenca": "CRP 67890",
+      "especialidade": "Psicopedagogia Clínica",
+      "experiencia": 7,
+      "telefone": "(11) 99999-5555",
+      "endereco": {
+        "rua": "Rua Oscar Freire, 654",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01426-000"
+      },
+      "configuracoes": {
+        "notificacoes": true,
+        "relatoriosAutomaticos": true,
+        "tema": "claro"
+      },
+      "estatisticas": {
+        "pacientes": 22,
+        "sessoes": 98,
+        "progressoMedio": 78,
+        "avaliacoes": 29
+      }
+    }
+  ]
+}

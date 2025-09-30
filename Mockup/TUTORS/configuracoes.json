@@ -1,0 +1,37 @@
+{
+  "configuracoes": {
+    "notificacoes": {
+      "ativar": true,
+      "novoProgresso": true,
+      "novaConquista": true,
+      "lembreteJogo": true,
+      "horarioLembrete": "18:00"
+    },
+    "privacidade": {
+      "compartilharDados": false,
+      "analytics": true,
+      "backupAutomatico": true
+    },
+    "interface": {
+      "tema": "claro",
+      "tamanhoFonte": "medio",
+      "idioma": "pt-BR"
+    },
+    "jogos": {
+      "somAtivado": true,
+      "vibracaoAtivada": true,
+      "dificuldadePadrao": "media",
+      "tempoLimite": 30
+    }
+  },
+  "termos": {
+    "versao": "1.0",
+    "dataAceite": "2024-01-10",
+    "aceito": true
+  },
+  "privacidade": {
+    "versao": "1.0",
+    "dataAceite": "2024-01-10",
+    "aceito": true
+  }
+}

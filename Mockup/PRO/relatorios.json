@@ -1,0 +1,124 @@
+{
+  "relatorios": [
+    {
+      "id": "relatorio_001",
+      "pacienteId": "paciente_001",
+      "pacienteNome": "João Silva",
+      "profissionalId": "prof_001",
+      "profissionalNome": "Dra. Maria Silva",
+      "tipo": "fonoaudiologia",
+      "data": "2024-01-20",
+      "periodo": {
+        "inicio": "2024-01-15",
+        "fim": "2024-01-20"
+      },
+      "resumo": {
+        "progressoGeral": 75,
+        "sessoesRealizadas": 3,
+        "objetivosAlcancados": 2,
+        "dificuldades": 1
+      },
+      "detalhes": {
+        "objetivos": [
+          {
+            "nome": "Identificação de Animais",
+            "status": "alcancado",
+            "progresso": 80,
+            "observacoes": "Excelente progresso na identificação de animais"
+          },
+          {
+            "nome": "Pronúncia de Palavras",
+            "status": "em_andamento",
+            "progresso": 60,
+            "observacoes": "Melhorou a pronúncia de 3 palavras"
+          },
+          {
+            "nome": "Desenvolvimento de Vocabulário",
+            "status": "alcancado",
+            "progresso": 85,
+            "observacoes": "Aprendeu 5 novas palavras"
+          }
+        ],
+        "atividades": [
+          {
+            "nome": "Jogo dos Animais",
+            "frequencia": 3,
+            "resultado": "Excelente",
+            "observacoes": "Identificou 8 de 10 animais corretamente"
+          },
+          {
+            "nome": "Exercícios de Pronúncia",
+            "frequencia": 3,
+            "resultado": "Bom",
+            "observacoes": "Melhorou a pronúncia de 3 palavras"
+          }
+        ],
+        "recomendacoes": [
+          "Continue incentivando o uso da aplicação",
+          "Foque na categoria 'Objetos' para melhorar o progresso",
+          "Parabéns pelo excelente desempenho!"
+        ]
+      }
+    },
+    {
+      "id": "relatorio_002",
+      "pacienteId": "paciente_002",
+      "pacienteNome": "Ana Costa",
+      "profissionalId": "prof_002",
+      "profissionalNome": "Dr. João Santos",
+      "tipo": "psicologia",
+      "data": "2024-01-19",
+      "periodo": {
+        "inicio": "2024-01-10",
+        "fim": "2024-01-19"
+      },
+      "resumo": {
+        "progressoGeral": 60,
+        "sessoesRealizadas": 2,
+        "objetivosAlcancados": 1,
+        "dificuldades": 2
+      },
+      "detalhes": {
+        "objetivos": [
+          {
+            "nome": "Comunicação Social",
+            "status": "em_andamento",
+            "progresso": 50,
+            "observacoes": "Ana se comunicou mais espontaneamente"
+          },
+          {
+            "nome": "Habilidades Emocionais",
+            "status": "alcancado",
+            "progresso": 80,
+            "observacoes": "Identificou corretamente 6 emoções"
+          },
+          {
+            "nome": "Interação Social",
+            "status": "em_andamento",
+            "progresso": 45,
+            "observacoes": "Interagiu bem com o terapeuta"
+          }
+        ],
+        "atividades": [
+          {
+            "nome": "Atividade de Comunicação",
+            "frequencia": 2,
+            "resultado": "Bom",
+            "observacoes": "Ana se comunicou mais espontaneamente"
+          },
+          {
+            "nome": "Jogos Emocionais",
+            "frequencia": 2,
+            "resultado": "Excelente",
+            "observacoes": "Identificou corretamente 6 emoções"
+          }
+        ],
+        "recomendacoes": [
+          "Continue praticando diariamente",
+          "Tente completar mais jogos da categoria 'Objetos'",
+          "Ótimo trabalho!"
+        ]
+      }
+    }
+  ]
+}
