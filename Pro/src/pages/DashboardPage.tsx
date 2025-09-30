@@ -411,23 +411,23 @@ export const DashboardPage: React.FC = () => {
   const config = getProfessionalConfig()
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--background-white)" }}>
-      {/* Conteúdo Principal */}
-      <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto">
-        <div className="w-full h-full flex flex-col">
+    <div className="min-h-screen w-full" style={{ backgroundColor: "var(--background-white)" }}>
+      {/* Conteúdo Principal - Sempre ocupa altura total da tela */}
+      <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8">
+        <div className="w-full min-h-full flex flex-col space-y-4">
           {/* Ações Rápidas - Topo */}
-          <div className="w-full mb-2">
+          <div className="w-full">
             <QuickActions actions={config.quickActions} />
           </div>
 
-          {/* Layout Principal - Resumo Menor e Agenda Lado a Lado */}
-          <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 mb-4 flex-1">
-            {/* Resumo dos Dados - Esquerda (Menor) */}
+          {/* Layout Principal - Resumo e Agenda lado a lado */}
+          <div className="w-full grid grid-cols-1 xl:grid-cols-4 gap-4">
+            {/* Resumo dos Dados - Esquerda (1/4 da tela) */}
             <div className="xl:col-span-1">
               <DataSummary stats={config.stats} color={config.color} />
             </div>
 
-            {/* Agenda Semanal - Centro (Maior) */}
+            {/* Agenda Semanal - Direita (3/4 da tela) */}
             <div className="xl:col-span-3">
               <WeeklySchedule
                 appointments={appointmentsData}
@@ -438,7 +438,7 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Card de Progresso - Abaixo */}
+          {/* Seção de Progresso - Abaixo */}
           <div className="w-full">
             <ProgressSection
               progressData={progressData}

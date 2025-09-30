@@ -16,6 +16,7 @@ import { PatientsPage } from './pages/PatientsPage';
 import { SessionsPage } from './pages/SessionsPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { DetailedReportsPage } from './pages/DetailedReportsPage';
+import { SettingsPage } from './pages/SettingsPage';
 import { ProfessionalProvider } from './contexts/ProfessionalContext';
 
 function App() {
@@ -70,8 +71,10 @@ function App() {
               <Route path="/sessions" element={<SessionsPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               
+              {/* Rotas implementadas */}
+              <Route path="/settings" element={<SettingsPage />} />
+              
               {/* Rotas placeholder para outras páginas */}
-              <Route path="/settings" element={<div className="p-8 text-center">Página de Configurações - Em desenvolvimento</div>} />
               <Route path="/contact" element={<div className="p-8 text-center">Página de Contato - Em desenvolvimento</div>} />
             </Route>
           </Route>

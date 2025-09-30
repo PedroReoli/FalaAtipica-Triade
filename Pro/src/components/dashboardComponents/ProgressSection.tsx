@@ -53,9 +53,9 @@ export const ProgressSection: React.FC<ProgressSectionProps> = ({
 
   const currentChartData = charts[currentChart]
 
-    return (
-          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${color}` }}>
-             <div className="flex items-center justify-between mb-4">
+  return (
+    <div className="bg-white rounded-xl p-4 shadow-sm w-full" style={{ border: `2px solid ${color}` }}>
+      <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold" style={{ color: "var(--text-black)" }}>
           {currentChartData.title}
         </h3>
@@ -80,7 +80,7 @@ export const ProgressSection: React.FC<ProgressSectionProps> = ({
         </div>
       </div>
 
-             <div className="h-48 sm:h-56">
+      <div className="h-48 sm:h-56">
         <ResponsiveContainer width="100%" height="100%">
           {currentChartData.type === "line" ? (
             <LineChart data={currentChartData.data}>

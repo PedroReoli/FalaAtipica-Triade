@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BarChart3, Calendar, Clock, Dog, Trophy, Flame, Map, Crown, Check } from 'lucide-react-native';
@@ -11,22 +11,77 @@ import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-const stats = [
-  { id: '1', title: 'Total de Interações', value: '1,247', icon: BarChart3 },
-  { id: '2', title: 'Dias Ativos', value: '23', icon: Calendar },
-  { id: '3', title: 'Tempo Médio por Sessão', value: '15 min', icon: Clock },
-  { id: '4', title: 'Categoria Mais Usada', value: 'Animais', icon: Dog },
-];
-
-const badges = [
-  { id: '1', title: 'Primeiro Passo', description: 'Primeira sessão completada', icon: Trophy, earned: true },
-  { id: '2', title: 'Consistente', description: '7 dias seguidos', icon: Flame, earned: true },
-  { id: '3', title: 'Explorador', description: 'Todas as categorias visitadas', icon: Map, earned: false },
-  { id: '4', title: 'Mestre', description: '100 interações completadas', icon: Crown, earned: false },
-];
+// Dados mockados do MOCAP/TUTORS
+const mockProgressData = {
+  criancas: [
+    {
+      id: "crianca_001",
+      nome: "João Silva",
+      idade: 5,
+      responsavel: "Maria Silva",
+      dataInicio: "2024-01-15",
+      progressoGeral: 75,
+      categorias: [
+        {
+          id: "animais",
+          nome: "Animais",
+          progresso: 80,
+          itensCompletos: 8,
+          totalItens: 10,
+          ultimaAtividade: "2024-01-20T10:30:00Z"
+        },
+        {
+          id: "objetos",
+          nome: "Objetos",
+          progresso: 60,
+          itensCompletos: 6,
+          totalItens: 10,
+          ultimaAtividade: "2024-01-19T14:15:00Z"
+        },
+        {
+          id: "cores",
+          nome: "Cores",
+          progresso: 90,
+          itensCompletos: 9,
+          totalItens: 10,
+          ultimaAtividade: "2024-01-21T09:45:00Z"
+        }
+      ],
+      conquistas: [
+        {
+          id: "primeira_conquista",
+          nome: "Primeira Estrela",
+          descricao: "Completou o primeiro jogo",
+          data: "2024-01-16T16:20:00Z",
+          icone: "star"
+        },
+        {
+          id: "animais_mestre",
+          nome: "Mestre dos Animais",
+          descricao: "Completou todos os jogos de animais",
+          data: "2024-01-20T10:30:00Z",
+          icone: "trophy"
+        }
+      ],
+      estatisticas: {
+        totalJogos: 24,
+        jogosCompletos: 18,
+        tempoTotal: 45,
+        sequenciaAtual: 3,
+        melhorSequencia: 5
+      }
+    }
+  ]
+};
 
 export const ProgressScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
+  const [progressData, setProgressData] = useState(mockProgressData);
+
+  useEffect(() => {
+    // Carregar dados do MOCAP/TUTORS
+    setProgressData(mockProgressData);
+  }, []);
 
   const handleHome = () => {
     navigation.navigate('Dashboard');
@@ -40,6 +95,51 @@ export const ProgressScreen: React.FC = () => {
     navigation.goBack();
   };
 
+  // Calcular estatísticas gerais
+  const getGeneralStats = () => {
+    const crianca = progressData.criancas[0];
+    if (!crianca) return [];
+
+    return [
+      { id: '1', title: 'Total de Jogos', value: crianca.estatisticas.totalJogos.toString(), icon: BarChart3 },
+      { id: '2', title: 'Jogos Completos', value: crianca.estatisticas.jogosCompletos.toString(), icon: Check },
+      { id: '3', title: 'Tempo Total', value: `${crianca.estatisticas.tempoTotal} min`, icon: Clock },
+      { id: '4', title: 'Progresso Geral', value: `${crianca.progressoGeral}%`, icon: Trophy },
+    ];
+  };
+
+  const getCategoryStats = () => {
+    const crianca = progressData.criancas[0];
+    if (!crianca) return [];
+
+    return crianca.categorias.map(categoria => ({
+      id: categoria.id,
+      nome: categoria.nome,
+      progresso: categoria.progresso,
+      itensCompletos: categoria.itensCompletos,
+      totalItens: categoria.totalItens,
+      ultimaAtividade: categoria.ultimaAtividade
+    }));
+  };
+
+  const getAchievements = () => {
+    const crianca = progressData.criancas[0];
+    if (!crianca) return [];
+
+    return crianca.conquistas.map(conquista => ({
+      id: conquista.id,
+      title: conquista.nome,
+      description: conquista.descricao,
+      icon: conquista.icone === 'star' ? Trophy : conquista.icone === 'trophy' ? Crown : Trophy,
+      earned: true,
+      date: conquista.data
+    }));
+  };
+
+  const stats = getGeneralStats();
+  const achievements = getAchievements();
+  const categoryStats = getCategoryStats();
+
   return (
     <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
       <Navbar 
@@ -49,8 +149,8 @@ export const ProgressScreen: React.FC = () => {
         showLogo={true}
       />
       
-      <View style={styles.content}>
-        <Text style={styles.title}>Estatísticas</Text>
+      <ScrollView style={styles.content}>
+        <Text style={styles.title}>Estatísticas Gerais</Text>
         
         {/* Cards de Estatísticas */}
         <View style={styles.statsGrid}>
@@ -66,11 +166,33 @@ export const ProgressScreen: React.FC = () => {
           })}
         </View>
 
+        <Text style={styles.title}>Progresso por Categoria</Text>
+        
+        {/* Progresso por Categoria */}
+        <View style={styles.categoryContainer}>
+          {categoryStats.map((categoria) => (
+            <View key={categoria.id} style={styles.categoryCard}>
+              <Text style={styles.categoryName}>{categoria.nome}</Text>
+              <View style={styles.progressBar}>
+                <View 
+                  style={[
+                    styles.progressFill, 
+                    { width: `${categoria.progresso}%` }
+                  ]} 
+                />
+              </View>
+              <Text style={styles.progressText}>
+                {categoria.itensCompletos}/{categoria.totalItens} itens ({categoria.progresso}%)
+              </Text>
+            </View>
+          ))}
+        </View>
+
         <Text style={styles.title}>Conquistas</Text>
         
         {/* Lista de Badges - Layout Compacto */}
         <View style={styles.badgesGrid}>
-          {badges.map((badge) => {
+          {achievements.map((badge) => {
             const IconComponent = badge.icon;
             return (
               <View key={badge.id} style={[styles.badgeCard, !badge.earned && styles.badgeLocked]}>
@@ -88,7 +210,7 @@ export const ProgressScreen: React.FC = () => {
             );
           })}
         </View>
-      </View>
+      </ScrollView>
 
       <Footer 
         activeTab="home"
@@ -176,5 +298,39 @@ const styles = StyleSheet.create({
   },
   badgeDescriptionLocked: {
     color: COLORS.YELLOW,
+  },
+  categoryContainer: {
+    marginBottom: 20,
+  },
+  categoryCard: {
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderWidth: 2,
+    borderColor: COLORS.GREEN,
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 12,
+  },
+  categoryName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.TEXT_BLACK,
+    marginBottom: 8,
+  },
+  progressBar: {
+    height: 8,
+    backgroundColor: COLORS.BACKGROUND_WHITE,
+    borderRadius: 4,
+    overflow: 'hidden',
+    marginBottom: 8,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: COLORS.GREEN,
+    borderRadius: 4,
+  },
+  progressText: {
+    fontSize: 12,
+    color: COLORS.TEXT_BLACK,
+    textAlign: 'center',
   },
 });

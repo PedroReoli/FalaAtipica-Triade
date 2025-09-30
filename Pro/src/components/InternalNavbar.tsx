@@ -89,6 +89,13 @@ export const InternalNavbar: React.FC = () => {
         >
           Relatórios
         </button>
+        <button
+          onClick={() => navigate('/settings')}
+          className="text-sm font-medium hover:text-blue-600 transition-colors"
+          style={{ color: 'var(--text-black)' }}
+        >
+          Configurações
+        </button>
       </div>
 
       {/* Perfil */}
