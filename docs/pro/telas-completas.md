@@ -179,6 +179,35 @@
   - ✅ Navegação de volta para detalhes do paciente
   - ✅ Cores adaptativas por profissional
 
+### 13.4 DeletePatientPage
+- **Rota**: `/patients/:id/delete`
+- **Arquivo**: `Pro/src/pages/DeletePatientPage.tsx`
+- **Status**: ✅ Completa
+- **Descrição**: Exclusão de paciente com confirmação
+- **Funcionalidades**:
+  - ✅ Confirmação por digitação do nome do paciente
+  - ✅ Validação de segurança antes da exclusão
+  - ✅ Interface de confirmação clara
+  - ✅ Navegação de volta para lista de pacientes
+  - ✅ Cores adaptativas por profissional
+
+### 13.5 Funcionalidades Integradas nas Abas
+- **Localização**: Dentro de `PatientDetailsPage` como abas
+- **Status**: 🔄 Em Validação
+- **Descrição**: Documentos, Histórico Médico e Aplicações agora são abas
+- **Funcionalidades**:
+  - ✅ **Aba Documentos**: Upload, lista e gestão de documentos
+  - ✅ **Aba Histórico**: Timeline médica com eventos cronológicos
+  - ✅ **Aba Aplicações**: Gerenciamento de apps KIDS e TUTORS
+  - ✅ **Interface unificada**: Todas as funcionalidades em uma única página
+  - ✅ **Navegação simplificada**: Sem necessidade de rotas separadas
+  - ✅ **Cores adaptativas**: Mantidas em todas as abas
+- **⚠️ PENDENTE**:
+  - ❌ **Gerenciamento de Acessos**: Funcionalidade de revogar tokens, histórico de acessos
+  - ❌ **Layout/UX**: Interface feia e não compacta - precisa de melhorias significativas
+  - ❌ **Responsividade**: Layout não otimizado para diferentes tamanhos de tela
+  - ❌ **Visual**: Cards e componentes precisam de redesign completo
+
 ### 14. SessionsPage
 - **Rota**: `/sessions`
 - **Arquivo**: `Pro/src/pages/SessionsPage.tsx`
@@ -411,11 +440,23 @@
 
 ## 🚀 **Próximos Passos**
 
+### **🎯 Próxima Prioridade: Rota de Sessões**
+- **Foco**: Melhorar layout e UX/UI da seção de Sessões
+- **Objetivo**: Aplicar padrão compacto e responsivo
+- **Status**: Aguardando retorno do usuário
+
+### **📋 Checklist Geral**
 1. **Aplicar padrão** em todas as telas
 2. **Validar manualmente** cada tela
 3. **Corrigir problemas** identificados
 4. **Marcar como completa** quando aprovada
 5. **Seguir para próxima** tela
+
+### **⚠️ Pendências Identificadas**
+- **PatientDetailsPage**: Aba "Aplicações" precisa de melhorias significativas
+- **Layout/UX**: Interface feia e não compacta
+- **Gerenciamento de Acessos**: Funcionalidades não implementadas
+- **Responsividade**: Layout não otimizado
 
 ---
 

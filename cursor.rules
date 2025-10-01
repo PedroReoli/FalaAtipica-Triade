@@ -115,6 +115,7 @@ FalaAtipica-Triade/
 3. **SEMPRE** consultar cursor.rules para regras do projeto
 4. **SEMPRE** verificar MOCAP/ para estrutura de dados
 5. **SEMPRE** revisar regras de negócio em docs/RegraDeNegocios/
+6. **SEMPRE** consultar docs/pro/telas-completas.md para status das telas
 
 ### Ordem de Leitura
 1. README.md (visão geral)
@@ -122,6 +123,23 @@ FalaAtipica-Triade/
 3. docs/RegraDeNegocios/ (regras de negócio)
 4. docs/[aplicacao]/README.md (documentação específica)
 5. MOCAP/[aplicacao]/ (dados mockados)
+6. **docs/pro/telas-completas.md** (status das telas e próximos passos)
+
+### 📋 Documento de Controle de Telas
+- **Arquivo**: `docs/pro/telas-completas.md`
+- **Propósito**: Controlar status de desenvolvimento de todas as telas
+- **Uso**: SEMPRE consultar antes de trabalhar em qualquer tela
+- **Atualização**: SEMPRE atualizar após mudanças
+- **Próximos Passos**: Documentados na seção "Próximos Passos"
+
+### 🎯 Status Atual do Projeto
+- **Última Atualização**: Documentação atualizada com pendências
+- **Próxima Prioridade**: Rota de Sessões (melhorar layout e UX/UI)
+- **Pendências Identificadas**:
+  - PatientDetailsPage: Aba "Aplicações" precisa de melhorias significativas
+  - Layout/UX: Interface feia e não compacta
+  - Gerenciamento de Acessos: Funcionalidades não implementadas
+  - Responsividade: Layout não otimizado
 
 ### Automação (Pasta auto/)
 - **SEMPRE** consultar scripts de automação antes de tarefas repetitivas

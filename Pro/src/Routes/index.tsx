@@ -22,6 +22,7 @@ import { PatientsPage } from '../pages/PatientsPage';
 import { PatientDetailsPage } from '../pages/PatientDetailsPage';
 import { NewPatientPage } from '../pages/NewPatientPage';
 import { EditPatientPage } from '../pages/EditPatientPage';
+import { DeletePatientPage } from '../pages/DeletePatientPage';
 
 // 📅 Gestão de Sessões
 import { SessionsPage } from '../pages/SessionsPage';
@@ -114,6 +115,7 @@ export const AppRoutes = () => {
         <Route path="/patients/new" element={<NewPatientPage />} />
         <Route path="/patients/:id" element={<PatientDetailsPage />} />
         <Route path="/patients/:id/edit" element={<EditPatientPage />} />
+        <Route path="/patients/:id/delete" element={<DeletePatientPage />} />
         
         {/* 📅 GESTÃO DE SESSÕES */}
         <Route path="/sessions" element={<SessionsPage />} />
