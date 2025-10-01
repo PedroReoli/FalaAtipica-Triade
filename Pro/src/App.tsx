@@ -20,6 +20,7 @@ import { SessionsPage } from './pages/SessionsPage';
 import { SessionDetailsPage } from './pages/SessionDetailsPage';
 import { EditSessionPage } from './pages/EditSessionPage';
 import { EditSessionReportPage } from './pages/EditSessionReportPage';
+import { SessionNotesPage } from './pages/SessionNotesPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { DetailedReportsPage } from './pages/DetailedReportsPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -83,6 +84,7 @@ function App() {
               <Route path="/sessions/:id" element={<SessionDetailsPage />} />
               <Route path="/sessions/:id/edit" element={<EditSessionPage />} />
               <Route path="/sessions/:id/report/edit" element={<EditSessionReportPage />} />
+              <Route path="/sessions/:id/notes" element={<SessionNotesPage />} />
               
               {/* Rotas de Perfil */}
               <Route path="/profile" element={<ProfilePage />} />
