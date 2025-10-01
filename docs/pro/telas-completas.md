@@ -325,6 +325,38 @@
 
 ---
 
+## 🚀 **Estrutura de Rotas Centralizada**
+
+### **Arquivo Principal**
+- **`src/Routes/index.tsx`** - Todas as rotas centralizadas
+- **`src/App.tsx`** - Apenas importa e usa as rotas
+
+### **Organização das Rotas**
+```tsx
+// Páginas Públicas (RootLayout)
+├── /login
+├── /request-access
+└── /forgot-password
+
+// Páginas Privadas (InternalLayout)
+├── Dashboard (/dashboard, /apps)
+├── Pacientes (/patients/*)
+├── Sessões (/sessions/*)
+├── Relatórios (/reports/*)
+├── Avaliações (/assessments/*)
+├── Medicações (/medications/*)
+├── Prescrições (/prescriptions/*)
+├── Calendário (/full-calendar)
+└── Perfil (/profile, /settings)
+```
+
+### **Benefícios da Centralização**
+- ✅ **Manutenibilidade**: Fácil localização e edição
+- ✅ **Documentação**: Rotas bem documentadas
+- ✅ **Escalabilidade**: Fácil adição de novas rotas
+- ✅ **Clareza**: Separação lógica entre públicas e privadas
+- ✅ **Consistência**: Padrão uniforme para todas as rotas
+
 ## 🎨 **Padrão de Layout Aplicado**
 
 ### **Estrutura Base**

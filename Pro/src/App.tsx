@@ -1,102 +1,32 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { RootLayout } from './layouts/RootLayout';
-import { InternalLayout } from './layouts/InternalLayout';
-import LoginPage from './pages/LoginPage';
-import RequestAccessPage from './pages/RequestAccessPage';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import { DashboardPage } from './pages/DashboardPage';
-import { AppsManagementPage } from './pages/AppsManagementPage';
-import { NewSessionPage } from './pages/NewSessionPage';
-import { AssessmentsPage } from './pages/AssessmentsPage';
-import { ReportsPage } from './pages/ReportsPage';
-import { MedicationsPage } from './pages/MedicationsPage';
-import { PrescriptionsPage } from './pages/PrescriptionsPage';
-import { FullCalendarPage } from './pages/FullCalendarPage';
-import { PatientsPage } from './pages/PatientsPage';
-import { PatientDetailsPage } from './pages/PatientDetailsPage';
-import { NewPatientPage } from './pages/NewPatientPage';
-import { EditPatientPage } from './pages/EditPatientPage';
-import { SessionsPage } from './pages/SessionsPage';
-import { SessionDetailsPage } from './pages/SessionDetailsPage';
-import { EditSessionPage } from './pages/EditSessionPage';
-import { EditSessionReportPage } from './pages/EditSessionReportPage';
-import { SessionNotesPage } from './pages/SessionNotesPage';
-import { ProfilePage } from './pages/ProfilePage';
-import { DetailedReportsPage } from './pages/DetailedReportsPage';
-import { SettingsPage } from './pages/SettingsPage';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { ProfessionalProvider } from './contexts/ProfessionalContext';
+import { AppRoutes } from './Routes';
+
+/**
+ * 🚀 APLICAÇÃO FALAATÍPICA
+ * 
+ * Este é o componente principal da aplicação que:
+ * - Configura o roteador (BrowserRouter)
+ * - Fornece o contexto profissional
+ * - Importa as rotas centralizadas
+ * 
+ * 📋 ESTRUTURA:
+ * ├── ProfessionalProvider (Contexto global)
+ * ├── Router (Roteamento)
+ * └── AppRoutes (Rotas centralizadas)
+ * 
+ * 🎯 BENEFÍCIOS:
+ * - Código mais limpo e organizado
+ * - Rotas centralizadas em arquivo separado
+ * - Fácil manutenção e adição de novas rotas
+ * - Documentação integrada
+ */
 
 function App() {
   return (
     <ProfessionalProvider>
       <Router>
-        <Routes>
-          {/* Rota raiz - redireciona para login */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          
-          {/* Layout raiz */}
-          <Route element={<RootLayout />}>
-            {/* Páginas públicas */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/request-access" element={<RequestAccessPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            
-            {/* Layout interno (com navbar) */}
-            <Route element={<InternalLayout />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/apps" element={<AppsManagementPage />} />
-              
-              {/* Rotas de Sessões */}
-              <Route path="/sessions/new" element={<NewSessionPage />} />
-              
-              {/* Rotas de Avaliações */}
-              <Route path="/assessments" element={<AssessmentsPage />} />
-              <Route path="/assessments/new" element={<div className="p-8 text-center">Nova Avaliação - Em desenvolvimento</div>} />
-              <Route path="/assessments/:id" element={<div className="p-8 text-center">Detalhes da Avaliação - Em desenvolvimento</div>} />
-              
-                                 {/* Rotas de Relatórios */}
-                   <Route path="/reports" element={<ReportsPage />} />
-                   <Route path="/reports/detailed" element={<DetailedReportsPage />} />
-                   <Route path="/reports/generate" element={<div className="p-8 text-center">Gerar Relatório - Em desenvolvimento</div>} />
-                   <Route path="/reports/:id" element={<div className="p-8 text-center">Visualizar Relatório - Em desenvolvimento</div>} />
-
-                   {/* Rotas de Calendário */}
-                   <Route path="/full-calendar" element={<FullCalendarPage />} />
-              
-              {/* Rotas de Medicações (Psiquiatras) */}
-              <Route path="/medications" element={<MedicationsPage />} />
-              <Route path="/medications/new" element={<div className="p-8 text-center">Nova Prescrição - Em desenvolvimento</div>} />
-              <Route path="/medications/:id" element={<div className="p-8 text-center">Editar Medicação - Em desenvolvimento</div>} />
-              
-              {/* Rotas de Prescrições (Psiquiatras) */}
-              <Route path="/prescriptions" element={<PrescriptionsPage />} />
-              <Route path="/prescriptions/new" element={<div className="p-8 text-center">Nova Prescrição - Em desenvolvimento</div>} />
-              <Route path="/prescriptions/:id" element={<div className="p-8 text-center">Visualizar Prescrição - Em desenvolvimento</div>} />
-              
-              {/* Rotas de Pacientes */}
-              <Route path="/patients" element={<PatientsPage />} />
-              <Route path="/patients/new" element={<NewPatientPage />} />
-              <Route path="/patients/:id" element={<PatientDetailsPage />} />
-              <Route path="/patients/:id/edit" element={<EditPatientPage />} />
-              
-              {/* Rotas de Sessões */}
-              <Route path="/sessions" element={<SessionsPage />} />
-              <Route path="/sessions/:id" element={<SessionDetailsPage />} />
-              <Route path="/sessions/:id/edit" element={<EditSessionPage />} />
-              <Route path="/sessions/:id/report/edit" element={<EditSessionReportPage />} />
-              <Route path="/sessions/:id/notes" element={<SessionNotesPage />} />
-              
-              {/* Rotas de Perfil */}
-              <Route path="/profile" element={<ProfilePage />} />
-              
-              {/* Rotas implementadas */}
-              <Route path="/settings" element={<SettingsPage />} />
-              
-              {/* Rotas placeholder para outras páginas */}
-              <Route path="/contact" element={<div className="p-8 text-center">Página de Contato - Em desenvolvimento</div>} />
-            </Route>
-          </Route>
-        </Routes>
+        <AppRoutes />
       </Router>
     </ProfessionalProvider>
   );
