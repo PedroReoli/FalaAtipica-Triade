@@ -13,7 +13,13 @@ import { MedicationsPage } from './pages/MedicationsPage';
 import { PrescriptionsPage } from './pages/PrescriptionsPage';
 import { FullCalendarPage } from './pages/FullCalendarPage';
 import { PatientsPage } from './pages/PatientsPage';
+import { PatientDetailsPage } from './pages/PatientDetailsPage';
+import { NewPatientPage } from './pages/NewPatientPage';
+import { EditPatientPage } from './pages/EditPatientPage';
 import { SessionsPage } from './pages/SessionsPage';
+import { SessionDetailsPage } from './pages/SessionDetailsPage';
+import { EditSessionPage } from './pages/EditSessionPage';
+import { EditSessionReportPage } from './pages/EditSessionReportPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { DetailedReportsPage } from './pages/DetailedReportsPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -66,9 +72,19 @@ function App() {
               <Route path="/prescriptions/new" element={<div className="p-8 text-center">Nova Prescrição - Em desenvolvimento</div>} />
               <Route path="/prescriptions/:id" element={<div className="p-8 text-center">Visualizar Prescrição - Em desenvolvimento</div>} />
               
-              {/* Rotas implementadas */}
+              {/* Rotas de Pacientes */}
               <Route path="/patients" element={<PatientsPage />} />
+              <Route path="/patients/new" element={<NewPatientPage />} />
+              <Route path="/patients/:id" element={<PatientDetailsPage />} />
+              <Route path="/patients/:id/edit" element={<EditPatientPage />} />
+              
+              {/* Rotas de Sessões */}
               <Route path="/sessions" element={<SessionsPage />} />
+              <Route path="/sessions/:id" element={<SessionDetailsPage />} />
+              <Route path="/sessions/:id/edit" element={<EditSessionPage />} />
+              <Route path="/sessions/:id/report/edit" element={<EditSessionReportPage />} />
+              
+              {/* Rotas de Perfil */}
               <Route path="/profile" element={<ProfilePage />} />
               
               {/* Rotas implementadas */}

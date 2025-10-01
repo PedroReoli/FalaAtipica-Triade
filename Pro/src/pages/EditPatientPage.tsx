@@ -1,0 +1,385 @@
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft, Save, User, Users, Phone, Mail, MapPin, FileText } from 'lucide-react';
+import { useProfessional } from '../contexts/ProfessionalContext';
+import { useProfessionalColors } from '../hooks/useProfessionalColors';
+
+export const EditPatientPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const { professionalType } = useProfessional();
+  const colors = useProfessionalColors(professionalType);
+
+  const [formData, setFormData] = useState({
+    // Informações do Paciente
+    name: 'João Silva',
+    birthDate: '2016-05-15',
+    status: 'active',
+    // Informações do Tutor
+    tutorName: 'Carlos Silva',
+    tutorRelationship: 'Pai',
+    tutorPhone: '(11) 99999-8888',
+    tutorEmail: 'carlos.silva@email.com',
+    // Endereço
+    street: 'Rua das Flores, 123',
+    city: 'São Paulo',
+    state: 'SP',
+    zipCode: '01234-567',
+    // Informações Médicas
+    diagnosis: 'Transtorno de Fala',
+    allergies: 'Nenhuma',
+    medications: 'Nenhuma',
+    observations: 'Paciente apresenta ótima evolução nas sessões.'
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Paciente editado:', formData);
+    // Aqui você implementaria a lógica de salvar as alterações
+    alert('Paciente atualizado com sucesso!');
+    navigate(`/patients/${id}`);
+  };
+
+  return (
+    <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
+      <div className="dashboard-content">
+        <div className="w-full min-h-full flex flex-col space-y-2">
+          {/* Header */}
+          <div className="dashboard-spacing">
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <button
+                    onClick={() => navigate(`/patients/${id}`)}
+                    className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    <ArrowLeft size={20} />
+                    <span>Voltar</span>
+                  </button>
+                  <div>
+                    <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>
+                      Editar {professionalType === 'pedagogo' ? 'Aluno' : 'Paciente'}
+                    </h1>
+                    <p className="text-gray-600 mt-1">
+                      Atualize as informações do {professionalType === 'pedagogo' ? 'aluno' : 'paciente'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Form */}
+          <div className="dashboard-spacing">
+            <form onSubmit={handleSubmit}>
+              <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+                {/* Informações do Paciente */}
+                <div className="mb-8">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <User size={20} style={{ color: colors.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      Informações do {professionalType === 'pedagogo' ? 'Aluno' : 'Paciente'}
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Nome Completo *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="Digite o nome completo"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Data de Nascimento *
+                      </label>
+                      <input
+                        type="date"
+                        name="birthDate"
+                        value={formData.birthDate}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Status *
+                      </label>
+                      <select
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                      >
+                        <option value="active">Ativo</option>
+                        <option value="inactive">Inativo</option>
+                        <option value="pending">Pendente</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Informações do Tutor */}
+                <div className="mb-8">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Users size={20} style={{ color: colors.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      Informações do Tutor/Responsável
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Nome do Tutor *
+                      </label>
+                      <input
+                        type="text"
+                        name="tutorName"
+                        value={formData.tutorName}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="Digite o nome do tutor"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Parentesco *
+                      </label>
+                      <select
+                        name="tutorRelationship"
+                        value={formData.tutorRelationship}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                      >
+                        <option value="Pai">Pai</option>
+                        <option value="Mãe">Mãe</option>
+                        <option value="Avô">Avô</option>
+                        <option value="Avó">Avó</option>
+                        <option value="Tio">Tio</option>
+                        <option value="Tia">Tia</option>
+                        <option value="Outro">Outro</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <Phone size={16} className="inline mr-1" />
+                        Telefone *
+                      </label>
+                      <input
+                        type="tel"
+                        name="tutorPhone"
+                        value={formData.tutorPhone}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="(00) 00000-0000"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <Mail size={16} className="inline mr-1" />
+                        Email *
+                      </label>
+                      <input
+                        type="email"
+                        name="tutorEmail"
+                        value={formData.tutorEmail}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="email@exemplo.com"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Endereço */}
+                <div className="mb-8">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <MapPin size={20} style={{ color: colors.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      Endereço
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Rua e Número
+                      </label>
+                      <input
+                        type="text"
+                        name="street"
+                        value={formData.street}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="Rua Exemplo, 123"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Cidade
+                      </label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="São Paulo"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Estado
+                      </label>
+                      <input
+                        type="text"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="SP"
+                        maxLength={2}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        CEP
+                      </label>
+                      <input
+                        type="text"
+                        name="zipCode"
+                        value={formData.zipCode}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="00000-000"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Informações Médicas */}
+                <div className="mb-8">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <FileText size={20} style={{ color: colors.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      Informações Médicas
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Diagnóstico
+                      </label>
+                      <input
+                        type="text"
+                        name="diagnosis"
+                        value={formData.diagnosis}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="Digite o diagnóstico"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Alergias
+                      </label>
+                      <input
+                        type="text"
+                        name="allergies"
+                        value={formData.allergies}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="Nenhuma"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Medicações
+                      </label>
+                      <input
+                        type="text"
+                        name="medications"
+                        value={formData.medications}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="Nenhuma"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Observações
+                      </label>
+                      <textarea
+                        name="observations"
+                        value={formData.observations}
+                        onChange={handleChange}
+                        rows={3}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
+                        style={{ focusRingColor: colors.primary }}
+                        placeholder="Informações adicionais sobre o paciente"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Botões de Ação */}
+                <div className="flex items-center justify-end space-x-4 pt-6 border-t">
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/patients/${id}`)}
+                    className="px-6 py-3 rounded-lg border-2 font-medium transition-colors"
+                    style={{ borderColor: colors.primary, color: colors.primary }}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-3 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors"
+                    style={{ backgroundColor: colors.primary }}
+                  >
+                    <Save size={18} />
+                    <span>Salvar Alterações</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

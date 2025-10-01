@@ -106,7 +106,7 @@
 ### 13. PatientsPage
 - **Rota**: `/patients`
 - **Arquivo**: `Pro/src/pages/PatientsPage.tsx`
-- **Status**: ⚠️ Ajustes Pendentes
+- **Status**: ✅ Completa
 - **Descrição**: Gestão de pacientes/alunos
 - **Melhorias Aplicadas**: 
   - ✅ Layout padrão da dashboard aplicado
@@ -114,22 +114,131 @@
   - ✅ Informações do tutor adicionadas
   - ✅ Cores adaptativas por profissional
   - ✅ Layout mobile otimizado
-  - ✅ Gráfico de pizza nas estatísticas
-  - ✅ Ícones nos status (Ativos, Pendentes, Inativos)
+  - ✅ **Gráfico interativo melhorado**:
+    - Cores aprimoradas e vibrantes
+    - Efeito hover com destaque visual
+    - Tooltip customizado com percentuais
+    - Legenda interativa abaixo do gráfico
+    - Label central mostrando total
+  - ✅ **Cards de estatísticas melhorados**:
+    - Ícones maiores com gradientes
+    - Bordas e fundos coloridos por categoria
+    - Percentuais exibidos em cada card
+    - Efeito hover com shadow
+    - Interatividade sincronizada com gráfico
   - ✅ Input de search maior e filtro menor
   - ✅ Dados simplificados (apenas nome/idade para pacientes)
   - ✅ Datas das sessões aproximadas
-- **Ajustes Pendentes**:
-  - ⚠️ **Rota `/patients/:id`**: Não implementada
-  - ⚠️ **Rota `/patients/new`**: Não implementada
-  - ⚠️ **Funcionalidade**: Cards clicáveis não funcionam
-  - ⚠️ **Navegação**: Botão "Novo Paciente" não funciona
+  - ✅ **Rota `/patients/:id`**: Implementada
+  - ✅ **Rota `/patients/new`**: Implementada
+  - ✅ **Funcionalidade**: Cards clicáveis funcionando
+  - ✅ **Navegação**: Botão "Novo Paciente" funcionando
+
+### 13.1 PatientDetailsPage
+- **Rota**: `/patients/:id`
+- **Arquivo**: `Pro/src/pages/PatientDetailsPage.tsx`
+- **Status**: ✅ Completa
+- **Descrição**: Detalhes completos do paciente
+- **Funcionalidades**:
+  - ✅ Tabs para Informações, Sessões e Relatórios
+  - ✅ Informações pessoais do paciente
+  - ✅ Informações completas do tutor
+  - ✅ Endereço e informações médicas
+  - ✅ Histórico de sessões
+  - ✅ Botões de edição e exclusão
+  - ✅ Navegação para nova sessão
+  - ✅ Cores adaptativas por profissional
+
+### 13.2 NewPatientPage
+- **Rota**: `/patients/new`
+- **Arquivo**: `Pro/src/pages/NewPatientPage.tsx`
+- **Status**: ✅ Completa
+- **Descrição**: Cadastro de novo paciente
+- **Funcionalidades**:
+  - ✅ Formulário completo de cadastro
+  - ✅ Seções organizadas (Paciente, Tutor, Endereço, Médico)
+  - ✅ Validação de campos obrigatórios
+  - ✅ Select para parentesco do tutor
+  - ✅ Campos para informações médicas
+  - ✅ Botões de salvar e cancelar
+  - ✅ Cores adaptativas por profissional
+
+### 13.3 EditPatientPage
+- **Rota**: `/patients/:id/edit`
+- **Arquivo**: `Pro/src/pages/EditPatientPage.tsx`
+- **Status**: ✅ Completa
+- **Descrição**: Edição de paciente existente
+- **Funcionalidades**:
+  - ✅ Formulário pré-preenchido com dados atuais
+  - ✅ Mesma estrutura do formulário de cadastro
+  - ✅ Campo de status (Ativo/Inativo/Pendente)
+  - ✅ Validação de campos obrigatórios
+  - ✅ Botões de salvar alterações e cancelar
+  - ✅ Navegação de volta para detalhes do paciente
+  - ✅ Cores adaptativas por profissional
 
 ### 14. SessionsPage
 - **Rota**: `/sessions`
 - **Arquivo**: `Pro/src/pages/SessionsPage.tsx`
-- **Status**: ⏳ Pendente
+- **Status**: ✅ Completa
 - **Descrição**: Gestão de sessões/consultas
+- **Melhorias Aplicadas**:
+  - ✅ Layout padrão da dashboard aplicado
+  - ✅ Cards clicáveis para navegação
+  - ✅ Estatísticas em cards compactos
+  - ✅ Filtros de busca e data
+  - ✅ Botões de ação (Visualizar, Editar)
+  - ✅ Cores adaptativas por profissional
+  - ✅ Navegação funcional para detalhes e edição
+
+### 14.1 SessionDetailsPage
+- **Rota**: `/sessions/:id`
+- **Arquivo**: `Pro/src/pages/SessionDetailsPage.tsx`
+- **Status**: ✅ Completa
+- **Descrição**: Detalhes completos da sessão
+- **Funcionalidades**:
+  - ✅ 3 Tabs: Detalhes, Relatório, Anotações
+  - ✅ Informações da sessão (data, horário, duração, tipo)
+  - ✅ Objetivos com status de conclusão
+  - ✅ Atividades realizadas com materiais e observações
+  - ✅ Relatório com progresso visual
+  - ✅ Observações e comportamento
+  - ✅ Próximos passos e recomendações
+  - ✅ Botões de editar e excluir
+  - ✅ Navegação para edição de relatório
+  - ✅ Cores adaptativas por profissional
+
+### 14.2 EditSessionPage
+- **Rota**: `/sessions/:id/edit`
+- **Arquivo**: `Pro/src/pages/EditSessionPage.tsx`
+- **Status**: ✅ Completa
+- **Descrição**: Edição de sessão existente
+- **Funcionalidades**:
+  - ✅ Formulário completo de edição
+  - ✅ Informações básicas (data, horário, duração, tipo, status)
+  - ✅ Objetivos dinâmicos (adicionar/remover)
+  - ✅ Atividades dinâmicas (adicionar/remover)
+  - ✅ Materiais utilizados por atividade
+  - ✅ Observações por atividade
+  - ✅ Navegação de volta para detalhes
+  - ✅ Cores adaptativas por profissional
+
+### 14.3 EditSessionReportPage
+- **Rota**: `/sessions/:id/report/edit`
+- **Arquivo**: `Pro/src/pages/EditSessionReportPage.tsx`
+- **Status**: ✅ Completa
+- **Descrição**: Edição detalhada do relatório da sessão
+- **Funcionalidades**:
+  - ✅ Objetivos com progresso visual (slider)
+  - ✅ Atividades com efetividade
+  - ✅ Avaliação técnica (articulação, fonologia, fluência, voz)
+  - ✅ Observações e comportamento
+  - ✅ Próximos passos dinâmicos
+  - ✅ Recomendações e tarefas para casa
+  - ✅ Foco da próxima sessão
+  - ✅ Interface intuitiva com cores por categoria
+  - ✅ Navegação de volta para detalhes
+  - ✅ Cores adaptativas por profissional
 
 ### 15. ProfilePage
 - **Rota**: `/profile`
