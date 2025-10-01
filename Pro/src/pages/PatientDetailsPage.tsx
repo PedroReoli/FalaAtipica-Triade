@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Edit2, Trash2, Calendar, Phone, Mail, Users, Clock, FileText, Activity } from 'lucide-react';
+import { ArrowLeft, Edit2, Trash2, Calendar, Phone, Mail, Users, Clock, FileText, Activity, Eye, MoreHorizontal } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useProfessionalColors } from '../hooks/useProfessionalColors';
 import type { ProfessionalType } from '../types';
@@ -76,6 +76,18 @@ export const PatientDetailsPage: React.FC = () => {
     if (window.confirm('Tem certeza que deseja excluir este paciente?')) {
       navigate('/patients');
     }
+  };
+
+  const handleViewSession = (sessionId: string) => {
+    navigate(`/sessions/${sessionId}`);
+  };
+
+  const handleEditSession = (sessionId: string) => {
+    navigate(`/sessions/${sessionId}/edit`);
+  };
+
+  const handleEditSessionReport = (sessionId: string) => {
+    navigate(`/sessions/${sessionId}/report/edit`);
   };
 
   const getStatusColor = (status: string) => {
@@ -368,11 +380,41 @@ export const PatientDetailsPage: React.FC = () => {
                               </p>
                             </div>
                           </div>
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium border ${getSessionStatusColor(session.status)}`}
-                          >
-                            {getSessionStatusText(session.status)}
-                          </span>
+                          <div className="flex items-center space-x-2">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-medium border ${getSessionStatusColor(session.status)}`}
+                            >
+                              {getSessionStatusText(session.status)}
+                            </span>
+                            <div className="flex items-center space-x-1">
+                              <button
+                                onClick={() => handleViewSession(session.id)}
+                                className="p-2 rounded-lg text-white transition-colors hover:opacity-80"
+                                style={{ backgroundColor: colors.primary }}
+                                title="Visualizar sessão"
+                              >
+                                <Eye size={16} />
+                              </button>
+                              <button
+                                onClick={() => handleEditSession(session.id)}
+                                className="p-2 rounded-lg text-white transition-colors hover:opacity-80"
+                                style={{ backgroundColor: colors.primary }}
+                                title="Editar sessão"
+                              >
+                                <Edit2 size={16} />
+                              </button>
+                              {session.status === 'completed' && (
+                                <button
+                                  onClick={() => handleEditSessionReport(session.id)}
+                                  className="p-2 rounded-lg text-white transition-colors hover:opacity-80"
+                                  style={{ backgroundColor: colors.primary }}
+                                  title="Editar relatório"
+                                >
+                                  <FileText size={16} />
+                                </button>
+                              )}
+                            </div>
+                          </div>
                         </div>
                         <p className="text-sm text-gray-600">{session.notes}</p>
                       </div>

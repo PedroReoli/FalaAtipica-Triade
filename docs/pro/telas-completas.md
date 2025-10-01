@@ -144,8 +144,10 @@
   - ✅ Informações pessoais do paciente
   - ✅ Informações completas do tutor
   - ✅ Endereço e informações médicas
-  - ✅ Histórico de sessões
-  - ✅ Botões de edição e exclusão
+  - ✅ **Histórico de sessões com botões de ação funcionais**
+  - ✅ **Botões: Visualizar (👁️), Editar (✏️), Editar Relatório (📄)**
+  - ✅ **Navegação funcional para edição de sessões e relatórios**
+  - ✅ Botões de edição e exclusão do paciente
   - ✅ Navegação para nova sessão
   - ✅ Cores adaptativas por profissional
 
@@ -237,6 +239,23 @@
   - ✅ Recomendações e tarefas para casa
   - ✅ Foco da próxima sessão
   - ✅ Interface intuitiva com cores por categoria
+  - ✅ Navegação de volta para detalhes
+  - ✅ Cores adaptativas por profissional
+
+### 14.4 SessionNotesPage
+- **Rota**: `/sessions/:id/notes`
+- **Arquivo**: `Pro/src/pages/SessionNotesPage.tsx`
+- **Status**: ✅ Completa
+- **Descrição**: Gerenciamento de anotações da sessão
+- **Funcionalidades**:
+  - ✅ Visualização de todas as anotações da sessão
+  - ✅ Adição de novas anotações
+  - ✅ Exclusão de anotações existentes
+  - ✅ Timestamp automático em cada anotação
+  - ✅ Identificação do autor da anotação
+  - ✅ Histórico completo de anotações
+  - ✅ Interface intuitiva com textarea
+  - ✅ Botão de salvar anotações
   - ✅ Navegação de volta para detalhes
   - ✅ Cores adaptativas por profissional
 
