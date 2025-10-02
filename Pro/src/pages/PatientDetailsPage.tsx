@@ -14,21 +14,6 @@ interface Session {
   status: 'completed' | 'scheduled' | 'cancelled';
 }
 
-interface Document {
-  id: string;
-  name: string;
-  type: string;
-  size: string;
-  uploadDate: string;
-  url: string;
-}
-
-interface MedicalHistoryEvent {
-  id: string;
-  event: string;
-  date: string;
-  description: string;
-}
 
 interface MobileApp {
   name: string;
@@ -70,8 +55,6 @@ export const PatientDetailsPage: React.FC = () => {
   // Dados importados da pasta Mockup
   const patient = { ...patientDetailsData.patient, id: id };
   const sessions: Session[] = patientDetailsData.sessions as Session[];
-  const documents: Document[] = patientDetailsData.documents as Document[];
-  const medicalHistory: MedicalHistoryEvent[] = patientDetailsData.medicalHistory as MedicalHistoryEvent[];
   const mobileApps = patientDetailsData.mobileApps as { kids: MobileApp; tutors: MobileApp };
   const summary: Summary = patientDetailsData.summary as Summary;
 
@@ -115,9 +98,6 @@ export const PatientDetailsPage: React.FC = () => {
     setShowAddHistoryModal(false);
   };
 
-  const openManagementModal = () => {
-    setShowManagementModal(true);
-  };
 
   const closeManagementModal = () => {
     setShowManagementModal(false);

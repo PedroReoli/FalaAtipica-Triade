@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Search, Plus, Filter, Calendar, Clock, User, Edit, Eye, 
-  ChevronLeft, ChevronRight, Grid, List, Settings, Move
+  Plus, Edit, ChevronLeft, ChevronRight, Move
 } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useProfessionalColors } from '../hooks/useProfessionalColors';
@@ -21,21 +20,17 @@ interface Session {
   professionalType: ProfessionalType;
 }
 
-interface CalendarView {
-  type: 'month' | 'week' | 'day';
-  currentDate: Date;
-}
 
 export const SessionsPage: React.FC = () => {
   const navigate = useNavigate();
   const { professionalType } = useProfessional();
   const colors = useProfessionalColors(professionalType);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isEditMode, setIsEditMode] = useState(false);
   const [showNewSessionModal, setShowNewSessionModal] = useState(false);
+  const [showDayModal, setShowDayModal] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [draggedSession, setDraggedSession] = useState<Session | null>(null);
   const [dragOverDate, setDragOverDate] = useState<string | null>(null);
 
@@ -114,55 +109,6 @@ export const SessionsPage: React.FC = () => {
     { id: '4', name: 'Ana Oliveira', age: 6 }
   ];
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800 border-red-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'Concluída';
-      case 'pending':
-        return 'Pendente';
-      case 'cancelled':
-        return 'Cancelada';
-      default:
-        return 'Pendente';
-    }
-  };
-
-  const filteredSessions = sessions.filter(session => {
-    const matchesSearch = session.patient.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         session.type.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === 'all' || session.status === filterStatus;
-    const matchesDate = !filterDate || session.date === filterDate;
-    return matchesSearch && matchesStatus && matchesDate;
-  });
-
-  const handleSessionClick = (sessionId: string) => {
-    navigate(`/sessions/${sessionId}`);
-  };
-
-  const handleNewSession = () => {
-    navigate('/sessions/new');
-  };
-
-  const handleEditSession = (sessionId: string) => {
-    navigate(`/sessions/${sessionId}/edit`);
-  };
-
-  const handleViewSession = (sessionId: string) => {
-    navigate(`/sessions/${sessionId}`);
-  };
 
   // Funções de navegação do calendário
   const navigateCalendar = (direction: 'prev' | 'next') => {
@@ -218,22 +164,33 @@ export const SessionsPage: React.FC = () => {
     setDragOverDate(null);
   };
 
+  // Função para abrir modal do dia
+  const handleDayClick = (date: string) => {
+    setSelectedDay(date);
+    setShowDayModal(true);
+  };
+
+  const closeDayModal = () => {
+    setShowDayModal(false);
+    setSelectedDay(null);
+  };
+
   return (
     <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
       <div className="dashboard-content">
         <div className="w-full min-h-full flex flex-col space-y-2">
-          {/* Header */}
+      {/* Header */}
           <div className="dashboard-spacing">
             <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
               <div className="flex items-center justify-between">
-                <div>
+          <div>
                   <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>
-                    {professionalType === 'psiquiatra' ? 'Consultas' : 'Sessões'}
-                  </h1>
+              {professionalType === 'psiquiatra' ? 'Consultas' : 'Sessões'}
+            </h1>
                   <p className="text-gray-600 mt-1">
                     Calendário de {professionalType === 'psiquiatra' ? 'consultas' : 'sessões'}
-                  </p>
-                </div>
+            </p>
+          </div>
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={() => setIsEditMode(!isEditMode)}
@@ -247,18 +204,18 @@ export const SessionsPage: React.FC = () => {
                     <Edit size={18} className="inline mr-2" />
                     {isEditMode ? 'Sair do Modo Edição' : 'Modo Edição'}
                   </button>
-                  <button
+          <button
                     onClick={() => setShowNewSessionModal(true)}
                     className="px-4 py-2 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors"
-                    style={{ backgroundColor: colors.primary }}
-                  >
-                    <Plus size={20} />
-                    <span>Nova {professionalType === 'psiquiatra' ? 'Consulta' : 'Sessão'}</span>
-                  </button>
+            style={{ backgroundColor: colors.primary }}
+          >
+            <Plus size={20} />
+            <span>Nova {professionalType === 'psiquiatra' ? 'Consulta' : 'Sessão'}</span>
+          </button>
                 </div>
               </div>
             </div>
-          </div>
+        </div>
 
           {/* Controles do Calendário */}
           <div className="dashboard-spacing">
@@ -284,7 +241,7 @@ export const SessionsPage: React.FC = () => {
                     {viewMode === 'week' && `Semana de ${currentDate.toLocaleDateString('pt-BR')}`}
                     {viewMode === 'day' && currentDate.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
                   </h2>
-                </div>
+          </div>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setViewMode('month')}
@@ -321,8 +278,8 @@ export const SessionsPage: React.FC = () => {
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
+        </div>
+      </div>
 
           {/* Indicador de Drag & Drop */}
           {isEditMode && draggedSession && (
@@ -336,8 +293,8 @@ export const SessionsPage: React.FC = () => {
                 </div>
                 <p className="text-sm text-blue-600 mt-1">
                   Solte em qualquer dia para mover a sessão
-                </p>
-              </div>
+              </p>
+            </div>
             </div>
           )}
 
@@ -347,7 +304,7 @@ export const SessionsPage: React.FC = () => {
               {viewMode === 'month' && (
                 <div className="grid grid-cols-7 gap-0">
                   {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
-                    <div key={day} className="p-3 text-center font-semibold text-gray-700 bg-gray-50 border-b border-gray-200">
+                    <div key={day} className="p-2 text-center font-semibold text-gray-700 bg-gray-50 border-b border-gray-200 text-sm">
                       {day}
                     </div>
                   ))}
@@ -355,7 +312,6 @@ export const SessionsPage: React.FC = () => {
                     const year = currentDate.getFullYear();
                     const month = currentDate.getMonth();
                     const firstDay = new Date(year, month, 1);
-                    const lastDay = new Date(year, month + 1, 0);
                     const startDate = new Date(firstDay);
                     startDate.setDate(startDate.getDate() - firstDay.getDay());
                     
@@ -370,7 +326,7 @@ export const SessionsPage: React.FC = () => {
                       days.push(
                         <div
                           key={i}
-                          className={`p-2 min-h-[100px] border border-gray-200 ${
+                          className={`p-1 min-h-[80px] border border-gray-200 cursor-pointer ${
                             isCurrentMonth ? 'bg-white' : 'bg-gray-50'
                           } ${isToday ? 'bg-blue-50 border-blue-300' : ''} ${
                             dragOverDate === current.toISOString().split('T')[0] ? 'bg-green-100 border-green-300' : ''
@@ -378,9 +334,10 @@ export const SessionsPage: React.FC = () => {
                           onDragOver={(e) => handleDragOver(e, current.toISOString().split('T')[0])}
                           onDrop={(e) => handleDrop(e, current.toISOString().split('T')[0])}
                           onDragLeave={handleDragLeave}
+                          onClick={() => handleDayClick(current.toISOString().split('T')[0])}
                         >
                           <div className="flex items-center justify-between mb-1">
-                            <span className={`text-sm font-medium ${
+                            <span className={`text-xs font-medium ${
                               isCurrentMonth ? 'text-gray-900' : 'text-gray-400'
                             }`}>
                               {current.getDate()}
@@ -388,20 +345,20 @@ export const SessionsPage: React.FC = () => {
                             {isEditMode && (
                               <button
                                 onClick={() => setShowNewSessionModal(true)}
-                                className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-blue-600 transition-colors"
+                                className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-blue-600 transition-colors"
                               >
-                                <Plus size={12} />
+                                <Plus size={10} />
                               </button>
                             )}
                           </div>
-                          <div className="space-y-1">
-                            {daySessions.slice(0, 3).map((session) => (
+                          <div className="space-y-0.5">
+                            {daySessions.slice(0, 2).map((session) => (
                               <div
                                 key={session.id}
                                 draggable={isEditMode}
                                 onDragStart={() => handleDragStart(session)}
                                 onDragEnd={handleDragEnd}
-                                className={`p-1 rounded text-xs cursor-pointer hover:opacity-80 transition-opacity ${
+                                className={`p-0.5 rounded text-xs cursor-pointer hover:opacity-80 transition-opacity ${
                                   session.status === 'completed' ? 'bg-green-100 text-green-800' :
                                   session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                   'bg-red-100 text-red-800'
@@ -412,22 +369,22 @@ export const SessionsPage: React.FC = () => {
                               >
                                 <div className="flex items-center justify-between">
                                   <div className="flex-1">
-                                    <div className="font-medium truncate">{session.time}</div>
-                                    <div className="truncate">{session.patient}</div>
+                                    <div className="font-medium truncate text-xs">{session.time}</div>
+                                    <div className="truncate text-xs">{session.patient}</div>
                                   </div>
                                   {isEditMode && (
-                                    <Move size={10} className="text-gray-500 ml-1" />
+                                    <Move size={8} className="text-gray-500 ml-1" />
                                   )}
                                 </div>
                               </div>
                             ))}
-                            {daySessions.length > 3 && (
+                            {daySessions.length > 2 && (
                               <div className="text-xs text-gray-500">
-                                +{daySessions.length - 3} mais
+                                +{daySessions.length - 2} mais
                               </div>
                             )}
-                          </div>
-                        </div>
+          </div>
+        </div>
                       );
                       current.setDate(current.getDate() + 1);
                     }
@@ -438,177 +395,316 @@ export const SessionsPage: React.FC = () => {
               )}
               
               {viewMode === 'week' && (
-                <div className="grid grid-cols-7 gap-0">
-                  {(() => {
-                    const startOfWeek = new Date(currentDate);
-                    const day = startOfWeek.getDay();
-                    startOfWeek.setDate(startOfWeek.getDate() - day);
-                    
-                    const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-                    const weekDays = [];
-                    
-                    for (let i = 0; i < 7; i++) {
-                      const date = new Date(startOfWeek);
-                      date.setDate(date.getDate() + i);
-                      const dateString = date.toISOString().split('T')[0];
-                      const daySessions = getSessionsForDate(dateString);
-                      const isToday = date.toDateString() === new Date().toDateString();
+                <div className="flex h-[600px]">
+                  {/* Coluna de Horas */}
+                  <div className="w-16 flex flex-col">
+                    <div className="h-12 border-b border-gray-200"></div>
+                    {Array.from({ length: 12 }, (_, i) => {
+                      const hour = i + 8; // 8h às 19h
+                      return (
+                        <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500">
+                          {hour.toString().padStart(2, '0')}:00
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Grid de Dias */}
+                  <div className="flex-1 grid grid-cols-7">
+                    {(() => {
+                      const startOfWeek = new Date(currentDate);
+                      const day = startOfWeek.getDay();
+                      startOfWeek.setDate(startOfWeek.getDate() - day);
                       
-                      weekDays.push(
+                      const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+                      const weekDays = [];
+                      
+                      for (let i = 0; i < 7; i++) {
+                        const date = new Date(startOfWeek);
+                        date.setDate(date.getDate() + i);
+                        const dateString = date.toISOString().split('T')[0];
+                        const daySessions = getSessionsForDate(dateString);
+                        const isToday = date.toDateString() === new Date().toDateString();
+                        
+                        weekDays.push(
+                          <div 
+                            key={i} 
+                            className={`border-r border-gray-200 ${isToday ? 'bg-blue-50' : 'bg-white'} ${
+                              dragOverDate === dateString ? 'bg-green-100 border-green-300' : ''
+                            }`}
+                            onDragOver={(e) => handleDragOver(e, dateString)}
+                            onDrop={(e) => handleDrop(e, dateString)}
+                            onDragLeave={handleDragLeave}
+                          >
+                            {/* Cabeçalho do Dia */}
+                            <div className="h-12 border-b border-gray-200 flex items-center justify-between px-2">
+            <div>
+                                <div className="font-semibold text-gray-900 text-sm">{days[i]}</div>
+                                <div className="text-xs text-gray-600">{date.getDate()}</div>
+                              </div>
+                              {isEditMode && (
+                                <button
+                                  onClick={() => setShowNewSessionModal(true)}
+                                  className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                                >
+                                  <Plus size={10} />
+                                </button>
+                              )}
+                            </div>
+                            
+                            {/* Grid de Horas - Alinhado com a coluna de horas */}
+                            <div className="relative">
+                              {Array.from({ length: 12 }, (_, hourIndex) => {
+                                const hour = hourIndex + 8;
+                                const hourSessions = daySessions.filter(session => {
+                                  const sessionHour = parseInt(session.time.split(':')[0]);
+                                  return sessionHour === hour;
+                                });
+                                
+                                return (
+                                  <div key={hour} className="h-12 border-b border-gray-200 relative">
+                                    {hourSessions.map((session) => (
+                                      <div
+                                        key={session.id}
+                                        draggable={isEditMode}
+                                        onDragStart={() => handleDragStart(session)}
+                                        onDragEnd={handleDragEnd}
+                                        className={`absolute inset-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${
+                                          session.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                          session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                          'bg-red-100 text-red-800'
+                                        } ${isEditMode ? 'cursor-move' : ''} ${
+                                          draggedSession?.id === session.id ? 'opacity-50' : ''
+                                        }`}
+                                        onClick={() => !isEditMode && navigate(`/sessions/${session.id}`)}
+                                      >
+                                        <div className="p-1">
+                                          <div className="font-medium text-xs">{session.time}</div>
+                                          <div className="text-xs truncate">{session.patient}</div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                );
+                              })}
+                            </div>
+            </div>
+                        );
+                      }
+                      
+                      return weekDays;
+                    })()}
+          </div>
+        </div>
+              )}
+              
+              {viewMode === 'day' && (
+                <div className="flex h-[600px]">
+                  {/* Coluna de Horas */}
+                  <div className="w-16 flex flex-col">
+                    <div className="h-12 border-b border-gray-200"></div>
+                    {Array.from({ length: 12 }, (_, i) => {
+                      const hour = i + 8; // 8h às 19h
+                      return (
+                        <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500">
+                          {hour.toString().padStart(2, '0')}:00
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Área do Dia */}
+                  <div className="flex-1">
+                    {(() => {
+                      const dateString = currentDate.toISOString().split('T')[0];
+                      const daySessions = getSessionsForDate(dateString);
+                      
+                      return (
                         <div 
-                          key={i} 
-                          className={`p-4 border border-gray-200 ${isToday ? 'bg-blue-50' : 'bg-white'} ${
+                          className={`h-full border border-gray-200 bg-white ${
                             dragOverDate === dateString ? 'bg-green-100 border-green-300' : ''
                           }`}
                           onDragOver={(e) => handleDragOver(e, dateString)}
                           onDrop={(e) => handleDrop(e, dateString)}
                           onDragLeave={handleDragLeave}
                         >
-                          <div className="flex items-center justify-between mb-3">
-                            <div>
-                              <div className="font-semibold text-gray-900">{days[i]}</div>
-                              <div className="text-sm text-gray-600">{date.getDate()}</div>
+                          {/* Cabeçalho do Dia */}
+                          <div className="h-12 border-b border-gray-200 flex items-center justify-between px-4">
+            <div>
+                              <div className="font-semibold text-gray-900 text-sm">
+                                {currentDate.toLocaleDateString('pt-BR', { 
+                                  weekday: 'long', 
+                                  day: 'numeric',
+                                  month: 'short'
+                                })}
+                              </div>
                             </div>
                             {isEditMode && (
                               <button
                                 onClick={() => setShowNewSessionModal(true)}
-                                className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                                className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
                               >
-                                <Plus size={16} />
+                                <Plus size={10} />
                               </button>
                             )}
                           </div>
-                          <div className="space-y-2">
-                            {daySessions.map((session) => (
-                              <div
-                                key={session.id}
-                                draggable={isEditMode}
-                                onDragStart={() => handleDragStart(session)}
-                                onDragEnd={handleDragEnd}
-                                className={`p-2 rounded cursor-pointer hover:opacity-80 transition-opacity ${
-                                  session.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                  session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-red-100 text-red-800'
-                                } ${isEditMode ? 'cursor-move' : ''} ${
-                                  draggedSession?.id === session.id ? 'opacity-50' : ''
-                                }`}
-                                onClick={() => !isEditMode && navigate(`/sessions/${session.id}`)}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <div className="flex-1">
-                                    <div className="font-medium text-sm">{session.time}</div>
-                                    <div className="text-xs truncate">{session.patient}</div>
-                                    <div className="text-xs opacity-75">{session.type}</div>
-                                  </div>
-                                  {isEditMode && (
-                                    <Move size={12} className="text-gray-500 ml-2" />
-                                  )}
+                          
+                          {/* Grid de Horas */}
+                          <div className="relative">
+                            {Array.from({ length: 12 }, (_, hourIndex) => {
+                              const hour = hourIndex + 8;
+                              const hourSessions = daySessions.filter(session => {
+                                const sessionHour = parseInt(session.time.split(':')[0]);
+                                return sessionHour === hour;
+                              });
+                              
+                              return (
+                                <div key={hour} className="h-12 border-b border-gray-200 relative">
+                                  {hourSessions.map((session) => (
+                                    <div
+                                      key={session.id}
+                                      draggable={isEditMode}
+                                      onDragStart={() => handleDragStart(session)}
+                                      onDragEnd={handleDragEnd}
+                                      className={`absolute inset-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${
+                                        session.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                        session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                        'bg-red-100 text-red-800'
+                                      } ${isEditMode ? 'cursor-move' : ''} ${
+                                        draggedSession?.id === session.id ? 'opacity-50' : ''
+                                      }`}
+                                      onClick={() => !isEditMode && navigate(`/sessions/${session.id}`)}
+                                    >
+                                      <div className="p-1">
+                                        <div className="font-medium text-xs">{session.time}</div>
+                                        <div className="text-xs truncate">{session.patient}</div>
+                                        <div className="text-xs opacity-75">{session.type}</div>
+                                      </div>
+                                    </div>
+                                  ))}
                                 </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </div>
                       );
-                    }
-                    
-                    return weekDays;
-                  })()}
-                </div>
+                    })()}
+                  </div>
+            </div>
               )}
-              
-              {viewMode === 'day' && (
-                <div>
-                  {(() => {
-                    const dateString = currentDate.toISOString().split('T')[0];
-                    const daySessions = getSessionsForDate(dateString);
-                    
-                    return (
-                      <div className="space-y-4">
-                        <div className="text-center mb-6">
-                          <h2 className="text-2xl font-bold text-gray-900">
-                            {currentDate.toLocaleDateString('pt-BR', { 
-                              weekday: 'long', 
-                              year: 'numeric', 
-                              month: 'long', 
-                              day: 'numeric' 
-                            })}
-                          </h2>
+          </div>
+        </div>
+
+          {/* Modal do Dia */}
+          {showDayModal && selectedDay && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 h-[80vh]" style={{ border: `2px solid ${colors.primary}` }}>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-semibold" style={{ color: colors.primary }}>
+                    {new Date(selectedDay).toLocaleDateString('pt-BR', { 
+                      weekday: 'long', 
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric'
+                    })}
+                  </h3>
+                  <button
+                    onClick={closeDayModal}
+                    className="text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    <Plus size={24} className="rotate-45" />
+                  </button>
+                </div>
+                
+                <div className="flex h-[calc(80vh-120px)]">
+                  {/* Coluna de Horas */}
+                  <div className="w-16 flex flex-col">
+                    <div className="h-12 border-b border-gray-200"></div>
+                    {Array.from({ length: 12 }, (_, i) => {
+                      const hour = i + 8; // 8h às 19h
+                      return (
+                        <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500">
+                          {hour.toString().padStart(2, '0')}:00
                         </div>
-                        
-                        <div 
-                          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 rounded-lg ${
-                            dragOverDate === dateString ? 'bg-green-100 border-2 border-green-300' : ''
-                          }`}
-                          onDragOver={(e) => handleDragOver(e, dateString)}
-                          onDrop={(e) => handleDrop(e, dateString)}
-                          onDragLeave={handleDragLeave}
-                        >
-                          {daySessions.map((session) => (
-                            <div
-                              key={session.id}
-                              draggable={isEditMode}
-                              onDragStart={() => handleDragStart(session)}
-                              onDragEnd={handleDragEnd}
-                              className={`p-4 rounded-lg border-2 cursor-pointer hover:shadow-md transition-all ${
-                                session.status === 'completed' ? 'border-green-200 bg-green-50' :
-                                session.status === 'pending' ? 'border-yellow-200 bg-yellow-50' :
-                                'border-red-200 bg-red-50'
-                              } ${isEditMode ? 'cursor-move' : ''} ${
-                                draggedSession?.id === session.id ? 'opacity-50' : ''
-                              }`}
-                              onClick={() => !isEditMode && navigate(`/sessions/${session.id}`)}
-                            >
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="font-semibold text-gray-900">{session.time}</div>
-                                <div className="flex items-center space-x-2">
-                                  {isEditMode && (
-                                    <Move size={14} className="text-gray-500" />
-                                  )}
-                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Área do Dia */}
+                  <div className="flex-1">
+                    <div 
+                      className={`h-full border border-gray-200 bg-white ${
+                        dragOverDate === selectedDay ? 'bg-green-100 border-green-300' : ''
+                      }`}
+                      onDragOver={(e) => handleDragOver(e, selectedDay)}
+                      onDrop={(e) => handleDrop(e, selectedDay)}
+                      onDragLeave={handleDragLeave}
+                    >
+                      {/* Cabeçalho do Dia */}
+                      <div className="h-12 border-b border-gray-200 flex items-center justify-between px-4">
+            <div>
+                          <div className="font-semibold text-gray-900 text-sm">
+                            {new Date(selectedDay).toLocaleDateString('pt-BR', { 
+                              weekday: 'long', 
+                              day: 'numeric',
+                              month: 'short'
+                            })}
+                          </div>
+                        </div>
+                        {isEditMode && (
+                          <button
+                            onClick={() => setShowNewSessionModal(true)}
+                            className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                          >
+                            <Plus size={10} />
+                          </button>
+                        )}
+                      </div>
+                      
+                      {/* Grid de Horas */}
+                      <div className="relative">
+                        {Array.from({ length: 12 }, (_, hourIndex) => {
+                          const hour = hourIndex + 8;
+                          const daySessions = getSessionsForDate(selectedDay);
+                          const hourSessions = daySessions.filter(session => {
+                            const sessionHour = parseInt(session.time.split(':')[0]);
+                            return sessionHour === hour;
+                          });
+                          
+                          return (
+                            <div key={hour} className="h-12 border-b border-gray-200 relative">
+                              {hourSessions.map((session) => (
+                                <div
+                                  key={session.id}
+                                  draggable={isEditMode}
+                                  onDragStart={() => handleDragStart(session)}
+                                  onDragEnd={handleDragEnd}
+                                  className={`absolute inset-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${
                                     session.status === 'completed' ? 'bg-green-100 text-green-800' :
                                     session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                     'bg-red-100 text-red-800'
-                                  }`}>
-                                    {session.status === 'completed' ? 'Concluída' :
-                                     session.status === 'pending' ? 'Pendente' : 'Cancelada'}
-                                  </span>
+                                  } ${isEditMode ? 'cursor-move' : ''} ${
+                                    draggedSession?.id === session.id ? 'opacity-50' : ''
+                                  }`}
+                                  onClick={() => !isEditMode && navigate(`/sessions/${session.id}`)}
+                                >
+                                  <div className="p-1">
+                                    <div className="font-medium text-xs">{session.time}</div>
+                                    <div className="text-xs truncate">{session.patient}</div>
+                                    <div className="text-xs opacity-75">{session.type}</div>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="text-sm font-medium text-gray-900">{session.patient}</div>
-                              <div className="text-xs text-gray-600">{session.type}</div>
-                              {session.notes && (
-                                <div className="text-xs text-gray-500 mt-1">{session.notes}</div>
-                              )}
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                        
-                        {daySessions.length === 0 && (
-                          <div className="text-center py-12">
-                            <Calendar size={48} className="mx-auto text-gray-400 mb-4" />
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                              Nenhuma sessão agendada
-                            </h3>
-                            <p className="text-gray-600 mb-4">
-                              Este dia não possui sessões agendadas
-                            </p>
-                            {isEditMode && (
-                              <button
-                                onClick={() => setShowNewSessionModal(true)}
-                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                              >
-                                Agendar Sessão
-                              </button>
-                            )}
-                          </div>
-                        )}
+                          );
+                        })}
                       </div>
-                    );
-                  })()}
-                </div>
-              )}
+                    </div>
             </div>
           </div>
+        </div>
+            </div>
+          )}
 
           {/* Modal de Nova Sessão */}
           {showNewSessionModal && (
@@ -694,8 +790,8 @@ export const SessionsPage: React.FC = () => {
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       required
                     />
-                  </div>
-                  
+      </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Observações
@@ -705,8 +801,8 @@ export const SessionsPage: React.FC = () => {
                       rows={3}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
-                  </div>
-                  
+      </div>
+
                   <div className="flex justify-end space-x-3">
                     <button
                       type="button"
@@ -715,18 +811,18 @@ export const SessionsPage: React.FC = () => {
                     >
                       Cancelar
                     </button>
-                    <button
+          <button
                       type="submit"
                       className="px-4 py-2 text-white rounded-lg transition-colors"
-                      style={{ backgroundColor: colors.primary }}
-                    >
+            style={{ backgroundColor: colors.primary }}
+          >
                       Agendar Sessão
-                    </button>
+          </button>
                   </div>
                 </form>
               </div>
-            </div>
-          )}
+        </div>
+      )}
         </div>
       </div>
     </div>
