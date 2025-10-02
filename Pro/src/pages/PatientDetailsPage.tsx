@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Edit2, Trash2, Calendar, Phone, Mail, Users, Clock, FileText, Activity, Eye, MoreHorizontal, FolderOpen, History } from 'lucide-react';
+import { ArrowLeft, Edit2, Trash2, Calendar, Phone, Mail, Users, Clock, FileText, Activity, Eye, FolderOpen, History } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useProfessionalColors } from '../hooks/useProfessionalColors';
-import type { ProfessionalType } from '../types';
 
 interface Session {
   id: string;
@@ -343,7 +342,7 @@ export const PatientDetailsPage: React.FC = () => {
                   }}
                 >
                   <div className="flex items-center justify-center space-x-2">
-                    <Phone size={18} />
+                    <Activity size={18} />
                     <span>Aplicações</span>
                   </div>
                 </button>
@@ -768,73 +767,74 @@ export const PatientDetailsPage: React.FC = () => {
 
                 {/* Tab: Aplicações Vinculadas */}
                 {activeTab === 'mobile' && (
-                  <div className="space-y-6">
+                  <div className="space-y-4">
+                    {/* Header Compacto */}
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
                         Aplicações Vinculadas
                       </h3>
                       <button
-                        className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
+                        className="px-3 py-2 text-sm rounded-lg text-white font-medium transition-colors"
                         style={{ backgroundColor: colors.primary }}
                       >
-                        <Activity size={18} className="inline mr-2" />
-                        Gerenciar Acessos
+                        <Activity size={16} className="inline mr-1" />
+                        Gerenciar
                       </button>
                     </div>
                     
-                    {/* Resumo Geral */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                            <Phone size={20} className="text-white" />
+                    {/* Cards de Resumo Compactos */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                      <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <Activity size={16} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-2xl font-bold text-gray-900">3</p>
-                            <p className="text-sm text-gray-600">Dispositivos</p>
+                            <p className="text-xs font-medium text-gray-600">Dispositivos</p>
+                            <p className="text-lg font-bold" style={{ color: colors.primary }}>2</p>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                            <Activity size={20} className="text-white" />
+                      <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                            <Activity size={16} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-2xl font-bold text-gray-900">2</p>
-                            <p className="text-sm text-gray-600">Apps Ativos</p>
+                            <p className="text-xs font-medium text-gray-600">Apps Ativos</p>
+                            <p className="text-lg font-bold" style={{ color: colors.primary }}>2</p>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
-                            <Clock size={20} className="text-white" />
+                      <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                            <Clock size={16} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-2xl font-bold text-gray-900">15</p>
-                            <p className="text-sm text-gray-600">Dias Restantes</p>
+                            <p className="text-xs font-medium text-gray-600">Dias Restantes</p>
+                            <p className="text-lg font-bold" style={{ color: colors.primary }}>15</p>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-                            <FileText size={20} className="text-white" />
+                      <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                            <FileText size={16} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-2xl font-bold text-gray-900">24h</p>
-                            <p className="text-sm text-gray-600">Último Acesso</p>
+                            <p className="text-xs font-medium text-gray-600">Último Acesso</p>
+                            <p className="text-sm font-bold" style={{ color: colors.primary }}>1h</p>
                           </div>
                         </div>
                       </div>
                     </div>
                     
-                    {/* Apps KIDS e TUTORS */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Apps em Grid Compacto */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       {/* App KIDS */}
                       <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${colors.primary}` }}>
                         <div className="p-6">
@@ -1062,7 +1062,6 @@ export const PatientDetailsPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
 
       {/* Modal de Editar Histórico */}
       {showEditHistoryModal && (
@@ -1216,6 +1215,7 @@ export const PatientDetailsPage: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
