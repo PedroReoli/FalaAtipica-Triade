@@ -175,6 +175,19 @@ export const SessionsPage: React.FC = () => {
     setSelectedDay(null);
   };
 
+  // Função de scroll sincronizado
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const scrollTop = e.currentTarget.scrollTop;
+    
+    // Sincronizar scroll de todas as colunas
+    const scrollableElements = document.querySelectorAll('.scrollable-column');
+    scrollableElements.forEach((element) => {
+      if (element !== e.currentTarget) {
+        element.scrollTop = scrollTop;
+      }
+    });
+  };
+
   return (
     <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
       <div className="dashboard-content">
@@ -395,22 +408,27 @@ export const SessionsPage: React.FC = () => {
               )}
               
               {viewMode === 'week' && (
-                <div className="flex h-[600px]">
-                  {/* Coluna de Horas */}
-                  <div className="w-16 flex flex-col">
-                    <div className="h-12 border-b border-gray-200"></div>
-                    {Array.from({ length: 12 }, (_, i) => {
-                      const hour = i + 8; // 8h às 19h
-                      return (
-                        <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500">
-                          {hour.toString().padStart(2, '0')}:00
-                        </div>
-                      );
-                    })}
-                  </div>
-                  
-                  {/* Grid de Dias */}
-                  <div className="flex-1 grid grid-cols-7">
+                <div className="h-[600px] overflow-hidden">
+                  {/* Container único com grid de 8 colunas (1 para horas + 7 para dias) */}
+                  <div className="grid grid-cols-8 h-full">
+                    {/* Coluna de Horas com scroll */}
+                    <div 
+                      className="flex flex-col overflow-y-auto scrollable-column" 
+                      style={{ maxHeight: '600px' }}
+                      onScroll={handleScroll}
+                    >
+                      <div className="h-12 border-b border-gray-200 flex-shrink-0"></div>
+                      {Array.from({ length: 18 }, (_, i) => {
+                        const hour = i + 6; // 6h às 23h
+                        return (
+                          <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500 flex-shrink-0">
+                            {hour.toString().padStart(2, '0')}:00
+                          </div>
+                        );
+                      })}
+                    </div>
+                    
+                    {/* Grid de Dias - 7 colunas */}
                     {(() => {
                       const startOfWeek = new Date(currentDate);
                       const day = startOfWeek.getDay();
@@ -429,7 +447,7 @@ export const SessionsPage: React.FC = () => {
                         weekDays.push(
                           <div 
                             key={i} 
-                            className={`border-r border-gray-200 ${isToday ? 'bg-blue-50' : 'bg-white'} ${
+                            className={`flex flex-col border-r border-gray-200 ${isToday ? 'bg-blue-50' : 'bg-white'} ${
                               dragOverDate === dateString ? 'bg-green-100 border-green-300' : ''
                             }`}
                             onDragOver={(e) => handleDragOver(e, dateString)}
@@ -453,9 +471,13 @@ export const SessionsPage: React.FC = () => {
                             </div>
                             
                             {/* Grid de Horas - Alinhado com a coluna de horas */}
-                            <div className="relative">
-                              {Array.from({ length: 12 }, (_, hourIndex) => {
-                                const hour = hourIndex + 8;
+                            <div 
+                              className="overflow-y-auto scrollable-column" 
+                              style={{ maxHeight: 'calc(100% - 48px)' }}
+                              onScroll={handleScroll}
+                            >
+                              {Array.from({ length: 18 }, (_, hourIndex) => {
+                                const hour = hourIndex + 6;
                                 const hourSessions = daySessions.filter(session => {
                                   const sessionHour = parseInt(session.time.split(':')[0]);
                                   return sessionHour === hour;
@@ -499,60 +521,65 @@ export const SessionsPage: React.FC = () => {
               )}
               
               {viewMode === 'day' && (
-                <div className="flex h-[600px]">
-                  {/* Coluna de Horas */}
-                  <div className="w-16 flex flex-col">
-                    <div className="h-12 border-b border-gray-200"></div>
-                    {Array.from({ length: 12 }, (_, i) => {
-                      const hour = i + 8; // 8h às 19h
-                      return (
-                        <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500">
-                          {hour.toString().padStart(2, '0')}:00
-                        </div>
-                      );
-                    })}
-                  </div>
-                  
-                  {/* Área do Dia */}
-                  <div className="flex-1">
-                    {(() => {
-                      const dateString = currentDate.toISOString().split('T')[0];
-                      const daySessions = getSessionsForDate(dateString);
-                      
-                      return (
-                        <div 
-                          className={`h-full border border-gray-200 bg-white ${
-                            dragOverDate === dateString ? 'bg-green-100 border-green-300' : ''
-                          }`}
-                          onDragOver={(e) => handleDragOver(e, dateString)}
-                          onDrop={(e) => handleDrop(e, dateString)}
-                          onDragLeave={handleDragLeave}
-                        >
-                          {/* Cabeçalho do Dia */}
-                          <div className="h-12 border-b border-gray-200 flex items-center justify-between px-4">
-            <div>
-                              <div className="font-semibold text-gray-900 text-sm">
-                                {currentDate.toLocaleDateString('pt-BR', { 
-                                  weekday: 'long', 
-                                  day: 'numeric',
-                                  month: 'short'
-                                })}
-                              </div>
-                            </div>
-                            {isEditMode && (
-                              <button
-                                onClick={() => setShowNewSessionModal(true)}
-                                className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-                              >
-                                <Plus size={10} />
-                              </button>
-                            )}
+                <div className="h-[600px] overflow-hidden">
+                  {/* Container único com grid de 2 colunas (1 para horas + 1 para dia) */}
+                  <div className="grid grid-cols-2 h-full">
+                    {/* Coluna de Horas com scroll */}
+                    <div 
+                      className="flex flex-col overflow-y-auto scrollable-column" 
+                      style={{ maxHeight: '600px' }}
+                      onScroll={handleScroll}
+                    >
+                      <div className="h-12 border-b border-gray-200 flex-shrink-0"></div>
+                      {Array.from({ length: 18 }, (_, i) => {
+                        const hour = i + 6; // 6h às 23h
+                        return (
+                          <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500 flex-shrink-0">
+                            {hour.toString().padStart(2, '0')}:00
                           </div>
-                          
-                          {/* Grid de Horas */}
-                          <div className="relative">
-                            {Array.from({ length: 12 }, (_, hourIndex) => {
-                              const hour = hourIndex + 8;
+                        );
+                      })}
+                    </div>
+                    
+                    {/* Área do Dia */}
+                    <div className="flex flex-col">
+                      {(() => {
+                        const dateString = currentDate.toISOString().split('T')[0];
+                        const daySessions = getSessionsForDate(dateString);
+                        
+                        return (
+                          <div 
+                            className={`h-full border border-gray-200 bg-white flex flex-col ${
+                              dragOverDate === dateString ? 'bg-green-100 border-green-300' : ''
+                            }`}
+                            onDragOver={(e) => handleDragOver(e, dateString)}
+                            onDrop={(e) => handleDrop(e, dateString)}
+                            onDragLeave={handleDragLeave}
+                          >
+                            {/* Cabeçalho do Dia */}
+                            <div className="h-12 border-b border-gray-200 flex items-center justify-between px-4">
+            <div>
+                                <div className="font-semibold text-gray-900 text-sm">
+                                  {currentDate.toLocaleDateString('pt-BR', { 
+                                    weekday: 'long', 
+                                    day: 'numeric',
+                                    month: 'short'
+                                  })}
+                                </div>
+                              </div>
+                              {isEditMode && (
+                                <button
+                                  onClick={() => setShowNewSessionModal(true)}
+                                  className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                                >
+                                  <Plus size={10} />
+                                </button>
+                              )}
+            </div>
+                            
+                            {/* Grid de Horas - Alinhado com a coluna de horas */}
+                            {Array.from({ length: 18 }, (_, hourIndex) => {
+                              const hour = hourIndex + 6;
                               const hourSessions = daySessions.filter(session => {
                                 const sessionHour = parseInt(session.time.split(':')[0]);
                                 return sessionHour === hour;
@@ -579,18 +606,18 @@ export const SessionsPage: React.FC = () => {
                                         <div className="font-medium text-xs">{session.time}</div>
                                         <div className="text-xs truncate">{session.patient}</div>
                                         <div className="text-xs opacity-75">{session.type}</div>
-                                      </div>
-                                    </div>
+          </div>
+        </div>
                                   ))}
                                 </div>
                               );
                             })}
-                          </div>
-                        </div>
-                      );
-                    })()}
-                  </div>
             </div>
+                        );
+                      })()}
+          </div>
+        </div>
+      </div>
               )}
           </div>
         </div>
@@ -616,53 +643,58 @@ export const SessionsPage: React.FC = () => {
                   </button>
                 </div>
                 
-                <div className="flex h-[calc(80vh-120px)]">
-                  {/* Coluna de Horas */}
-                  <div className="w-16 flex flex-col">
-                    <div className="h-12 border-b border-gray-200"></div>
-                    {Array.from({ length: 12 }, (_, i) => {
-                      const hour = i + 8; // 8h às 19h
-                      return (
-                        <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500">
-                          {hour.toString().padStart(2, '0')}:00
-                        </div>
-                      );
-                    })}
-                  </div>
-                  
-                  {/* Área do Dia */}
-                  <div className="flex-1">
+                <div className="h-[calc(80vh-120px)] overflow-hidden">
+                  {/* Container único com grid de 2 colunas (1 para horas + 1 para dia) */}
+                  <div className="grid grid-cols-[80px_1fr] h-full">
+                    {/* Coluna de Horas com largura menor e scroll */}
                     <div 
-                      className={`h-full border border-gray-200 bg-white ${
-                        dragOverDate === selectedDay ? 'bg-green-100 border-green-300' : ''
-                      }`}
-                      onDragOver={(e) => handleDragOver(e, selectedDay)}
-                      onDrop={(e) => handleDrop(e, selectedDay)}
-                      onDragLeave={handleDragLeave}
+                      className="flex flex-col overflow-y-auto scrollable-column" 
+                      style={{ maxHeight: '600px' }}
+                      onScroll={handleScroll}
                     >
-                      {/* Cabeçalho do Dia */}
-                      <div className="h-12 border-b border-gray-200 flex items-center justify-between px-4">
-            <div>
-                          <div className="font-semibold text-gray-900 text-sm">
-                            {new Date(selectedDay).toLocaleDateString('pt-BR', { 
-                              weekday: 'long', 
-                              day: 'numeric',
-                              month: 'short'
-                            })}
+                      <div className="h-12 border-b border-gray-200 flex-shrink-0"></div>
+                      {Array.from({ length: 18 }, (_, i) => {
+                        const hour = i + 6; // 6h às 23h
+                        return (
+                          <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500 flex-shrink-0">
+                            {hour.toString().padStart(2, '0')}:00
                           </div>
+                        );
+                      })}
+                    </div>
+                    
+                    {/* Área do Dia */}
+                    <div className="flex flex-col">
+                      <div 
+                        className={`h-full border border-gray-200 bg-white flex flex-col ${
+                          dragOverDate === selectedDay ? 'bg-green-100 border-green-300' : ''
+                        }`}
+                        onDragOver={(e) => handleDragOver(e, selectedDay)}
+                        onDrop={(e) => handleDrop(e, selectedDay)}
+                        onDragLeave={handleDragLeave}
+                      >
+                        {/* Cabeçalho do Dia */}
+                        <div className="h-12 border-b border-gray-200 flex items-center justify-between px-4">
+                          <div>
+                            <div className="font-semibold text-gray-900 text-sm">
+                              {new Date(selectedDay).toLocaleDateString('pt-BR', { 
+                                weekday: 'long', 
+                                day: 'numeric',
+                                month: 'short'
+                              })}
+                            </div>
+                          </div>
+                          {isEditMode && (
+                            <button
+                              onClick={() => setShowNewSessionModal(true)}
+                              className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                            >
+                              <Plus size={10} />
+                            </button>
+                          )}
                         </div>
-                        {isEditMode && (
-                          <button
-                            onClick={() => setShowNewSessionModal(true)}
-                            className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-                          >
-                            <Plus size={10} />
-                          </button>
-                        )}
-                      </div>
-                      
-                      {/* Grid de Horas */}
-                      <div className="relative">
+                        
+                        {/* Grid de Horas - Alinhado com a coluna de horas */}
                         {Array.from({ length: 12 }, (_, hourIndex) => {
                           const hour = hourIndex + 8;
                           const daySessions = getSessionsForDate(selectedDay);
@@ -675,7 +707,7 @@ export const SessionsPage: React.FC = () => {
                             <div key={hour} className="h-12 border-b border-gray-200 relative">
                               {hourSessions.map((session) => (
                                 <div
-                                  key={session.id}
+            key={session.id}
                                   draggable={isEditMode}
                                   onDragStart={() => handleDragStart(session)}
                                   onDragEnd={handleDragEnd}
@@ -694,14 +726,14 @@ export const SessionsPage: React.FC = () => {
                                     <div className="text-xs opacity-75">{session.type}</div>
                                   </div>
                                 </div>
-                              ))}
-                            </div>
+        ))}
+      </div>
                           );
                         })}
                       </div>
                     </div>
-            </div>
-          </div>
+                  </div>
+                </div>
         </div>
             </div>
           )}
@@ -713,7 +745,7 @@ export const SessionsPage: React.FC = () => {
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-semibold" style={{ color: colors.primary }}>
                     Nova Sessão
-                  </h3>
+          </h3>
                   <button
                     onClick={() => setShowNewSessionModal(false)}
                     className="text-gray-500 hover:text-gray-700 transition-colors"
