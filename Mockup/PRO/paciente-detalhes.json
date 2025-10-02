@@ -1,0 +1,134 @@
+{
+  "patient": {
+    "id": "1",
+    "name": "João Silva",
+    "age": 8,
+    "birthDate": "2016-05-15",
+    "status": "active",
+    "registrationDate": "2024-01-10",
+    "tutor": {
+      "name": "Carlos Silva",
+      "phone": "(11) 99999-8888",
+      "email": "carlos.silva@email.com",
+      "relationship": "Pai"
+    },
+    "address": {
+      "street": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "zipCode": "01234-567"
+    },
+    "medicalInfo": {
+      "diagnosis": "Transtorno de Fala",
+      "allergies": "Nenhuma",
+      "medications": "Nenhuma",
+      "observations": "Criança apresenta dificuldades na articulação do fonema /r/"
+    }
+  },
+  "sessions": [
+    {
+      "id": "1",
+      "date": "2024-01-15",
+      "duration": 60,
+      "type": "Terapia Individual",
+      "notes": "Sessão focada em exercícios de articulação.",
+      "status": "completed"
+    },
+    {
+      "id": "2",
+      "date": "2024-01-22",
+      "duration": 45,
+      "type": "Avaliação",
+      "notes": "Avaliação do progresso do paciente.",
+      "status": "completed"
+    },
+    {
+      "id": "3",
+      "date": "2024-01-29",
+      "duration": 60,
+      "type": "Terapia Individual",
+      "notes": "Próxima sessão agendada.",
+      "status": "scheduled"
+    }
+  ],
+  "documents": [
+    {
+      "id": "1",
+      "name": "Relatório de Avaliação Inicial",
+      "type": "PDF",
+      "size": "2.3 MB",
+      "uploadDate": "2024-01-10",
+      "url": "#"
+    },
+    {
+      "id": "2",
+      "name": "Exame de Audição",
+      "type": "PDF",
+      "size": "1.8 MB",
+      "uploadDate": "2024-01-08",
+      "url": "#"
+    }
+  ],
+  "medicalHistory": [
+    {
+      "id": "1",
+      "event": "Primeira Consulta",
+      "date": "2024-01-10",
+      "description": "Primeira consulta com fonoaudiólogo para avaliação inicial."
+    },
+    {
+      "id": "2",
+      "event": "Início do Tratamento",
+      "date": "2024-01-15",
+      "description": "Início das sessões de terapia fonoaudiológica."
+    }
+  ],
+  "mobileApps": {
+    "kids": {
+      "name": "App KIDS",
+      "status": "Ativo",
+      "devices": [
+        {
+          "id": "1",
+          "name": "iPad Pro 12.9\"",
+          "os": "iOS 17",
+          "lastAccess": "2h atrás",
+          "status": "Ativo"
+        }
+      ],
+      "subscription": {
+        "plan": "Premium",
+        "price": "R$ 39,90/mês",
+        "status": "Ativa",
+        "expires": "15/03/2024"
+      },
+      "token": "KIDS-ABC123-XYZ789"
+    },
+    "tutors": {
+      "name": "App TUTORS",
+      "status": "Ativo",
+      "devices": [
+        {
+          "id": "1",
+          "name": "Samsung Galaxy S22",
+          "os": "Android 13",
+          "lastAccess": "1h atrás",
+          "status": "Ativo"
+        }
+      ],
+      "subscription": {
+        "plan": "Básico",
+        "price": "R$ 19,90/mês",
+        "status": "Ativa",
+        "expires": "20/03/2024"
+      },
+      "token": "TUTORS-DEF456-UVW012"
+    }
+  },
+  "summary": {
+    "devices": 2,
+    "activeApps": 2,
+    "daysRemaining": 15,
+    "lastAccess": "1h"
+  }
+}

@@ -193,20 +193,21 @@
 
 ### 13.5 Funcionalidades Integradas nas Abas
 - **Localização**: Dentro de `PatientDetailsPage` como abas
-- **Status**: 🔄 Em Validação
+- **Status**: 🔄 Em Desenvolvimento
 - **Descrição**: Documentos, Histórico Médico e Aplicações agora são abas
 - **Funcionalidades**:
   - ✅ **Aba Documentos**: Upload, lista e gestão de documentos
   - ✅ **Aba Histórico**: Timeline médica com eventos cronológicos
-  - ✅ **Aba Aplicações**: Gerenciamento de apps KIDS e TUTORS
+  - 🔄 **Aba Aplicações**: Gerenciamento de apps KIDS e TUTORS
   - ✅ **Interface unificada**: Todas as funcionalidades em uma única página
   - ✅ **Navegação simplificada**: Sem necessidade de rotas separadas
   - ✅ **Cores adaptativas**: Mantidas em todas as abas
-- **⚠️ PENDENTE**:
-  - ❌ **Gerenciamento de Acessos**: Funcionalidade de revogar tokens, histórico de acessos
-  - ❌ **Layout/UX**: Interface feia e não compacta - precisa de melhorias significativas
-  - ❌ **Responsividade**: Layout não otimizado para diferentes tamanhos de tela
-  - ❌ **Visual**: Cards e componentes precisam de redesign completo
+  - ✅ **Layout compacto**: Interface redesenhada e otimizada
+  - ✅ **Dados centralizados**: Todos os dados mockados movidos para `Mockup/PRO/`
+  - ✅ **Responsividade**: Layout otimizado para mobile e desktop
+  - ✅ **Ícones atualizados**: Activity ao invés de Phone para aplicações
+  - ✅ **Modal de Gerenciamento**: Interface para ações de acesso
+  - ⚠️ **PENDENTE**: Funcionalidades do modal ainda não implementadas
 
 ### 14. SessionsPage
 - **Rota**: `/sessions`
@@ -443,7 +444,12 @@
 ### **🎯 Próxima Prioridade: Rota de Sessões**
 - **Foco**: Melhorar layout e UX/UI da seção de Sessões
 - **Objetivo**: Aplicar padrão compacto e responsivo
-- **Status**: Aguardando retorno do usuário
+- **Status**: 🔄 Em Andamento
+- **Tarefas**:
+  - ✅ Layout da aba "Aplicações" redesenhado
+  - 🔄 Melhorar `SessionsPage` com layout compacto
+  - 🔄 Aplicar padrão dashboard em todas as telas de sessões
+  - 🔄 Implementar funcionalidades avançadas de gerenciamento
 
 ### **📋 Checklist Geral**
 1. **Aplicar padrão** em todas as telas

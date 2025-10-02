@@ -211,6 +211,14 @@ FalaAtipica-Triade/
 - Estrutura consistente entre aplicações
 - IDs únicos para relacionamentos
 
+### ⚠️ REGRA CRÍTICA - DADOS MOCKADOS
+**EXTREMAMENTE IMPORTANTE**: 
+- **NUNCA** colocar dados mockados diretamente nos arquivos TSX/TS
+- **SEMPRE** usar dados da pasta `Mockup/` correspondente
+- **SEMPRE** importar dados dos arquivos JSON da pasta Mockup
+- **SEMPRE** manter dados mockados centralizados e organizados
+- **SEMPRE** seguir a estrutura: `Mockup/[APLICACAO]/[arquivo].json`
+
 ### Migração
 - Fase 1-3: Consumo de dados MOCAP
 - Fase 4: Substituição por Supabase
