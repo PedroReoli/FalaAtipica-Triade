@@ -10,17 +10,12 @@ import {
   FileText, 
   Calendar, 
   User, 
-  ArrowLeft, 
   Search, 
-  Filter, 
   Plus,
   Eye,
-  Edit,
   Trash2,
   File,
-  FileImage,
   FileSpreadsheet,
-  MoreHorizontal,
   X
 } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
@@ -41,7 +36,7 @@ interface Report {
 
 export const ReportsPage: React.FC = () => {
   const navigate = useNavigate()
-  const { professionalType, professionalData } = useProfessional()
+  const { professionalType } = useProfessional()
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
@@ -248,7 +243,7 @@ export const ReportsPage: React.FC = () => {
   // Filtros
   const filteredReports = reports.filter(report => {
     const matchesSearch = report.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        report.patient.toLowerCase().includes(searchTerm.toLowerCase())
+                         report.patient.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesType = filterType === "all" || report.type === filterType
     const matchesStatus = filterStatus === "all" || report.status === filterStatus
     const matchesDate = filterDate === "all" || report.date.includes(filterDate)
@@ -270,96 +265,99 @@ export const ReportsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Relatórios</h1>
-              <p className="text-sm text-gray-600">
-                Gerencie e visualize todos os relatórios
-              </p>
+    <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
+      <div className="dashboard-content">
+        <div className="w-full min-h-full flex flex-col space-y-2">
+          {/* Header Card - Relatórios da Empresa */}
+          <div className="dashboard-spacing">
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+              <div className="flex justify-between items-center">
+              <div>
+                  <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>Relatórios da Empresa</h1>
+                  <p className="text-gray-600 mt-1">Gerencie e acompanhe todos os relatórios dos pacientes</p>
             </div>
             <div className="flex items-center space-x-3">
               <button
-                onClick={() => setShowUploadModal(true)}
-                className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    onClick={() => setShowUploadModal(true)}
+                    className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
               >
-                <Upload className="w-4 h-4" />
-                <span>Upload</span>
+                    <Upload className="w-4 h-4" />
+                    <span>Upload</span>
               </button>
               <button
-                onClick={() => setShowGenerateModal(true)}
-                className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: getProfessionalColor() }}
-              >
-                <Plus className="w-4 h-4" />
+                    onClick={() => setShowGenerateModal(true)}
+                    className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
+                    style={{ backgroundColor: getProfessionalColor() }}
+                  >
+                    <Plus className="w-4 h-4" />
                 <span>Gerar Relatório</span>
               </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Filtros */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {/* Busca */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Buscar relatórios..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+          {/* Filtros */}
+          <div className="dashboard-spacing">
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+              <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-black)" }}>Filtros e Busca</h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {/* Busca */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Buscar relatórios..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                {/* Filtro por Tipo */}
+                <select
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">Todos os Tipos</option>
+                  <option value="Progresso">Progresso</option>
+                  <option value="Avaliação">Avaliação</option>
+                  <option value="Mensal">Mensal</option>
+                  <option value="Análise">Análise</option>
+                  <option value="Sessões">Sessões</option>
+                </select>
+
+                {/* Filtro por Status */}
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">Todos os Status</option>
+                  <option value="ready">Pronto</option>
+                  <option value="generating">Gerando</option>
+                  <option value="error">Erro</option>
+                </select>
+
+                {/* Filtro por Data */}
+                <select
+                  value={filterDate}
+                  onChange={(e) => setFilterDate(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">Todas as Datas</option>
+                  <option value="2024-01">Janeiro 2024</option>
+                  <option value="2024-02">Fevereiro 2024</option>
+                  <option value="2024-03">Março 2024</option>
+                </select>
             </div>
-
-            {/* Filtro por Tipo */}
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">Todos os Tipos</option>
-              <option value="Progresso">Progresso</option>
-              <option value="Avaliação">Avaliação</option>
-              <option value="Mensal">Mensal</option>
-              <option value="Análise">Análise</option>
-              <option value="Sessões">Sessões</option>
-            </select>
-
-            {/* Filtro por Status */}
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">Todos os Status</option>
-              <option value="ready">Pronto</option>
-              <option value="generating">Gerando</option>
-              <option value="error">Erro</option>
-            </select>
-
-            {/* Filtro por Data */}
-            <select
-              value={filterDate}
-              onChange={(e) => setFilterDate(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">Todas as Datas</option>
-              <option value="2024-01">Janeiro 2024</option>
-              <option value="2024-02">Fevereiro 2024</option>
-              <option value="2024-03">Março 2024</option>
-            </select>
           </div>
         </div>
 
         {/* Lista de Relatórios */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="dashboard-spacing">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredReports.map((report) => (
             <div 
               key={report.id} 
@@ -393,18 +391,18 @@ export const ReportsPage: React.FC = () => {
                 <div className="flex items-center space-x-2 text-xs text-gray-600">
                   <Calendar className="w-3 h-3" />
                   <span className="font-medium">{new Date(report.date).toLocaleDateString('pt-BR')}</span>
-                </div>
+                      </div>
                 <div className="flex items-center space-x-2 text-xs text-gray-600">
                   <User className="w-3 h-3" />
                   <span>{report.createdBy}</span>
-                </div>
-                {report.size && (
+                      </div>
+                      {report.size && (
                   <div className="flex items-center space-x-2 text-xs text-gray-600">
                     <File className="w-3 h-3" />
                     <span>{report.size}</span>
                   </div>
-                )}
-              </div>
+                      )}
+                    </div>
 
               {/* Description */}
               {report.description && (
@@ -412,7 +410,7 @@ export const ReportsPage: React.FC = () => {
                   <p className="text-xs text-gray-600 line-clamp-2">
                     {report.description}
                   </p>
-                </div>
+                  </div>
               )}
 
               {/* Actions */}
@@ -428,7 +426,7 @@ export const ReportsPage: React.FC = () => {
                   >
                     <Eye className="w-4 h-4" />
                   </button>
-                  <button
+                    <button
                     onClick={(e) => {
                       e.stopPropagation()
                       handleDownload(report)
@@ -437,7 +435,7 @@ export const ReportsPage: React.FC = () => {
                     title="Download"
                   >
                     <Download className="w-4 h-4" />
-                  </button>
+                    </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -487,9 +485,10 @@ export const ReportsPage: React.FC = () => {
             </div>
           </div>
         )}
+        </div>
       </div>
 
-      {/* Modal de Upload */}
+        {/* Modal de Upload */}
       {showUploadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
@@ -765,8 +764,9 @@ export const ReportsPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

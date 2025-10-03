@@ -131,55 +131,53 @@ export const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Perfil</h1>
-                <p className="text-sm text-gray-600">
-                  Gerencie suas informações pessoais e profissionais
-                </p>
-              </div>
-              <div className="flex space-x-3">
-                {isEditing ? (
-                  <>
+    <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
+      <div className="dashboard-content">
+        <div className="w-full min-h-full flex flex-col space-y-2">
+          {/* Header Card - Perfil */}
+          <div className="dashboard-spacing">
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>Perfil</h1>
+                  <p className="text-gray-600 mt-1">Gerencie suas informações pessoais e profissionais</p>
+                </div>
+                <div className="flex space-x-3">
+                  {isEditing ? (
+                    <>
+                      <button
+                        onClick={handleSave}
+                        className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: getProfessionalColor() }}
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>Salvar</span>
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                        <span>Cancelar</span>
+                      </button>
+                    </>
+                  ) : (
                     <button
-                      onClick={handleSave}
+                      onClick={() => setIsEditing(true)}
                       className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
                       style={{ backgroundColor: getProfessionalColor() }}
                     >
-                      <Save className="w-4 h-4" />
-                      <span>Salvar</span>
+                      <Edit className="w-4 h-4" />
+                      <span>Editar</span>
                     </button>
-                    <button
-                      onClick={handleCancel}
-                      className="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                    >
-                      <X className="w-4 h-4" />
-                      <span>Cancelar</span>
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                    style={{ backgroundColor: getProfessionalColor() }}
-                  >
-                    <Edit className="w-4 h-4" />
-                    <span>Editar</span>
-                  </button>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Content */}
+          <div className="dashboard-spacing">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
           {/* Profile Card */}
@@ -479,7 +477,9 @@ export const ProfilePage: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+          )}
+        </div>
+      </div>
     </div>
   )
 }

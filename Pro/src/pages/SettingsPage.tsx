@@ -188,51 +188,51 @@ export const SettingsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Configurações</h1>
-            <p className="text-sm text-gray-600">
-              Gerencie seu perfil, parcerias e convites
-            </p>
+    <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
+      <div className="dashboard-content">
+        <div className="w-full min-h-full flex flex-col space-y-2">
+          {/* Header Card - Configurações */}
+          <div className="dashboard-spacing">
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+              <div>
+                <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>Configurações</h1>
+                <p className="text-gray-600 mt-1">Gerencie seu perfil, parcerias e convites</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Tabs */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
-            <button
-              onClick={() => setActiveTab('partnerships')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'partnerships'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <Building2 className="w-4 h-4 inline mr-2" />
-              Parcerias
-            </button>
-            <button
-              onClick={() => setActiveTab('invites')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'invites'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <Users className="w-4 h-4 inline mr-2" />
-              Convites
-            </button>
+          {/* Tabs */}
+          <div className="dashboard-spacing">
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <div className="flex space-x-8">
+                <button
+                  onClick={() => setActiveTab('partnerships')}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                    activeTab === 'partnerships'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <Building2 className="w-4 h-4 inline mr-2" />
+                  Parcerias
+                </button>
+                <button
+                  onClick={() => setActiveTab('invites')}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                    activeTab === 'invites'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <Users className="w-4 h-4 inline mr-2" />
+                  Convites
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Content */}
+          <div className="dashboard-spacing">
         
 
         {/* Parcerias Tab */}
@@ -533,10 +533,11 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
           </div>
+          </div>
+        )}
+
         </div>
-      )}
-
-
+      </div>
     </div>
   )
 }
