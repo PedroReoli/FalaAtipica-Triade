@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { ProfessionalTypeSelector } from './common/ProfessionalTypeSelector';
 import { mockAuthService } from '../services/mockAuthService';
 import { Menu, X } from 'lucide-react';
 
@@ -143,8 +142,8 @@ export const InternalNavbar: React.FC = () => {
           {/* Sidebar */}
           <div className="fixed top-0 left-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
             {/* Header da Sidebar */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gray-50">
+              <div className="flex items-center space-x-3">
                 <img 
                   src="/assets/logo/falaatipica-logo.png" 
                   alt="FalaAtípica" 
@@ -159,49 +158,50 @@ export const InternalNavbar: React.FC = () => {
               </div>
               <button
                 onClick={closeSidebar}
-                className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
                 aria-label="Fechar menu"
               >
                 <X size={20} className="text-gray-600" />
               </button>
             </div>
 
-            {/* Seletor de Profissional */}
-            <div className="p-4 border-b border-gray-200">
-              <ProfessionalTypeSelector />
-            </div>
 
             {/* Navegação */}
-            <div className="p-4 space-y-2">
-              {navigationItems.map((item) => (
-                <button
-                  key={item.path}
-                  onClick={() => {
-                    navigate(item.path);
-                    closeSidebar();
-                  }}
-                  className="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium"
-                  style={{ color: 'var(--text-black)' }}
-                >
-                  {item.label}
-                </button>
-              ))}
+            <div className="p-6">
+              <h3 className="text-sm font-semibold text-gray-700 mb-4">Navegação</h3>
+              <div className="space-y-1">
+                {navigationItems.map((item) => (
+                  <button
+                    key={item.path}
+                    onClick={() => {
+                      navigate(item.path);
+                      closeSidebar();
+                    }}
+                    className="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium flex items-center space-x-3"
+                    style={{ color: 'var(--text-black)' }}
+                  >
+                    <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Perfil */}
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex items-center space-x-3">
+            <div className="p-6 border-t border-gray-200 bg-gray-50">
+              <h3 className="text-sm font-semibold text-gray-700 mb-4">Perfil</h3>
+              <div className="flex items-center space-x-3 mb-4">
                 <button
                   onClick={() => {
                     navigate('/profile');
                     closeSidebar();
                   }}
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-medium hover:opacity-80 transition-opacity"
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-white text-sm font-medium hover:opacity-80 transition-opacity shadow-sm"
                   style={{ backgroundColor: getProfessionalColor() }}
                 >
                   {professionalData.name.charAt(0)}
                 </button>
-                <div>
+                <div className="flex-1">
                   <p className="text-sm font-medium" style={{ color: 'var(--text-black)' }}>
                     {professionalData.name}
                   </p>
@@ -213,9 +213,9 @@ export const InternalNavbar: React.FC = () => {
                   handleLogout();
                   closeSidebar();
                 }}
-                className="w-full mt-4 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                className="w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors font-medium"
               >
-                Sair
+                Sair da Conta
               </button>
             </div>
           </div>
