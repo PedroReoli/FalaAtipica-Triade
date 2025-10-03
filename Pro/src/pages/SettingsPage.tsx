@@ -43,7 +43,7 @@ interface Invite {
 export const SettingsPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
-  const [activeTab, setActiveTab] = useState<'profile' | 'partnerships' | 'invites'>('profile')
+  const [activeTab, setActiveTab] = useState<'partnerships' | 'invites'>('partnerships')
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [showPartnershipModal, setShowPartnershipModal] = useState(false)
   const [newInvite, setNewInvite] = useState({
@@ -99,7 +99,20 @@ export const SettingsPage: React.FC = () => {
   ]
 
   const handleInviteSubmit = () => {
-    console.log("Enviando convite:", newInvite)
+    // Simular envio de convite por email
+    const inviteData = {
+      ...newInvite,
+      id: Date.now().toString(),
+      status: 'pending',
+      sentAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 dias
+    }
+    
+    console.log("Enviando convite por email:", inviteData)
+    
+    // Simular feedback visual
+    alert(`Convite enviado para ${newInvite.email}!\n\nO profissional receberá um email com instruções para aceitar o convite.`)
+    
     setShowInviteModal(false)
     setNewInvite({ email: '', professionalType: '', message: '' })
   }
@@ -109,6 +122,23 @@ export const SettingsPage: React.FC = () => {
     setShowPartnershipModal(false)
     setNewPartnership({ name: '', type: 'clinic', description: '' })
   }
+
+  const handleAcceptInvite = (inviteId: string) => {
+    console.log("Aceitando convite:", inviteId)
+    alert("Convite aceito! O profissional foi adicionado à parceria.")
+  }
+
+  const handleDeclineInvite = (inviteId: string) => {
+    console.log("Recusando convite:", inviteId)
+    alert("Convite recusado.")
+  }
+
+  const handleCancelInvite = (inviteId: string) => {
+    console.log("Cancelando convite:", inviteId)
+    alert("Convite cancelado.")
+  }
+
+
 
   const getProfessionalColor = () => {
     switch (professionalType) {
@@ -176,17 +206,6 @@ export const SettingsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-8">
             <button
-              onClick={() => setActiveTab('profile')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'profile'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <User className="w-4 h-4 inline mr-2" />
-              Perfil
-            </button>
-            <button
               onClick={() => setActiveTab('partnerships')}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'partnerships'
@@ -215,74 +234,6 @@ export const SettingsPage: React.FC = () => {
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         
-        {/* Perfil Tab */}
-        {activeTab === 'profile' && (
-          <div className="space-y-6">
-            {/* Informações Pessoais */}
-            <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Informações Pessoais</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
-                  <input
-                    type="text"
-                    defaultValue="Dr. Ana Silva"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input
-                    type="email"
-                    defaultValue="ana.silva@email.com"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
-                  <input
-                    type="tel"
-                    defaultValue="(11) 99999-9999"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">CRP/CRFa</label>
-                  <input
-                    type="text"
-                    defaultValue="06/123456"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Configurações de Conta */}
-            <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Configurações de Conta</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium text-gray-900">Alterar Senha</h4>
-                    <p className="text-sm text-gray-600">Atualize sua senha de acesso</p>
-                  </div>
-                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                    Alterar
-                  </button>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium text-gray-900">Privacidade</h4>
-                    <p className="text-sm text-gray-600">Configure suas preferências de privacidade</p>
-                  </div>
-                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                    Configurar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Parcerias Tab */}
         {activeTab === 'partnerships' && (
@@ -366,6 +317,20 @@ export const SettingsPage: React.FC = () => {
               </button>
             </div>
 
+            {/* Informações sobre o Sistema de Email */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <Mail className="w-5 h-5 text-blue-600 mt-0.5" />
+                <div>
+                  <h4 className="font-medium text-blue-900">Como funciona o sistema de convites</h4>
+                  <p className="text-sm text-blue-700 mt-1">
+                    Quando você envia um convite, o profissional recebe um email com um link para aceitar ou recusar a parceria. 
+                    O convite expira em 7 dias. Você pode cancelar convites pendentes a qualquer momento.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Lista de Convites */}
             <div className="space-y-4">
               {invites.map((invite) => (
@@ -402,11 +367,30 @@ export const SettingsPage: React.FC = () => {
                       {invite.status === 'accepted' && 'Convite aceito!'}
                       {invite.status === 'declined' && 'Convite recusado'}
                     </div>
-                    {invite.status === 'pending' && (
-                      <button className="text-red-600 hover:text-red-800 text-xs font-medium">
-                        Cancelar
-                      </button>
-                    )}
+                    <div className="flex space-x-2">
+                      {invite.status === 'pending' && (
+                        <>
+                          <button 
+                            onClick={() => handleAcceptInvite(invite.id)}
+                            className="text-green-600 hover:text-green-800 text-xs font-medium px-2 py-1 bg-green-50 rounded"
+                          >
+                            Aceitar
+                          </button>
+                          <button 
+                            onClick={() => handleDeclineInvite(invite.id)}
+                            className="text-red-600 hover:text-red-800 text-xs font-medium px-2 py-1 bg-red-50 rounded"
+                          >
+                            Recusar
+                          </button>
+                          <button 
+                            onClick={() => handleCancelInvite(invite.id)}
+                            className="text-gray-600 hover:text-gray-800 text-xs font-medium px-2 py-1 bg-gray-50 rounded"
+                          >
+                            Cancelar
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -551,6 +535,8 @@ export const SettingsPage: React.FC = () => {
           </div>
         </div>
       )}
+
+
     </div>
   )
 }
