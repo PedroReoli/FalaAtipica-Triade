@@ -35,6 +35,8 @@ import { NewSessionPage } from '../pages/NewSessionPage';
 // 📋 Relatórios
 import { ReportsPage } from '../pages/ReportsPage';
 import { DetailedReportsPage } from '../pages/DetailedReportsPage';
+import { ReportEditPage } from '../pages/ReportEditPage';
+import { ReportViewPage } from '../pages/ReportViewPage';
 
 // 🧪 Avaliações
 import { AssessmentsPage } from '../pages/AssessmentsPage';
@@ -128,8 +130,9 @@ export const AppRoutes = () => {
         {/* 📋 RELATÓRIOS */}
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/reports/detailed" element={<DetailedReportsPage />} />
-        <Route path="/reports/generate" element={<div className="p-8 text-center">Gerar Relatório - Em desenvolvimento</div>} />
-        <Route path="/reports/:id" element={<div className="p-8 text-center">Visualizar Relatório - Em desenvolvimento</div>} />
+        <Route path="/reports/edit" element={<ReportEditPage />} />
+        <Route path="/reports/:id" element={<ReportViewPage />} />
+        <Route path="/reports/:id/edit" element={<ReportEditPage />} />
         
         {/* 🧪 AVALIAÇÕES */}
         <Route path="/assessments" element={<AssessmentsPage />} />

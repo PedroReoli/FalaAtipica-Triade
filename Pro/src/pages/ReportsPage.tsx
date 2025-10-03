@@ -57,6 +57,7 @@ export const ReportsPage: React.FC = () => {
     type: "",
     description: ""
   })
+  const [isDragOver, setIsDragOver] = useState(false)
   
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -135,6 +136,32 @@ export const ReportsPage: React.FC = () => {
     setUploadedFiles(prev => [...prev, ...files])
   }
 
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault()
+    setIsDragOver(true)
+  }
+
+  const handleDragLeave = (event: React.DragEvent) => {
+    event.preventDefault()
+    setIsDragOver(false)
+  }
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault()
+    setIsDragOver(false)
+    
+    const files = Array.from(event.dataTransfer.files)
+    const validFiles = files.filter(file => {
+      const validTypes = ['.pdf', '.docx', '.doc', '.xlsx', '.xls', '.md', '.txt']
+      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
+      return validTypes.includes(fileExtension)
+    })
+    
+    if (validFiles.length > 0) {
+      setUploadedFiles(prev => [...prev, ...validFiles])
+    }
+  }
+
   const handleUploadSubmit = () => {
     // Simular upload
     console.log("Arquivos enviados:", uploadedFiles)
@@ -143,8 +170,20 @@ export const ReportsPage: React.FC = () => {
   }
 
   const handleGenerateSubmit = () => {
-    // Simular geração de relatório
-    console.log("Gerando relatório:", newReport)
+    // Navegar para página de edição de relatório
+    const reportData = {
+      title: newReport.title,
+      patient: newReport.patient,
+      type: newReport.type,
+      description: newReport.description
+    }
+    
+    // Salvar dados temporariamente (em um contexto ou localStorage)
+    localStorage.setItem('newReportData', JSON.stringify(reportData))
+    
+    // Navegar para página de edição
+    navigate('/reports/edit')
+    
     setShowGenerateModal(false)
     setNewReport({ title: "", patient: "", type: "", description: "" })
   }
@@ -156,6 +195,11 @@ export const ReportsPage: React.FC = () => {
   const handlePreview = (report: Report) => {
     setSelectedReport(report)
     setShowPreviewModal(true)
+  }
+
+  const handleCardClick = (report: Report) => {
+    // Navegar para página de visualização do relatório
+    navigate(`/reports/${report.id}`)
   }
 
   const handleDelete = (reportId: string) => {
@@ -231,19 +275,11 @@ export const ReportsPage: React.FC = () => {
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate(-1)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Relatórios</h1>
-                <p className="text-sm text-gray-600">
-                  Gerencie e visualize todos os relatórios
-                </p>
-              </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Relatórios</h1>
+              <p className="text-sm text-gray-600">
+                Gerencie e visualize todos os relatórios
+              </p>
             </div>
             <div className="flex items-center space-x-3">
               <button
@@ -323,80 +359,98 @@ export const ReportsPage: React.FC = () => {
         </div>
 
         {/* Lista de Relatórios */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredReports.map((report) => (
-            <div key={report.id} className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-3">
+            <div 
+              key={report.id} 
+              onClick={() => handleCardClick(report)}
+              className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+              style={{ border: `2px solid ${getProfessionalColor()}` }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-3">
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm"
+                    style={{ backgroundColor: getProfessionalColor() }}
+                  >
                     {getFileIcon(report.format)}
-                    <div>
-                      <h3 className="font-semibold text-gray-900 line-clamp-2">
-                        {report.title}
-                      </h3>
-                      <p className="text-sm text-gray-600">{report.patient}</p>
-                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
-                      {getStatusText(report.status)}
-                    </span>
-                    <button className="p-1 hover:bg-gray-100 rounded">
-                      <MoreHorizontal className="w-4 h-4 text-gray-400" />
-                    </button>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">
+                      {report.title}
+                    </h3>
+                    <p className="text-xs text-gray-600">{report.patient}</p>
                   </div>
                 </div>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium border flex items-center space-x-1 ${getStatusColor(report.status)}`}>
+                  <span>{getStatusText(report.status)}</span>
+                </span>
+              </div>
 
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span>{new Date(report.date).toLocaleDateString('pt-BR')}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <User className="w-4 h-4 mr-2" />
-                    <span>{report.createdBy}</span>
-                  </div>
-                  {report.size && (
-                    <div className="flex items-center text-sm text-gray-600">
-                      <File className="w-4 h-4 mr-2" />
-                      <span>{report.size}</span>
-                    </div>
-                  )}
+              {/* Info */}
+              <div className="space-y-1 mb-3 p-2 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <Calendar className="w-3 h-3" />
+                  <span className="font-medium">{new Date(report.date).toLocaleDateString('pt-BR')}</span>
                 </div>
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <User className="w-3 h-3" />
+                  <span>{report.createdBy}</span>
+                </div>
+                {report.size && (
+                  <div className="flex items-center space-x-2 text-xs text-gray-600">
+                    <File className="w-3 h-3" />
+                    <span>{report.size}</span>
+                  </div>
+                )}
+              </div>
 
-                {report.description && (
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+              {/* Description */}
+              {report.description && (
+                <div className="mb-3">
+                  <p className="text-xs text-gray-600 line-clamp-2">
                     {report.description}
                   </p>
-                )}
+                </div>
+              )}
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => handlePreview(report)}
-                      className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                      title="Visualizar"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDownload(report)}
-                      className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                      title="Download"
-                    >
-                      <Download className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(report.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Excluir"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {report.lastModified && `Modificado em ${new Date(report.lastModified).toLocaleDateString('pt-BR')}`}
-                  </div>
+              {/* Actions */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handlePreview(report)
+                    }}
+                    className="p-1 text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                    title="Visualizar"
+                  >
+                    <Eye className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDownload(report)
+                    }}
+                    className="p-1 text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                    title="Download"
+                  >
+                    <Download className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDelete(report.id)
+                    }}
+                    className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
+                    title="Excluir"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="text-xs text-gray-500">
+                  {report.lastModified && `Modificado em ${new Date(report.lastModified).toLocaleDateString('pt-BR')}`}
                 </div>
               </div>
             </div>
@@ -404,13 +458,15 @@ export const ReportsPage: React.FC = () => {
         </div>
 
         {filteredReports.length === 0 && (
-          <div className="text-center py-12">
-            <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum relatório encontrado</h3>
-            <p className="text-gray-600 mb-4">
+          <div className="bg-white rounded-xl p-8 shadow-sm text-center" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <BarChart3 className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Nenhum relatório encontrado
+            </h3>
+            <p className="text-gray-600 mb-6">
               {searchTerm || filterType !== "all" || filterStatus !== "all" || filterDate !== "all"
-                ? "Tente ajustar os filtros para encontrar o que procura."
-                : "Comece criando seu primeiro relatório ou fazendo upload de um arquivo."}
+                ? "Tente ajustar os filtros de busca"
+                : "Comece criando seu primeiro relatório ou fazendo upload de um arquivo"}
             </p>
             <div className="flex justify-center space-x-3">
               <button
@@ -449,28 +505,78 @@ export const ReportsPage: React.FC = () => {
             <div className="p-6">
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Selecione os arquivos
+                  Selecione os arquivos ou arraste e solte
                 </label>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  accept=".pdf,.docx,.doc,.xlsx,.xls"
-                  onChange={handleFileUpload}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+                
+                {/* Área de Drag and Drop */}
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+                    isDragOver 
+                      ? 'border-blue-500 bg-blue-50' 
+                      : 'border-gray-300 hover:border-gray-400'
+                  }`}
+                >
+                  <Upload className={`w-12 h-12 mx-auto mb-4 ${
+                    isDragOver ? 'text-blue-500' : 'text-gray-400'
+                  }`} />
+                  
+                  <div className="space-y-2">
+                    <p className={`text-lg font-medium ${
+                      isDragOver ? 'text-blue-600' : 'text-gray-600'
+                    }`}>
+                      {isDragOver ? 'Solte os arquivos aqui' : 'Arraste arquivos para cá'}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      ou clique para selecionar
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      PDF, DOCX, XLSX, MD, TXT (máx. 10MB cada)
+                    </p>
+                  </div>
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept=".pdf,.docx,.doc,.xlsx,.xls,.md,.txt"
+                    onChange={handleFileUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                </div>
               </div>
               
               {uploadedFiles.length > 0 && (
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">Arquivos selecionados:</h4>
-                  <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    Arquivos selecionados ({uploadedFiles.length}):
+                  </h4>
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
                     {uploadedFiles.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                        <span className="text-sm text-gray-700">{file.name}</span>
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                        <div className="flex items-center space-x-3">
+                          <div className="flex-shrink-0">
+                            {file.name.endsWith('.pdf') && <FileText className="w-5 h-5 text-red-500" />}
+                            {file.name.endsWith('.docx') && <FileText className="w-5 h-5 text-blue-500" />}
+                            {file.name.endsWith('.xlsx') && <FileText className="w-5 h-5 text-green-500" />}
+                            {file.name.endsWith('.md') && <FileText className="w-5 h-5 text-purple-500" />}
+                            {file.name.endsWith('.txt') && <FileText className="w-5 h-5 text-gray-500" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900 truncate">
+                              {file.name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {(file.size / 1024 / 1024).toFixed(2)} MB
+                            </p>
+                          </div>
+                        </div>
                         <button
                           onClick={() => setUploadedFiles(prev => prev.filter((_, i) => i !== index))}
-                          className="text-red-500 hover:text-red-700"
+                          className="flex-shrink-0 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                          title="Remover arquivo"
                         >
                           <X className="w-4 h-4" />
                         </button>
