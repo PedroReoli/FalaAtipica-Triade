@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, Info } from 'lucide-react';
-import { FillButton } from '../components/common';
+import { Mail, Lock, Eye, EyeOff, Info, CheckCircle, X } from 'lucide-react';
+import { FillButton, ToastContainer } from '../components/common';
 import { mockAuthService, mockUsers } from '../services/mockAuthService';
 import { useProfessional } from '../contexts/ProfessionalContext';
+import { useToast } from '../hooks/useToast';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { setCurrentUser, setProfessionalType } = useProfessional();
+  const { toasts, removeToast, success, error: showError, warning } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [showCredentials, setShowCredentials] = useState(false);
+  const [showCredentialsModal, setShowCredentialsModal] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -20,21 +21,42 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validações
+    if (!formData.email || !formData.password) {
+      warning('Por favor, preencha todos os campos');
+      return;
+    }
+
+    if (!formData.email.includes('@')) {
+      showError('Email inválido');
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      showError('A senha deve ter no mínimo 6 caracteres');
+      return;
+    }
+
     setIsLoading(true);
-    setError('');
 
     try {
       const response = await mockAuthService.login(formData.email, formData.password);
       
       if (response.success && response.user) {
+        success(`Bem-vindo(a), ${response.user.name}!`, true); // true = centered
         setCurrentUser(response.user);
         setProfessionalType(response.user.type);
-        navigate('/dashboard');
+        
+        // Delay para mostrar o toast centralizado de boas-vindas
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2200); // 2s do toast + 200ms extra
       } else {
-        setError(response.message || 'Erro no login');
+        showError(response.message || 'Email ou senha incorretos');
       }
     } catch (err) {
-      setError('Erro interno do servidor');
+      showError('Erro ao conectar com o servidor. Tente novamente.');
     } finally {
       setIsLoading(false);
     }
@@ -48,8 +70,127 @@ const LoginPage: React.FC = () => {
     }));
   };
 
+  const handleQuickLogin = (email: string, password: string) => {
+    setFormData({ email, password, rememberMe: false });
+  };
+
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex relative">
+      {/* Toast Container */}
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
+      
+      {/* Botão Credenciais de Teste - Canto Superior Direito */}
+      <button
+        onClick={() => setShowCredentialsModal(true)}
+        className="fixed top-4 right-4 z-50 p-3 bg-white border-2 border-blue-500 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-200 group"
+        title="Ver credenciais de teste"
+      >
+        <Info className="w-5 h-5 text-blue-600" />
+        <span className="absolute -bottom-8 right-0 text-xs bg-gray-800 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          Credenciais de teste
+        </span>
+      </button>
+
+      {/* Modal de Credenciais */}
+      {showCredentialsModal && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setShowCredentialsModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden animate-fade-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header do Modal */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white relative">
+              <button
+                onClick={() => setShowCredentialsModal(false)}
+                className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <div className="flex items-center space-x-3">
+                <div className="bg-white/20 p-3 rounded-lg">
+                  <Info className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">Credenciais de Teste</h2>
+                  <p className="text-blue-100 text-sm mt-1">
+                    Clique em uma conta para preencher automaticamente
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Conteúdo do Modal */}
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {mockUsers.map((user, index) => (
+                  <div
+                    key={index}
+                    className="p-4 bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-lg transition-all cursor-pointer group"
+                    onClick={() => {
+                      handleQuickLogin(user.email, user.password);
+                      setShowCredentialsModal(false);
+                    }}
+                  >
+                    {/* Header do Card */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center space-x-2">
+                        <span 
+                          className="px-3 py-1 rounded-full text-xs font-bold text-white"
+                          style={{ 
+                            backgroundColor: 
+                              user.type === 'fonoaudiologo' ? 'var(--green)' :
+                              user.type === 'psicologo' ? 'var(--blue)' :
+                              user.type === 'psiquiatra' ? 'var(--red)' :
+                              user.type === 'pedagogo' ? 'var(--yellow)' :
+                              'var(--purple)'
+                          }}
+                        >
+                          {user.type.toUpperCase()}
+                        </span>
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                      </div>
+                    </div>
+
+                    {/* Informações */}
+                    <div className="space-y-2">
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium">Nome</p>
+                        <p className="text-sm font-semibold text-gray-800">{user.name}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium">Email</p>
+                        <p className="text-sm text-gray-700 font-mono">{user.email}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium">Senha</p>
+                        <p className="text-sm text-gray-700 font-mono">{user.password}</p>
+                      </div>
+                    </div>
+
+                    {/* Hover Action */}
+                    <div className="mt-4 pt-3 border-t border-gray-200">
+                      <p className="text-xs text-blue-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity text-center">
+                        ✨ Clique para preencher
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer do Modal */}
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <p className="text-sm text-center text-gray-700">
+                  💡 <strong>Dica:</strong> Clique em qualquer conta para preencher o formulário automaticamente
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Lado Esquerdo - Vazio */}
       <div className="hidden lg:flex lg:w-1/2 bg-white"></div>
 
@@ -100,29 +241,6 @@ const LoginPage: React.FC = () => {
               <p className="text-subtitle">
                 Faça login para acessar sua conta
               </p>
-            </div>
-
-            {/* Credenciais de Teste */}
-            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <button
-                onClick={() => setShowCredentials(!showCredentials)}
-                className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
-              >
-                <Info className="h-4 w-4 mr-2" />
-                <span className="text-sm font-medium">
-                  {showCredentials ? 'Ocultar' : 'Ver'} credenciais de teste
-                </span>
-              </button>
-              
-              {showCredentials && (
-                <div className="mt-3 space-y-2">
-                  {mockUsers.map((user, index) => (
-                    <div key={index} className="text-xs text-gray-700">
-                      <strong>{user.type}:</strong> {user.email} / {user.password}
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
 
             {/* Formulário */}
@@ -185,12 +303,6 @@ const LoginPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Mensagem de Erro */}
-              {error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-sm text-red-600">{error}</p>
-                </div>
-              )}
 
               {/* Opções */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Plus, Edit, ChevronLeft, ChevronRight, Move
+  Plus, Edit, ChevronLeft, ChevronRight, Move, Calendar
 } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useRoleColor } from '../hooks/useRoleColor';
@@ -205,6 +205,13 @@ export const SessionsPage: React.FC = () => {
             </p>
           </div>
                 <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => navigate('/full-calendar')}
+                    className="px-4 py-2 rounded-lg font-medium transition-colors text-gray-600 bg-gray-100 hover:bg-gray-200"
+                  >
+                    <Calendar size={18} className="inline mr-2" />
+                    Agenda Completa
+                  </button>
                   <button
                     onClick={() => setIsEditMode(!isEditMode)}
                     className={`px-4 py-2 rounded-lg font-medium transition-colors ${
