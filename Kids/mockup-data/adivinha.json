@@ -1,0 +1,65 @@
+{
+  "categorias": [
+    {
+      "id": "animais",
+      "nome": "Animais",
+      "itens": [
+        {
+          "id": "cachorro",
+          "nome": "Cachorro",
+          "sombra": "sombra_cachorro.png",
+          "imagem": "cachorro.png",
+          "alternativas": [
+            { "id": "cachorro", "nome": "Cachorro", "imagem": "cachorro.png", "correta": true },
+            { "id": "gato", "nome": "Gato", "imagem": "gato.png", "correta": false },
+            { "id": "cavalo", "nome": "Cavalo", "imagem": "cavalo.png", "correta": false },
+            { "id": "vaca", "nome": "Vaca", "imagem": "vaca.png", "correta": false },
+            { "id": "porco", "nome": "Porco", "imagem": "porco.png", "correta": false },
+            { "id": "galinha", "nome": "Galinha", "imagem": "galinha.png", "correta": false },
+            { "id": "pato", "nome": "Pato", "imagem": "pato.png", "correta": false },
+            { "id": "coelho", "nome": "Coelho", "imagem": "coelho.png", "correta": false }
+          ]
+        },
+        {
+          "id": "gato",
+          "nome": "Gato",
+          "sombra": "sombra_gato.png",
+          "imagem": "gato.png",
+          "alternativas": [
+            { "id": "cachorro", "nome": "Cachorro", "imagem": "cachorro.png", "correta": false },
+            { "id": "gato", "nome": "Gato", "imagem": "gato.png", "correta": true },
+            { "id": "cavalo", "nome": "Cavalo", "imagem": "cavalo.png", "correta": false },
+            { "id": "vaca", "nome": "Vaca", "imagem": "vaca.png", "correta": false },
+            { "id": "porco", "nome": "Porco", "imagem": "porco.png", "correta": false },
+            { "id": "galinha", "nome": "Galinha", "imagem": "galinha.png", "correta": false },
+            { "id": "pato", "nome": "Pato", "imagem": "pato.png", "correta": false },
+            { "id": "coelho", "nome": "Coelho", "imagem": "coelho.png", "correta": false }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "objetos",
+      "nome": "Objetos",
+      "itens": [
+        {
+          "id": "casa",
+          "nome": "Casa",
+          "sombra": "sombra_casa.png",
+          "imagem": "casa.png",
+          "alternativas": [
+            { "id": "casa", "nome": "Casa", "imagem": "casa.png", "correta": true },
+            { "id": "carro", "nome": "Carro", "imagem": "carro.png", "correta": false },
+            { "id": "arvore", "nome": "Árvore", "imagem": "arvore.png", "correta": false },
+            { "id": "bola", "nome": "Bola", "imagem": "bola.png", "correta": false },
+            { "id": "livro", "nome": "Livro", "imagem": "livro.png", "correta": false },
+            { "id": "mesa", "nome": "Mesa", "imagem": "mesa.png", "correta": false },
+            { "id": "cadeira", "nome": "Cadeira", "imagem": "cadeira.png", "correta": false },
+            { "id": "telefone", "nome": "Telefone", "imagem": "telefone.png", "correta": false }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

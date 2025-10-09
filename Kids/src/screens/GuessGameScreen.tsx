@@ -3,64 +3,28 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert, Image } from 'react-na
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Zap, Lightbulb, Check, X } from 'lucide-react-native';
+import { Zap, Lightbulb, Check, X, HelpCircle } from 'lucide-react-native';
 import { InternalHeader } from '../components/InternalHeader';
 import { BottomNavigation } from '../components/BottomNavigation';
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import ProgressService from '../services/progressService';
+import { adivinhaService } from '../services/adivinhaService';
+import type { ItemAdivinha, Alternativa } from '../services/adivinhaService';
 
 type GuessGameScreenNavigationProp = StackNavigationProp<RootStackParamList, 'GuessGame'>;
 
-// Dados mockados do jogo Adivinha
-const gameData = {
-  categorias: [
-    {
-      id: "animais",
-      nome: "Animais",
-      itens: [
-        {
-          id: "cachorro",
-          nome: "Cachorro",
-          sombra: "sombra_cachorro.png",
-          imagem: "cachorro.png",
-          alternativas: [
-            { id: "cachorro", nome: "Cachorro", imagem: "cachorro.png", correta: true },
-            { id: "gato", nome: "Gato", imagem: "gato.png", correta: false },
-            { id: "cavalo", nome: "Cavalo", imagem: "cavalo.png", correta: false },
-            { id: "vaca", nome: "Vaca", imagem: "vaca.png", correta: false }
-          ]
-        },
-        {
-          id: "gato",
-          nome: "Gato",
-          sombra: "sombra_gato.png",
-          imagem: "gato.png",
-          alternativas: [
-            { id: "cachorro", nome: "Cachorro", imagem: "cachorro.png", correta: false },
-            { id: "gato", nome: "Gato", imagem: "gato.png", correta: true },
-            { id: "cavalo", nome: "Cavalo", imagem: "cavalo.png", correta: false },
-            { id: "vaca", nome: "Vaca", imagem: "vaca.png", correta: false }
-          ]
-        }
-      ]
-    }
-  ]
-};
-
 export const GuessGameScreen: React.FC = () => {
   const navigation = useNavigation<GuessGameScreenNavigationProp>();
-  const progressService = ProgressService.getInstance();
   
   // Estados do jogo
-  const [currentItem, setCurrentItem] = useState<any>(null);
-  const [alternativas, setAlternativas] = useState<any[]>([]);
+  const [currentItem, setCurrentItem] = useState<ItemAdivinha | null>(null);
+  const [alternativas, setAlternativas] = useState<Alternativa[]>([]);
   const [score, setScore] = useState(0);
   const [currentRound, setCurrentRound] = useState(1);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [gameStartTime, setGameStartTime] = useState<number>(0);
+  const totalRounds = 5;
 
   // Inicializar jogo
   useEffect(() => {
@@ -68,16 +32,23 @@ export const GuessGameScreen: React.FC = () => {
   }, []);
 
   const startNewGame = () => {
-    const categoria = gameData.categorias[0]; // Animais
-    const item = categoria.itens[Math.floor(Math.random() * categoria.itens.length)];
-    setCurrentItem(item);
-    setAlternativas(item.alternativas);
+    loadNewItem();
     setScore(0);
     setCurrentRound(1);
     setGameCompleted(false);
     setSelectedAnswer(null);
     setShowResult(false);
-    setGameStartTime(Date.now());
+  };
+
+  const loadNewItem = () => {
+    // Buscar item aleatório da categoria animais
+    const item = adivinhaService.getRandomItem('animais');
+    if (item) {
+      setCurrentItem(item);
+      // Embaralhar e pegar 4 alternativas
+      const embaralhadas = adivinhaService.getAlternativasEmbaralhadas(item, 4);
+      setAlternativas(embaralhadas);
+    }
   };
 
   const handleAnswer = (alternativaId: string) => {
@@ -93,7 +64,7 @@ export const GuessGameScreen: React.FC = () => {
     
     // Mostrar resultado por 2 segundos
     setTimeout(() => {
-      if (currentRound < 3) {
+      if (currentRound < totalRounds) {
         nextRound();
       } else {
         finishGame();
@@ -102,10 +73,7 @@ export const GuessGameScreen: React.FC = () => {
   };
 
   const nextRound = () => {
-    const categoria = gameData.categorias[0];
-    const item = categoria.itens[Math.floor(Math.random() * categoria.itens.length)];
-    setCurrentItem(item);
-    setAlternativas(item.alternativas);
+    loadNewItem();
     setCurrentRound(currentRound + 1);
     setSelectedAnswer(null);
     setShowResult(false);
@@ -113,17 +81,6 @@ export const GuessGameScreen: React.FC = () => {
 
   const finishGame = () => {
     setGameCompleted(true);
-    
-    // Registrar progresso no serviço
-    const timeSpent = Math.floor((Date.now() - gameStartTime) / 1000);
-    progressService.recordGameResult(
-      'adivinha_animais',
-      'Adivinha - Animais',
-      'animais',
-      score,
-      3, // maxScore
-      timeSpent
-    );
   };
 
   const handleBack = () => {
@@ -147,10 +104,14 @@ export const GuessGameScreen: React.FC = () => {
         <View style={styles.resultContainer}>
           <View style={styles.resultCard}>
             <Text style={styles.resultTitle}>Parabéns! 🎉</Text>
-            <Text style={styles.resultScore}>Você acertou {score} de 3 perguntas!</Text>
+            <Text style={styles.resultScore}>Você acertou {score} de {totalRounds} perguntas!</Text>
             
-            {score === 3 && (
+            {score === totalRounds && (
               <Text style={styles.perfectScore}>Perfeito! ⭐</Text>
+            )}
+            
+            {score >= totalRounds * 0.8 && score < totalRounds && (
+              <Text style={styles.goodScore}>Muito bem! 🌟</Text>
             )}
             
             <TouchableOpacity style={styles.playAgainButton} onPress={handlePlayAgain}>
@@ -174,14 +135,14 @@ export const GuessGameScreen: React.FC = () => {
       <View style={styles.content}>
         {/* Informações do jogo */}
         <View style={styles.gameInfo}>
-          <Text style={styles.roundText}>Pergunta {currentRound} de 3</Text>
-          <Text style={styles.scoreText}>Pontos: {score}</Text>
+          <Text style={styles.roundText}>Pergunta {currentRound} de {totalRounds}</Text>
+          <Text style={styles.scoreText}>✨ {score} pontos</Text>
         </View>
 
         {/* Sombra/Imagem do item */}
         <View style={styles.shadowContainer}>
           <View style={styles.shadowImage}>
-            <Text style={styles.shadowText}>?</Text>
+            <HelpCircle size={80} color={COLORS.TEXT_WHITE} />
           </View>
           <Text style={styles.questionText}>Qual é este animal?</Text>
         </View>
@@ -401,6 +362,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: COLORS.YELLOW,
+    marginBottom: 20,
+  },
+  goodScore: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: COLORS.GREEN,
     marginBottom: 20,
   },
   playAgainButton: {

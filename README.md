@@ -1,108 +1,371 @@
-# FalaAtípica - Plataforma de Auxílio para Atraso de Fala
+<div align="center">
 
-## Descrição
-Sistema completo de auxílio para crianças com atraso de fala, desenvolvido como projeto de TCC. A plataforma consiste em três aplicações complementares, cada uma direcionada a um público específico e com funcionalidades adaptadas às suas necessidades.
+<img src="images/falaatipica-logo.png" alt="FalaAtípica Logo" width="200"/>
 
-## Visão Geral do Projeto
+# FalaAtípica
 
-### Aplicação KIDS
-- **Público**: Crianças com atraso de fala
-- **Plataforma**: React Native com TypeScript
-- **Foco**: Mínima interação, apenas jogos educativos
-- **Objetivo**: Estimular o desenvolvimento da fala através de atividades lúdicas
+### *Aprender, expressar e celebrar*
 
-### Aplicação TUTORS
-- **Público**: Pais/Responsáveis pelas crianças
-- **Plataforma**: React Native com TypeScript
-- **Foco**: Acompanhamento básico de progresso e conquistas
-- **Objetivo**: Permitir que pais/responsáveis acompanhem o progresso das crianças
+</div>
 
-### Aplicação PRO
-- **Público**: Fonoaudiólogos, Psicólogos e Psiquiatras
-- **Plataforma**: React com TypeScript
-- **Foco**: Gestão completa de pacientes, sessões e relatórios detalhados
-- **Objetivo**: Fornecer ferramentas profissionais para acompanhamento clínico
+---
 
-## Estrutura do Projeto
+## 🌟 Uma Voz para Cada Criança
+
+**Milhões de crianças ao redor do mundo enfrentam desafios na comunicação.** Atraso de fala não é apenas uma dificuldade técnica — é uma barreira que impede crianças de expressarem seus sonhos, medos, alegrias e necessidades. É frustração transformada em silêncio.
+
+**FalaAtípica nasce da convicção de que toda criança merece ser ouvida.**
+
+Este não é apenas um projeto de TCC. É o **início de uma empresa** comprometida em transformar a vida de crianças com atraso de fala, suas famílias e os profissionais que as acompanham. É tecnologia a serviço da esperança.
+
+---
+
+## 💡 Nossa Missão
+
+**Democratizar o acesso a ferramentas de estimulação da fala**, tornando o processo de desenvolvimento da linguagem mais **lúdico, acessível e eficaz**.
+
+Acreditamos que:
+
+- 🎮 **Aprender pode ser divertido** - Jogos educativos que cativam
+- 💬 **Expressar-se é um direito** - Cada criança merece sua voz
+- 🎉 **Celebrar é essencial** - Cada conquista importa, por menor que seja
+
+---
+
+## 🎯 O Que é FalaAtípica?
+
+**FalaAtípica é uma plataforma completa** que une três aplicações integradas:
+
+### 🎮 **KIDS** - Para as Crianças
+
+*"Porque aprender pode ser mágico"*
+
+A aplicação que transforma estimulação da fala em aventura. Jogos coloridos, feedback positivo e um ambiente seguro onde errar faz parte do aprender.
+
+- **Público**: Crianças de 3 a 12 anos com atraso de fala
+- **Objetivo**: Estimular o desenvolvimento através do lúdico
+- **Filosofia**: Zero pressão, 100% diversão
+
+### 👨‍👩‍👧 **TUTORS** - Para as Famílias
+
+*"Porque acompanhar é amar"*
+
+Pais e responsáveis não são espectadores — são parte essencial da jornada. Esta aplicação traduz progresso técnico em conquistas emocionais.
+
+- **Público**: Pais, mães e responsáveis
+- **Objetivo**: Acompanhar progresso e celebrar conquistas
+- **Filosofia**: Informação clara, esperança renovada
+
+### 💼 **PRO** - Para os Profissionais
+
+*"Porque cuidar exige ferramentas"*
+
+Fonoaudiólogos, psicólogos, psiquiatras, pedagogos e psicopedagogos merecem tecnologia que potencialize seu trabalho, não que o complique.
+
+- **Público**: Profissionais de saúde e educação
+- **Objetivo**: Gestão completa, relatórios detalhados, análise profunda
+- **Filosofia**: Eficiência que gera mais tempo para o que importa — cuidar
+
+---
+
+## 🎨 Nossa Identidade Visual
+
+**Cada cor tem um propósito. Cada escolha é intencional.**
+
+As cores do FalaAtípica não são apenas estética — são **psicologia aplicada**, escolhidas para estimular, acalmar e engajar.
+
+### 🎨 Paleta de Cores Oficial
+
+```
+🔵 Azul (#1e88e5)    → Confiança, calma, concentração
+🟢 Verde (#43a047)    → Crescimento, esperança, vida
+🔴 Vermelho (#e53935) → Energia, paixão, atenção
+🟡 Amarelo (#fbc02d)  → Alegria, criatividade, otimismo
+```
+
+### 🎨 Cores Complementares
+
+```
+🔷 Azul Escuro (#054776) → Profundidade, seriedade (fundos profissionais)
+⚪ Branco Gelo (#f4f6ff) → Leveza, clareza, respiro
+⚫ Preto Suave (#3c3c3c) → Leitura confortável
+⚪ Branco Puro (#ffffff) → Contraste perfeito
+```
+
+**Por quê estas cores?**
+
+- **Azul**: Tranquiliza crianças ansiosas
+- **Verde**: Representa crescimento real e conquistas
+- **Vermelho**: Chama atenção sem assustar
+- **Amarelo**: Traz luz e positividade
+
+**Estas cores são OBRIGATÓRIAS em todo o projeto.** Não são negociáveis porque foram escolhidas com base em **neurociência infantil e psicologia das cores**.
+
+---
+
+## 📊 A Realidade que nos Move
+
+### Os Números que não Podemos Ignorar
+
+- **5% a 8%** das crianças apresentam algum tipo de atraso de fala
+- **Milhões de famílias** buscam ajuda, mas encontram barreiras
+- **Custo elevado** de terapias fonoaudiológicas limita o acesso
+- **Falta de ferramentas** dificulta o acompanhamento em casa
+- **Profissionais sobrecarregados** precisam de tecnologia que ajude
+
+### A História por Trás do Código
+
+Este projeto nasceu da observação de uma realidade dolorosa: **crianças brilhantes aprisionadas pela dificuldade de se comunicar**. Crianças que têm tanto a dizer, mas não conseguem. Famílias que querem ajudar, mas não sabem como. Profissionais que se dedicam, mas precisam de mais ferramentas.
+
+**FalaAtípica é nossa resposta.**
+
+---
+
+## 🏗️ Arquitetura e Tecnologia
+
+### Estrutura do Projeto
+
 ```
 FalaAtipica-Triade/
-├── Kids/                    # Aplicação para crianças
-├── Pro/                     # Aplicação para profissionais avançados
-├── Tutors/                  # Aplicação para doutores/fonoaudiólogos
-├── MOCAP/                   # Dados mockados centralizados
-│   ├── KIDS/               # Mocks específicos para Kids
-│   ├── TUTORS/             # Mocks específicos para Tutors
-│   └── PRO/                # Mocks específicos para Pro
-├── docs/                    # Documentação completa
-│   ├── RegraDeNegocios/    # Regras de negócio
-│   ├── sprints/            # Documentação de sprints
-│   ├── mockups/            # Mockups das telas
-│   ├── api/                # Documentação da API
-│   └── deployment/         # Guias de deploy
-└── .gitattributes
+├── 🎮 Kids/                    # App para crianças (React Native)
+│   ├── src/screens/           # Telas (Dashboard, Jogos, Login)
+│   ├── src/components/        # Componentes reutilizáveis
+│   ├── src/services/          # Autenticação e dados
+│   └── mockup-data/           # Dados locais de teste
+│
+├── 💼 Pro/                     # App para profissionais (React Web)
+│   ├── src/pages/             # 26 páginas implementadas
+│   ├── src/components/        # Componentes e layouts
+│   ├── src/hooks/             # useRoleColor, useToast, etc
+│   └── src/services/          # Autenticação mockada
+│
+├── 👨‍👩‍👧 Tutors/                  # App para pais (React Native)
+│   └── [Em desenvolvimento]
+│
+├── 📂 Mockup/                  # Dados centralizados (fase pré-backend)
+│   ├── KIDS/                  # usuários, jogos, categorias
+│   ├── TUTORS/                # relatórios simples, conquistas
+│   └── PRO/                   # pacientes, sessões, relatórios
+│
+├── 📚 docs/                    # Documentação viva
+│   ├── pro/                   # Status, telas, regras
+│   ├── kids/                  # Status dos jogos
+│   ├── RegraDeNegocios/       # Regras de negócio
+│   └── cores.md               # Identidade visual
+│
+└── 🤖 auto/                    # Automações em Python
 ```
 
-## Paleta de Cores
-**PALETA OFICIAL DO PROJETO**:
-- **Azul**: `#1e88e5` (cor principal)
-- **Verde**: `#43a047` (fonoaudiólogos)
-- **Vermelho**: `#e53935` (psiquiatras)
-- **Amarelo**: `#fbc02d` (acessórios)
-- **Azul Escuro**: `#054776` (fundo)
-- **Branco**: `#f4f6ff` (fundo claro)
-- **Preto**: `#3c3c3c` (texto)
-- **Branco**: `#ffffff` (texto claro)
+### Stack Tecnológica
 
-## Tecnologias
-- **Frontend Mobile**: React Native com TypeScript
-- **Frontend Web**: React com TypeScript
-- **Estilização**: Tailwind CSS
-- **Navegação**: React Navigation (mobile)
-- **Dados**: MOCAP (fase inicial) → Supabase (fase final)
+**Frontend Mobile (KIDS + TUTORS)**
 
-## Fases de Desenvolvimento
+- React Native + Expo
+- TypeScript
+- React Navigation
+- Lucide Icons
 
-### Fase 1: KIDS
-- Implementação das telas em React Native
-- Navegação completa
-- Consumo de dados MOCAP/KIDS
-- Jogos: "Adivinha" e "Jogo das Palavras"
+**Frontend Web (PRO)**
 
-### Fase 2: TUTORS
-- Implementação das telas em React Native
-- Navegação completa
-- Consumo de dados MOCAP/TUTORS
-- Relatórios básicos e progresso
+- React + Vite
+- TypeScript
+- TailwindCSS
+- React Router
+- React Markdown
 
-### Fase 3: PRO
-- Implementação das telas em React
-- Navegação e placeholders
-- Consumo de dados MOCAP/PRO
-- Relatórios avançados
+**Backend (Fase 4)**
 
-### Fase 4: Integração Supabase
-- Substituição do MOCAP por Supabase
-- Implementação de backend
-- Sincronização entre aplicações
+- Supabase (planejado)
+- PostgreSQL
+- Real-time sync
+- Authentication
 
-## Instalação
-[Instruções de instalação serão adicionadas conforme o desenvolvimento]
+---
 
-## Desenvolvimento
-[Instruções de desenvolvimento serão adicionadas conforme o desenvolvimento]
+## 🚀 Do TCC à Startup
 
-## Documentação
-- **Regras de negócio**: `docs/RegraDeNegocios/`
-- **Sprints**: `docs/sprints/`
-- **Mockups**: `docs/mockups/`
-- **API**: `docs/api/`
-- **Deploy**: `docs/deployment/`
-- **Configurações**: `cursor.rules`
+### Começamos como um Trabalho de Conclusão de Curso...
 
-## Critérios de Aceite
-- Todas as telas renderizadas
-- Navegação funcional
-- Dados visíveis vindos do MOCAP
-- Sem integrações reais (fase inicial)
-- Acessibilidade básica implementada
-- Respeito aos mockups fornecidos
+Este projeto nasceu nas madrugadas de estudo, nas conversas com fonoaudiólogos, nas histórias de pais exaustos e crianças frustradas. **Um TCC que se recusou a ser apenas acadêmico.**
+
+### ...Estamos nos tornando uma Empresa
+
+**FalaAtípica está em transição:**
+
+- ✅ **Fase 1 (TCC)**: Validação do conceito, desenvolvimento MVP
+- 🔄 **Fase 2 (Atual)**: Refinamento, testes reais, feedback de profissionais
+- 🎯 **Fase 3 (Próxima)**: Incorporação, lançamento comercial, impacto em escala
+
+**Nossa meta:** Estar em 1.000 clínicas e 10.000 lares até 2026.
+
+---
+
+## 📈 Status de Desenvolvimento
+
+### 🎮 KIDS App - **90% Completo**
+
+- ✅ Sistema de autenticação com validações
+- ✅ Jogo "Adivinha" totalmente funcional
+- ✅ Dashboard com visual infantil atrativo
+- ✅ Sistema de feedback (toasts) implementado
+- ✅ Integração com dados mockados
+- ⏳ Jogo das Palavras (estrutura pronta, lógica pendente)
+
+### 💼 PRO App - **95% Completo**
+
+- ✅ 26 páginas totalmente funcionais
+- ✅ Sistema de cores por role (useRoleColor)
+- ✅ Gestão completa de pacientes
+- ✅ Calendário avançado (drag & drop)
+- ✅ Sistema de relatórios (upload, geração, Markdown)
+- ✅ Parcerias e convites
+- ✅ 5 tipos de profissionais suportados
+- ⏳ 9 placeholders (rotas secundárias)
+
+### 👨‍👩‍👧 TUTORS App - **Próximo**
+
+- ⏳ Em planejamento
+- Dashboard simplificado
+- Relatórios básicos
+- Conquistas da criança
+
+### 🔌 Backend - **Fase 4**
+
+- Supabase + PostgreSQL
+- Autenticação real
+- Sincronização real-time
+
+---
+
+## 🎨 Design que Importa
+
+### Por que Essas Cores?
+
+**Não escolhemos cores ao acaso.** Cada tonalidade foi selecionada considerando:
+
+- **Neurociência infantil**: Cores que acalmam e estimulam
+- **Psicologia das cores**: Significados emocionais
+- **Acessibilidade**: Contraste adequado para todas as idades
+- **Branding**: Identidade visual memorável
+
+**Estas cores são sagradas no projeto.** Alterar é quebrar a identidade que construímos.
+
+---
+
+## 💻 Começando
+
+### Pré-requisitos
+
+- Node.js 18+
+- npm ou yarn
+- Expo CLI (para KIDS/TUTORS)
+- Amor por fazer diferença ❤️
+
+### Instalação Rápida
+
+```bash
+# Clone o repositório
+git clone [url-do-repo]
+cd FalaAtipica-Triade
+
+# KIDS App
+cd Kids
+npm install
+npm run expo        # Menu do Expo
+npm run web         # Web browser
+
+# PRO App
+cd ../Pro
+npm install
+npm run dev         # Desenvolvimento
+
+# TUTORS App (em breve)
+cd ../Tutors
+npm install
+npm run expo
+```
+
+---
+
+## 🎯 Roadmap
+
+### ✅ Concluído (2024-2025)
+
+- Definição do conceito
+- Arquitetura das 3 aplicações
+- Desenvolvimento KIDS (90%)
+- Desenvolvimento PRO (95%)
+- Sistema de cores centralizado
+- Documentação completa
+
+### 🔄 Em Andamento
+
+- Polimento KIDS
+- Desenvolvimento TUTORS
+- Testes com usuários reais
+- Validação com profissionais
+
+### 🎯 Próximos Passos
+
+1. **Concluir TUTORS** (Sprint atual)
+2. **Implementar Backend** (Supabase)
+3. **Testes Beta** com clínicas parceiras
+4. **Lançamento MVP** (Q1 2026)
+5. **Expansão** e escala
+
+---
+
+## 📚 Documentação Completa
+
+- 📘 **`docs/pro/`** - Status, componentes, regras de negócio do PRO
+- 📗 **`docs/kids/`** - Status dos jogos, telas, funcionalidades
+- 📙 **`docs/cores.md`** - Guia completo da identidade visual
+- 📕 **`cursor.rules`** - Regras de desenvolvimento do projeto
+
+---
+
+## 🤝 Este é um Projeto de Impacto
+
+**Código aberto, coração aberto.**
+
+Acreditamos que tecnologia para o bem deve ser acessível. Contribuições que **realmente ajudem crianças** são bem-vindas.
+
+---
+
+## 👨‍💻 Desenvolvido por
+
+**Pedro Lucas Reis**
+
+- TCC em Desenvolvimento
+- Futuro fundador da FalaAtípica
+- Movido pela crença de que tecnologia pode mudar vidas
+
+---
+
+## 💌 Uma Mensagem Final
+
+**Para cada linha de código que escrevemos, existe uma criança que queremos ajudar.**
+
+Para cada feature que implementamos, existe uma família que queremos apoiar.
+
+Para cada bug que corrigimos, existe um profissional que queremos empoderar.
+
+**FalaAtípica não é só software. É propósito transformado em tecnologia.**
+
+---
+
+## 📞 Contato
+
+- **Email**: pedrosousa2160@gmail.com
+- **LinkedIn**: [Seu LinkedIn]
+- **Site**: [Em breve]
+
+---
+
+<div align="center">
+
+**"Toda criança merece ser ouvida. Toda voz merece ser celebrada."**
+
+💙 FalaAtípica - Transformando silêncios em histórias
+
+</div>

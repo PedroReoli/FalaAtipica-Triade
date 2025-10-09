@@ -1,0 +1,41 @@
+{
+  "categorias": [
+    {
+      "id": "animais",
+      "nome": "Animais",
+      "cor": "#43a047",
+      "icone": "paw",
+      "descricao": "Aprenda sobre animais",
+      "nivel": 1,
+      "jogos": ["adivinha", "palavras"]
+    },
+    {
+      "id": "objetos",
+      "nome": "Objetos",
+      "cor": "#1e88e5",
+      "icone": "box",
+      "descricao": "Aprenda sobre objetos do dia a dia",
+      "nivel": 1,
+      "jogos": ["adivinha", "palavras"]
+    },
+    {
+      "id": "alimentos",
+      "nome": "Alimentos",
+      "cor": "#fbc02d",
+      "icone": "apple",
+      "descricao": "Aprenda sobre alimentos",
+      "nivel": 2,
+      "jogos": ["adivinha", "palavras"]
+    },
+    {
+      "id": "cores",
+      "nome": "Cores",
+      "cor": "#e53935",
+      "icone": "palette",
+      "descricao": "Aprenda sobre cores",
+      "nivel": 2,
+      "jogos": ["adivinha", "palavras"]
+    }
+  ]
+}
+

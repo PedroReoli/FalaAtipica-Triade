@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, StatusBar } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { User } from 'lucide-react-native';
 import { Logo } from './Logo';
@@ -8,12 +8,43 @@ import { COLORS } from '../constants/colors';
 interface HeaderProps {
   showProfile?: boolean;
   showLogo?: boolean;
+  userName?: string;
+  onLogout?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   showProfile = true,
   showLogo = true,
+  userName = 'Criança',
+  onLogout,
 }) => {
+  const [tapCount, setTapCount] = useState(0);
+  const tapTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleProfileTap = () => {
+    // Incrementar contador de taps
+    setTapCount(prev => prev + 1);
+
+    // Limpar timer anterior se existir
+    if (tapTimerRef.current) {
+      clearTimeout(tapTimerRef.current);
+    }
+
+    // Verificar se é o segundo tap
+    if (tapCount === 1) {
+      // Segundo tap - fazer logout
+      if (onLogout) {
+        onLogout();
+      }
+      setTapCount(0);
+    } else {
+      // Primeiro tap - esperar 500ms para ver se vem o segundo
+      tapTimerRef.current = setTimeout(() => {
+        setTapCount(0);
+      }, 500);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.BACKGROUND_BLUE} />
@@ -22,10 +53,14 @@ export const Header: React.FC<HeaderProps> = ({
       <View style={styles.header}>
         {showProfile && (
           <View style={styles.profileSection}>
-            <View style={styles.profileImage}>
-              <User size={14} color={COLORS.TEXT_WHITE} />
-            </View>
-            <Text style={styles.greeting}>Olá [NOME]</Text>
+            <TouchableOpacity 
+              style={styles.profileImage}
+              onPress={handleProfileTap}
+              activeOpacity={0.7}
+            >
+              <User size={24} color={COLORS.TEXT_WHITE} />
+            </TouchableOpacity>
+            <Text style={styles.greeting}>Olá, {userName}</Text>
           </View>
         )}
 
@@ -55,12 +90,14 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   profileImage: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: COLORS.BLUE,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.TEXT_WHITE,
   },
   greeting: {
     color: COLORS.TEXT_WHITE,

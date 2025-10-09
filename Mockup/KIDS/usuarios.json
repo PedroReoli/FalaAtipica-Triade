@@ -1,0 +1,62 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nome": "João Silva",
+      "idade": 8,
+      "email": "joao@kids.com",
+      "senha": "123456",
+      "avatar": "avatar1.png",
+      "responsavel": {
+        "nome": "Carlos Silva",
+        "parentesco": "Pai",
+        "telefone": "(11) 99999-8888",
+        "email": "carlos.silva@email.com"
+      },
+      "progresso": {
+        "pontos": 150,
+        "nivel": 3,
+        "jogosCompletos": 12
+      }
+    },
+    {
+      "id": "2",
+      "nome": "Maria Santos",
+      "idade": 6,
+      "email": "maria@kids.com",
+      "senha": "123456",
+      "avatar": "avatar2.png",
+      "responsavel": {
+        "nome": "Ana Santos",
+        "parentesco": "Mãe",
+        "telefone": "(11) 98888-7777",
+        "email": "ana.santos@email.com"
+      },
+      "progresso": {
+        "pontos": 85,
+        "nivel": 2,
+        "jogosCompletos": 6
+      }
+    },
+    {
+      "id": "3",
+      "nome": "Pedro Costa",
+      "idade": 10,
+      "email": "pedro@kids.com",
+      "senha": "123456",
+      "avatar": "avatar3.png",
+      "responsavel": {
+        "nome": "Lucia Costa",
+        "parentesco": "Mãe",
+        "telefone": "(11) 97777-6666",
+        "email": "lucia.costa@email.com"
+      },
+      "progresso": {
+        "pontos": 230,
+        "nivel": 5,
+        "jogosCompletos": 20
+      }
+    }
+  ]
+}
+

@@ -1,0 +1,175 @@
+{
+  "cenas": {
+    "nivel1": {
+      "nome": "Nível 1 - Relações Espaciais Simples",
+      "descricao": "Posições e localizações básicas",
+      "itens": [
+        {
+          "id": "n1_01",
+          "imagem": "gato_sobre_caixa.png",
+          "descricao": "Gato sentado sobre uma caixa marrom",
+          "fraseCerta": "O gato está sobre a caixa.",
+          "frasesErradas": [
+            "A caixa está sobre o gato.",
+            "O gato está atrás da caixa."
+          ],
+          "dificuldade": 1,
+          "conceito": "sobre/embaixo"
+        },
+        {
+          "id": "n1_02",
+          "imagem": "cachorro_embaixo_mesa.png",
+          "descricao": "Cachorro deitado embaixo de uma mesa",
+          "fraseCerta": "O cachorro está embaixo da mesa.",
+          "frasesErradas": [
+            "O cachorro está sobre a mesa.",
+            "A mesa está embaixo do cachorro."
+          ],
+          "dificuldade": 1,
+          "conceito": "embaixo/sobre"
+        },
+        {
+          "id": "n1_03",
+          "imagem": "bola_dentro_cesta.png",
+          "descricao": "Bola vermelha dentro de uma cesta",
+          "fraseCerta": "A bola está dentro da cesta.",
+          "frasesErradas": [
+            "A bola está fora da cesta.",
+            "A cesta está dentro da bola."
+          ],
+          "dificuldade": 1,
+          "conceito": "dentro/fora"
+        },
+        {
+          "id": "n1_04",
+          "imagem": "menino_ao_lado_arvore.png",
+          "descricao": "Menino de pé ao lado de uma árvore",
+          "fraseCerta": "O menino está ao lado da árvore.",
+          "frasesErradas": [
+            "O menino está longe da árvore.",
+            "A árvore está ao lado do menino."
+          ],
+          "dificuldade": 1,
+          "conceito": "ao lado/longe"
+        }
+      ]
+    },
+    "nivel2": {
+      "nome": "Nível 2 - Ações Simples",
+      "descricao": "Verbos de ação e quem faz",
+      "itens": [
+        {
+          "id": "n2_01",
+          "imagem": "menina_empurra_carrinho.png",
+          "descricao": "Menina empurrando um carrinho de brinquedo",
+          "fraseCerta": "A menina empurra o carrinho.",
+          "frasesErradas": [
+            "O carrinho empurra a menina.",
+            "A menina está puxando o carrinho."
+          ],
+          "dificuldade": 2,
+          "conceito": "empurrar/puxar"
+        },
+        {
+          "id": "n2_02",
+          "imagem": "menino_chuta_bola.png",
+          "descricao": "Menino chutando uma bola azul",
+          "fraseCerta": "O menino chuta a bola.",
+          "frasesErradas": [
+            "A bola chuta o menino.",
+            "O menino pega a bola."
+          ],
+          "dificuldade": 2,
+          "conceito": "chutar/pegar"
+        },
+        {
+          "id": "n2_03",
+          "imagem": "cachorro_corre_parque.png",
+          "descricao": "Cachorro correndo no parque",
+          "fraseCerta": "O cachorro corre no parque.",
+          "frasesErradas": [
+            "O cachorro dorme no parque.",
+            "O parque corre com o cachorro."
+          ],
+          "dificuldade": 2,
+          "conceito": "correr/dormir"
+        },
+        {
+          "id": "n2_04",
+          "imagem": "menina_pula_corda.png",
+          "descricao": "Menina pulando corda",
+          "fraseCerta": "A menina pula corda.",
+          "frasesErradas": [
+            "A corda pula a menina.",
+            "A menina segura a corda."
+          ],
+          "dificuldade": 2,
+          "conceito": "pular/segurar"
+        }
+      ]
+    },
+    "nivel3": {
+      "nome": "Nível 3 - Ações com Objeto Indireto",
+      "descricao": "Quem faz, o que faz, para quem",
+      "itens": [
+        {
+          "id": "n3_01",
+          "imagem": "menino_da_maca_professora.png",
+          "descricao": "Menino entregando uma maçã vermelha para a professora",
+          "fraseCerta": "O menino dá uma maçã para a professora.",
+          "frasesErradas": [
+            "A professora dá uma maçã para o menino.",
+            "O menino come a maçã da professora."
+          ],
+          "dificuldade": 3,
+          "conceito": "dar/receber (objeto indireto)"
+        },
+        {
+          "id": "n3_02",
+          "imagem": "menina_mostra_desenho_mae.png",
+          "descricao": "Menina mostrando um desenho para a mãe",
+          "fraseCerta": "A menina mostra o desenho para a mãe.",
+          "frasesErradas": [
+            "A mãe mostra o desenho para a menina.",
+            "A menina esconde o desenho da mãe."
+          ],
+          "dificuldade": 3,
+          "conceito": "mostrar/esconder (objeto indireto)"
+        },
+        {
+          "id": "n3_03",
+          "imagem": "pai_le_livro_crianca.png",
+          "descricao": "Pai lendo um livro para a criança",
+          "fraseCerta": "O pai lê um livro para a criança.",
+          "frasesErradas": [
+            "A criança lê um livro para o pai.",
+            "O pai escreve um livro para a criança."
+          ],
+          "dificuldade": 3,
+          "conceito": "ler/escrever (objeto indireto)"
+        },
+        {
+          "id": "n3_04",
+          "imagem": "avo_entrega_presente_neto.png",
+          "descricao": "Avó entregando um presente embrulhado para o neto",
+          "fraseCerta": "A avó entrega um presente para o neto.",
+          "frasesErradas": [
+            "O neto entrega um presente para a avó.",
+            "A avó abre o presente do neto."
+          ],
+          "dificuldade": 3,
+          "conceito": "entregar/receber (objeto indireto)"
+        }
+      ]
+    }
+  },
+  "configuracoes": {
+    "tempoInatividade": 8000,
+    "tempoDicaVisual": 3000,
+    "fadePromptAposAcertos": 3,
+    "totalRodadasPorSessao": 12,
+    "embaralharCenas": true,
+    "destacarElemento": true
+  }
+}
+

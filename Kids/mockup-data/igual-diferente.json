@@ -1,0 +1,174 @@
+{
+  "jogos": {
+    "nivel1": {
+      "nome": "Nível 1 - Diferenças Grandes",
+      "descricao": "Pares com diferenças bem visíveis",
+      "pares": [
+        {
+          "id": "n1_01",
+          "tipo": "palavra",
+          "item1": "gato",
+          "item2": "pato",
+          "resposta": "diferente",
+          "dificuldade": 1
+        },
+        {
+          "id": "n1_02",
+          "tipo": "palavra",
+          "item1": "casa",
+          "item2": "mesa",
+          "resposta": "diferente",
+          "dificuldade": 1
+        },
+        {
+          "id": "n1_03",
+          "tipo": "palavra",
+          "item1": "bola",
+          "item2": "bola",
+          "resposta": "igual",
+          "dificuldade": 1
+        },
+        {
+          "id": "n1_04",
+          "tipo": "palavra",
+          "item1": "rato",
+          "item2": "gato",
+          "resposta": "diferente",
+          "dificuldade": 1
+        },
+        {
+          "id": "n1_05",
+          "tipo": "imagem",
+          "item1": "cachorro.png",
+          "item2": "gato.png",
+          "resposta": "diferente",
+          "dificuldade": 1
+        },
+        {
+          "id": "n1_06",
+          "tipo": "imagem",
+          "item1": "casa.png",
+          "item2": "casa.png",
+          "resposta": "igual",
+          "dificuldade": 1
+        }
+      ]
+    },
+    "nivel2": {
+      "nome": "Nível 2 - Diferenças Médias",
+      "descricao": "Pares com troca de uma letra",
+      "pares": [
+        {
+          "id": "n2_01",
+          "tipo": "palavra",
+          "item1": "cachorro",
+          "item2": "cachoro",
+          "resposta": "diferente",
+          "dificuldade": 2
+        },
+        {
+          "id": "n2_02",
+          "tipo": "palavra",
+          "item1": "prato",
+          "item2": "plato",
+          "resposta": "diferente",
+          "dificuldade": 2
+        },
+        {
+          "id": "n2_03",
+          "tipo": "palavra",
+          "item1": "carro",
+          "item2": "carro",
+          "resposta": "igual",
+          "dificuldade": 2
+        },
+        {
+          "id": "n2_04",
+          "tipo": "palavra",
+          "item1": "flor",
+          "item2": "frol",
+          "resposta": "diferente",
+          "dificuldade": 2
+        },
+        {
+          "id": "n2_05",
+          "tipo": "imagem",
+          "item1": "bolo_chocolate.png",
+          "item2": "bolo_morango.png",
+          "resposta": "diferente",
+          "dificuldade": 2
+        },
+        {
+          "id": "n2_06",
+          "tipo": "imagem",
+          "item1": "arvore_verde.png",
+          "item2": "arvore_verde.png",
+          "resposta": "igual",
+          "dificuldade": 2
+        }
+      ]
+    },
+    "nivel3": {
+      "nome": "Nível 3 - Diferenças Sutis",
+      "descricao": "Pares quase idênticos (ditongos, acentos, clusters)",
+      "pares": [
+        {
+          "id": "n3_01",
+          "tipo": "palavra",
+          "item1": "avó",
+          "item2": "avo",
+          "resposta": "diferente",
+          "dificuldade": 3
+        },
+        {
+          "id": "n3_02",
+          "tipo": "palavra",
+          "item1": "pranta",
+          "item2": "planta",
+          "resposta": "diferente",
+          "dificuldade": 3
+        },
+        {
+          "id": "n3_03",
+          "tipo": "palavra",
+          "item1": "livro",
+          "item2": "livro",
+          "resposta": "igual",
+          "dificuldade": 3
+        },
+        {
+          "id": "n3_04",
+          "tipo": "palavra",
+          "item1": "café",
+          "item2": "cafe",
+          "resposta": "diferente",
+          "dificuldade": 3
+        },
+        {
+          "id": "n3_05",
+          "tipo": "imagem",
+          "item1": "cadeira_esquerda.png",
+          "item2": "cadeira_direita.png",
+          "resposta": "diferente",
+          "dificuldade": 3
+        },
+        {
+          "id": "n3_06",
+          "tipo": "imagem",
+          "item1": "bicicleta_vermelha.png",
+          "item2": "bicicleta_vermelha.png",
+          "resposta": "igual",
+          "dificuldade": 3
+        }
+      ]
+    }
+  },
+  "configuracoes": {
+    "tempoInatividade": 5000,
+    "tempoDicaPrompt": 3000,
+    "fadePromptAposAcertos": 2,
+    "totalRodadasPorSessao": 12,
+    "embaralharPares": true
+  }
+}
+

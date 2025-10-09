@@ -7,7 +7,7 @@ import { DashboardScreen } from '../screens/DashboardScreen';
 import { CategoriesScreen } from '../screens/CategoriesScreen';
 import { CategoryItemsScreen } from '../screens/CategoryItemsScreen';
 import { GuessGameScreen } from '../screens/GuessGameScreen';
-import { AdivinhaScreen } from '../screens/AdivinhaScreen';
+import { IgualDiferenteScreen } from '../screens/IgualDiferenteScreen';
 import { RequestAccessScreen } from '../screens/RequestAccessScreen';
 
 export type RootStackParamList = {
@@ -17,7 +17,7 @@ export type RootStackParamList = {
   Categories: undefined;
   CategoryItems: { categoryId: string };
   GuessGame: undefined;
-  Adivinha: undefined;
+  IgualDiferente: undefined;
   RequestAccess: undefined;
 };
 
@@ -35,11 +35,11 @@ export const AppNavigator: React.FC = () => {
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} />
-            <Stack.Screen name="Categories" component={CategoriesScreen} />
-    <Stack.Screen name="CategoryItems" component={CategoryItemsScreen} />
-    <Stack.Screen name="GuessGame" component={GuessGameScreen} />
-    <Stack.Screen name="Adivinha" component={AdivinhaScreen} />
-    <Stack.Screen name="RequestAccess" component={RequestAccessScreen} />
+        <Stack.Screen name="Categories" component={CategoriesScreen} />
+        <Stack.Screen name="CategoryItems" component={CategoryItemsScreen} />
+        <Stack.Screen name="IgualDiferente" component={IgualDiferenteScreen} />
+        <Stack.Screen name="GuessGame" component={GuessGameScreen} />
+        <Stack.Screen name="RequestAccess" component={RequestAccessScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
