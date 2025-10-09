@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Edit2, Trash2, Calendar, Clock, User, FileText, Activity, Target, BookOpen, CheckCircle, AlertCircle } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { useRoleColor } from '../hooks/useRoleColor';
 
 interface SessionObjective {
   id: string;
@@ -33,7 +33,7 @@ export const SessionDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { professionalType } = useProfessional();
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = useRoleColor();
   const [activeTab, setActiveTab] = useState<'details' | 'report' | 'notes'>('details');
 
   // Dados mockados da sessão
@@ -160,7 +160,7 @@ export const SessionDetailsPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between mb-4">
                 <button
                   onClick={() => navigate('/sessions')}
@@ -173,7 +173,7 @@ export const SessionDetailsPage: React.FC = () => {
                   <button
                     onClick={handleEdit}
                     className="p-2 rounded-lg text-white transition-colors"
-                    style={{ backgroundColor: colors.primary }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <Edit2 size={18} />
                   </button>
@@ -218,7 +218,7 @@ export const SessionDetailsPage: React.FC = () => {
 
           {/* Tabs */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex border-b">
                 <button
                   onClick={() => setActiveTab('details')}
@@ -228,8 +228,8 @@ export const SessionDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'details' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'details' ? colors.primary : 'transparent',
+                    borderBottomColor: activeTab === 'details' ? roleColor.primary : 'transparent',
+                    backgroundColor: activeTab === 'details' ? roleColor.primary : 'transparent',
                     color: activeTab === 'details' ? 'white' : undefined
                   }}
                 >
@@ -246,8 +246,8 @@ export const SessionDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'report' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'report' ? colors.primary : 'transparent',
+                    borderBottomColor: activeTab === 'report' ? roleColor.primary : 'transparent',
+                    backgroundColor: activeTab === 'report' ? roleColor.primary : 'transparent',
                     color: activeTab === 'report' ? 'white' : undefined
                   }}
                 >
@@ -264,8 +264,8 @@ export const SessionDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'notes' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'notes' ? colors.primary : 'transparent',
+                    borderBottomColor: activeTab === 'notes' ? roleColor.primary : 'transparent',
+                    backgroundColor: activeTab === 'notes' ? roleColor.primary : 'transparent',
                     color: activeTab === 'notes' ? 'white' : undefined
                   }}
                 >
@@ -282,7 +282,7 @@ export const SessionDetailsPage: React.FC = () => {
                   <div className="space-y-6">
                     {/* Objetivos */}
                     <div>
-                      <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
                         Objetivos da Sessão
                       </h3>
                       <div className="space-y-3">
@@ -313,7 +313,7 @@ export const SessionDetailsPage: React.FC = () => {
 
                     {/* Atividades */}
                     <div>
-                      <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
                         Atividades Realizadas
                       </h3>
                       <div className="space-y-4">
@@ -351,13 +351,13 @@ export const SessionDetailsPage: React.FC = () => {
                 {activeTab === 'report' && (
                   <div className="space-y-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Relatório da Sessão
                       </h3>
                       <button
                         onClick={handleEditReport}
                         className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: colors.primary }}
+                        style={{ backgroundColor: roleColor.primary }}
                       >
                         Editar Relatório
                       </button>
@@ -431,7 +431,7 @@ export const SessionDetailsPage: React.FC = () => {
                     <button
                       onClick={() => navigate(`/sessions/${id}/notes`)}
                       className="px-6 py-3 rounded-lg text-white font-medium transition-colors"
-                      style={{ backgroundColor: colors.primary }}
+                      style={{ backgroundColor: roleColor.primary }}
                     >
                       Ver Anotações
                     </button>

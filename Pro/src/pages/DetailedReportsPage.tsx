@@ -17,6 +17,7 @@ import {
   Eye
 } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell } from "recharts"
 
 interface Patient {
@@ -41,6 +42,7 @@ interface Report {
 export const DetailedReportsPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [selectedPatient, setSelectedPatient] = useState<string>("all")
   const [reportType, setReportType] = useState<string>("general")
 
@@ -88,18 +90,6 @@ export const DetailedReportsPage: React.FC = () => {
     { name: "Carlos Lima", progress: 72 },
   ]
 
-  const getProfessionalColor = () => {
-    switch (professionalType) {
-      case "fonoaudiologo":
-        return "var(--green)"
-      case "psicologo":
-        return "var(--blue)"
-      case "psiquiatra":
-        return "var(--red)"
-      default:
-        return "var(--blue)"
-    }
-  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -142,7 +132,7 @@ export const DetailedReportsPage: React.FC = () => {
 
 
         {/* Filtros */}
-        <div className="bg-white rounded-xl p-4 shadow-sm mb-4" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+        <div className="bg-white rounded-xl p-4 shadow-sm mb-4" style={{ border: `2px solid ${roleColor.primary}` }}>
           <div className="flex flex-col lg:flex-row gap-3">
             <div className="flex-1">
               <label className="block text-sm font-medium mb-1" style={{ color: "var(--text-black)" }}>
@@ -182,7 +172,7 @@ export const DetailedReportsPage: React.FC = () => {
 
         {/* Estatísticas Gerais */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total de Pacientes</p>
@@ -190,11 +180,11 @@ export const DetailedReportsPage: React.FC = () => {
                   {patients.length}
                 </p>
               </div>
-              <Users size={20} style={{ color: getProfessionalColor() }} />
+              <Users size={20} style={{ color: roleColor.primary }} />
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Sessões Realizadas</p>
@@ -202,11 +192,11 @@ export const DetailedReportsPage: React.FC = () => {
                   {patients.reduce((sum, p) => sum + p.sessions, 0)}
                 </p>
               </div>
-              <Calendar size={20} style={{ color: getProfessionalColor() }} />
+              <Calendar size={20} style={{ color: roleColor.primary }} />
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Progresso Médio</p>
@@ -214,11 +204,11 @@ export const DetailedReportsPage: React.FC = () => {
                   {Math.round(patients.reduce((sum, p) => sum + p.progress, 0) / patients.length)}%
                 </p>
               </div>
-              <Target size={20} style={{ color: getProfessionalColor() }} />
+              <Target size={20} style={{ color: roleColor.primary }} />
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Relatórios Gerados</p>
@@ -226,7 +216,7 @@ export const DetailedReportsPage: React.FC = () => {
                   {reports.length}
                 </p>
               </div>
-              <FileText size={20} style={{ color: getProfessionalColor() }} />
+              <FileText size={20} style={{ color: roleColor.primary }} />
             </div>
           </div>
         </div>
@@ -234,7 +224,7 @@ export const DetailedReportsPage: React.FC = () => {
         {/* Gráficos */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           {/* Progresso Geral */}
-          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
             <h3 className="text-lg font-semibold mb-3" style={{ color: "var(--text-black)" }}>
               Progresso Geral
             </h3>
@@ -254,9 +244,9 @@ export const DetailedReportsPage: React.FC = () => {
                   <Line
                     type="monotone"
                     dataKey="progress"
-                    stroke={getProfessionalColor()}
+                    stroke={roleColor.primary}
                     strokeWidth={3}
-                    dot={{ fill: getProfessionalColor(), strokeWidth: 2, r: 4 }}
+                    dot={{ fill: roleColor.primary, strokeWidth: 2, r: 4 }}
                   />
                 </RechartsLineChart>
               </ResponsiveContainer>
@@ -264,7 +254,7 @@ export const DetailedReportsPage: React.FC = () => {
           </div>
 
           {/* Sessões por Mês */}
-          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+          <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
             <h3 className="text-lg font-semibold mb-3" style={{ color: "var(--text-black)" }}>
               Sessões por Mês
             </h3>
@@ -281,7 +271,7 @@ export const DetailedReportsPage: React.FC = () => {
                       borderRadius: "8px",
                     }}
                   />
-                  <Bar dataKey="sessions" fill={getProfessionalColor()} radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="sessions" fill={roleColor.primary} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -290,7 +280,7 @@ export const DetailedReportsPage: React.FC = () => {
 
         {/* Progresso por Paciente */}
         {selectedPatient === "all" && (
-          <div className="bg-white rounded-xl p-4 shadow-sm mb-4" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+          <div className="bg-white rounded-xl p-4 shadow-sm mb-4" style={{ border: `2px solid ${roleColor.primary}` }}>
             <h3 className="text-lg font-semibold mb-3" style={{ color: "var(--text-black)" }}>
               Progresso por Paciente
             </h3>
@@ -325,7 +315,7 @@ export const DetailedReportsPage: React.FC = () => {
                    />
                    <Bar 
                      dataKey="progress" 
-                     fill={getProfessionalColor()} 
+                     fill={roleColor.primary} 
                      radius={[0, 4, 4, 0]}
                      barSize={20}
                    />
@@ -336,14 +326,14 @@ export const DetailedReportsPage: React.FC = () => {
         )}
 
         {/* Lista de Relatórios */}
-        <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+        <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold" style={{ color: "var(--text-black)" }}>
               Relatórios Disponíveis
             </h3>
             <button
               className="px-3 py-2 rounded-lg text-white font-medium transition-colors"
-              style={{ backgroundColor: getProfessionalColor() }}
+              style={{ backgroundColor: roleColor.primary }}
             >
               Gerar Novo Relatório
             </button>
@@ -358,7 +348,7 @@ export const DetailedReportsPage: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: getProfessionalColor() }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <FileText size={16} className="text-white" />
                   </div>
@@ -382,13 +372,13 @@ export const DetailedReportsPage: React.FC = () => {
                   <div className="flex space-x-1">
                     <button
                       className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-                      style={{ color: getProfessionalColor() }}
+                      style={{ color: roleColor.primary }}
                     >
                       <Eye size={14} />
                     </button>
                     <button
                       className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-                      style={{ color: getProfessionalColor() }}
+                      style={{ color: roleColor.primary }}
                     >
                       <Download size={14} />
                     </button>

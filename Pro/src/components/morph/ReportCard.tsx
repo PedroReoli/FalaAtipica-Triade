@@ -1,6 +1,6 @@
 import React from 'react';
 import { FileText, User, Calendar, Send, Edit, Eye } from 'lucide-react';
-import { useProfessionalColors } from '../../hooks/useProfessionalColors';
+import { getRoleColor } from '../../hooks/useRoleColor';
 import type { ProfessionalType } from '../../types';
 
 interface ReportCardProps {
@@ -53,7 +53,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
   onSend,
   className = ''
 }) => {
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = getRoleColor(professionalType);
 
   return (
     <div
@@ -63,8 +63,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         ${className}
       `}
       style={{
-        '--professional-color': colors.primary,
-        borderColor: colors.primary
+        '--professional-color': roleColor.primary,
+        borderColor: roleColor.primary
       } as React.CSSProperties}
     >
       {/* Header */}
@@ -72,9 +72,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         <div className="flex items-center space-x-2">
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: colors.light }}
+            style={{ backgroundColor: roleColor.light }}
           >
-            <FileText size={16} style={{ color: colors.primary }} />
+            <FileText size={16} style={{ color: roleColor.primary }} />
           </div>
           <div>
             <h4 className="font-semibold text-gray-900">{report.title}</h4>
@@ -106,8 +106,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
           onClick={onView}
           className="flex-1 flex items-center justify-center space-x-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200"
           style={{
-            backgroundColor: colors.light,
-            color: colors.primary
+            backgroundColor: roleColor.light,
+            color: roleColor.primary
           }}
         >
           <Eye size={14} />
@@ -117,7 +117,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
           <button
             onClick={onEdit}
             className="flex-1 flex items-center justify-center space-x-1 py-2 px-3 rounded-lg text-sm font-medium text-white transition-colors duration-200"
-            style={{ backgroundColor: colors.primary }}
+            style={{ backgroundColor: roleColor.primary }}
           >
             <Edit size={14} />
             <span>Editar</span>
@@ -127,7 +127,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
           <button
             onClick={onSend}
             className="flex-1 flex items-center justify-center space-x-1 py-2 px-3 rounded-lg text-sm font-medium text-white transition-colors duration-200"
-            style={{ backgroundColor: colors.secondary }}
+            style={{ backgroundColor: roleColor.secondary }}
           >
             <Send size={14} />
             <span>Enviar</span>

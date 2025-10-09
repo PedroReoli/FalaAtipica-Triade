@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Plus, Trash2, Calendar, Clock, User, Target, Activity } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { useRoleColor } from '../hooks/useRoleColor';
 
 interface SessionObjective {
   id: string;
@@ -22,7 +22,7 @@ export const EditSessionPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { professionalType } = useProfessional();
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = useRoleColor();
 
   const [formData, setFormData] = useState({
     patientId: '1',
@@ -138,7 +138,7 @@ export const EditSessionPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <button
@@ -164,12 +164,12 @@ export const EditSessionPage: React.FC = () => {
           {/* Form */}
           <div className="dashboard-spacing">
             <form onSubmit={handleSubmit}>
-              <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+              <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
                 {/* Informações Básicas */}
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-4">
-                    <Calendar size={20} style={{ color: colors.primary }} />
-                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                    <Calendar size={20} style={{ color: roleColor.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                       Informações Básicas
                     </h3>
                   </div>
@@ -196,7 +196,7 @@ export const EditSessionPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                       />
                     </div>
                     <div>
@@ -210,7 +210,7 @@ export const EditSessionPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                       />
                     </div>
                     <div>
@@ -226,7 +226,7 @@ export const EditSessionPage: React.FC = () => {
                         min="15"
                         max="180"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                       />
                     </div>
                     <div>
@@ -239,7 +239,7 @@ export const EditSessionPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                       >
                         <option value="Terapia Individual">Terapia Individual</option>
                         <option value="Terapia em Grupo">Terapia em Grupo</option>
@@ -257,7 +257,7 @@ export const EditSessionPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                       >
                         <option value="scheduled">Agendada</option>
                         <option value="completed">Realizada</option>
@@ -274,7 +274,7 @@ export const EditSessionPage: React.FC = () => {
                         value={formData.location}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Consultório 1"
                       />
                     </div>
@@ -285,8 +285,8 @@ export const EditSessionPage: React.FC = () => {
                 <div className="mb-8">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
-                      <Target size={20} style={{ color: colors.primary }} />
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <Target size={20} style={{ color: roleColor.primary }} />
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Objetivos da Sessão
                       </h3>
                     </div>
@@ -294,7 +294,7 @@ export const EditSessionPage: React.FC = () => {
                       type="button"
                       onClick={addObjective}
                       className="px-3 py-2 rounded-lg text-white text-sm font-medium transition-colors"
-                      style={{ backgroundColor: colors.primary }}
+                      style={{ backgroundColor: roleColor.primary }}
                     >
                       <Plus size={16} className="inline mr-1" />
                       Adicionar
@@ -315,7 +315,7 @@ export const EditSessionPage: React.FC = () => {
                           onChange={(e) => handleObjectiveChange(objective.id, 'description', e.target.value)}
                           placeholder="Descreva o objetivo..."
                           className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                          style={{ focusRingColor: colors.primary }}
+                          style={{ focusRingColor: roleColor.primary }}
                         />
                         <button
                           type="button"
@@ -333,8 +333,8 @@ export const EditSessionPage: React.FC = () => {
                 <div className="mb-8">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
-                      <Activity size={20} style={{ color: colors.primary }} />
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <Activity size={20} style={{ color: roleColor.primary }} />
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Atividades Realizadas
                       </h3>
                     </div>
@@ -342,7 +342,7 @@ export const EditSessionPage: React.FC = () => {
                       type="button"
                       onClick={addActivity}
                       className="px-3 py-2 rounded-lg text-white text-sm font-medium transition-colors"
-                      style={{ backgroundColor: colors.primary }}
+                      style={{ backgroundColor: roleColor.primary }}
                     >
                       <Plus size={16} className="inline mr-1" />
                       Adicionar
@@ -358,7 +358,7 @@ export const EditSessionPage: React.FC = () => {
                             onChange={(e) => handleActivityChange(activity.id, 'name', e.target.value)}
                             placeholder="Nome da atividade..."
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none mr-3"
-                            style={{ focusRingColor: colors.primary }}
+                            style={{ focusRingColor: roleColor.primary }}
                           />
                           <div className="flex items-center space-x-2">
                             <input
@@ -369,7 +369,7 @@ export const EditSessionPage: React.FC = () => {
                               min="1"
                               max="120"
                               className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                              style={{ focusRingColor: colors.primary }}
+                              style={{ focusRingColor: roleColor.primary }}
                             />
                             <span className="text-sm text-gray-600">min</span>
                             <button
@@ -408,7 +408,7 @@ export const EditSessionPage: React.FC = () => {
                               type="text"
                               placeholder="Adicionar material..."
                               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                              style={{ focusRingColor: colors.primary }}
+                              style={{ focusRingColor: roleColor.primary }}
                               onKeyPress={(e) => {
                                 if (e.key === 'Enter') {
                                   e.preventDefault();
@@ -441,7 +441,7 @@ export const EditSessionPage: React.FC = () => {
                             placeholder="Observações sobre a atividade..."
                             rows={2}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
-                            style={{ focusRingColor: colors.primary }}
+                            style={{ focusRingColor: roleColor.primary }}
                           />
                         </div>
                       </div>
@@ -455,14 +455,14 @@ export const EditSessionPage: React.FC = () => {
                     type="button"
                     onClick={() => navigate(`/sessions/${id}`)}
                     className="px-6 py-3 rounded-lg border-2 font-medium transition-colors"
-                    style={{ borderColor: colors.primary, color: colors.primary }}
+                    style={{ borderColor: roleColor.primary, color: roleColor.primary }}
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
                     className="px-6 py-3 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors"
-                    style={{ backgroundColor: colors.primary }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <Save size={18} />
                     <span>Salvar Alterações</span>

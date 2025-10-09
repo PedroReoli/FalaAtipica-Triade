@@ -5,10 +5,12 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Calendar, Clock, User, FileText, Save, ArrowLeft } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 export const NewSessionPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [formData, setFormData] = useState({
     patient: "",
     date: "",
@@ -25,18 +27,6 @@ export const NewSessionPage: React.FC = () => {
     navigate("/dashboard")
   }
 
-  const getProfessionalColor = () => {
-    switch (professionalType) {
-      case "fonoaudiologo":
-        return "var(--green)"
-      case "psicologo":
-        return "var(--blue)"
-      case "psiquiatra":
-        return "var(--red)"
-      default:
-        return "var(--blue)"
-    }
-  }
 
   return (
     <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
@@ -44,7 +34,7 @@ export const NewSessionPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <button
@@ -64,7 +54,7 @@ export const NewSessionPage: React.FC = () => {
                 </div>
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: getProfessionalColor() }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   <Calendar size={20} className="text-white" />
                 </div>
@@ -74,7 +64,7 @@ export const NewSessionPage: React.FC = () => {
 
           {/* Formulário */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Paciente */}
                 <div>
@@ -165,7 +155,7 @@ export const NewSessionPage: React.FC = () => {
                   <button
                     type="submit"
                     className="flex-1 flex items-center justify-center space-x-2 p-3 rounded-lg text-white font-medium transition-colors"
-                    style={{ backgroundColor: getProfessionalColor() }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <Save size={18} />
                     <span>Agendar {professionalType === "psiquiatra" ? "Consulta" : "Sessão"}</span>

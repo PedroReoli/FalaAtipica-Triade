@@ -20,6 +20,7 @@ import {
   AlertCircle
 } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 interface Partnership {
   id: string
@@ -43,6 +44,7 @@ interface Invite {
 export const SettingsPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [activeTab, setActiveTab] = useState<'partnerships' | 'invites'>('partnerships')
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [showPartnershipModal, setShowPartnershipModal] = useState(false)
@@ -140,18 +142,6 @@ export const SettingsPage: React.FC = () => {
 
 
 
-  const getProfessionalColor = () => {
-    switch (professionalType) {
-      case "fonoaudiologo":
-        return "var(--green)"
-      case "psicologo":
-        return "var(--blue)"
-      case "psiquiatra":
-        return "var(--red)"
-      default:
-        return "var(--blue)"
-    }
-  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -193,7 +183,7 @@ export const SettingsPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header Card - Configurações */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div>
                 <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>Configurações</h1>
                 <p className="text-gray-600 mt-1">Gerencie seu perfil, parcerias e convites</p>
@@ -247,7 +237,7 @@ export const SettingsPage: React.FC = () => {
               <button
                 onClick={() => setShowPartnershipModal(true)}
                 className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <Plus className="w-4 h-4" />
                 <span>Nova Parceria</span>
@@ -257,10 +247,10 @@ export const SettingsPage: React.FC = () => {
             {/* Lista de Parcerias */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {partnerships.map((partnership) => (
-                <div key={partnership.id} className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+                <div key={partnership.id} className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm" style={{ backgroundColor: getProfessionalColor() }}>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm" style={{ backgroundColor: roleColor.primary }}>
                         {partnership.type === 'clinic' ? <Building2 className="w-5 h-5" /> : <Users className="w-5 h-5" />}
                       </div>
                       <div>
@@ -310,7 +300,7 @@ export const SettingsPage: React.FC = () => {
               <button
                 onClick={() => setShowInviteModal(true)}
                 className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <UserPlus className="w-4 h-4" />
                 <span>Enviar Convite</span>
@@ -334,10 +324,10 @@ export const SettingsPage: React.FC = () => {
             {/* Lista de Convites */}
             <div className="space-y-4">
               {invites.map((invite) => (
-                <div key={invite.id} className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+                <div key={invite.id} className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm" style={{ backgroundColor: getProfessionalColor() }}>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm" style={{ backgroundColor: roleColor.primary }}>
                         <Mail className="w-5 h-5" />
                       </div>
                       <div>
@@ -459,7 +449,7 @@ export const SettingsPage: React.FC = () => {
                 <button
                   onClick={handleInviteSubmit}
                   className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: getProfessionalColor() }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   Enviar Convite
                 </button>
@@ -526,7 +516,7 @@ export const SettingsPage: React.FC = () => {
                 <button
                   onClick={handlePartnershipSubmit}
                   className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: getProfessionalColor() }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   Criar Parceria
                 </button>

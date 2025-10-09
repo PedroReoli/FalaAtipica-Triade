@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Plus, Trash2, BookOpen, Calendar, Clock } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { useRoleColor } from '../hooks/useRoleColor';
 
 interface Note {
   id: string;
@@ -15,7 +15,7 @@ export const SessionNotesPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { professionalType } = useProfessional();
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = useRoleColor();
 
   // Dados mockados
   const [notes, setNotes] = useState<Note[]>([
@@ -90,7 +90,7 @@ export const SessionNotesPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between mb-4">
                 <button
                   onClick={() => navigate(`/sessions/${id}`)}
@@ -102,7 +102,7 @@ export const SessionNotesPage: React.FC = () => {
                 <button
                   onClick={handleSave}
                   className="px-4 py-2 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors"
-                  style={{ backgroundColor: colors.primary }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   <Save size={18} />
                   <span>Salvar</span>
@@ -130,8 +130,8 @@ export const SessionNotesPage: React.FC = () => {
 
           {/* New Note */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
-              <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
+              <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
                 Nova Anotação
               </h3>
               <textarea
@@ -141,7 +141,7 @@ export const SessionNotesPage: React.FC = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
                 rows={4}
                 style={{
-                  focusRingColor: colors.primary
+                  focusRingColor: roleColor.primary
                 }}
               />
               <div className="mt-3 flex justify-end">
@@ -149,7 +149,7 @@ export const SessionNotesPage: React.FC = () => {
                   onClick={handleAddNote}
                   disabled={!newNote.trim()}
                   className="px-4 py-2 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: colors.primary }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   <Plus size={18} />
                   <span>Adicionar Anotação</span>
@@ -160,9 +160,9 @@ export const SessionNotesPage: React.FC = () => {
 
           {/* Notes List */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                   Histórico de Anotações
                 </h3>
                 <div className="flex items-center space-x-2 text-gray-600">

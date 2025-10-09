@@ -4,7 +4,7 @@ import {
   Plus, Edit, ChevronLeft, ChevronRight, Move
 } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { useRoleColor } from '../hooks/useRoleColor';
 import type { ProfessionalType } from '../types';
 
 interface Session {
@@ -24,7 +24,7 @@ interface Session {
 export const SessionsPage: React.FC = () => {
   const navigate = useNavigate();
   const { professionalType } = useProfessional();
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = useRoleColor();
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isEditMode, setIsEditMode] = useState(false);
@@ -194,7 +194,7 @@ export const SessionsPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
       {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between">
           <div>
                   <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>
@@ -212,7 +212,7 @@ export const SessionsPage: React.FC = () => {
                         ? 'text-white' 
                         : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
                     }`}
-                    style={{ backgroundColor: isEditMode ? colors.primary : undefined }}
+                    style={{ backgroundColor: isEditMode ? roleColor.primary : undefined }}
                   >
                     <Edit size={18} className="inline mr-2" />
                     {isEditMode ? 'Sair do Modo Edição' : 'Modo Edição'}
@@ -220,7 +220,7 @@ export const SessionsPage: React.FC = () => {
           <button
                     onClick={() => setShowNewSessionModal(true)}
                     className="px-4 py-2 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors"
-            style={{ backgroundColor: colors.primary }}
+            style={{ backgroundColor: roleColor.primary }}
           >
             <Plus size={20} />
             <span>Nova {professionalType === 'psiquiatra' ? 'Consulta' : 'Sessão'}</span>
@@ -232,7 +232,7 @@ export const SessionsPage: React.FC = () => {
 
           {/* Controles do Calendário */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
@@ -263,7 +263,7 @@ export const SessionsPage: React.FC = () => {
                         ? 'text-white' 
                         : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
                     }`}
-                    style={{ backgroundColor: viewMode === 'month' ? colors.primary : undefined }}
+                    style={{ backgroundColor: viewMode === 'month' ? roleColor.primary : undefined }}
                   >
                     Mês
                   </button>
@@ -274,7 +274,7 @@ export const SessionsPage: React.FC = () => {
                         ? 'text-white' 
                         : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
                     }`}
-                    style={{ backgroundColor: viewMode === 'week' ? colors.primary : undefined }}
+                    style={{ backgroundColor: viewMode === 'week' ? roleColor.primary : undefined }}
                   >
                     Semana
                   </button>
@@ -285,7 +285,7 @@ export const SessionsPage: React.FC = () => {
                         ? 'text-white' 
                         : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
                     }`}
-                    style={{ backgroundColor: viewMode === 'day' ? colors.primary : undefined }}
+                    style={{ backgroundColor: viewMode === 'day' ? roleColor.primary : undefined }}
                   >
                     Dia
                   </button>
@@ -313,7 +313,7 @@ export const SessionsPage: React.FC = () => {
 
           {/* Calendário */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               {viewMode === 'month' && (
                 <div className="grid grid-cols-7 gap-0">
                   {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
@@ -625,9 +625,9 @@ export const SessionsPage: React.FC = () => {
           {/* Modal do Dia */}
           {showDayModal && selectedDay && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 h-[80vh]" style={{ border: `2px solid ${colors.primary}` }}>
+              <div className="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 h-[80vh]" style={{ border: `2px solid ${roleColor.primary}` }}>
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold" style={{ color: colors.primary }}>
+                  <h3 className="text-xl font-semibold" style={{ color: roleColor.primary }}>
                     {new Date(selectedDay).toLocaleDateString('pt-BR', { 
                       weekday: 'long', 
                       day: 'numeric',
@@ -741,9 +741,9 @@ export const SessionsPage: React.FC = () => {
           {/* Modal de Nova Sessão */}
           {showNewSessionModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${colors.primary}` }}>
+              <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${roleColor.primary}` }}>
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold" style={{ color: colors.primary }}>
+                  <h3 className="text-xl font-semibold" style={{ color: roleColor.primary }}>
                     Nova Sessão
           </h3>
                   <button
@@ -846,7 +846,7 @@ export const SessionsPage: React.FC = () => {
           <button
                       type="submit"
                       className="px-4 py-2 text-white rounded-lg transition-colors"
-            style={{ backgroundColor: colors.primary }}
+            style={{ backgroundColor: roleColor.primary }}
           >
                       Agendar Sessão
           </button>

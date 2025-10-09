@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { BookOpen, Plus, ArrowLeft, Search, Filter, User, Calendar, Download } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 interface Prescription {
   id: string
@@ -19,6 +20,7 @@ interface Prescription {
 export const PrescriptionsPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState<string>("all")
 
@@ -61,9 +63,6 @@ export const PrescriptionsPage: React.FC = () => {
     },
   ]
 
-  const getProfessionalColor = () => {
-    return "var(--red)" // Sempre vermelho para psiquiatras
-  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -128,14 +127,14 @@ export const PrescriptionsPage: React.FC = () => {
               <button
                 onClick={() => navigate("/prescriptions/new")}
                 className="flex items-center space-x-2 p-3 rounded-lg text-white font-medium transition-colors"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <Plus size={18} />
                 <span>Nova Prescrição</span>
               </button>
               <div
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <BookOpen size={20} className="text-white" />
               </div>
@@ -184,7 +183,7 @@ export const PrescriptionsPage: React.FC = () => {
                 <div className="flex items-center space-x-4">
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: getProfessionalColor() }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <BookOpen size={24} className="text-white" />
                   </div>
@@ -225,7 +224,7 @@ export const PrescriptionsPage: React.FC = () => {
                       className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                       title="Baixar prescrição"
                     >
-                      <Download size={18} style={{ color: getProfessionalColor() }} />
+                      <Download size={18} style={{ color: roleColor.primary }} />
                     </button>
                   )}
                   <button
@@ -233,7 +232,7 @@ export const PrescriptionsPage: React.FC = () => {
                     className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                     title="Visualizar prescrição"
                   >
-                    <BookOpen size={18} style={{ color: getProfessionalColor() }} />
+                    <BookOpen size={18} style={{ color: roleColor.primary }} />
                   </button>
                 </div>
               </div>

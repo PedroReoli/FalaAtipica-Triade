@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, User, Phone, Mail, Users, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { useRoleColor } from '../hooks/useRoleColor';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import type { ProfessionalType } from '../types';
 
@@ -24,7 +24,7 @@ interface Patient {
 export const PatientsPage: React.FC = () => {
   const navigate = useNavigate();
   const { professionalType } = useProfessional();
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = useRoleColor();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -200,7 +200,7 @@ export const PatientsPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
       {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between">
           <div>
                   <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>
@@ -213,7 +213,7 @@ export const PatientsPage: React.FC = () => {
           <button
             onClick={handleNewPatient}
                   className="px-4 py-2 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors"
-            style={{ backgroundColor: colors.primary }}
+            style={{ backgroundColor: roleColor.primary }}
           >
             <Plus size={20} />
             <span>Novo {professionalType === 'pedagogo' ? 'Aluno' : 'Paciente'}</span>
@@ -227,7 +227,7 @@ export const PatientsPage: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
               {/* Stats Cards - Left Side */}
               <div className="lg:col-span-1">
-                <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+                <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
                   <h3 className="text-lg font-semibold mb-3" style={{ color: "var(--text-black)" }}>Estatísticas</h3>
                   
                   {/* Gráfico Interativo */}
@@ -283,13 +283,13 @@ export const PatientsPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-lg border-2 bg-white" style={{ borderColor: colors.primary }}>
+                  <div className="p-4 rounded-lg border-2 bg-white" style={{ borderColor: roleColor.primary }}>
                     {/* Header */}
                     <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <h4 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Resumo
                       </h4>
-                      <span className="text-2xl font-bold" style={{ color: colors.primary }}>
+                      <span className="text-2xl font-bold" style={{ color: roleColor.primary }}>
                         {patients.length}
                       </span>
                     </div>
@@ -369,7 +369,7 @@ export const PatientsPage: React.FC = () => {
               {/* Patients List - Right Side */}
               <div className="lg:col-span-3">
         {/* Search and Filters */}
-                <div className="bg-white rounded-xl p-4 shadow-sm mb-4" style={{ border: `2px solid ${colors.primary}` }}>
+                <div className="bg-white rounded-xl p-4 shadow-sm mb-4" style={{ border: `2px solid ${roleColor.primary}` }}>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -394,7 +394,7 @@ export const PatientsPage: React.FC = () => {
         </div>
       </div>
 
-                <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+                <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
                   <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-black)" }}>
                     {professionalType === 'pedagogo' ? 'Alunos' : 'Pacientes'}
                   </h3>
@@ -404,14 +404,14 @@ export const PatientsPage: React.FC = () => {
             key={patient.id}
             onClick={() => handlePatientClick(patient.id)}
                   className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
-                  style={{ border: `2px solid ${colors.primary}` }}
+                  style={{ border: `2px solid ${roleColor.primary}` }}
           >
             {/* Header */}
                   <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-3">
                 <div
                         className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm"
-                  style={{ backgroundColor: colors.primary }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   {patient.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </div>
@@ -456,7 +456,7 @@ export const PatientsPage: React.FC = () => {
               </div>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-gray-600">Próxima:</span>
-                      <span className="font-medium text-xs" style={{ color: colors.primary }}>
+                      <span className="font-medium text-xs" style={{ color: roleColor.primary }}>
                   {new Date(patient.nextSession).toLocaleDateString('pt-BR')}
                 </span>
               </div>
@@ -472,7 +472,7 @@ export const PatientsPage: React.FC = () => {
       {/* Empty State */}
       {filteredPatients.length === 0 && (
             <div className="dashboard-spacing">
-              <div className="bg-white rounded-xl p-8 shadow-sm text-center" style={{ border: `2px solid ${colors.primary}` }}>
+              <div className="bg-white rounded-xl p-8 shadow-sm text-center" style={{ border: `2px solid ${roleColor.primary}` }}>
           <User size={64} className="mx-auto text-gray-400 mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             Nenhum {professionalType === 'pedagogo' ? 'aluno' : 'paciente'} encontrado
@@ -483,7 +483,7 @@ export const PatientsPage: React.FC = () => {
           <button
             onClick={handleNewPatient}
             className="px-6 py-3 rounded-lg text-white font-medium transition-colors duration-200"
-            style={{ backgroundColor: colors.primary }}
+            style={{ backgroundColor: roleColor.primary }}
           >
             Adicionar {professionalType === 'pedagogo' ? 'Aluno' : 'Paciente'}
           </button>

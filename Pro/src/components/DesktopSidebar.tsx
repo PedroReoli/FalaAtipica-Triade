@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useProfessional } from '../contexts/ProfessionalContext';
+import { useRoleColor } from '../hooks/useRoleColor';
 import { mockAuthService } from '../services/mockAuthService';
 import { 
   Home, 
@@ -9,7 +10,6 @@ import {
   Calendar, 
   FileText, 
   Settings, 
-  User,
   LogOut
 } from 'lucide-react';
 
@@ -17,23 +17,7 @@ export const DesktopSidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { professionalData } = useProfessional();
-
-  const getProfessionalColor = () => {
-    switch (professionalData.type) {
-      case 'fonoaudiologo':
-        return 'var(--green)';
-      case 'psicologo':
-        return 'var(--blue)';
-      case 'psiquiatra':
-        return 'var(--red)';
-      case 'pedagogo':
-        return 'var(--yellow)';
-      case 'psicopedagogo':
-        return 'var(--purple)';
-      default:
-        return 'var(--blue)';
-    }
-  };
+  const roleColor = useRoleColor();
 
   const handleLogout = () => {
     mockAuthService.logout();
@@ -90,7 +74,7 @@ export const DesktopSidebar: React.FC = () => {
           />
           <span 
             className="ml-3 text-lg font-bold"
-            style={{ color: getProfessionalColor() }}
+            style={{ color: roleColor.primary }}
           >
             FalaAtípica
           </span>
@@ -112,7 +96,7 @@ export const DesktopSidebar: React.FC = () => {
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 style={{
-                  backgroundColor: active ? getProfessionalColor() : 'transparent'
+                  backgroundColor: active ? roleColor.primary : 'transparent'
                 }}
               >
                 <Icon className="w-5 h-5 mr-3" />
@@ -128,7 +112,7 @@ export const DesktopSidebar: React.FC = () => {
             <button
               onClick={() => navigate('/profile')}
               className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-medium hover:opacity-80 transition-opacity shadow-sm"
-              style={{ backgroundColor: getProfessionalColor() }}
+              style={{ backgroundColor: roleColor.primary }}
             >
               {professionalData.name.charAt(0)}
             </button>

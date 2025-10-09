@@ -19,6 +19,7 @@ import {
   X
 } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 interface Report {
   id: string
@@ -37,6 +38,7 @@ interface Report {
 export const ReportsPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType } = useProfessional()
+  const roleColor = useRoleColor()
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
@@ -270,7 +272,7 @@ export const ReportsPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header Card - Relatórios da Empresa */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex justify-between items-center">
               <div>
                   <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>Relatórios da Empresa</h1>
@@ -287,7 +289,7 @@ export const ReportsPage: React.FC = () => {
               <button
                     onClick={() => setShowGenerateModal(true)}
                     className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                    style={{ backgroundColor: getProfessionalColor() }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <Plus className="w-4 h-4" />
                 <span>Gerar Relatório</span>
@@ -299,7 +301,7 @@ export const ReportsPage: React.FC = () => {
 
           {/* Filtros */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-black)" }}>Filtros e Busca</h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* Busca */}
@@ -363,14 +365,14 @@ export const ReportsPage: React.FC = () => {
               key={report.id} 
               onClick={() => handleCardClick(report)}
               className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
-              style={{ border: `2px solid ${getProfessionalColor()}` }}
+              style={{ border: `2px solid ${roleColor.primary}` }}
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
                   <div
                     className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm"
-                    style={{ backgroundColor: getProfessionalColor() }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     {getFileIcon(report.format)}
                   </div>
@@ -456,7 +458,7 @@ export const ReportsPage: React.FC = () => {
         </div>
 
         {filteredReports.length === 0 && (
-          <div className="bg-white rounded-xl p-8 shadow-sm text-center" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+          <div className="bg-white rounded-xl p-8 shadow-sm text-center" style={{ border: `2px solid ${roleColor.primary}` }}>
             <BarChart3 className="w-16 h-16 mx-auto text-gray-400 mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               Nenhum relatório encontrado
@@ -477,7 +479,7 @@ export const ReportsPage: React.FC = () => {
               <button
                 onClick={() => setShowGenerateModal(true)}
                 className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <Plus className="w-4 h-4 inline mr-2" />
                 Gerar Relatório
@@ -595,7 +597,7 @@ export const ReportsPage: React.FC = () => {
                 <button
                   onClick={handleUploadSubmit}
                   className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: getProfessionalColor() }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   Upload
                 </button>
@@ -691,7 +693,7 @@ export const ReportsPage: React.FC = () => {
                 <button
                   onClick={handleGenerateSubmit}
                   className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: getProfessionalColor() }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   Gerar Relatório
                 </button>
@@ -756,7 +758,7 @@ export const ReportsPage: React.FC = () => {
                 <button
                   onClick={() => handleDownload(selectedReport)}
                   className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: getProfessionalColor() }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   <Download className="w-4 h-4 inline mr-2" />
                   Download

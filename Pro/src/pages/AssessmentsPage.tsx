@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FileText, User, Calendar, Plus, ArrowLeft, Search, Filter } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 interface Assessment {
   id: string
@@ -18,6 +19,7 @@ interface Assessment {
 export const AssessmentsPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState<string>("all")
 
@@ -55,18 +57,6 @@ export const AssessmentsPage: React.FC = () => {
     },
   ]
 
-  const getProfessionalColor = () => {
-    switch (professionalType) {
-      case "fonoaudiologo":
-        return "var(--green)"
-      case "psicologo":
-        return "var(--blue)"
-      case "psiquiatra":
-        return "var(--red)"
-      default:
-        return "var(--blue)"
-    }
-  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -126,14 +116,14 @@ export const AssessmentsPage: React.FC = () => {
               <button
                 onClick={() => navigate("/assessments/new")}
                 className="flex items-center space-x-2 p-3 rounded-lg text-white font-medium transition-colors"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <Plus size={18} />
                 <span>Nova Avaliação</span>
               </button>
               <div
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <FileText size={20} className="text-white" />
               </div>
@@ -182,7 +172,7 @@ export const AssessmentsPage: React.FC = () => {
                 <div className="flex items-center space-x-4">
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: getProfessionalColor() }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <User size={24} className="text-white" />
                   </div>
@@ -199,7 +189,7 @@ export const AssessmentsPage: React.FC = () => {
                       {assessment.score && (
                         <div className="flex items-center space-x-1">
                           <span className="text-xs text-gray-500">Pontuação:</span>
-                          <span className="text-sm font-semibold" style={{ color: getProfessionalColor() }}>
+                          <span className="text-sm font-semibold" style={{ color: roleColor.primary }}>
                             {assessment.score}/100
                           </span>
                         </div>
@@ -215,7 +205,7 @@ export const AssessmentsPage: React.FC = () => {
                     onClick={() => navigate(`/assessments/${assessment.id}`)}
                     className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   >
-                    <FileText size={18} style={{ color: getProfessionalColor() }} />
+                    <FileText size={18} style={{ color: roleColor.primary }} />
                   </button>
                 </div>
               </div>

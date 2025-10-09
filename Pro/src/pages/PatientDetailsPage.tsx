@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Edit2, Trash2, Calendar, Phone, Mail, Users, Clock, FileText, Activity, Eye, FolderOpen, History } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { useRoleColor } from '../hooks/useRoleColor';
 import patientDetailsData from '../../../Mockup/PRO/paciente-detalhes.json';
 
 interface Session {
@@ -45,7 +45,7 @@ export const PatientDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { professionalType } = useProfessional();
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = useRoleColor();
   const [activeTab, setActiveTab] = useState<'info' | 'sessions' | 'reports' | 'documents' | 'history' | 'mobile'>('info');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showEditHistoryModal, setShowEditHistoryModal] = useState(false);
@@ -174,7 +174,7 @@ export const PatientDetailsPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between mb-4">
                 <button
                   onClick={() => navigate('/patients')}
@@ -187,7 +187,7 @@ export const PatientDetailsPage: React.FC = () => {
                   <button
                     onClick={handleEdit}
                     className="p-2 rounded-lg text-white transition-colors"
-                    style={{ backgroundColor: colors.primary }}
+                    style={{ backgroundColor: roleColor.primary }}
                     title="Editar paciente"
                   >
                     <Edit2 size={18} />
@@ -206,7 +206,7 @@ export const PatientDetailsPage: React.FC = () => {
               <div className="flex items-center space-x-4">
                 <div
                   className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-2xl"
-                  style={{ backgroundColor: colors.primary }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   {patient.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </div>
@@ -229,7 +229,7 @@ export const PatientDetailsPage: React.FC = () => {
 
           {/* Tabs */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex border-b">
                 <button
                   onClick={() => setActiveTab('info')}
@@ -239,8 +239,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'info' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'info' ? colors.primary : 'transparent',
+                    borderBottomColor: activeTab === 'info' ? roleColor.primary : 'transparent',
+                    backgroundColor: activeTab === 'info' ? roleColor.primary : 'transparent',
                     color: activeTab === 'info' ? 'white' : undefined
                   }}
                 >
@@ -257,8 +257,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'sessions' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'sessions' ? colors.primary : 'transparent',
+                    borderBottomColor: activeTab === 'sessions' ? roleColor.primary : 'transparent',
+                    backgroundColor: activeTab === 'sessions' ? roleColor.primary : 'transparent',
                     color: activeTab === 'sessions' ? 'white' : undefined
                   }}
                 >
@@ -275,8 +275,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'reports' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'reports' ? colors.primary : 'transparent',
+                    borderBottomColor: activeTab === 'reports' ? roleColor.primary : 'transparent',
+                    backgroundColor: activeTab === 'reports' ? roleColor.primary : 'transparent',
                     color: activeTab === 'reports' ? 'white' : undefined
                   }}
                 >
@@ -293,8 +293,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'documents' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'documents' ? colors.primary : 'transparent',
+                    borderBottomColor: activeTab === 'documents' ? roleColor.primary : 'transparent',
+                    backgroundColor: activeTab === 'documents' ? roleColor.primary : 'transparent',
                     color: activeTab === 'documents' ? 'white' : undefined
                   }}
                 >
@@ -311,8 +311,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'history' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'history' ? colors.primary : 'transparent',
+                    borderBottomColor: activeTab === 'history' ? roleColor.primary : 'transparent',
+                    backgroundColor: activeTab === 'history' ? roleColor.primary : 'transparent',
                     color: activeTab === 'history' ? 'white' : undefined
                   }}
                 >
@@ -329,8 +329,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'mobile' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'mobile' ? colors.primary : 'transparent',
+                    borderBottomColor: activeTab === 'mobile' ? roleColor.primary : 'transparent',
+                    backgroundColor: activeTab === 'mobile' ? roleColor.primary : 'transparent',
                     color: activeTab === 'mobile' ? 'white' : undefined
                   }}
                 >
@@ -365,7 +365,7 @@ export const PatientDetailsPage: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Informações Pessoais */}
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
                         Informações Pessoais
                       </h3>
                       <div className="space-y-3">
@@ -389,7 +389,7 @@ export const PatientDetailsPage: React.FC = () => {
 
                     {/* Informações do Tutor */}
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
                         Informações do Tutor
                       </h3>
                       <div className="space-y-3">
@@ -420,7 +420,7 @@ export const PatientDetailsPage: React.FC = () => {
 
                     {/* Informações Médicas */}
                     <div className="md:col-span-2 space-y-4">
-                      <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
                         Informações Médicas
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -449,13 +449,13 @@ export const PatientDetailsPage: React.FC = () => {
                 {activeTab === 'sessions' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Histórico de Sessões
                       </h3>
                       <button
                         onClick={() => navigate('/sessions/new')}
                         className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: colors.primary }}
+                        style={{ backgroundColor: roleColor.primary }}
                       >
                         Nova Sessão
                       </button>
@@ -469,7 +469,7 @@ export const PatientDetailsPage: React.FC = () => {
                           <div className="flex items-center space-x-3">
                             <div
                               className="w-10 h-10 rounded-lg flex items-center justify-center"
-                              style={{ backgroundColor: colors.primary }}
+                              style={{ backgroundColor: roleColor.primary }}
                             >
                               <Activity size={18} className="text-white" />
                             </div>
@@ -490,7 +490,7 @@ export const PatientDetailsPage: React.FC = () => {
                               <button
                                 onClick={() => handleViewSession(session.id)}
                                 className="p-2 rounded-lg text-white transition-colors hover:opacity-80"
-                                style={{ backgroundColor: colors.primary }}
+                                style={{ backgroundColor: roleColor.primary }}
                                 title="Visualizar sessão"
                               >
                                 <Eye size={16} />
@@ -498,7 +498,7 @@ export const PatientDetailsPage: React.FC = () => {
                               <button
                                 onClick={() => handleEditSession(session.id)}
                                 className="p-2 rounded-lg text-white transition-colors hover:opacity-80"
-                                style={{ backgroundColor: colors.primary }}
+                                style={{ backgroundColor: roleColor.primary }}
                                 title="Editar sessão"
                               >
                                 <Edit2 size={16} />
@@ -507,7 +507,7 @@ export const PatientDetailsPage: React.FC = () => {
                                 <button
                                   onClick={() => handleEditSessionReport(session.id)}
                                   className="p-2 rounded-lg text-white transition-colors hover:opacity-80"
-                                  style={{ backgroundColor: colors.primary }}
+                                  style={{ backgroundColor: roleColor.primary }}
                                   title="Editar relatório"
                                 >
                                   <FileText size={16} />
@@ -528,7 +528,7 @@ export const PatientDetailsPage: React.FC = () => {
                     {/* Arquivos recém-uploadados */}
                     {uploadedFiles.length > 0 && (
                       <div className="mb-6">
-                        <h4 className="text-md font-semibold mb-3" style={{ color: colors.primary }}>
+                        <h4 className="text-md font-semibold mb-3" style={{ color: roleColor.primary }}>
                           Relatórios Recém-Adicionados
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -568,7 +568,7 @@ export const PatientDetailsPage: React.FC = () => {
                       <button
                         onClick={() => triggerFileUpload('report-upload')}
                         className="px-6 py-3 rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: colors.primary }}
+                        style={{ backgroundColor: roleColor.primary }}
                       >
                         Upload Relatório
                       </button>
@@ -580,13 +580,13 @@ export const PatientDetailsPage: React.FC = () => {
                 {activeTab === 'documents' && (
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Documentos e Anexos
                       </h3>
                       <button
                         onClick={() => triggerFileUpload('document-upload')}
                         className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: colors.primary }}
+                        style={{ backgroundColor: roleColor.primary }}
                       >
                         <FolderOpen size={18} className="inline mr-2" />
                         Upload
@@ -596,7 +596,7 @@ export const PatientDetailsPage: React.FC = () => {
                     {/* Arquivos recém-uploadados */}
                     {uploadedFiles.length > 0 && (
                       <div className="mb-6">
-                        <h4 className="text-md font-semibold mb-3" style={{ color: colors.primary }}>
+                        <h4 className="text-md font-semibold mb-3" style={{ color: roleColor.primary }}>
                           Arquivos Recém-Adicionados
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -678,14 +678,14 @@ export const PatientDetailsPage: React.FC = () => {
                 {activeTab === 'history' && (
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Histórico Médico Detalhado
                       </h3>
                       <div className="flex space-x-2">
                         <button
                           onClick={handleEditHistory}
                           className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                          style={{ backgroundColor: colors.primary }}
+                          style={{ backgroundColor: roleColor.primary }}
                         >
                           <Edit2 size={18} className="inline mr-2" />
                           Editar
@@ -693,7 +693,7 @@ export const PatientDetailsPage: React.FC = () => {
                         <button
                           onClick={handleAddHistory}
                           className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                          style={{ backgroundColor: colors.primary }}
+                          style={{ backgroundColor: roleColor.primary }}
                         >
                           <Activity size={18} className="inline mr-2" />
                           Adicionar Histórico
@@ -763,12 +763,12 @@ export const PatientDetailsPage: React.FC = () => {
                   <div className="space-y-4">
                     {/* Header Compacto */}
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Aplicações Vinculadas
                       </h3>
                       <button
                         className="px-3 py-2 text-sm rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: colors.primary }}
+                        style={{ backgroundColor: roleColor.primary }}
                       >
                         <Activity size={16} className="inline mr-1" />
                         Gerenciar
@@ -784,7 +784,7 @@ export const PatientDetailsPage: React.FC = () => {
                           </div>
                           <div>
                             <p className="text-xs font-medium text-gray-600">Dispositivos</p>
-                            <p className="text-lg font-bold" style={{ color: colors.primary }}>{summary.devices}</p>
+                            <p className="text-lg font-bold" style={{ color: roleColor.primary }}>{summary.devices}</p>
                           </div>
                         </div>
                       </div>
@@ -796,7 +796,7 @@ export const PatientDetailsPage: React.FC = () => {
                           </div>
                           <div>
                             <p className="text-xs font-medium text-gray-600">Apps Ativos</p>
-                            <p className="text-lg font-bold" style={{ color: colors.primary }}>{summary.activeApps}</p>
+                            <p className="text-lg font-bold" style={{ color: roleColor.primary }}>{summary.activeApps}</p>
                           </div>
                         </div>
                       </div>
@@ -808,7 +808,7 @@ export const PatientDetailsPage: React.FC = () => {
                           </div>
                           <div>
                             <p className="text-xs font-medium text-gray-600">Dias Restantes</p>
-                            <p className="text-lg font-bold" style={{ color: colors.primary }}>{summary.daysRemaining}</p>
+                            <p className="text-lg font-bold" style={{ color: roleColor.primary }}>{summary.daysRemaining}</p>
                           </div>
                         </div>
                       </div>
@@ -820,7 +820,7 @@ export const PatientDetailsPage: React.FC = () => {
                           </div>
                           <div>
                             <p className="text-xs font-medium text-gray-600">Último Acesso</p>
-                            <p className="text-sm font-bold" style={{ color: colors.primary }}>{summary.lastAccess}</p>
+                            <p className="text-sm font-bold" style={{ color: roleColor.primary }}>{summary.lastAccess}</p>
                           </div>
                         </div>
                       </div>
@@ -829,7 +829,7 @@ export const PatientDetailsPage: React.FC = () => {
                     {/* Apps em Grid Compacto */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       {/* App KIDS */}
-                      <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${colors.primary}` }}>
+                      <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${roleColor.primary}` }}>
                         <div className="p-6">
                           <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center space-x-3">
@@ -929,7 +929,7 @@ export const PatientDetailsPage: React.FC = () => {
                       </div>
                       
                       {/* App TUTORS */}
-                      <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${colors.primary}` }}>
+                      <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${roleColor.primary}` }}>
                         <div className="p-6">
                           <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center space-x-3">
@@ -1016,9 +1016,9 @@ export const PatientDetailsPage: React.FC = () => {
                     </div>
                     
                     {/* Ações Gerais */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${colors.primary}` }}>
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${roleColor.primary}` }}>
                       <div className="p-6">
-                        <h4 className="font-semibold text-gray-900 mb-4" style={{ color: colors.primary }}>
+                        <h4 className="font-semibold text-gray-900 mb-4" style={{ color: roleColor.primary }}>
                           Ações de Gerenciamento
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1059,9 +1059,9 @@ export const PatientDetailsPage: React.FC = () => {
       {/* Modal de Gerenciamento de Acessos */}
       {showManagementModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-4xl w-full mx-4" style={{ border: `2px solid ${colors.primary}` }}>
+          <div className="bg-white rounded-xl p-6 max-w-4xl w-full mx-4" style={{ border: `2px solid ${roleColor.primary}` }}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold" style={{ color: colors.primary }}>
+              <h3 className="text-xl font-semibold" style={{ color: roleColor.primary }}>
                 Gerenciar Acessos das Aplicações
               </h3>
               <button
@@ -1165,7 +1165,7 @@ export const PatientDetailsPage: React.FC = () => {
               <button
                 onClick={closeManagementModal}
                 className="px-4 py-2 text-white rounded-lg transition-colors"
-                style={{ backgroundColor: colors.primary }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 Salvar Alterações
               </button>
@@ -1177,9 +1177,9 @@ export const PatientDetailsPage: React.FC = () => {
       {/* Modal de Editar Histórico */}
       {showEditHistoryModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${colors.primary}` }}>
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${roleColor.primary}` }}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+              <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                 Editar Histórico Médico
               </h3>
               <button
@@ -1235,7 +1235,7 @@ export const PatientDetailsPage: React.FC = () => {
               <button
                 onClick={closeEditHistoryModal}
                 className="px-4 py-2 text-white rounded-lg transition-colors"
-                style={{ backgroundColor: colors.primary }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 Salvar Alterações
               </button>
@@ -1247,9 +1247,9 @@ export const PatientDetailsPage: React.FC = () => {
       {/* Modal de Adicionar Histórico */}
       {showAddHistoryModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${colors.primary}` }}>
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${roleColor.primary}` }}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+              <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                 Adicionar Novo Evento ao Histórico
               </h3>
               <button
@@ -1318,7 +1318,7 @@ export const PatientDetailsPage: React.FC = () => {
               <button
                 onClick={closeAddHistoryModal}
                 className="px-4 py-2 text-white rounded-lg transition-colors"
-                style={{ backgroundColor: colors.primary }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 Adicionar Evento
               </button>

@@ -18,10 +18,12 @@ import {
   Settings
 } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 export const ProfilePage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [isEditing, setIsEditing] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [formData, setFormData] = useState({
@@ -104,18 +106,6 @@ export const ProfilePage: React.FC = () => {
     setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' })
   }
 
-  const getProfessionalColor = () => {
-    switch (professionalType) {
-      case "fonoaudiologo":
-        return "var(--green)"
-      case "psicologo":
-        return "var(--blue)"
-      case "psiquiatra":
-        return "var(--red)"
-      default:
-        return "var(--blue)"
-    }
-  }
 
   const getProfessionalTypeName = () => {
     switch (professionalType) {
@@ -136,7 +126,7 @@ export const ProfilePage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header Card - Perfil */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>Perfil</h1>
@@ -148,7 +138,7 @@ export const ProfilePage: React.FC = () => {
                       <button
                         onClick={handleSave}
                         className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                        style={{ backgroundColor: getProfessionalColor() }}
+                        style={{ backgroundColor: roleColor.primary }}
                       >
                         <Save className="w-4 h-4" />
                         <span>Salvar</span>
@@ -165,7 +155,7 @@ export const ProfilePage: React.FC = () => {
                     <button
                       onClick={() => setIsEditing(true)}
                       className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                      style={{ backgroundColor: getProfessionalColor() }}
+                      style={{ backgroundColor: roleColor.primary }}
                     >
                       <Edit className="w-4 h-4" />
                       <span>Editar</span>
@@ -182,9 +172,9 @@ export const ProfilePage: React.FC = () => {
           
           {/* Profile Card */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="text-center mb-6">
-                <div className="w-20 h-20 mx-auto mb-3 rounded-full flex items-center justify-center text-white text-xl font-bold" style={{ backgroundColor: getProfessionalColor() }}>
+                <div className="w-20 h-20 mx-auto mb-3 rounded-full flex items-center justify-center text-white text-xl font-bold" style={{ backgroundColor: roleColor.primary }}>
                   <User className="w-10 h-10" />
                 </div>
                 <h2 className="text-lg font-semibold text-gray-900 mb-1">{formData.name}</h2>
@@ -208,7 +198,7 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             {/* Configurações de Conta */}
-            <div className="bg-white rounded-xl p-6 shadow-sm mt-6" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-6 shadow-sm mt-6" style={{ border: `2px solid ${roleColor.primary}` }}>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Configurações</h3>
               <div className="space-y-3">
                 <button 
@@ -237,7 +227,7 @@ export const ProfilePage: React.FC = () => {
           <div className="lg:col-span-1 space-y-6">
             
             {/* Informações Pessoais */}
-            <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Informações Pessoais</h3>
               <div className="grid grid-cols-1 gap-4">
                 <div>
@@ -300,7 +290,7 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             {/* Informações Profissionais */}
-            <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Informações Profissionais</h3>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Coluna 1 - Dados Básicos */}
@@ -469,7 +459,7 @@ export const ProfilePage: React.FC = () => {
                 <button
                   onClick={handlePasswordSubmit}
                   className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: getProfessionalColor() }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   Alterar Senha
                 </button>

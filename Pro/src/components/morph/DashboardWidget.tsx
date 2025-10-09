@@ -1,6 +1,6 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
-import { useProfessionalColors } from '../../hooks/useProfessionalColors';
+import { getRoleColor } from '../../hooks/useRoleColor';
 import type { ProfessionalType } from '../../types';
 
 interface DashboardWidgetProps {
@@ -48,7 +48,7 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
   onClick,
   className = ''
 }) => {
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = getRoleColor(professionalType);
   const TrendIcon = getTrendIcon(widget.trend);
 
   return (
@@ -59,10 +59,10 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
         ${className}
       `}
       style={{
-        '--professional-color': colors.primary,
-        '--professional-secondary': colors.secondary,
-        '--professional-light': colors.light,
-        borderColor: colors.primary
+        '--professional-color': roleColor.primary,
+        '--professional-secondary': roleColor.secondary,
+        '--professional-light': roleColor.light,
+        borderColor: roleColor.primary
       } as React.CSSProperties}
       onClick={onClick}
     >
@@ -70,9 +70,9 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
       <div className="flex items-center justify-between mb-4">
         <div
           className="w-12 h-12 rounded-lg flex items-center justify-center"
-          style={{ backgroundColor: colors.light }}
+          style={{ backgroundColor: roleColor.light }}
         >
-          <widget.icon size={24} style={{ color: colors.primary }} />
+          <widget.icon size={24} style={{ color: roleColor.primary }} />
         </div>
         <div className={`flex items-center space-x-1 ${getTrendColor(widget.trend)}`}>
           <TrendIcon size={16} />
@@ -82,7 +82,7 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
 
       {/* Content */}
       <div>
-        <h3 className="text-2xl font-bold mb-1" style={{ color: colors.primary }}>
+        <h3 className="text-2xl font-bold mb-1" style={{ color: roleColor.primary }}>
           {widget.value}
         </h3>
         <p className="text-sm text-gray-600">{widget.title}</p>
@@ -91,7 +91,7 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
       {/* Hover Effect */}
       <div
         className="absolute inset-0 rounded-xl opacity-0 hover:opacity-5 transition-opacity duration-200"
-        style={{ backgroundColor: colors.primary }}
+        style={{ backgroundColor: roleColor.primary }}
       />
     </div>
   );

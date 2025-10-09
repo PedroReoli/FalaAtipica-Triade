@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertCircle, CheckCircle, XCircle, Info, X } from 'lucide-react';
-import { useProfessionalColors } from '../../hooks/useProfessionalColors';
+import { getRoleColor } from '../../hooks/useRoleColor';
 import type { ProfessionalType } from '../../types';
 
 interface AlertCardProps {
@@ -68,7 +68,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
   onAction,
   className = ''
 }) => {
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = getRoleColor(professionalType);
   const Icon = getAlertIcon(alert.type);
 
   return (
@@ -79,8 +79,8 @@ export const AlertCard: React.FC<AlertCardProps> = ({
         ${className}
       `}
       style={{
-        '--professional-color': colors.primary,
-        borderColor: colors.primary
+        '--professional-color': roleColor.primary,
+        borderColor: roleColor.primary
       } as React.CSSProperties}
     >
       {/* Header */}
@@ -88,9 +88,9 @@ export const AlertCard: React.FC<AlertCardProps> = ({
         <div className="flex items-center space-x-2">
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: colors.light }}
+            style={{ backgroundColor: roleColor.light }}
           >
-            <Icon size={16} style={{ color: colors.primary }} />
+            <Icon size={16} style={{ color: roleColor.primary }} />
           </div>
           <div>
             <h4 className="font-semibold text-gray-900">{alert.title}</h4>
@@ -124,7 +124,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
           <button
             onClick={onAction}
             className="px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors duration-200"
-            style={{ backgroundColor: colors.primary }}
+            style={{ backgroundColor: roleColor.primary }}
           >
             Ver Detalhes
           </button>

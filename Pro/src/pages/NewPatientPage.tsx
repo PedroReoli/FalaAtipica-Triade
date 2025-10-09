@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, User, Users, Phone, Mail, MapPin, Calendar, FileText } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { useRoleColor } from '../hooks/useRoleColor';
 
 export const NewPatientPage: React.FC = () => {
   const navigate = useNavigate();
   const { professionalType } = useProfessional();
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = useRoleColor();
 
   const [formData, setFormData] = useState({
     // Informações do Paciente
@@ -52,7 +52,7 @@ export const NewPatientPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <button
@@ -78,12 +78,12 @@ export const NewPatientPage: React.FC = () => {
           {/* Form */}
           <div className="dashboard-spacing">
             <form onSubmit={handleSubmit}>
-              <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+              <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
                 {/* Informações do Paciente */}
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-4">
-                    <User size={20} style={{ color: colors.primary }} />
-                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                    <User size={20} style={{ color: roleColor.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                       Informações do {professionalType === 'pedagogo' ? 'Aluno' : 'Paciente'}
                     </h3>
                   </div>
@@ -99,7 +99,7 @@ export const NewPatientPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Digite o nome completo"
                       />
                     </div>
@@ -114,7 +114,7 @@ export const NewPatientPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                       />
                     </div>
                   </div>
@@ -123,8 +123,8 @@ export const NewPatientPage: React.FC = () => {
                 {/* Informações do Tutor */}
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-4">
-                    <Users size={20} style={{ color: colors.primary }} />
-                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                    <Users size={20} style={{ color: roleColor.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                       Informações do Tutor/Responsável
                     </h3>
                   </div>
@@ -140,7 +140,7 @@ export const NewPatientPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Digite o nome do tutor"
                       />
                     </div>
@@ -154,7 +154,7 @@ export const NewPatientPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                       >
                         <option value="">Selecione</option>
                         <option value="Pai">Pai</option>
@@ -178,7 +178,7 @@ export const NewPatientPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="(00) 00000-0000"
                       />
                     </div>
@@ -194,7 +194,7 @@ export const NewPatientPage: React.FC = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="email@exemplo.com"
                       />
                     </div>
@@ -204,8 +204,8 @@ export const NewPatientPage: React.FC = () => {
                 {/* Endereço */}
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-4">
-                    <MapPin size={20} style={{ color: colors.primary }} />
-                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                    <MapPin size={20} style={{ color: roleColor.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                       Endereço
                     </h3>
                   </div>
@@ -220,7 +220,7 @@ export const NewPatientPage: React.FC = () => {
                         value={formData.street}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Rua Exemplo, 123"
                       />
                     </div>
@@ -234,7 +234,7 @@ export const NewPatientPage: React.FC = () => {
                         value={formData.city}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="São Paulo"
                       />
                     </div>
@@ -248,7 +248,7 @@ export const NewPatientPage: React.FC = () => {
                         value={formData.state}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="SP"
                         maxLength={2}
                       />
@@ -263,7 +263,7 @@ export const NewPatientPage: React.FC = () => {
                         value={formData.zipCode}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="00000-000"
                       />
                     </div>
@@ -273,8 +273,8 @@ export const NewPatientPage: React.FC = () => {
                 {/* Informações Médicas */}
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-4">
-                    <FileText size={20} style={{ color: colors.primary }} />
-                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                    <FileText size={20} style={{ color: roleColor.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                       Informações Médicas
                     </h3>
                   </div>
@@ -289,7 +289,7 @@ export const NewPatientPage: React.FC = () => {
                         value={formData.diagnosis}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Digite o diagnóstico"
                       />
                     </div>
@@ -303,7 +303,7 @@ export const NewPatientPage: React.FC = () => {
                         value={formData.allergies}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Nenhuma"
                       />
                     </div>
@@ -317,7 +317,7 @@ export const NewPatientPage: React.FC = () => {
                         value={formData.medications}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Nenhuma"
                       />
                     </div>
@@ -331,7 +331,7 @@ export const NewPatientPage: React.FC = () => {
                         onChange={handleChange}
                         rows={3}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Informações adicionais sobre o paciente"
                       />
                     </div>
@@ -344,14 +344,14 @@ export const NewPatientPage: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/patients')}
                     className="px-6 py-3 rounded-lg border-2 font-medium transition-colors"
-                    style={{ borderColor: colors.primary, color: colors.primary }}
+                    style={{ borderColor: roleColor.primary, color: roleColor.primary }}
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
                     className="px-6 py-3 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors"
-                    style={{ backgroundColor: colors.primary }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <Save size={18} />
                     <span>Salvar {professionalType === 'pedagogo' ? 'Aluno' : 'Paciente'}</span>

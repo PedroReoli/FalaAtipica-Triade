@@ -210,9 +210,132 @@
 - **Desktop**: Layout completo com sidebar
 
 ### Sistema de Cores por Profissional
-- **Fonoaudiólogos**: Verde (`#43a047`)
-- **Psicólogos**: Azul (`#1e88e5`)
-- **Psiquiatras**: Vermelho (`#e53935`)
+- **Fonoaudiólogos**: Verde (`#43a047`) - `var(--green)`
+- **Psicólogos**: Azul (`#1e88e5`) - `var(--blue)`
+- **Psiquiatras**: Vermelho (`#e53935`) - `var(--red)`
+- **Pedagogos**: Amarelo (`#fbc02d`) - `var(--yellow)`
+- **Psicopedagogos**: Roxo (`#9c27b0`) - `var(--purple)`
+
+### 🎨 Sistema Centralizado de Cores (useRoleColor)
+
+**Hook Criado**: `Pro/src/hooks/useRoleColor.ts`
+
+Este hook centraliza o gerenciamento de cores baseado no role do profissional logado, garantindo consistência em toda a aplicação.
+
+#### Como Usar
+```typescript
+import { useRoleColor } from '../hooks/useRoleColor';
+
+function MyComponent() {
+  const roleColor = useRoleColor();
+  
+  return (
+    <div style={{ color: roleColor.primary }}>
+      {/* ou */}
+      <button style={{ backgroundColor: roleColor.getPrimaryColor() }}>
+        Botão
+      </button>
+    </div>
+  );
+}
+```
+
+#### Funções Disponíveis
+- `roleColor.primary` - Retorna `var(--color)` (recomendado)
+- `roleColor.primaryHex` - Retorna a cor em hexadecimal
+- `roleColor.secondary` - Cor secundária para hover/destaque
+- `roleColor.light` - Versão clara da cor
+- `roleColor.dark` - Versão escura da cor
+- `roleColor.getPrimaryColor()` - Helper que retorna a cor primária
+- `roleColor.getPrimaryHex()` - Helper que retorna a cor em hex
+- `roleColor.getStyle(property)` - Helper para inline styles
+
+#### Funções Utilitárias
+```typescript
+import { getRoleColor, getRolePrimaryColor } from '../hooks/useRoleColor';
+
+// Obter cor de um role específico (útil quando precisa de outro role)
+const fonoColor = getRoleColor('fonoaudiologo');
+
+// Obter apenas a cor primária de um role
+const primaryColor = getRolePrimaryColor('psicologo');
+```
+
+#### Próximos Passos - Migração
+**IMPORTANTE**: Quando voltar ao projeto, fazer a migração completa:
+
+1. **Substituir `useProfessionalColors` por `useRoleColor`** em todos os componentes
+2. **Atualizar imports** de:
+   ```typescript
+   // De:
+   import { useProfessionalColors } from '../hooks/useProfessionalColors';
+   
+   // Para:
+   import { useRoleColor } from '../hooks/useRoleColor';
+   ```
+
+3. **Atualizar chamadas** de:
+   ```typescript
+   // De:
+   const colors = useProfessionalColors(professionalType);
+   
+   // Para:
+   const roleColor = useRoleColor();
+   ```
+
+4. **Componentes que precisam ser atualizados**:
+   
+   **✅ CONCLUÍDOS**:
+   - ✅ `DesktopSidebar.tsx` 
+   - ✅ `InternalNavbar.tsx` (componente principal)
+   - ✅ `layouts/InternalNavbar.tsx` (layout antigo)
+   - ✅ `ReportsPage.tsx`
+   - ✅ `SettingsPage.tsx`
+   - ✅ `ProfilePage.tsx`
+   - ✅ `AppsManagementPage.tsx`
+   - ✅ `NewSessionPage.tsx`
+   - ✅ `DetailedReportsPage.tsx`
+   - ✅ `FullCalendarPage.tsx`
+   - ✅ `AssessmentsPage.tsx`
+   - ✅ `MedicationsPage.tsx`
+   - ✅ `PrescriptionsPage.tsx`
+   - ✅ `ReportEditPage.tsx`
+   - ✅ `ReportViewPage.tsx`
+   - ✅ Todos os componentes em `components/morph/`:
+     - ✅ `DashboardWidget.tsx`
+     - ✅ `AlertCard.tsx`
+     - ✅ `SessionCard.tsx`
+     - ✅ `ProfessionalCard.tsx`
+     - ✅ `ReportCard.tsx`
+   
+   **✅ MIGRAÇÃO COMPLETA**:
+   - ✅ `SessionsPage.tsx`
+   - ✅ `PatientsPage.tsx`
+   - ✅ `PatientDetailsPage.tsx`
+   - ✅ `DeletePatientPage.tsx`
+   - ✅ `SessionNotesPage.tsx`
+   - ✅ `EditSessionReportPage.tsx`
+   - ✅ `SessionDetailsPage.tsx`
+   - ✅ `EditSessionPage.tsx`
+   - ✅ `EditPatientPage.tsx`
+   - ✅ `NewPatientPage.tsx`
+   - ✅ `DashboardPage.tsx` (não usa cores, sem alteração necessária)
+   
+   **🎉 TOTAL: 31 ARQUIVOS MIGRADOS COM SUCESSO!**
+
+5. **✅ MIGRAÇÃO COMPLETA - Próximos Passos**:
+   - ⚠️ **OPCIONAL**: Deletar o arquivo `Pro/src/hooks/useProfessionalColors.ts` (antigo, não usado mais)
+   - ✅ Todos os imports foram atualizados
+   - ✅ Todas as 31 páginas e componentes migrados
+   - 🧪 **TESTAR**: Verificar todas as páginas com diferentes roles (fonoaudiólogo, psicólogo, psiquiatra, pedagogo, psicopedagogo)
+
+#### Vantagens do Novo Hook
+- ✅ Usa variáveis CSS (`var(--color)`) para consistência
+- ✅ Centralizado e fácil de manter
+- ✅ Helpers úteis para casos comuns
+- ✅ Documentação completa
+- ✅ Type-safe com TypeScript
+- ✅ Não precisa passar `professionalType` como parâmetro
 
 ## 📊 Componentes de Dashboard
 

@@ -16,6 +16,7 @@ import {
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 interface ReportData {
   title: string
@@ -28,6 +29,7 @@ export const ReportEditPage: React.FC = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [reportData, setReportData] = useState<ReportData>({
     title: "",
     patient: "",
@@ -109,18 +111,6 @@ export const ReportEditPage: React.FC = () => {
     URL.revokeObjectURL(url)
   }
 
-  const getProfessionalColor = () => {
-    switch (professionalType) {
-      case "fonoaudiologo":
-        return "var(--green)"
-      case "psicologo":
-        return "var(--blue)"
-      case "psiquiatra":
-        return "var(--red)"
-      default:
-        return "var(--blue)"
-    }
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -155,7 +145,7 @@ export const ReportEditPage: React.FC = () => {
               <button
                 onClick={handleSave}
                 className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <Save className="w-4 h-4" />
                 <span>Salvar</span>
@@ -291,7 +281,7 @@ Ou simplesmente escreva em texto puro."
                 <button
                   onClick={handleApplyImport}
                   className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: getProfessionalColor() }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   Aplicar Importação
                 </button>

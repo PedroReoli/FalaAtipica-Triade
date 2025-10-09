@@ -1,30 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProfessional } from '../contexts/ProfessionalContext';
+import { useRoleColor } from '../hooks/useRoleColor';
 import { mockAuthService } from '../services/mockAuthService';
 import { Menu, X } from 'lucide-react';
 
 export const InternalNavbar: React.FC = () => {
   const navigate = useNavigate();
   const { professionalData } = useProfessional();
+  const roleColor = useRoleColor();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const getProfessionalColor = () => {
-    switch (professionalData.type) {
-      case 'fonoaudiologo':
-        return 'var(--green)';
-      case 'psicologo':
-        return 'var(--blue)';
-      case 'psiquiatra':
-        return 'var(--red)';
-      case 'pedagogo':
-        return 'var(--yellow)';
-      case 'psicopedagogo':
-        return 'var(--purple)';
-      default:
-        return 'var(--blue)';
-    }
-  };
 
   const handleLogout = () => {
     mockAuthService.logout();
@@ -110,7 +95,7 @@ export const InternalNavbar: React.FC = () => {
           <button
             onClick={() => navigate('/profile')}
             className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium hover:opacity-80 transition-opacity"
-            style={{ backgroundColor: getProfessionalColor() }}
+            style={{ backgroundColor: roleColor.primary }}
             title="Ver Perfil"
           >
             {professionalData.name.charAt(0)}
@@ -122,7 +107,7 @@ export const InternalNavbar: React.FC = () => {
           <button
             onClick={() => navigate('/profile')}
             className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium hover:opacity-80 transition-opacity"
-            style={{ backgroundColor: getProfessionalColor() }}
+            style={{ backgroundColor: roleColor.primary }}
             title="Ver Perfil"
           >
             {professionalData.name.charAt(0)}
@@ -197,7 +182,7 @@ export const InternalNavbar: React.FC = () => {
                     closeSidebar();
                   }}
                   className="w-12 h-12 rounded-full flex items-center justify-center text-white text-sm font-medium hover:opacity-80 transition-opacity shadow-sm"
-                  style={{ backgroundColor: getProfessionalColor() }}
+                  style={{ backgroundColor: roleColor.primary }}
                 >
                   {professionalData.name.charAt(0)}
                 </button>

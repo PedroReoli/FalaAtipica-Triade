@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { ChevronLeft, ChevronRight, ArrowLeft, Calendar, Clock, User } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 interface Appointment {
   id: string
@@ -16,6 +17,7 @@ interface Appointment {
 export const FullCalendarPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [currentDate, setCurrentDate] = useState(new Date())
 
   // Mock data para compromissos do mês
@@ -29,18 +31,6 @@ export const FullCalendarPage: React.FC = () => {
     { id: "7", date: "2024-01-28", time: "13:00", patient: "Roberto Alves", type: "sessão" },
   ]
 
-  const getProfessionalColor = () => {
-    switch (professionalType) {
-      case "fonoaudiologo":
-        return "var(--green)"
-      case "psicologo":
-        return "var(--blue)"
-      case "psiquiatra":
-        return "var(--red)"
-      default:
-        return "var(--blue)"
-    }
-  }
 
   const getMonthName = (date: Date) => {
     return date.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })
@@ -79,7 +69,7 @@ export const FullCalendarPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Título da Página */}
         <div className="flex items-center space-x-2 mb-8">
-          <Calendar size={24} style={{ color: getProfessionalColor() }} />
+          <Calendar size={24} style={{ color: roleColor.primary }} />
           <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>
             Agenda Completa
           </h1>
@@ -90,7 +80,7 @@ export const FullCalendarPage: React.FC = () => {
           <button
             onClick={previousMonth}
             className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-            style={{ color: getProfessionalColor() }}
+            style={{ color: roleColor.primary }}
           >
             <ChevronLeft size={20} />
             <span>Mês Anterior</span>
@@ -103,7 +93,7 @@ export const FullCalendarPage: React.FC = () => {
           <button
             onClick={nextMonth}
             className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-            style={{ color: getProfessionalColor() }}
+            style={{ color: roleColor.primary }}
           >
             <span>Próximo Mês</span>
             <ChevronRight size={20} />
@@ -158,7 +148,7 @@ export const FullCalendarPage: React.FC = () => {
                     {appointments.length > 0 && (
                       <span
                         className="text-xs px-2 py-1 rounded-full text-white font-medium"
-                        style={{ backgroundColor: getProfessionalColor() }}
+                        style={{ backgroundColor: roleColor.primary }}
                       >
                         {appointments.length}
                       </span>
@@ -205,19 +195,19 @@ export const FullCalendarPage: React.FC = () => {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="text-2xl font-bold" style={{ color: getProfessionalColor() }}>
+              <div className="text-2xl font-bold" style={{ color: roleColor.primary }}>
                 {mockAppointments.length}
               </div>
               <div className="text-sm text-gray-600">Total de Compromissos</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold" style={{ color: getProfessionalColor() }}>
+              <div className="text-2xl font-bold" style={{ color: roleColor.primary }}>
                 {new Set(mockAppointments.map(app => app.date)).size}
               </div>
               <div className="text-sm text-gray-600">Dias com Compromissos</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold" style={{ color: getProfessionalColor() }}>
+              <div className="text-2xl font-bold" style={{ color: roleColor.primary }}>
                 {new Set(mockAppointments.map(app => app.patient)).size}
               </div>
               <div className="text-sm text-gray-600">Pacientes Únicos</div>

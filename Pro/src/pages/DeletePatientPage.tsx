@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Trash2, AlertTriangle, User, Calendar, Phone, Mail } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { useRoleColor } from '../hooks/useRoleColor';
 
 export const DeletePatientPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { professionalType } = useProfessional();
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = useRoleColor();
   
   const [confirmationText, setConfirmationText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -69,7 +69,7 @@ export const DeletePatientPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between mb-4">
                 <button
                   onClick={() => navigate(`/patients/${id}`)}
@@ -97,8 +97,8 @@ export const DeletePatientPage: React.FC = () => {
 
           {/* Patient Info */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
-              <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
+              <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
                 Informações do Paciente
               </h3>
               
@@ -183,7 +183,7 @@ export const DeletePatientPage: React.FC = () => {
                   placeholder="Digite o nome do paciente aqui..."
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:outline-none text-center"
                   style={{
-                    focusRingColor: colors.primary
+                    focusRingColor: roleColor.primary
                   }}
                 />
                 
@@ -204,7 +204,7 @@ export const DeletePatientPage: React.FC = () => {
 
           {/* Actions */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={handleCancel}

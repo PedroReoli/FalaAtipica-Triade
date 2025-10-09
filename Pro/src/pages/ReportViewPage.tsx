@@ -15,6 +15,7 @@ import {
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 interface Report {
   id: string
@@ -35,6 +36,7 @@ export const ReportViewPage: React.FC = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [report, setReport] = useState<Report | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -123,18 +125,6 @@ O paciente João Silva demonstrou progresso significativo durante o período de 
     }
   }
 
-  const getProfessionalColor = () => {
-    switch (professionalType) {
-      case "fonoaudiologo":
-        return "var(--green)"
-      case "psicologo":
-        return "var(--blue)"
-      case "psiquiatra":
-        return "var(--red)"
-      default:
-        return "var(--blue)"
-    }
-  }
 
   if (isLoading) {
     return (
@@ -196,7 +186,7 @@ O paciente João Silva demonstrou progresso significativo durante o período de 
               <button
                 onClick={handleDownload}
                 className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <Download className="w-4 h-4" />
                 <span>Download</span>

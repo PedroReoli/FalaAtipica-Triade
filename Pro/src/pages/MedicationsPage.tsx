@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Pill, Plus, ArrowLeft, Search, Filter, User, Calendar } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
+import { useRoleColor } from "../hooks/useRoleColor"
 
 interface Medication {
   id: string
@@ -21,6 +22,7 @@ interface Medication {
 export const MedicationsPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
+  const roleColor = useRoleColor()
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState<string>("all")
 
@@ -69,9 +71,6 @@ export const MedicationsPage: React.FC = () => {
     },
   ]
 
-  const getProfessionalColor = () => {
-    return "var(--red)" // Sempre vermelho para psiquiatras
-  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -132,14 +131,14 @@ export const MedicationsPage: React.FC = () => {
               <button
                 onClick={() => navigate("/medications/new")}
                 className="flex items-center space-x-2 p-3 rounded-lg text-white font-medium transition-colors"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <Plus size={18} />
                 <span>Nova Prescrição</span>
               </button>
               <div
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: getProfessionalColor() }}
+                style={{ backgroundColor: roleColor.primary }}
               >
                 <Pill size={20} className="text-white" />
               </div>
@@ -188,7 +187,7 @@ export const MedicationsPage: React.FC = () => {
                 <div className="flex items-center space-x-4">
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: getProfessionalColor() }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <Pill size={24} className="text-white" />
                   </div>
@@ -202,7 +201,7 @@ export const MedicationsPage: React.FC = () => {
                         <span className="text-sm text-gray-600">{medication.patient}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <span className="text-sm font-medium" style={{ color: getProfessionalColor() }}>
+                        <span className="text-sm font-medium" style={{ color: roleColor.primary }}>
                           {medication.dosage}
                         </span>
                         <span className="text-sm text-gray-500">•</span>
@@ -239,7 +238,7 @@ export const MedicationsPage: React.FC = () => {
                     className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                     title="Editar medicação"
                   >
-                    <Pill size={18} style={{ color: getProfessionalColor() }} />
+                    <Pill size={18} style={{ color: roleColor.primary }} />
                   </button>
                 </div>
               </div>

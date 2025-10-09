@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Plus, Trash2, Target, Activity, FileText, CheckCircle, AlertCircle, TrendingUp, User, BookOpen } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { useRoleColor } from '../hooks/useRoleColor';
 
 interface ReportObjective {
   id: string;
@@ -32,7 +32,7 @@ export const EditSessionReportPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { professionalType } = useProfessional();
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = useRoleColor();
 
   const [objectives, setObjectives] = useState<ReportObjective[]>([
     { id: '1', description: 'Melhorar articulação do fonema /r/', completed: true, progress: 80 },
@@ -201,7 +201,7 @@ export const EditSessionReportPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <button
@@ -227,13 +227,13 @@ export const EditSessionReportPage: React.FC = () => {
           {/* Form */}
           <div className="dashboard-spacing">
             <form onSubmit={handleSubmit}>
-              <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
+              <div className="bg-white rounded-xl p-6 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
                 {/* Objetivos e Progresso */}
                 <div className="mb-8">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
-                      <Target size={20} style={{ color: colors.primary }} />
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <Target size={20} style={{ color: roleColor.primary }} />
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Objetivos e Progresso
                       </h3>
                     </div>
@@ -241,7 +241,7 @@ export const EditSessionReportPage: React.FC = () => {
                       type="button"
                       onClick={addObjective}
                       className="px-3 py-2 rounded-lg text-white text-sm font-medium transition-colors"
-                      style={{ backgroundColor: colors.primary }}
+                      style={{ backgroundColor: roleColor.primary }}
                     >
                       <Plus size={16} className="inline mr-1" />
                       Adicionar Objetivo
@@ -263,7 +263,7 @@ export const EditSessionReportPage: React.FC = () => {
                             onChange={(e) => handleObjectiveChange(objective.id, 'description', e.target.value)}
                             placeholder="Descrição do objetivo..."
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                            style={{ focusRingColor: colors.primary }}
+                            style={{ focusRingColor: roleColor.primary }}
                           />
                           <button
                             type="button"
@@ -304,8 +304,8 @@ export const EditSessionReportPage: React.FC = () => {
                 <div className="mb-8">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
-                      <Activity size={20} style={{ color: colors.primary }} />
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <Activity size={20} style={{ color: roleColor.primary }} />
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Atividades Realizadas
                       </h3>
                     </div>
@@ -313,7 +313,7 @@ export const EditSessionReportPage: React.FC = () => {
                       type="button"
                       onClick={addActivity}
                       className="px-3 py-2 rounded-lg text-white text-sm font-medium transition-colors"
-                      style={{ backgroundColor: colors.primary }}
+                      style={{ backgroundColor: roleColor.primary }}
                     >
                       <Plus size={16} className="inline mr-1" />
                       Adicionar Atividade
@@ -333,7 +333,7 @@ export const EditSessionReportPage: React.FC = () => {
                               onChange={(e) => handleActivityChange(activity.id, 'name', e.target.value)}
                               placeholder="Nome da atividade..."
                               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                              style={{ focusRingColor: colors.primary }}
+                              style={{ focusRingColor: roleColor.primary }}
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2">
@@ -348,7 +348,7 @@ export const EditSessionReportPage: React.FC = () => {
                                 min="1"
                                 max="120"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                                style={{ focusRingColor: colors.primary }}
+                                style={{ focusRingColor: roleColor.primary }}
                               />
                             </div>
                             <div>
@@ -362,7 +362,7 @@ export const EditSessionReportPage: React.FC = () => {
                                 min="0"
                                 max="100"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                                style={{ focusRingColor: colors.primary }}
+                                style={{ focusRingColor: roleColor.primary }}
                               />
                             </div>
                           </div>
@@ -394,7 +394,7 @@ export const EditSessionReportPage: React.FC = () => {
                               type="text"
                               placeholder="Adicionar material..."
                               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                              style={{ focusRingColor: colors.primary }}
+                              style={{ focusRingColor: roleColor.primary }}
                               onKeyPress={(e) => {
                                 if (e.key === 'Enter') {
                                   e.preventDefault();
@@ -427,7 +427,7 @@ export const EditSessionReportPage: React.FC = () => {
                             placeholder="Observações sobre a atividade..."
                             rows={2}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
-                            style={{ focusRingColor: colors.primary }}
+                            style={{ focusRingColor: roleColor.primary }}
                           />
                         </div>
                         
@@ -449,8 +449,8 @@ export const EditSessionReportPage: React.FC = () => {
                 {/* Avaliação Técnica */}
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-4">
-                    <TrendingUp size={20} style={{ color: colors.primary }} />
-                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                    <TrendingUp size={20} style={{ color: roleColor.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                       Avaliação Técnica
                     </h3>
                   </div>
@@ -489,8 +489,8 @@ export const EditSessionReportPage: React.FC = () => {
                 {/* Observações e Comportamento */}
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-4">
-                    <User size={20} style={{ color: colors.primary }} />
-                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                    <User size={20} style={{ color: roleColor.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                       Observações e Comportamento
                     </h3>
                   </div>
@@ -504,7 +504,7 @@ export const EditSessionReportPage: React.FC = () => {
                         onChange={(e) => handleReportChange('observations', e.target.value)}
                         rows={4}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Descreva as observações sobre a sessão..."
                       />
                     </div>
@@ -517,7 +517,7 @@ export const EditSessionReportPage: React.FC = () => {
                         onChange={(e) => handleReportChange('behavior', e.target.value)}
                         rows={4}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Descreva o comportamento do paciente..."
                       />
                     </div>
@@ -528,8 +528,8 @@ export const EditSessionReportPage: React.FC = () => {
                 <div className="mb-8">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
-                      <CheckCircle size={20} style={{ color: colors.primary }} />
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                      <CheckCircle size={20} style={{ color: roleColor.primary }} />
+                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                         Próximos Passos
                       </h3>
                     </div>
@@ -537,7 +537,7 @@ export const EditSessionReportPage: React.FC = () => {
                       type="button"
                       onClick={addNextStep}
                       className="px-3 py-2 rounded-lg text-white text-sm font-medium transition-colors"
-                      style={{ backgroundColor: colors.primary }}
+                      style={{ backgroundColor: roleColor.primary }}
                     >
                       <Plus size={16} className="inline mr-1" />
                       Adicionar
@@ -553,7 +553,7 @@ export const EditSessionReportPage: React.FC = () => {
                           onChange={(e) => updateNextStep(index, e.target.value)}
                           placeholder="Descreva o próximo passo..."
                           className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none"
-                          style={{ focusRingColor: colors.primary }}
+                          style={{ focusRingColor: roleColor.primary }}
                         />
                         <button
                           type="button"
@@ -570,8 +570,8 @@ export const EditSessionReportPage: React.FC = () => {
                 {/* Recomendações e Tarefas */}
                 <div className="mb-8">
                   <div className="flex items-center space-x-2 mb-4">
-                    <BookOpen size={20} style={{ color: colors.primary }} />
-                    <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+                    <BookOpen size={20} style={{ color: roleColor.primary }} />
+                    <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
                       Recomendações e Tarefas
                     </h3>
                   </div>
@@ -585,7 +585,7 @@ export const EditSessionReportPage: React.FC = () => {
                         onChange={(e) => handleReportChange('recommendations', e.target.value)}
                         rows={3}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Recomendações para o paciente..."
                       />
                     </div>
@@ -598,7 +598,7 @@ export const EditSessionReportPage: React.FC = () => {
                         onChange={(e) => handleReportChange('homework', e.target.value)}
                         rows={3}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
-                        style={{ focusRingColor: colors.primary }}
+                        style={{ focusRingColor: roleColor.primary }}
                         placeholder="Tarefas para o paciente realizar em casa..."
                       />
                     </div>
@@ -612,7 +612,7 @@ export const EditSessionReportPage: React.FC = () => {
                       onChange={(e) => handleReportChange('focusNextSession', e.target.value)}
                       rows={2}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 focus:outline-none resize-none"
-                      style={{ focusRingColor: colors.primary }}
+                      style={{ focusRingColor: roleColor.primary }}
                       placeholder="O que focar na próxima sessão..."
                     />
                   </div>
@@ -624,14 +624,14 @@ export const EditSessionReportPage: React.FC = () => {
                     type="button"
                     onClick={() => navigate(`/sessions/${id}`)}
                     className="px-6 py-3 rounded-lg border-2 font-medium transition-colors"
-                    style={{ borderColor: colors.primary, color: colors.primary }}
+                    style={{ borderColor: roleColor.primary, color: roleColor.primary }}
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
                     className="px-6 py-3 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors"
-                    style={{ backgroundColor: colors.primary }}
+                    style={{ backgroundColor: roleColor.primary }}
                   >
                     <Save size={18} />
                     <span>Salvar Relatório</span>

@@ -5,6 +5,7 @@ import {
   Eye
 } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
+import { useRoleColor } from '../hooks/useRoleColor';
 
 interface AppConfig {
   id: string;
@@ -20,23 +21,7 @@ interface AppConfig {
 
 export const AppsManagementPage: React.FC = () => {
   const { professionalType } = useProfessional();
-  
-  const getProfessionalColor = () => {
-    switch (professionalType) {
-      case 'fonoaudiologo':
-        return 'var(--green)';
-      case 'psicologo':
-        return getProfessionalColor();
-      case 'psiquiatra':
-        return 'var(--red)';
-      case 'pedagogo':
-        return 'var(--yellow)';
-      case 'psicopedagogo':
-        return 'var(--purple)';
-      default:
-        return getProfessionalColor();
-    }
-  };
+  const roleColor = useRoleColor();
 
   const apps: AppConfig[] = [
     {
@@ -70,7 +55,7 @@ export const AppsManagementPage: React.FC = () => {
         <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <div>
                 <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>Aplicações da Empresa</h1>
                 <p className="text-gray-600 mt-1">Acompanhe as atualizações dos apps KIDS e TUTORS</p>
@@ -82,10 +67,10 @@ export const AppsManagementPage: React.FC = () => {
           <div className="dashboard-spacing">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {apps.map((app) => (
-                <div key={app.id} className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+                <div key={app.id} className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: getProfessionalColor() }}>
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: roleColor.primary }}>
                         <app.icon size={24} className="text-white" />
                       </div>
                       <div>
@@ -116,11 +101,11 @@ export const AppsManagementPage: React.FC = () => {
 
                   <div className="flex items-center justify-center sm:justify-start">
                     <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                      <button className="px-4 py-2 rounded-lg text-white font-medium flex items-center justify-center space-x-2 transition-colors" style={{ backgroundColor: getProfessionalColor() }}>
+                      <button className="px-4 py-2 rounded-lg text-white font-medium flex items-center justify-center space-x-2 transition-colors" style={{ backgroundColor: roleColor.primary }}>
                         <Eye size={16} />
                         <span>Visualizar</span>
                       </button>
-                      <button className="px-4 py-2 rounded-lg text-white font-medium flex items-center justify-center space-x-2 transition-colors" style={{ backgroundColor: getProfessionalColor() }}>
+                      <button className="px-4 py-2 rounded-lg text-white font-medium flex items-center justify-center space-x-2 transition-colors" style={{ backgroundColor: roleColor.primary }}>
                         <Download size={16} />
                         <span>Download</span>
                       </button>
@@ -134,7 +119,7 @@ export const AppsManagementPage: React.FC = () => {
 
           {/* Recent Activity */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${getProfessionalColor()}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
               <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-black)" }}>Atividades Recentes</h3>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200">

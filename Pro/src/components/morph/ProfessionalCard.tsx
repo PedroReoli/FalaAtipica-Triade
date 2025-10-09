@@ -1,6 +1,6 @@
 import React from 'react';
 import { User, Mic, Heart, Pill, BookOpen, Brain } from 'lucide-react';
-import { useProfessionalColors } from '../../hooks/useProfessionalColors';
+import { getRoleColor } from '../../hooks/useRoleColor';
 import type { ProfessionalType } from '../../types';
 
 interface ProfessionalCardProps {
@@ -38,7 +38,7 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
   onClick,
   className = ''
 }) => {
-  const colors = useProfessionalColors(professionalType);
+  const roleColor = getRoleColor(professionalType);
   const Icon = getProfessionalIcon(professionalType);
 
   return (
@@ -49,11 +49,11 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
         ${className}
       `}
       style={{
-        '--professional-color': colors.primary,
-        '--professional-secondary': colors.secondary,
-        '--professional-light': colors.light,
-        '--professional-dark': colors.dark,
-        borderColor: colors.primary
+        '--professional-color': roleColor.primary,
+        '--professional-secondary': roleColor.secondary,
+        '--professional-light': roleColor.light,
+        '--professional-dark': roleColor.dark,
+        borderColor: roleColor.primary
       } as React.CSSProperties}
       onClick={onClick}
     >
@@ -61,12 +61,12 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
       <div className="flex items-center justify-between mb-4">
         <div
           className="w-12 h-12 rounded-lg flex items-center justify-center"
-          style={{ backgroundColor: colors.light }}
+          style={{ backgroundColor: roleColor.light }}
         >
-          <Icon size={24} style={{ color: colors.primary }} />
+          <Icon size={24} style={{ color: roleColor.primary }} />
         </div>
         <div className="text-right">
-          <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
+          <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
             {data.name}
           </h3>
           <p className="text-sm text-gray-600">{data.specialty}</p>
@@ -76,7 +76,7 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4">
         <div className="text-center">
-          <div className="text-2xl font-bold" style={{ color: colors.primary }}>
+          <div className="text-2xl font-bold" style={{ color: roleColor.primary }}>
             {data.patients}
           </div>
           <div className="text-sm text-gray-600">
@@ -84,7 +84,7 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
           </div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold" style={{ color: colors.primary }}>
+          <div className="text-2xl font-bold" style={{ color: roleColor.primary }}>
             {data.sessions}
           </div>
           <div className="text-sm text-gray-600">
@@ -96,7 +96,7 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
       {/* Hover Effect */}
       <div
         className="absolute inset-0 rounded-xl opacity-0 hover:opacity-10 transition-opacity duration-200"
-        style={{ backgroundColor: colors.primary }}
+        style={{ backgroundColor: roleColor.primary }}
       />
     </div>
   );

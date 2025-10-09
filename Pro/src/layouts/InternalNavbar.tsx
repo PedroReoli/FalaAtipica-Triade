@@ -1,25 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProfessional } from '../contexts/ProfessionalContext';
+import { useRoleColor } from '../hooks/useRoleColor';
 import { ProfessionalTypeSelector } from '../components/common/ProfessionalTypeSelector';
 import { mockAuthService } from '../services/mockAuthService';
 
 export const InternalNavbar: React.FC = () => {
   const navigate = useNavigate();
   const { professionalData } = useProfessional();
-
-  const getProfessionalColor = () => {
-    switch (professionalData.type) {
-      case 'fonoaudiologo':
-        return 'var(--green)';
-      case 'psicologo':
-        return 'var(--blue)';
-      case 'psiquiatra':
-        return 'var(--red)';
-      default:
-        return 'var(--blue)';
-    }
-  };
+  const roleColor = useRoleColor();
 
   const handleLogout = () => {
     mockAuthService.logout();
@@ -27,7 +16,7 @@ export const InternalNavbar: React.FC = () => {
   };
 
          return (
-         <nav className="h-24 bg-white shadow-sm flex items-center justify-between px-4" style={{ borderBottom: `4px solid ${getProfessionalColor()}` }}>
+         <nav className="h-24 bg-white shadow-sm flex items-center justify-between px-4" style={{ borderBottom: `4px solid ${roleColor.primary}` }}>
       {/* Logo e Seletor */}
       <div className="flex items-center space-x-4">
                      <div className="flex items-center space-x-2">
@@ -84,7 +73,7 @@ export const InternalNavbar: React.FC = () => {
         <button
           onClick={handleLogout}
           className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium"
-          style={{ backgroundColor: getProfessionalColor() }}
+          style={{ backgroundColor: roleColor.primary }}
         >
           {professionalData.name.charAt(0)}
         </button>
