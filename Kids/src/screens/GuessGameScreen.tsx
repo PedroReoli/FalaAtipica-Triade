@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Zap, Lightbulb, Check, X, HelpCircle } from 'lucide-react-native';
 import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { adivinhaService } from '../services/adivinhaService';
@@ -119,18 +118,17 @@ export const GuessGameScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
         </View>
-
-        <BottomNavigation 
-          onHome={handleHome}
-          homeActive={false}
-        />
       </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <InternalHeader title="Adivinha" />
+      <InternalHeader 
+        title="Adivinha" 
+        showBackButton={true}
+        onBack={() => navigation.navigate('Dashboard')}
+      />
 
       <View style={styles.content}>
         {/* Informações do jogo */}
@@ -200,11 +198,6 @@ export const GuessGameScreen: React.FC = () => {
           </View>
         )}
       </View>
-
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
-      />
     </SafeAreaView>
   );
 };

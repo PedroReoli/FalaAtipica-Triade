@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Check, X, Star, Sparkles, Image as ImageIcon } from 'lucide-react-native';
 import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { igualDiferenteService, type ParIgualDiferente } from '../services/igualDiferenteService';
@@ -258,11 +257,6 @@ export const IgualDiferenteScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
         </View>
-
-        <BottomNavigation 
-          onHome={handleHome}
-          homeActive={false}
-        />
       </SafeAreaView>
     );
   }
@@ -310,7 +304,11 @@ export const IgualDiferenteScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <InternalHeader title="Igual-Diferente" />
+      <InternalHeader 
+        title="Igual-Diferente" 
+        showBackButton={true}
+        onBack={() => navigation.navigate('Dashboard')}
+      />
 
       <View style={styles.content}>
         {/* Informações do jogo */}
@@ -439,11 +437,6 @@ export const IgualDiferenteScreen: React.FC = () => {
           </Animated.View>
         )}
       </View>
-
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
-      />
     </SafeAreaView>
   );
 };

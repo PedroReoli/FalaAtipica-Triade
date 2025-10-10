@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Check, X, Star, Sparkles, Image as ImageIcon, Lightbulb } from 'lucide-react-native';
 import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { cenaCertaService, type CenaCerta } from '../services/cenaCertaService';
@@ -287,11 +286,6 @@ export const CenaCertaScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
         </View>
-
-        <BottomNavigation 
-          onHome={handleHome}
-          homeActive={false}
-        />
       </SafeAreaView>
     );
   }
@@ -312,7 +306,11 @@ export const CenaCertaScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <InternalHeader title="Cena Certa" />
+      <InternalHeader 
+        title="Cena Certa" 
+        showBackButton={true}
+        onBack={() => navigation.navigate('Dashboard')}
+      />
 
       <View style={styles.content}>
         {/* Info do jogo */}
@@ -434,11 +432,6 @@ export const CenaCertaScreen: React.FC = () => {
           </Animated.View>
         )}
       </View>
-
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
-      />
     </SafeAreaView>
   );
 };
