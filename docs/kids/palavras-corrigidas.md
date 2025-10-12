@@ -187,3 +187,7 @@
 **Versão**: 2.0.0 (Dados Corrigidos)  
 **Status**: ✅ **TESTADO E APROVADO**
 
+
+
+
+

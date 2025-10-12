@@ -318,3 +318,7 @@ formedWord inicial: ['']
 **Versão**: 2.1.0 (Bugs Críticos Corrigidos)  
 **Status**: ✅ **TESTADO E APROVADO**
 
+
+
+
+

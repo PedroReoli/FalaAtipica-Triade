@@ -197,3 +197,4 @@ O jogo será considerado completo quando:
 **Revisão necessária**: Após implementação de ajustes
 
 
+

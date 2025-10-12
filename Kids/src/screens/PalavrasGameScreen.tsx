@@ -12,12 +12,25 @@ import { palavrasService, type PalavraJogo } from '../services/palavrasService';
 type PalavrasGameScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PalavrasGame'>;
 type PalavrasGameScreenRouteProp = RouteProp<RootStackParamList, 'PalavrasGame'>;
 
-interface DraggableItem {
+interface ClickableItem {
   id: string;
   text: string;
-  isInFormation: boolean;
-  formationIndex: number | null;
+  isUsed: boolean;
 }
+
+// Mensagens de parabéns aleatórias
+const MENSAGENS_SUCESSO = [
+  'Isso! Muito bem! 🎉',
+  'Parabéns! Você acertou! ⭐',
+  'Incrível! Continue assim! 🌟',
+  'Perfeito! Você é demais! 🎊',
+  'Ótimo trabalho! 👏',
+];
+
+const getMensagemAleatoria = () => {
+  const randomIndex = Math.floor(Math.random() * MENSAGENS_SUCESSO.length);
+  return MENSAGENS_SUCESSO[randomIndex];
+};
 
 export const PalavrasGameScreen: React.FC = () => {
   const navigation = useNavigation<PalavrasGameScreenNavigationProp>();
@@ -35,13 +48,14 @@ export const PalavrasGameScreen: React.FC = () => {
   const [tentativasAtuais, setTentativasAtuais] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
   
-  // Estados para drag & drop
-  const [items, setItems] = useState<DraggableItem[]>([]);
+  // Estados para sistema de cliques
+  const [items, setItems] = useState<ClickableItem[]>([]);
   const [formedWord, setFormedWord] = useState<string[]>([]);
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [wrongSlots, setWrongSlots] = useState<number[]>([]); // Slots com erro (borda vermelha)
   
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [mensagemSucesso, setMensagemSucesso] = useState<string>('');
   const [respostas, setRespostas] = useState<any[]>([]);
   
   // Refs
@@ -101,9 +115,9 @@ export const PalavrasGameScreen: React.FC = () => {
       setIsCorrect(false);
       setTentativasAtuais(0);
       setShowPrompt(false);
-      setSelectedItemId(null);
+      setWrongSlots([]);
       
-      // Preparar itens arrastáveis conforme o tipo
+      // Preparar itens clicáveis conforme o tipo
       let itemsText: string[] = [];
       if (palavra.tipo === 'silabas' && palavra.silabas) {
         itemsText = palavrasService.embaralharSilabas(palavra.silabas);
@@ -116,8 +130,7 @@ export const PalavrasGameScreen: React.FC = () => {
       setItems(itemsText.map((text, idx) => ({
         id: `item-${idx}-${Date.now()}`,
         text,
-        isInFormation: false,
-        formationIndex: null
+        isUsed: false
       })));
       
       startTimeRef.current = Date.now();
@@ -182,11 +195,12 @@ export const PalavrasGameScreen: React.FC = () => {
     ]).start();
   };
 
-  const handleAddToFormation = (itemId: string) => {
+  // Função para clicar em um item (teletransporta para o próximo slot vazio)
+  const handleItemClick = (itemId: string) => {
     if (showResult) return;
     
     const item = items.find(i => i.id === itemId);
-    if (!item || item.isInFormation) return;
+    if (!item || item.isUsed) return; // Já foi usado
     
     const currentPalavra = palavras[currentIndex];
     const maxSlots = currentPalavra.tipo === 'silabas' 
@@ -195,18 +209,17 @@ export const PalavrasGameScreen: React.FC = () => {
       ? currentPalavra.letras!.length
       : currentPalavra.lacunas!.length;
     
-    // Para "completar", encontrar o próximo índice vazio
+    // Encontrar o próximo slot vazio
     let targetIndex = -1;
     if (currentPalavra.tipo === 'completar') {
       targetIndex = formedWord.findIndex(slot => slot === '');
-      if (targetIndex === -1) return; // Todos os slots estão preenchidos
+      if (targetIndex === -1) return; // Todos os slots preenchidos
     } else {
-      // Para "silabas" e "ordenar", adicionar no final
-      if (formedWord.length >= maxSlots) return;
+      if (formedWord.length >= maxSlots) return; // Já completou
       targetIndex = formedWord.length;
     }
     
-    // Adicionar à palavra formada
+    // Adicionar ao slot
     const newFormedWord = [...formedWord];
     if (currentPalavra.tipo === 'completar') {
       newFormedWord[targetIndex] = item.text;
@@ -215,80 +228,113 @@ export const PalavrasGameScreen: React.FC = () => {
     }
     setFormedWord(newFormedWord);
     
-    // Marcar item como na formação
+    // Marcar item como usado
     setItems(items.map(i => 
-      i.id === itemId 
-        ? { ...i, isInFormation: true, formationIndex: targetIndex }
-        : i
+      i.id === itemId ? { ...i, isUsed: true } : i
     ));
 
-    // Verificar se completou automaticamente
+    // Resetar timer de inatividade
+    startInactivityTimer();
+
+    // Verificar se completou todos os slots
     const isComplete = currentPalavra.tipo === 'completar'
-      ? !newFormedWord.includes('') // Todos os slots preenchidos
+      ? !newFormedWord.includes('')
       : newFormedWord.length === maxSlots;
       
     if (isComplete) {
       setTimeout(() => {
-        handleAutoConfirm();
-      }, 300); // Pequeno delay para ver a animação
+        validateAnswer(newFormedWord);
+      }, 300);
     }
   };
 
-  const handleRemoveFromFormation = (index: number) => {
+  // Função para remover um item de um slot (volta para as opções)
+  const handleSlotClick = (index: number) => {
     if (showResult) return;
     
     const currentPalavra = palavras[currentIndex];
+    const removedText = formedWord[index];
+    if (!removedText) return; // Slot vazio
     
-    // Remover da palavra formada
+    // Remover do slot
     const newFormedWord = [...formedWord];
     if (currentPalavra.tipo === 'completar') {
-      // Para "completar", apenas limpar o slot
       newFormedWord[index] = '';
     } else {
-      // Para "silabas" e "ordenar", remover e reorganizar
       newFormedWord.splice(index, 1);
     }
     setFormedWord(newFormedWord);
     
-    // Atualizar itens
-    setItems(items.map(item => {
-      if (item.formationIndex === index) {
-        return { ...item, isInFormation: false, formationIndex: null };
-      } else if (currentPalavra.tipo !== 'completar' && item.formationIndex !== null && item.formationIndex > index) {
-        // Apenas reorganizar índices para "silabas" e "ordenar"
-        return { ...item, formationIndex: item.formationIndex - 1 };
-      }
-      return item;
-    }));
+    // Devolver o item para as opções (marcar como não usado)
+    setItems(items.map(item => 
+      item.text === removedText && item.isUsed
+        ? { ...item, isUsed: false }
+        : item
+    ));
+
+    // Limpar slots errados
+    setWrongSlots([]);
   };
 
-  const handleAutoConfirm = () => {
+  // Função para validar a resposta quando completar todos os slots
+  const validateAnswer = (completedWord: string[]) => {
     const currentPalavra = palavras[currentIndex];
-    let userAnswer = '';
     let correct = false;
+    let wrongIndices: number[] = [];
 
-    // Validar conforme tipo
+    // Validar conforme tipo e identificar slots errados
     if (currentPalavra.tipo === 'silabas') {
-      userAnswer = formedWord.join('');
+      const userAnswer = completedWord.join('');
       correct = userAnswer === currentPalavra.palavra;
+      
+      if (!correct) {
+        // Identificar sílabas erradas
+        currentPalavra.silabas!.forEach((silaba, idx) => {
+          if (completedWord[idx] !== silaba) {
+            wrongIndices.push(idx);
+          }
+        });
+      }
     } else if (currentPalavra.tipo === 'completar') {
-      const palavra = currentPalavra.letras!.map((letra, idx) => {
+      const palavraCompleta = currentPalavra.letras!.map((letra, idx) => {
         if (currentPalavra.lacunas!.includes(idx)) {
           const lacunaIndex = currentPalavra.lacunas!.indexOf(idx);
-          return formedWord[lacunaIndex] || '_';
+          return completedWord[lacunaIndex] || '_';
         }
         return letra;
       }).join('');
-      userAnswer = palavra;
-      correct = palavra === currentPalavra.palavra;
+      
+      correct = palavraCompleta === currentPalavra.palavra;
+      
+      if (!correct) {
+        // Identificar lacunas erradas
+        currentPalavra.lacunas!.forEach((lacunaPos, idx) => {
+          const letraCorreta = currentPalavra.palavra[lacunaPos];
+          if (completedWord[idx] !== letraCorreta) {
+            wrongIndices.push(idx);
+          }
+        });
+      }
     } else if (currentPalavra.tipo === 'ordenar') {
-      userAnswer = formedWord.join('');
+      const userAnswer = completedWord.join('');
       correct = userAnswer === currentPalavra.palavra;
+      
+      if (!correct) {
+        // Identificar letras em posições erradas
+        currentPalavra.palavra.split('').forEach((letra, idx) => {
+          if (completedWord[idx] !== letra) {
+            wrongIndices.push(idx);
+          }
+        });
+      }
     }
 
     const tempoResposta = Date.now() - startTimeRef.current;
-    setShowResult(true);
-    setIsCorrect(correct);
+    
+    // Mostrar slots errados (se houver)
+    if (!correct) {
+      setWrongSlots(wrongIndices);
+    }
 
     // Registrar
     setRespostas(prev => [...prev, {
@@ -300,6 +346,10 @@ export const PalavrasGameScreen: React.FC = () => {
     }]);
 
     if (correct) {
+      setShowResult(true);
+      setIsCorrect(true);
+      setMensagemSucesso(getMensagemAleatoria()); // Mensagem aleatória
+      
       const pontos = config.pontosPorAcerto + (!showPrompt ? config.bonusSemDica : 0);
       setScore(score + pontos);
       if (!showPrompt) {
@@ -316,9 +366,11 @@ export const PalavrasGameScreen: React.FC = () => {
         }
       }, 2000);
     } else {
+      // Errou: mostrar bordas vermelhas nos slots errados (NÃO limpa automaticamente)
       setAcertosSeguidos(0);
       setTentativasAtuais(tentativasAtuais + 1);
       
+      // Se esgotou tentativas, avança para próxima palavra
       if (tentativasAtuais + 1 >= config.tentativasMaximas) {
         setTimeout(() => {
           if (currentIndex < palavras.length - 1) {
@@ -326,24 +378,10 @@ export const PalavrasGameScreen: React.FC = () => {
           } else {
             finishGame();
           }
-        }, 3000);
-      } else {
-        setTimeout(() => {
-          setShowResult(false);
-          setIsCorrect(false);
-          // Resetar formação
-          if (currentPalavra.tipo === 'completar' && currentPalavra.lacunas) {
-            setFormedWord(Array(currentPalavra.lacunas.length).fill(''));
-          } else {
-            setFormedWord([]);
-          }
-          setItems(items.map(item => ({ 
-            ...item, 
-            isInFormation: false, 
-            formationIndex: null 
-          })));
         }, 2000);
       }
+      // Se ainda tem tentativas, mantém os slots com borda vermelha
+      // A criança pode clicar nos slots vermelhos para remover e tentar de novo
     }
   };
 
@@ -513,45 +551,35 @@ export const PalavrasGameScreen: React.FC = () => {
             }
           ]}
         >
-          {isLacuna && letraPreenchida && (
-            <TouchableOpacity 
-              style={styles.removeButton}
-              onPress={() => handleRemoveFromFormation(lacunaIndex)}
-            >
-              <X size={16} color={COLORS.RED} strokeWidth={3} />
-            </TouchableOpacity>
-          )}
-          <Text style={styles.letterText}>
-            {isLacuna ? (letraPreenchida || '') : letra}
-          </Text>
+          <TouchableOpacity 
+            style={[
+              styles.letterSlotTouchable,
+              wrongSlots.includes(lacunaIndex) && styles.wrongSlot
+            ]}
+            onPress={() => isLacuna && letraPreenchida && handleSlotClick(lacunaIndex)}
+            disabled={!isLacuna || !letraPreenchida}
+          >
+            <Text style={styles.letterText}>
+              {isLacuna ? (letraPreenchida || '') : letra}
+            </Text>
+          </TouchableOpacity>
         </View>
       );
     });
   };
 
-  // Componente clicável (substitui drag & drop)
-  const ClickableItem = ({ item }: { item: DraggableItem }) => {
-    if (item.isInFormation) return null;
+  // Componente clicável (100% baseado em cliques)
+  const ClickableItem = ({ item }: { item: ClickableItem }) => {
+    // Se já foi usado, não mostrar
+    if (item.isUsed) return null;
     
     const isSilaba = currentPalavra.tipo === 'silabas' || currentPalavra.tipo === 'ordenar';
     
-    const handleClick = () => {
-      if (showResult) return;
-      
-      // Adiciona ao próximo espaço vazio automaticamente
-      handleAddToFormation(item.id);
-      
-      // Feedback visual temporário
-      setSelectedItemId(item.id);
-      setTimeout(() => setSelectedItemId(null), 300);
-    };
-    
     return (
       <TouchableOpacity
-        onPress={handleClick}
+        onPress={() => handleItemClick(item.id)}
         style={[
           isSilaba ? styles.silabaButton : styles.letterButton,
-          selectedItemId === item.id && styles.selectedItem,
           showPrompt && {
             shadowColor: COLORS.GREEN,
             shadowOffset: { width: 0, height: 0 },
@@ -609,25 +637,20 @@ export const PalavrasGameScreen: React.FC = () => {
                 ? currentPalavra.silabas!.length 
                 : currentPalavra.letras!.length 
             }).map((_, index) => (
-              <View
-                key={index}
+              <TouchableOpacity 
+                key={index} 
                 style={[
                   styles.formationSlot,
-                  formedWord[index] && styles.filledSlot
+                  formedWord[index] && styles.filledSlot,
+                  wrongSlots.includes(index) && styles.wrongSlot
                 ]}
+                onPress={() => formedWord[index] && handleSlotClick(index)}
+                disabled={!formedWord[index]}
               >
-                {formedWord[index] && (
-                  <TouchableOpacity 
-                    style={styles.removeButton}
-                    onPress={() => handleRemoveFromFormation(index)}
-                  >
-                    <X size={18} color={COLORS.RED} strokeWidth={3} />
-                  </TouchableOpacity>
-                )}
                 <Text style={styles.formationText}>
                   {formedWord[index] || ''}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ))
           )}
         </View>
@@ -658,9 +681,9 @@ export const PalavrasGameScreen: React.FC = () => {
               {isCorrect ? (
                 <>
                   <Animated.View style={{ opacity: confettiAnim }}>
-                    <Sparkles size={64} color={COLORS.YELLOW} />
+                    <Sparkles size={48} color={COLORS.YELLOW} />
                   </Animated.View>
-                  <Text style={styles.centeredToastSuccess}>Isso! Muito bem! 🎉</Text>
+                  <Text style={styles.centeredToastSuccess}>{mensagemSucesso}</Text>
                 </>
               ) : (
                 <>
@@ -757,6 +780,23 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     backgroundColor: '#E8F5E8',
   },
+  wrongSlot: {
+    borderColor: COLORS.RED,
+    borderWidth: 4,
+    borderStyle: 'solid',
+    backgroundColor: '#FFE8E8',
+    shadowColor: COLORS.RED,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  letterSlotTouchable: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   selectedItem: {
     transform: [{ scale: 0.95 }],
     opacity: 0.7,
@@ -836,7 +876,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   centeredToastSuccess: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: 'bold',
     color: COLORS.GREEN,
     textAlign: 'center',

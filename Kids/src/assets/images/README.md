@@ -1,101 +1,112 @@
-# Imagens das Categorias - KIDS
+# 🎨 Imagens dos Jogos - KIDS APP
 
-## Como Adicionar Imagens das Categorias
+## 📁 Estrutura de Pastas Organizada
 
-### Estrutura Atual
-Atualmente, as categorias usam um círculo azul simples como placeholder:
-```tsx
-<View style={styles.categoryIcon} />
+```
+images/
+├── adivinha/           # Jogo 1: Adivinha
+│   ├── sombras/       # Sombras dos objetos
+│   ├── objetos/       # Objetos completos
+│   └── README.md      # Documentação específica
+│
+├── igual-diferente/    # Jogo 2: Igual-Diferente
+│   ├── nivel1/        # Diferenças grandes
+│   ├── nivel2/        # Diferenças médias
+│   ├── nivel3/        # Diferenças sutis
+│   └── README.md      # Documentação específica
+│
+├── cena-certa/         # Jogo 3: Cena Certa
+│   ├── nivel1/        # Relações espaciais
+│   ├── nivel2/        # Ações simples
+│   ├── nivel3/        # Ações complexas
+│   └── README.md      # Documentação específica
+│
+├── palavras/           # Jogo 4: Palavras
+│   ├── animais/       # Categoria Animais (13 imgs)
+│   ├── alimentos/     # Categoria Alimentos (13 imgs)
+│   ├── objetos/       # Categoria Objetos (13 imgs)
+│   └── README.md      # Documentação específica
+│
+└── README.md           # Este arquivo
 ```
 
-### Como Substituir por Imagens
+---
 
-1. **Adicionar as imagens nesta pasta:**
-   ```
-   src/assets/images/
-   ├── categoria-agua.png
-   ├── categoria-suco.png
-   ├── categoria-maca.png
-   ├── categoria-banana.png
-   ├── categoria-pao.png
-   └── categoria-arroz.png
-   ```
+## 🎮 Resumo por Jogo
 
-2. **Atualizar o CategoriesScreen.tsx:**
-   ```tsx
-   // Importar as imagens
-   import aguaImage from '../assets/images/categoria-agua.png';
-   import sucoImage from '../assets/images/categoria-suco.png';
-   // ... outras imagens
+### **1. ADIVINHA** 🤔
+- **Total**: 32 imagens (16 pares)
+- **Tipo**: Sombras + Objetos
+- **Formato**: PNG transparente, 200x200px
+- 📄 [Ver documentação completa](./adivinha/README.md)
 
-   // Atualizar o array de categorias
-   const categories: Category[] = [
-     { id: 'agua', name: 'água', image: aguaImage },
-     { id: 'suco', name: 'suco', image: sucoImage },
-     // ... outras categorias
-   ];
+### **2. IGUAL-DIFERENTE** 🎯
+- **Total**: ~15 imagens únicas
+- **Tipo**: Comparações visuais
+- **Formato**: PNG transparente, 150x150px
+- 📄 [Ver documentação completa](./igual-diferente/README.md)
 
-   // Substituir o View por Image
-   <Image
-     source={category.image}
-     style={styles.categoryIcon}
-     resizeMode="contain"
-   />
-   ```
+### **3. CENA CERTA** 🎭
+- **Total**: 12 cenas
+- **Tipo**: Ilustrações de ações/posições
+- **Formato**: PNG/JPG, 400x300px
+- 📄 [Ver documentação completa](./cena-certa/README.md)
 
-### Especificações das Imagens
+### **4. PALAVRAS** 📝
+- **Total**: 39 imagens (13 por categoria)
+- **Tipo**: Objetos simples
+- **Formato**: PNG transparente, 200x200px
+- 📄 [Ver documentação completa](./palavras/README.md)
 
-- **Formato**: PNG com fundo transparente
-- **Tamanho**: 64x64px (2x para retina)
-- **Estilo**: Simples e colorido
-- **Cores**: Compatível com a paleta do app
+---
 
-### Categorias Disponíveis
+## 📊 Total Geral
 
-- `agua` - água
-- `suco` - suco
-- `maca` - maçã
-- `banana` - banana
-- `pao` - pão (tem badge de completado)
-- `arroz` - arroz
+| Jogo | Imagens | Status |
+|------|---------|--------|
+| Adivinha | 32 | ⚠️ Pendente |
+| Igual-Diferente | 15 | ⚠️ Pendente |
+| Cena Certa | 12 | ⚠️ Pendente |
+| Palavras | 39 | ⚠️ Pendente |
+| **TOTAL** | **98** | **0%** |
 
-### Exemplo de Uso Final
+---
 
-```tsx
-interface Category {
-  id: string;
-  name: string;
-  image: any; // Tipo da imagem
-  completed?: boolean;
-}
+## 🎨 Especificações Gerais
 
-// No render:
-<Image
-  source={category.image}
-  style={styles.categoryIcon}
-  resizeMode="contain"
-/>
-```
+### **Formatos Aceitos:**
+- PNG (preferido para transparência)
+- JPG (para cenas complexas)
 
-### Estilo Atual (Placeholder)
+### **Estilos:**
+- Flat design colorido
+- Cartoon amigável
+- Cores vibrantes e atraentes para crianças
 
-```tsx
-categoryIcon: {
-  width: 32,
-  height: 32,
-  borderRadius: 16,
-  backgroundColor: COLORS.BLUE,
-  // Placeholder para futuras imagens
-},
-```
+### **Qualidade:**
+- Alta resolução (Retina ready)
+- Fundo transparente (quando aplicável)
+- Compressão otimizada
 
-### Estilo Final (Com Imagens)
+---
 
-```tsx
-categoryIcon: {
-  width: 32,
-  height: 32,
-  // borderRadius removido para imagens quadradas
-  // backgroundColor removido
-},
-```
+## 🚀 Próximos Passos
+
+1. [ ] Criar subpastas em cada jogo
+2. [ ] Gerar/adicionar imagens do jogo **Adivinha** (32 imgs)
+3. [ ] Gerar/adicionar imagens do jogo **Igual-Diferente** (15 imgs)
+4. [ ] Gerar/adicionar imagens do jogo **Cena Certa** (12 imgs)
+5. [ ] Gerar/adicionar imagens do jogo **Palavras** (39 imgs)
+6. [ ] Integrar imagens no código
+7. [ ] Testar todos os jogos
+
+---
+
+## 💡 Gerando Imagens com IA
+
+Consulte o README.md de cada jogo para prompts específicos de IA otimizados para cada tipo de imagem.
+
+---
+
+**Última atualização**: 2025-01-10  
+**Status**: Estrutura criada, aguardando imagens

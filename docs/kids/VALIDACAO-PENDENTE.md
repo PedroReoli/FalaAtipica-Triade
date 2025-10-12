@@ -237,3 +237,7 @@ Reproduzível: Sempre
 **Responsável**: Usuário (testes manuais)  
 **Versão**: 2.1.0-BETA
 
+
+
+
+

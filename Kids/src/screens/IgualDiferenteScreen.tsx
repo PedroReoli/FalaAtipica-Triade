@@ -344,12 +344,12 @@ export const IgualDiferenteScreen: React.FC = () => {
           <View style={styles.pairsRow}>
             {/* Item 1 */}
             <View style={styles.itemCard}>
-              {currentPar.tipo === 'palavra' ? (
-                <Text style={styles.itemText}>{currentPar.item1}</Text>
+              {currentPar.item1.tipo === 'texto' ? (
+                <Text style={styles.itemText}>{currentPar.item1.conteudo}</Text>
               ) : (
                 <View style={styles.imagePlaceholder}>
                   <ImageIcon size={60} color={COLORS.BLUE} />
-                  <Text style={styles.imageName}>{currentPar.item1}</Text>
+                  <Text style={styles.imageName}>{currentPar.item1.conteudo}</Text>
                 </View>
               )}
             </View>
@@ -359,12 +359,12 @@ export const IgualDiferenteScreen: React.FC = () => {
 
             {/* Item 2 */}
             <View style={styles.itemCard}>
-              {currentPar.tipo === 'palavra' ? (
-                <Text style={styles.itemText}>{currentPar.item2}</Text>
+              {currentPar.item2.tipo === 'texto' ? (
+                <Text style={styles.itemText}>{currentPar.item2.conteudo}</Text>
               ) : (
                 <View style={styles.imagePlaceholder}>
                   <ImageIcon size={60} color={COLORS.BLUE} />
-                  <Text style={styles.imageName}>{currentPar.item2}</Text>
+                  <Text style={styles.imageName}>{currentPar.item2.conteudo}</Text>
                 </View>
               )}
             </View>

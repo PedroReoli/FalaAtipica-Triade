@@ -7,14 +7,14 @@ import { COLORS } from '../constants/colors';
 
 interface InternalHeaderProps {
   title: string;
-  onBack?: () => void;
   showBackButton?: boolean;
+  onBack?: () => void;
 }
 
 export const InternalHeader: React.FC<InternalHeaderProps> = ({
   title,
-  onBack,
   showBackButton = false,
+  onBack,
 }) => {
   return (
     <SafeAreaView style={styles.container}>
@@ -22,26 +22,28 @@ export const InternalHeader: React.FC<InternalHeaderProps> = ({
       
       {/* Internal Page Header */}
       <View style={styles.header}>
-        {showBackButton && onBack && (
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={onBack}
-            activeOpacity={0.7}
-          >
-            <Home size={28} color={COLORS.TEXT_WHITE} strokeWidth={2.5} />
-          </TouchableOpacity>
-        )}
+        {/* Botão Home (esquerda) - só aparece se showBackButton */}
+        <View style={styles.leftContainer}>
+          {showBackButton && onBack && (
+            <TouchableOpacity 
+              style={styles.backButton}
+              onPress={onBack}
+              activeOpacity={0.7}
+            >
+              <Home size={28} color={COLORS.TEXT_WHITE} strokeWidth={2.5} />
+            </TouchableOpacity>
+          )}
+        </View>
         
-        <Text style={[
-          styles.title,
-          showBackButton && styles.titleWithBack
-        ]}>
-          {title}
-        </Text>
-        
-        <View style={styles.logoContainer}>
+        {/* Logo (centro quando não tem botão, direita quando tem) */}
+        <View style={[styles.logoContainer, !showBackButton && styles.logoContainerCentered]}>
           <Logo size="large" showText={false} color={COLORS.TEXT_WHITE} />
         </View>
+        
+        {/* Título (baixo e centralizado quando não tem botão) */}
+        {showBackButton && (
+          <Text style={styles.title}>{title}</Text>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -54,32 +56,36 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 4,
-    minHeight: 40,
-    position: 'relative',
+    paddingVertical: 12,
+    minHeight: 60,
+  },
+  leftContainer: {
+    width: 44,
+    alignItems: 'flex-start',
   },
   backButton: {
+    padding: 8,
+  },
+  logoContainer: {
+    alignItems: 'flex-end',
+  },
+  logoContainerCentered: {
     position: 'absolute',
-    left: 16,
-    zIndex: 3,
-    padding: 4,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     color: COLORS.TEXT_WHITE,
     fontSize: 22,
     fontWeight: 'bold',
     position: 'absolute',
-    left: 0,
-    right: 0,
+    left: 60,
+    right: 60,
     textAlign: 'center',
     zIndex: 1,
-  },
-  titleWithBack: {
-    left: 56,
-  },
-  logoContainer: {
-    zIndex: 2,
   },
 });

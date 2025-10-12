@@ -5,50 +5,66 @@
       "descricao": "Pares com diferenças bem visíveis",
       "pares": [
         {
-          "id": "n1_01",
-          "tipo": "palavra",
-          "item1": "gato",
-          "item2": "pato",
+          "id": "n1_palavra_01",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "GATO", "tipo": "texto" },
+          "item2": { "conteudo": "PATO", "tipo": "texto" },
           "resposta": "diferente",
           "dificuldade": 1
         },
         {
-          "id": "n1_02",
-          "tipo": "palavra",
-          "item1": "casa",
-          "item2": "mesa",
+          "id": "n1_palavra_02",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "CASA", "tipo": "texto" },
+          "item2": { "conteudo": "MESA", "tipo": "texto" },
           "resposta": "diferente",
           "dificuldade": 1
         },
         {
-          "id": "n1_03",
-          "tipo": "palavra",
-          "item1": "bola",
-          "item2": "bola",
+          "id": "n1_palavra_03",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "BOLA", "tipo": "texto" },
+          "item2": { "conteudo": "BOLA", "tipo": "texto" },
           "resposta": "igual",
           "dificuldade": 1
         },
         {
-          "id": "n1_04",
-          "tipo": "palavra",
-          "item1": "rato",
-          "item2": "gato",
+          "id": "n1_imagem_01",
+          "tipo": "imagem-imagem",
+          "item1": { "conteudo": "cachorro.png", "tipo": "imagem" },
+          "item2": { "conteudo": "gato.png", "tipo": "imagem" },
           "resposta": "diferente",
           "dificuldade": 1
         },
         {
-          "id": "n1_05",
-          "tipo": "imagem",
-          "item1": "cachorro.png",
-          "item2": "gato.png",
+          "id": "n1_imagem_02",
+          "tipo": "imagem-imagem",
+          "item1": { "conteudo": "casa.png", "tipo": "imagem" },
+          "item2": { "conteudo": "casa.png", "tipo": "imagem" },
+          "resposta": "igual",
+          "dificuldade": 1
+        },
+        {
+          "id": "n1_mista_01",
+          "tipo": "imagem-palavra",
+          "item1": { "conteudo": "bola.png", "tipo": "imagem" },
+          "item2": { "conteudo": "BOLA", "tipo": "texto" },
+          "resposta": "igual",
+          "dificuldade": 1
+        },
+        {
+          "id": "n1_mista_02",
+          "tipo": "imagem-palavra",
+          "item1": { "conteudo": "gato.png", "tipo": "imagem" },
+          "item2": { "conteudo": "PATO", "tipo": "texto" },
           "resposta": "diferente",
           "dificuldade": 1
         },
         {
-          "id": "n1_06",
-          "tipo": "imagem",
-          "item1": "casa.png",
-          "item2": "casa.png",
+          "id": "n1_mista_03",
+          "tipo": "imagem-palavra",
+          "item1": { "conteudo": "casa.png", "tipo": "imagem" },
+          "item2": { "conteudo": "CASA", "tipo": "texto" },
           "resposta": "igual",
           "dificuldade": 1
         }
@@ -56,53 +72,69 @@
     },
     "nivel2": {
       "nome": "Nível 2 - Diferenças Médias",
-      "descricao": "Pares com troca de uma letra",
+      "descricao": "Pares com troca de uma letra ou detalhes sutis",
       "pares": [
         {
-          "id": "n2_01",
-          "tipo": "palavra",
-          "item1": "cachorro",
-          "item2": "cachoro",
+          "id": "n2_palavra_01",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "CACHORRO", "tipo": "texto" },
+          "item2": { "conteudo": "CACHORO", "tipo": "texto" },
           "resposta": "diferente",
           "dificuldade": 2
         },
         {
-          "id": "n2_02",
-          "tipo": "palavra",
-          "item1": "prato",
-          "item2": "plato",
+          "id": "n2_palavra_02",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "PRATO", "tipo": "texto" },
+          "item2": { "conteudo": "PLATO", "tipo": "texto" },
           "resposta": "diferente",
           "dificuldade": 2
         },
         {
-          "id": "n2_03",
-          "tipo": "palavra",
-          "item1": "carro",
-          "item2": "carro",
+          "id": "n2_palavra_03",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "CARRO", "tipo": "texto" },
+          "item2": { "conteudo": "CARRO", "tipo": "texto" },
           "resposta": "igual",
           "dificuldade": 2
         },
         {
-          "id": "n2_04",
-          "tipo": "palavra",
-          "item1": "flor",
-          "item2": "frol",
+          "id": "n2_imagem_01",
+          "tipo": "imagem-imagem",
+          "item1": { "conteudo": "bolo_chocolate.png", "tipo": "imagem" },
+          "item2": { "conteudo": "bolo_morango.png", "tipo": "imagem" },
           "resposta": "diferente",
           "dificuldade": 2
         },
         {
-          "id": "n2_05",
-          "tipo": "imagem",
-          "item1": "bolo_chocolate.png",
-          "item2": "bolo_morango.png",
+          "id": "n2_imagem_02",
+          "tipo": "imagem-imagem",
+          "item1": { "conteudo": "arvore_verde.png", "tipo": "imagem" },
+          "item2": { "conteudo": "arvore_verde.png", "tipo": "imagem" },
+          "resposta": "igual",
+          "dificuldade": 2
+        },
+        {
+          "id": "n2_mista_01",
+          "tipo": "imagem-palavra",
+          "item1": { "conteudo": "cavalo.png", "tipo": "imagem" },
+          "item2": { "conteudo": "CAVALO", "tipo": "texto" },
+          "resposta": "igual",
+          "dificuldade": 2
+        },
+        {
+          "id": "n2_mista_02",
+          "tipo": "imagem-palavra",
+          "item1": { "conteudo": "cachorro.png", "tipo": "imagem" },
+          "item2": { "conteudo": "CAVALO", "tipo": "texto" },
           "resposta": "diferente",
           "dificuldade": 2
         },
         {
-          "id": "n2_06",
-          "tipo": "imagem",
-          "item1": "arvore_verde.png",
-          "item2": "arvore_verde.png",
+          "id": "n2_mista_03",
+          "tipo": "imagem-palavra",
+          "item1": { "conteudo": "flor.png", "tipo": "imagem" },
+          "item2": { "conteudo": "FLOR", "tipo": "texto" },
           "resposta": "igual",
           "dificuldade": 2
         }
@@ -110,54 +142,70 @@
     },
     "nivel3": {
       "nome": "Nível 3 - Diferenças Sutis",
-      "descricao": "Pares quase idênticos (ditongos, acentos, clusters)",
+      "descricao": "Pares quase idênticos (ditongos, acentos, detalhes mínimos)",
       "pares": [
         {
-          "id": "n3_01",
-          "tipo": "palavra",
-          "item1": "avó",
-          "item2": "avo",
+          "id": "n3_palavra_01",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "AVÓ", "tipo": "texto" },
+          "item2": { "conteudo": "AVO", "tipo": "texto" },
           "resposta": "diferente",
           "dificuldade": 3
         },
         {
-          "id": "n3_02",
-          "tipo": "palavra",
-          "item1": "pranta",
-          "item2": "planta",
+          "id": "n3_palavra_02",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "PRANTA", "tipo": "texto" },
+          "item2": { "conteudo": "PLANTA", "tipo": "texto" },
           "resposta": "diferente",
           "dificuldade": 3
         },
         {
-          "id": "n3_03",
-          "tipo": "palavra",
-          "item1": "livro",
-          "item2": "livro",
+          "id": "n3_palavra_03",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "LIVRO", "tipo": "texto" },
+          "item2": { "conteudo": "LIVRO", "tipo": "texto" },
           "resposta": "igual",
           "dificuldade": 3
         },
         {
-          "id": "n3_04",
-          "tipo": "palavra",
-          "item1": "café",
-          "item2": "cafe",
+          "id": "n3_palavra_04",
+          "tipo": "palavra-palavra",
+          "item1": { "conteudo": "CAFÉ", "tipo": "texto" },
+          "item2": { "conteudo": "CAFE", "tipo": "texto" },
           "resposta": "diferente",
           "dificuldade": 3
         },
         {
-          "id": "n3_05",
-          "tipo": "imagem",
-          "item1": "cadeira_esquerda.png",
-          "item2": "cadeira_direita.png",
+          "id": "n3_imagem_01",
+          "tipo": "imagem-imagem",
+          "item1": { "conteudo": "cadeira_esquerda.png", "tipo": "imagem" },
+          "item2": { "conteudo": "cadeira_direita.png", "tipo": "imagem" },
           "resposta": "diferente",
           "dificuldade": 3
         },
         {
-          "id": "n3_06",
-          "tipo": "imagem",
-          "item1": "bicicleta_vermelha.png",
-          "item2": "bicicleta_vermelha.png",
+          "id": "n3_imagem_02",
+          "tipo": "imagem-imagem",
+          "item1": { "conteudo": "bicicleta_vermelha.png", "tipo": "imagem" },
+          "item2": { "conteudo": "bicicleta_vermelha.png", "tipo": "imagem" },
           "resposta": "igual",
+          "dificuldade": 3
+        },
+        {
+          "id": "n3_mista_01",
+          "tipo": "imagem-palavra",
+          "item1": { "conteudo": "elefante.png", "tipo": "imagem" },
+          "item2": { "conteudo": "ELEFANTE", "tipo": "texto" },
+          "resposta": "igual",
+          "dificuldade": 3
+        },
+        {
+          "id": "n3_mista_02",
+          "tipo": "imagem-palavra",
+          "item1": { "conteudo": "borboleta.png", "tipo": "imagem" },
+          "item2": { "conteudo": "FORMIGA", "tipo": "texto" },
+          "resposta": "diferente",
           "dificuldade": 3
         }
       ]
@@ -171,4 +219,3 @@
     "embaralharPares": true
   }
 }
-
