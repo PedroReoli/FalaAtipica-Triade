@@ -1,26 +1,31 @@
 # Documentação - FalaAtípica
 
+## Apresentação
+
+### 📊 PowerPoint
+- [Estrutura da Apresentação](./apresentacao-powerpoint.md) - Estrutura dos slides para apresentação do TCC
+
 ## Estrutura da Documentação
 
 ### 📋 Regras de Negócio
-- [Regras de Negócio](./RegraDeNegocios/README.md) - Documentação das regras de negócio do sistema
+- [Regras de Negócio](./RegraDeNegocios/regras-de-negocio.md) - Documentação das regras de negócio do sistema
 
 ### 📅 Sprints
-- [Sprints](./sprints/README.md) - Documentação e acompanhamento das sprints de desenvolvimento
+- [Sprints](./sprints/sprints-tracking.md) - Documentação e acompanhamento das sprints de desenvolvimento
 
 ### 🎨 Mockups
-- [Mockups](./mockups/README.md) - Mockups e wireframes das telas
+- [Mockups](./mockups/design-mockups.md) - Mockups e wireframes das telas
 
 ### 🔌 API
-- [API](./api/README.md) - Documentação da API e integrações
+- [API](./api/api-documentation.md) - Documentação da API e integrações
 
 ### 🚀 Deploy
-- [Deploy](./deployment/README.md) - Guias de deploy e configuração de ambiente
+- [Deploy](./deployment/deployment-guide.md) - Guias de deploy e configuração de ambiente
 
 ## Aplicações
 
 ### 📱 KIDS
-- [Documentação KIDS](./kids/README.md) - Documentação específica da aplicação Kids
+- [Documentação KIDS](./kids/kids-app-documentation.md) - Documentação específica da aplicação Kids
 - [Telas KIDS](./kids/telas.md) - Lista e descrição das telas
 - [Componentes KIDS](./kids/componentes.md) - Componentes específicos
 
@@ -30,7 +35,7 @@
 - [Componentes TUTORS](./tutors/componentes.md) - Componentes específicos
 
 ### 💼 PRO
-- [Documentação PRO](./pro/README.md) - Documentação específica da aplicação Pro
+- [Documentação PRO](./pro/pro-app-documentation.md) - Documentação específica da aplicação Pro
 - [Telas PRO](./pro/telas.md) - Lista e descrição das telas
 - [Componentes PRO](./pro/componentes.md) - Componentes específicos
 - [Regras de Negócio PRO](./pro/regras-negocio-pro.md) - Regras de negócio por profissional
