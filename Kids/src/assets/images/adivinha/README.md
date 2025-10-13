@@ -83,3 +83,4 @@ import objeto from './adivinha/objetos/cachorro.png';
 
 **Total de Imagens**: 32 (16 sombras + 16 objetos)
 
+

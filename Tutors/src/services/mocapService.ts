@@ -1,6 +1,9 @@
 // Serviço para consumir dados MOCAP/TUTORS
 // Simula uma API real que será substituída pelo Supabase na fase final
 
+import perfilData from '../../../Mockup/TUTORS/perfil.json';
+import progressData from '../../../Mockup/TUTORS/progress.json';
+
 // Dados mockados diretamente no arquivo (padrão KIDS)
 const usersData = {
   users: [
@@ -1359,6 +1362,17 @@ export class MocapService {
       totalTimeSpent,
       categoriesPlayed,
     };
+  }
+
+  // Métodos específicos para perfil do tutor
+  static async getTutorProfile(tutorId: string = 'tutor_001'): Promise<any> {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return perfilData;
+  }
+
+  static async getChildrenProgress(): Promise<any> {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return progressData;
   }
 }
 

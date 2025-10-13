@@ -1,12 +1,14 @@
 {
   "usuario": {
-    "id": "usuario_001",
-    "nome": "Maria Silva",
-    "email": "maria.silva@email.com",
-    "telefone": "(11) 99999-9999",
-    "relacionamento": "Mãe",
+    "id": "tutor_001",
+    "nome": "Carlos Silva",
+    "email": "carlos@tutors.com",
+    "telefone": "(11) 99999-8888",
+    "relacionamento": "Pai",
     "dataCadastro": "2024-01-10",
     "ultimoAcesso": "2024-01-21T14:30:00Z",
+    "profissionalId": "prof_001",
+    "profissionalNome": "Dra. Maria Silva",
     "configuracoes": {
       "notificacoes": true,
       "relatoriosAutomaticos": true,
@@ -16,48 +18,54 @@
   },
   "criancas": [
     {
-      "id": "crianca_001",
+      "id": "1",
       "nome": "João Silva",
-      "idade": 5,
-      "dataNascimento": "2019-03-15",
+      "idade": 8,
+      "dataNascimento": "2016-03-15",
       "relacionamento": "Filho",
       "dataInicio": "2024-01-15",
       "status": "ativo",
       "progressoGeral": 75,
       "ultimaAtividade": "2024-01-21T10:30:00Z",
       "foto": "joao_silva.jpg",
+      "diagnostico": "Atraso no desenvolvimento da linguagem",
       "observacoes": "Criança muito ativa e interessada nos jogos. Tem facilidade com animais.",
       "preferencias": {
         "categoriaFavorita": "animais",
         "horarioPreferido": "manha",
         "dificuldadePreferida": "media"
-      }
-    },
-    {
-      "id": "crianca_002",
-      "nome": "Ana Costa",
-      "idade": 4,
-      "dataNascimento": "2020-05-20",
-      "relacionamento": "Sobrinha",
-      "dataInicio": "2024-01-10",
-      "status": "ativo",
-      "progressoGeral": 60,
-      "ultimaAtividade": "2024-01-21T11:00:00Z",
-      "foto": "ana_costa.jpg",
-      "observacoes": "Criança mais tímida, mas está se adaptando bem aos jogos.",
-      "preferencias": {
-        "categoriaFavorita": "cores",
-        "horarioPreferido": "tarde",
-        "dificuldadePreferida": "facil"
-      }
+      },
+      "jogos": {
+        "totalJogos": 24,
+        "jogosCompletos": 18,
+        "tempoTotal": 45,
+        "sequenciaAtual": 3,
+        "melhorSequencia": 5
+      },
+      "conquistas": [
+        {
+          "id": "primeira_conquista",
+          "nome": "Primeira Estrela",
+          "descricao": "Completou o primeiro jogo",
+          "data": "2024-01-16T16:20:00Z",
+          "icone": "star"
+        },
+        {
+          "id": "animais_mestre",
+          "nome": "Mestre dos Animais",
+          "descricao": "Completou todos os jogos de animais",
+          "data": "2024-01-20T10:30:00Z",
+          "icone": "trophy"
+        }
+      ]
     }
   ],
   "estatisticas": {
-    "totalCriancas": 2,
-    "criancasAtivas": 2,
-    "progressoMedio": 67.5,
-    "totalTempoJogado": 75,
-    "conquistasTotais": 3,
-    "relatoriosGerados": 4
+    "totalCriancas": 1,
+    "criancasAtivas": 1,
+    "progressoMedio": 75,
+    "totalTempoJogado": 45,
+    "conquistasTotais": 2,
+    "relatoriosGerados": 3
   }
 }

@@ -203,3 +203,4 @@ No text in image.
 - Verificar se todas as 39 palavras do JSON têm imagens correspondentes
 
 
+

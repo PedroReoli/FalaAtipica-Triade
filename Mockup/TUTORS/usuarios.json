@@ -1,0 +1,59 @@
+{
+  "tutores": [
+    {
+      "id": "tutor_001",
+      "nome": "Carlos Silva",
+      "email": "carlos@tutors.com",
+      "senha": "123456",
+      "telefone": "(11) 99999-8888",
+      "relacionamento": "Pai",
+      "dataCadastro": "2024-01-10",
+      "ultimoAcesso": "2024-01-21T14:30:00Z",
+      "criancasIds": ["1"],
+      "profissionalId": "prof_001",
+      "configuracoes": {
+        "notificacoes": true,
+        "relatoriosAutomaticos": true,
+        "lembretes": true,
+        "idioma": "pt-BR"
+      }
+    },
+    {
+      "id": "tutor_002",
+      "nome": "Ana Santos",
+      "email": "ana@tutors.com",
+      "senha": "123456",
+      "telefone": "(11) 98888-7777",
+      "relacionamento": "Mãe",
+      "dataCadastro": "2024-01-08",
+      "ultimoAcesso": "2024-01-21T16:45:00Z",
+      "criancasIds": ["2"],
+      "profissionalId": "prof_001",
+      "configuracoes": {
+        "notificacoes": true,
+        "relatoriosAutomaticos": false,
+        "lembretes": true,
+        "idioma": "pt-BR"
+      }
+    },
+    {
+      "id": "tutor_003",
+      "nome": "Lucia Costa",
+      "email": "lucia@tutors.com",
+      "senha": "123456",
+      "telefone": "(11) 97777-6666",
+      "relacionamento": "Mãe",
+      "dataCadastro": "2024-01-05",
+      "ultimoAcesso": "2024-01-21T18:20:00Z",
+      "criancasIds": ["3"],
+      "profissionalId": "prof_002",
+      "configuracoes": {
+        "notificacoes": true,
+        "relatoriosAutomaticos": true,
+        "lembretes": false,
+        "idioma": "pt-BR"
+      }
+    }
+  ]
+}
+

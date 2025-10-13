@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { 
@@ -13,11 +13,52 @@ import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { mockAuthService } from '../services/mockAuthService';
+import MocapService from '../services/mocapService';
 
 type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
+interface Crianca {
+  id: string;
+  nome: string;
+  idade: number;
+  diagnostico: string;
+  progressoGeral: number;
+}
+
 export const DashboardScreen: React.FC = () => {
   const navigation = useNavigation<DashboardScreenNavigationProp>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [userName, setUserName] = useState('');
+  const [criancas, setCriancas] = useState<Crianca[]>([]);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Pegar usuário logado
+      const currentUser = mockAuthService.getCurrentUser();
+      
+      if (currentUser) {
+        setUserName(currentUser.nome);
+        
+        // Carregar perfil do tutor
+        const perfilData = await MocapService.getTutorProfile(currentUser.id);
+        
+        if (perfilData && perfilData.criancas) {
+          setCriancas(perfilData.criancas);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleNavigateToFeature = (feature: keyof RootStackParamList) => {
     if (feature === 'ChildProfile') {
@@ -35,6 +76,17 @@ export const DashboardScreen: React.FC = () => {
     navigation.navigate('Profile');
   };
 
+  if (isLoading) {
+    return (
+      <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.BLUE} />
+          <Text style={styles.loadingText}>Carregando...</Text>
+        </View>
+      </SafeAreaWrapper>
+    );
+  }
+
   return (
     <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
       {/* Header Section */}
@@ -46,7 +98,7 @@ export const DashboardScreen: React.FC = () => {
           </View>
           <View style={styles.profileInfo}>
             <Text style={styles.greeting}>Olá</Text>
-            <Text style={styles.userName}>[NOME]</Text>
+            <Text style={styles.userName}>{userName || 'Usuário'}</Text>
           </View>
         </View>
       </View>
@@ -101,33 +153,39 @@ export const DashboardScreen: React.FC = () => {
 
         {/* Crianças Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Crianças</Text>
+          <Text style={styles.sectionTitle}>Crianças ({criancas.length})</Text>
           <View style={styles.childrenList}>
-            <TouchableOpacity 
-              style={styles.childCard}
-              onPress={() => handleNavigateToFeature('ChildProfile')}
-            >
-              <View style={styles.childImage}>
-                <User size={20} color={COLORS.TEXT_WHITE} />
+            {criancas.length > 0 ? (
+              criancas.map((crianca) => (
+                <TouchableOpacity 
+                  key={crianca.id}
+                  style={styles.childCard}
+                  onPress={() => navigation.navigate('ChildProfile', { childId: crianca.id })}
+                >
+                  <View style={styles.childImage}>
+                    <User size={20} color={COLORS.TEXT_WHITE} />
+                  </View>
+                  <View style={styles.childInfo}>
+                    <View style={styles.childHeader}>
+                      <Text style={styles.childName}>{crianca.nome}</Text>
+                      <Text style={styles.childAge}>{crianca.idade} anos</Text>
+                    </View>
+                    <Text style={styles.childDescription}>{crianca.diagnostico}</Text>
+                    {/* Barra de Progresso */}
+                    <View style={styles.progressBarContainer}>
+                      <View style={styles.progressBarBackground}>
+                        <View style={[styles.progressBarFill, { width: `${crianca.progressoGeral}%` }]} />
+                      </View>
+                      <Text style={styles.progressText}>{crianca.progressoGeral}%</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <View style={styles.emptyState}>
+                <Text style={styles.emptyStateText}>Nenhuma criança cadastrada</Text>
               </View>
-              <View style={styles.childInfo}>
-                <Text style={styles.childName}>[Nome Criança 01]</Text>
-                <Text style={styles.childDescription}>[NEUROATIPICIDADE]</Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.childCard}
-              onPress={() => handleNavigateToFeature('ChildProfile')}
-            >
-              <View style={styles.childImage}>
-                <User size={20} color={COLORS.TEXT_WHITE} />
-              </View>
-              <View style={styles.childInfo}>
-                <Text style={styles.childName}>[Nome Criança 02]</Text>
-                <Text style={styles.childDescription}>[NEUROATIPICIDADE]</Text>
-              </View>
-            </TouchableOpacity>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -143,6 +201,17 @@ export const DashboardScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 16,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: COLORS.TEXT_BLACK,
+    fontWeight: '500',
+  },
   header: {
     backgroundColor: COLORS.BACKGROUND_BLUE,
     paddingHorizontal: 20,
@@ -241,16 +310,64 @@ const styles = StyleSheet.create({
   },
   childInfo: {
     flex: 1,
+    gap: 8,
+  },
+  childHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   childName: {
     fontSize: 16,
     fontWeight: 'bold',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 4,
+  },
+  childAge: {
+    fontSize: 12,
+    color: COLORS.TEXT_BLACK,
+    opacity: 0.7,
+    backgroundColor: COLORS.BLUE,
+    color: COLORS.TEXT_WHITE,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+    fontWeight: '600',
   },
   childDescription: {
     fontSize: 14,
     color: COLORS.TEXT_BLACK,
-    opacity: 0.7,
+    opacity: 0.8,
+  },
+  progressBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  progressBarBackground: {
+    flex: 1,
+    height: 8,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: COLORS.GREEN,
+    borderRadius: 4,
+  },
+  progressText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.TEXT_BLACK,
+    minWidth: 35,
+  },
+  emptyState: {
+    padding: 32,
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    fontSize: 14,
+    color: COLORS.TEXT_BLACK,
+    opacity: 0.6,
   },
 });

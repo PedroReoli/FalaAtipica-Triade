@@ -101,3 +101,4 @@ import gato from './igual-diferente/nivel1/gato.png';
 **Total de Imagens**: ~15 imagens únicas
 
 
+

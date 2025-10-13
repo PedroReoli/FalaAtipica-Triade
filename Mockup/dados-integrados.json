@@ -1,0 +1,72 @@
+{
+  "sistema": {
+    "nome": "FalaAtípica",
+    "versao": "1.0.0",
+    "descricao": "Sistema integrado de dados entre Pro, Tutors e Kids"
+  },
+  "estrutura": {
+    "profissionais": "Mockup/PRO/profissionais.json",
+    "tutores": "Mockup/TUTORS/perfil.json",
+    "criancas": "Mockup/KIDS/usuarios.json",
+    "relacionamentos": [
+      {
+        "profissional_id": "prof_001",
+        "profissional_nome": "Dra. Maria Silva",
+        "profissional_email": "fono@teste.com",
+        "tutores": [
+          {
+            "tutor_id": "tutor_001",
+            "tutor_nome": "Carlos Silva",
+            "tutor_email": "carlos@tutors.com",
+            "criancas": [
+              {
+                "crianca_id": "1",
+                "crianca_nome": "João Silva",
+                "crianca_email": "joao@kids.com",
+                "idade": 8,
+                "diagnostico": "Atraso no desenvolvimento da linguagem"
+              }
+            ]
+          },
+          {
+            "tutor_id": "tutor_002",
+            "tutor_nome": "Ana Santos",
+            "tutor_email": "ana@tutors.com",
+            "criancas": [
+              {
+                "crianca_id": "2",
+                "crianca_nome": "Maria Santos",
+                "crianca_email": "maria@kids.com",
+                "idade": 6,
+                "diagnostico": "Transtorno fonológico"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "profissional_id": "prof_002",
+        "profissional_nome": "Dr. João Santos",
+        "profissional_email": "psico@teste.com",
+        "tutores": [
+          {
+            "tutor_id": "tutor_003",
+            "tutor_nome": "Lucia Costa",
+            "tutor_email": "lucia@tutors.com",
+            "criancas": [
+              {
+                "crianca_id": "3",
+                "crianca_nome": "Pedro Costa",
+                "crianca_email": "pedro@kids.com",
+                "idade": 10,
+                "diagnostico": "Disfasia do desenvolvimento"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "nota": "Este arquivo documenta a integração entre os 3 sistemas. Os dados reais estão nos arquivos específicos de cada módulo."
+}
+

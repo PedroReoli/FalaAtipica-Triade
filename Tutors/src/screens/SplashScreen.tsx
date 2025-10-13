@@ -47,6 +47,7 @@ export const SplashScreen: React.FC = () => {
       </View>
     </SafeAreaWrapper>
   );
+
 };
 
 const { width, height } = Dimensions.get('window');
