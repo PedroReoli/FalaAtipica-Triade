@@ -214,7 +214,7 @@ FalaAtipica-Triade/
   - [ ] Botões
   - [ ] Cards
   - [ ] Inputs
-  - [ ] Modals
+  - [X] Modals
   - [ ] Toasts
 - [ ] **Revisar responsividade:**
 
