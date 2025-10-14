@@ -1,0 +1,365 @@
+# 📋 TODO - FalaAtípica Triade
+
+**Última Atualização:** 14 de Outubro de 2025
+**Versão:** 1.0.0
+
+---
+
+## 🚨 PRIORIDADE CRÍTICA
+
+### 🔴 **Integração API no Pro**
+
+- [ ] **Criar `Pro/src/services/mockDataService.ts`**
+
+  - [ ] Função para carregar `pacientes.json`
+  - [ ] Função para carregar `sessoes.json`
+  - [ ] Função para carregar `relatorios.json`
+  - [ ] Função para carregar `medicamentos.json`
+  - [ ] Função para salvar paciente (localStorage + API)
+  - [ ] Função para salvar sessão (localStorage + API)
+  - [ ] Função para atualizar paciente (localStorage + API)
+- [ ] **Integrar `useAPIIntegration` nas páginas principais:**
+
+  - [X] `LoginPage.tsx` (já integrado)
+  - [ ] `PatientsPage.tsx`
+  - [ ] `SessionsPage.tsx`
+  - [ ] `ReportsPage.tsx`
+  - [ ] `NewPatientPage.tsx`
+  - [ ] `NewSessionPage.tsx`
+  - [ ] `PatientDetailsPage.tsx`
+  - [ ] `MedicationsPage.tsx`
+  - [ ] `SettingsPage.tsx`
+- [ ] **Implementar fallback offline em todas as páginas**
+
+  - [ ] Testar cada página com API online
+  - [ ] Testar cada página com API offline
+  - [ ] Adicionar logs de debug em todas as operações
+- [ ] **Testar CRUD completo:**
+
+  - [ ] Create (Criar paciente, sessão, relatório)
+  - [ ] Read (Listar pacientes, sessões, relatórios)
+  - [ ] Update (Editar paciente, sessão, relatório)
+  - [ ] Delete (Deletar paciente, sessão - se necessário)
+
+---
+
+## 📄 DOCUMENTAÇÃO PENDENTE
+
+### 🔴 **Crítica:**
+
+- [ ] **Documentar integração API no Pro** (`docs/pro/integracao-api.md`)
+- [ ] **Atualizar README do Pro** com instruções de API
+- [ ] **Criar guia de troubleshooting** para API offline
+
+### 🟡 **Alta:**
+
+- [ ] **Documentar mockDataService** (`docs/pro/mock-data-service.md`)
+- [ ] **Atualizar diagramas de arquitetura** incluindo API
+- [ ] **Documentar fluxo de fallback** para cada funcionalidade
+
+### 🟢 **Média:**
+
+- [ ] **Criar changelog** das mudanças de integração API
+- [ ] **Documentar boas práticas** de integração API
+- [ ] **Atualizar guia de desenvolvimento** do Pro
+
+---
+
+## 🌐 SITE INSTITUCIONAL - FalaAtípica
+
+### 🎯 **Novo Projeto: Site Institucional**
+
+**Objetivo:** Criar um site front-end em React para apresentar o projeto FalaAtípica e suas aplicações.
+
+#### **Estrutura:**
+
+```
+FalaAtipica-Triade/
+├── Site/                    # Nova pasta para o site institucional
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   │   ├── Home.tsx
+│   │   │   └── Apresentacao.tsx    # Rota /apresentacao
+│   │   ├── styles/
+│   │   └── App.tsx
+│   ├── package.json
+│   └── README.md
+```
+
+#### **Tarefas:**
+
+- [ ] **Setup do Projeto:**
+
+  - [ ] Criar pasta `Site/` na raiz do repositório
+  - [ ] Inicializar projeto React + TypeScript + Vite
+  - [ ] Configurar Tailwind CSS
+  - [ ] Configurar React Router
+  - [ ] Adicionar script no `package.json` raiz: `npm run site`
+- [ ] **Página Home (`/`):**
+
+  - [ ] Hero Section com logo FalaAtípica
+  - [ ] Seção "Sobre o Projeto"
+  - [ ] Cards apresentando os 3 apps:
+    - [ ] FalaAtípica KIDS
+    - [ ] FalaAtípica TUTORS
+    - [ ] FalaAtípica PRO
+  - [ ] Seção "Recursos" de cada app
+  - [ ] Seção "Tecnologias Utilizadas"
+  - [ ] Footer com informações de contato
+  - [ ] Navegação para `/apresentacao`
+- [ ] **Página Apresentação (`/apresentacao`):**
+
+  - [ ] Sistema de slides interativo (sem PowerPoint/Gamma)
+  - [ ] Slide 1: Introdução ao projeto
+  - [ ] Slide 2: Problema identificado
+  - [ ] Slide 3: Solução proposta
+  - [ ] Slide 4: Arquitetura do sistema
+  - [ ] Slide 5: Demonstração Kids
+  - [ ] Slide 6: Demonstração Tutors
+  - [ ] Slide 7: Demonstração Pro
+  - [ ] Slide 8: API Local e sincronização
+  - [ ] Slide 9: Resultados e métricas
+  - [ ] Slide 10: Próximos passos
+  - [ ] Navegação entre slides (setas, teclado)
+  - [ ] Indicador de progresso
+  - [ ] Modo apresentador (notas ocultas)
+- [ ] **Design e UX:**
+
+  - [ ] Usar paleta de cores do FalaAtípica:
+    - [ ] Azul: `#1e88e5`
+    - [ ] Verde: `#43a047`
+    - [ ] Vermelho: `#e53935`
+    - [ ] Amarelo: `#fbc02d`
+    - [ ] Fundo Azul: `#054776`
+    - [ ] Fundo Branco: `#f4f6ff`
+  - [ ] Responsivo (desktop, tablet, mobile)
+  - [ ] Animações suaves entre slides
+  - [ ] Transições elegantes
+  - [ ] Ícones (Lucide React)
+- [ ] **Recursos Adicionais:**
+
+  - [ ] Embed de vídeos de demonstração (se houver)
+  - [ ] Screenshots dos apps
+  - [ ] Gráficos e estatísticas
+  - [ ] Links para repos e documentação
+  - [ ] QR Code para acesso rápido aos apps
+- [ ] **Documentação:**
+
+  - [ ] Criar `Site/README.md` com instruções
+  - [ ] Documentar estrutura de slides
+  - [ ] Guia de personalização
+  - [ ] Instruções de deploy (Vercel/Netlify)
+- [ ] **Deploy:**
+
+  - [ ] Configurar build de produção
+  - [ ] Deploy no Vercel ou Netlify
+  - [ ] Configurar domínio customizado (opcional)
+  - [ ] Adicionar analytics (opcional)
+
+---
+
+## 🔧 MELHORIAS TÉCNICAS
+
+### 🟡 **Alta Prioridade:**
+
+- [ ] **Otimizar performance do Pro:**
+
+  - [ ] Code splitting
+  - [ ] Lazy loading de componentes
+  - [ ] Memoization onde necessário
+  - [ ] Otimizar re-renders
+- [ ] **Melhorar UX:**
+
+  - [ ] Loading states consistentes
+  - [ ] Skeleton loaders
+  - [ ] Mensagens de erro amigáveis
+  - [ ] Toasts de feedback
+- [ ] **Adicionar validações:**
+
+  - [ ] Validação de formulários
+  - [ ] Sanitização de inputs
+  - [ ] Mensagens de validação claras
+
+### 🟢 **Média Prioridade:**
+
+- [ ] **Refatorar código duplicado:**
+
+  - [ ] Criar componentes reutilizáveis
+  - [ ] Extrair lógica comum para hooks
+  - [ ] Padronizar estrutura de arquivos
+- [ ] **Melhorar acessibilidade:**
+
+  - [ ] ARIA labels
+  - [ ] Navegação por teclado
+  - [ ] Contraste adequado
+  - [ ] Screen reader support
+
+---
+
+## 🎨 UI/UX PENDENTE
+
+### 🔴 **Crítica:**
+
+- [ ] **Revisar PatientDetailsPage (Pro):**
+  - [ ] Melhorar aba "Aplicações"
+  - [ ] Layout mais compacto
+  - [ ] UX mais intuitiva
+
+### 🟡 **Alta:**
+
+- [ ] **Padronizar componentes:**
+
+  - [ ] Botões
+  - [ ] Cards
+  - [ ] Inputs
+  - [ ] Modals
+  - [ ] Toasts
+- [ ] **Revisar responsividade:**
+
+  - [ ] Testar em mobile
+  - [ ] Testar em tablet
+  - [ ] Testar em diferentes resoluções
+
+### 🟢 **Média:**
+
+- [ ] **Adicionar animações:**
+  - [ ] Loading states
+  - [ ] Transições de página
+  - [ ] Hover effects
+  - [ ] Micro-interactions
+
+---
+
+## 🧪 TESTES
+
+### 🟡 **Alta Prioridade:**
+
+- [ ] **Testar fluxo completo:**
+
+  - [ ] Login em todos os apps
+  - [ ] CRUD de pacientes (Pro)
+  - [ ] CRUD de sessões (Pro)
+  - [ ] Jogos (Kids)
+  - [ ] Dashboard (Tutors)
+- [ ] **Testar integração API:**
+
+  - [ ] API online em todos os apps
+  - [ ] API offline em todos os apps
+  - [ ] Sincronização em tempo real
+  - [ ] Fallback automático
+
+### 🟢 **Média Prioridade:**
+
+- [ ] **Testar em diferentes navegadores:**
+
+  - [ ] Chrome
+  - [ ] Firefox
+  - [ ] Edge
+  - [ ] Safari (se possível)
+- [ ] **Testar em dispositivos:**
+
+  - [ ] Emulador Android
+  - [ ] Dispositivo físico Android
+  - [ ] Web (Chrome, Firefox)
+
+---
+
+## 📱 APLICATIVOS
+
+### **Kids:**
+
+- [X] Jogo "Adivinha" - Completo
+- [X] Jogo "Igual-Diferente" - Completo
+- [X] Jogo "Cena Certa" - Completo
+- [X] Jogo "Palavras" - Completo
+- [X] Integração API - Completo
+- [X] Fallback offline - Completo
+
+### **Tutors:**
+
+- [X] Login - Completo
+- [X] Dashboard - Completo
+- [X] Relatórios - Completo
+- [X] Integração API - Completo
+- [X] Fallback offline - Completo
+
+### **Pro:**
+
+- [X] Login - Completo
+- [ ] Pacientes - Precisa integração API
+- [ ] Sessões - Precisa integração API
+- [ ] Relatórios - Precisa integração API
+- [ ] Novo Paciente - Precisa integração API
+- [ ] Nova Sessão - Precisa integração API
+- [X] Aplicações - Modificado (Solicitar Licença)
+- [ ] Integração API - Incompleta
+- [ ] Fallback offline - Incompleta
+
+---
+
+## 🚀 DEPLOY
+
+### 🟢 **Média Prioridade:**
+
+- [ ] **Preparar para produção:**
+
+  - [ ] Configurar variáveis de ambiente
+  - [ ] Configurar build otimizado
+  - [ ] Minificar assets
+  - [ ] Comprimir imagens
+- [ ] **Deploy Kids (Expo):**
+
+  - [ ] Build APK
+  - [ ] Testar APK em dispositivo
+  - [ ] Documentar processo
+- [ ] **Deploy Tutors (Expo):**
+
+  - [ ] Build APK
+  - [ ] Testar APK em dispositivo
+  - [ ] Documentar processo
+- [ ] **Deploy Pro (Vercel/Netlify):**
+
+  - [ ] Configurar build
+  - [ ] Deploy
+  - [ ] Testar em produção
+  - [ ] Configurar domínio
+- [ ] **Deploy Site Institucional (Vercel/Netlify):**
+
+  - [ ] Configurar build
+  - [ ] Deploy
+  - [ ] Testar em produção
+  - [ ] Configurar domínio
+
+---
+
+## 📝 OBSERVAÇÕES
+
+### **Legenda de Prioridades:**
+
+- 🔴 **CRÍTICA:** Deve ser feito ANTES da apresentação
+- 🟡 **ALTA:** Deve ser feito LOGO APÓS a apresentação
+- 🟢 **MÉDIA:** Pode ser feito depois, mas é importante
+- ⚪ **BAIXA:** Nice to have, não é urgente
+
+### **Status:**
+
+- [ ] Pendente
+- [X] Completo
+
+- [~] Em progresso
+- [!] Bloqueado
+
+---
+
+## 🎯 PRÓXIMOS PASSOS IMEDIATOS
+
+1. **Finalizar integração API no Pro** (🔴 Crítica)
+2. **Criar site institucional** (🟡 Alta)
+3. **Testar tudo antes da apresentação** (🔴 Crítica)
+4. **Documentar pendências** (🟡 Alta)
+
+---
+
+**Este TODO será atualizado conforme o progresso do projeto.**
