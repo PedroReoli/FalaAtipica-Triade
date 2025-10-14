@@ -5,8 +5,7 @@ import { FillButton, ToastContainer } from '../components/common';
 import { mockAuthService, mockUsers } from '../services/mockAuthService';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useToast } from '../hooks/useToast';
-
-const API_URL = 'http://localhost:3001/api';
+import { API_BASE_URL } from '../config/api';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,7 +44,8 @@ const LoginPage: React.FC = () => {
     try {
       // ✅ TENTAR LOGIN VIA API PRIMEIRO
       try {
-        const apiResponse = await fetch(`${API_URL}/auth/login`, {
+        console.log('🔍 [LOGIN] Tentando API:', `${API_BASE_URL}/auth/login`);
+        const apiResponse = await fetch(`${API_BASE_URL}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -61,7 +61,7 @@ const LoginPage: React.FC = () => {
           
           if (result.success && result.data.user) {
             // Login via API bem-sucedido
-            console.log('✅ Login via API:', result.data.user.nome);
+            console.log('✅ [LOGIN] API OK:', result.data.user.nome);
             
             // Converter para formato do Pro
             const user = {
@@ -86,14 +86,14 @@ const LoginPage: React.FC = () => {
           }
         }
       } catch (apiError) {
-        console.log('⚠️ API offline ou erro - usando login local');
+        console.log('⚠️ [LOGIN] API erro - usando local');
       }
 
       // ✅ FALLBACK: LOGIN LOCAL (mockAuthService)
       const response = await mockAuthService.login(formData.email, formData.password);
       
       if (response.success && response.user) {
-        console.log('✅ Login local (mockAuthService)');
+        console.log('✅ [LOGIN] Local OK:', response.user.name);
         success(`Bem-vindo(a), ${response.user.name}!`, true);
         setCurrentUser(response.user);
         setProfessionalType(response.user.type);

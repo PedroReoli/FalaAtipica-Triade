@@ -10,10 +10,9 @@ import { COLORS } from '../constants/colors';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import { mockAuthService, mockTutors } from '../services/mockAuthService';
 import { useToast } from '../hooks/useToast';
+import { API_BASE_URL } from '../config/api';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
-
-const API_URL = 'http://localhost:3001/api';
 
 export const LoginScreen: React.FC = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
@@ -45,7 +44,8 @@ export const LoginScreen: React.FC = () => {
 
     try {
       // ✅ TENTAR LOGIN VIA API PRIMEIRO
-      const apiResponse = await fetch(`${API_URL}/auth/login`, {
+      console.log('🔍 [LOGIN] Tentando API:', `${API_BASE_URL}/auth/login`);
+      const apiResponse = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -61,7 +61,7 @@ export const LoginScreen: React.FC = () => {
         
         if (result.success && result.data.user) {
           // Login via API bem-sucedido
-          console.log('✅ Login via API:', result.data.user.nome);
+          console.log('✅ [LOGIN] API OK:', result.data.user.nome);
           
           // Salvar usuário no mockAuthService (compatibilidade)
           const user = {
@@ -91,7 +91,7 @@ export const LoginScreen: React.FC = () => {
         }
       }
     } catch (apiError) {
-      console.log('⚠️ API offline ou erro - usando login local');
+      console.log('⚠️ [LOGIN] API erro - usando local');
     }
 
     // ✅ FALLBACK: LOGIN LOCAL (mockAuthService)
@@ -99,7 +99,7 @@ export const LoginScreen: React.FC = () => {
       const response = mockAuthService.login(email, password);
       
       if (response.success && response.user) {
-        console.log('✅ Login local (mockAuthService)');
+        console.log('✅ [LOGIN] Local OK:', response.user.nome);
         success(`Bem-vindo(a), ${response.user.nome}!`, true);
         
         setTimeout(() => {

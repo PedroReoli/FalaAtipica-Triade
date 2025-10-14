@@ -1,4 +1,16 @@
 {
-  "progress": []
+  "progress": [
+    {
+      "id": "progress_1760408329906_2iw415m",
+      "userId": "1",
+      "gameId": "palavras",
+      "level": 1,
+      "score": 100,
+      "correctAnswers": 7,
+      "wrongAnswers": 0,
+      "timeSpent": 111,
+      "category": "animais",
+      "timestamp": "2025-10-14T02:18:49.906Z"
+    }
+  ]
 }
-

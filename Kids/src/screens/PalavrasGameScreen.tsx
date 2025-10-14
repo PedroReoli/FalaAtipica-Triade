@@ -505,6 +505,7 @@ export const PalavrasGameScreen: React.FC = () => {
       const currentUser = mockAuthService.getCurrentUser();
       
       if (currentUser) {
+        console.log('🎮 [PROGRESSO] Enviando:', percentual + '%');
         const progressResult = await sendProgress({
           userId: currentUser.id,
           gameId: 'palavras',
@@ -517,16 +518,16 @@ export const PalavrasGameScreen: React.FC = () => {
         });
         
         if (progressResult) {
-          console.log('✅ Progresso salvo na API:', progressResult);
+          console.log('✅ [PROGRESSO] Salvo na API');
         } else {
-          console.log('⚠️ API offline - progresso não sincronizado (jogo continua normal)');
+          console.log('⚠️ [PROGRESSO] API offline - jogo continua');
         }
         
         // ✅ EMITIR EVENTO: Jogo completado
         emitGameCompleted('palavras', 'Jogo das Palavras', percentual);
       }
     } catch (error) {
-      console.log('⚠️ Erro ao enviar progresso, mas jogo continua:', error);
+      console.log('⚠️ [PROGRESSO] Erro - jogo continua');
     }
     
     // ✅ SEMPRE MOSTRA TELA DE RESULTADO (COM OU SEM API)

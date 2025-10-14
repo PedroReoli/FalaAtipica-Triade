@@ -84,7 +84,7 @@
           "imagem": "macaco.png",
           "dificuldade": 2,
           "tipo": "completar",
-          "opcoes": ["C", "K", "Q", "G"]
+          "opcoes": ["C", "C", "K", "G"]
         }
       ],
       "nivel3": [
@@ -198,7 +198,7 @@
           "imagem": "arroz.png",
           "dificuldade": 2,
           "tipo": "completar",
-          "opcoes": ["R", "L", "N", "M"]
+          "opcoes": ["R", "R", "L", "N"]
         }
       ],
       "nivel3": [
@@ -292,7 +292,7 @@
           "imagem": "carro.png",
           "dificuldade": 2,
           "tipo": "completar",
-          "opcoes": ["R", "L", "T", "N"]
+          "opcoes": ["R", "R", "L", "T"]
         },
         {
           "id": "livro",
