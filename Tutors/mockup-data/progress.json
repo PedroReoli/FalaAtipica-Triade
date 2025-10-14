@@ -1,0 +1,104 @@
+{
+  "criancas": [
+    {
+      "id": "crianca_001",
+      "nome": "João Silva",
+      "idade": 5,
+      "responsavel": "Maria Silva",
+      "dataInicio": "2024-01-15",
+      "progressoGeral": 75,
+      "categorias": [
+        {
+          "id": "animais",
+          "nome": "Animais",
+          "progresso": 80,
+          "itensCompletos": 8,
+          "totalItens": 10,
+          "ultimaAtividade": "2024-01-20T10:30:00Z"
+        },
+        {
+          "id": "objetos",
+          "nome": "Objetos",
+          "progresso": 60,
+          "itensCompletos": 6,
+          "totalItens": 10,
+          "ultimaAtividade": "2024-01-19T14:15:00Z"
+        },
+        {
+          "id": "cores",
+          "nome": "Cores",
+          "progresso": 90,
+          "itensCompletos": 9,
+          "totalItens": 10,
+          "ultimaAtividade": "2024-01-21T09:45:00Z"
+        }
+      ],
+      "conquistas": [
+        {
+          "id": "primeira_conquista",
+          "nome": "Primeira Estrela",
+          "descricao": "Completou o primeiro jogo",
+          "data": "2024-01-16T16:20:00Z",
+          "icone": "star"
+        },
+        {
+          "id": "animais_mestre",
+          "nome": "Mestre dos Animais",
+          "descricao": "Completou todos os jogos de animais",
+          "data": "2024-01-20T10:30:00Z",
+          "icone": "trophy"
+        }
+      ],
+      "estatisticas": {
+        "totalJogos": 24,
+        "jogosCompletos": 18,
+        "tempoTotal": 45,
+        "sequenciaAtual": 3,
+        "melhorSequencia": 5
+      }
+    },
+    {
+      "id": "crianca_002",
+      "nome": "Ana Costa",
+      "idade": 4,
+      "responsavel": "Pedro Costa",
+      "dataInicio": "2024-01-10",
+      "progressoGeral": 60,
+      "categorias": [
+        {
+          "id": "animais",
+          "nome": "Animais",
+          "progresso": 70,
+          "itensCompletos": 7,
+          "totalItens": 10,
+          "ultimaAtividade": "2024-01-21T11:00:00Z"
+        },
+        {
+          "id": "objetos",
+          "nome": "Objetos",
+          "progresso": 50,
+          "itensCompletos": 5,
+          "totalItens": 10,
+          "ultimaAtividade": "2024-01-20T15:30:00Z"
+        }
+      ],
+      "conquistas": [
+        {
+          "id": "primeira_conquista",
+          "nome": "Primeira Estrela",
+          "descricao": "Completou o primeiro jogo",
+          "data": "2024-01-11T14:15:00Z",
+          "icone": "star"
+        }
+      ],
+      "estatisticas": {
+        "totalJogos": 15,
+        "jogosCompletos": 12,
+        "tempoTotal": 30,
+        "sequenciaAtual": 2,
+        "melhorSequencia": 3
+      }
+    }
+  ]
+}
+

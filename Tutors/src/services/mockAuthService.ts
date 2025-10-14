@@ -1,4 +1,4 @@
-import usuariosData from '../../../Mockup/TUTORS/usuarios.json';
+import usuariosData from '../../mockup-data/usuarios.json';
 
 export interface MockTutor {
   id: string;
