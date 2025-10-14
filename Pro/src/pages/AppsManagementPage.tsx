@@ -1,8 +1,7 @@
 import React from 'react';
 import { 
   Brain, 
-  Download,
-  Eye
+  Mail
 } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useRoleColor } from '../hooks/useRoleColor';
@@ -22,6 +21,15 @@ interface AppConfig {
 export const AppsManagementPage: React.FC = () => {
   const { professionalType } = useProfessional();
   const roleColor = useRoleColor();
+
+  const handleRequestLicense = () => {
+    const email = 'pedrosousa2160@gmail.com';
+    const subject = 'Solicitação de Licença - FalaAtípica';
+    const body = 'Olá,\n\nGostaria de solicitar uma licença para os aplicativos FalaAtípica KIDS e TUTORS.\n\nAtenciosamente,';
+    
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoUrl, '_blank');
+  };
 
   const apps: AppConfig[] = [
     {
@@ -99,17 +107,14 @@ export const AppsManagementPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-center sm:justify-start">
-                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                      <button className="px-4 py-2 rounded-lg text-white font-medium flex items-center justify-center space-x-2 transition-colors" style={{ backgroundColor: roleColor.primary }}>
-                        <Eye size={16} />
-                        <span>Visualizar</span>
-                      </button>
-                      <button className="px-4 py-2 rounded-lg text-white font-medium flex items-center justify-center space-x-2 transition-colors" style={{ backgroundColor: roleColor.primary }}>
-                        <Download size={16} />
-                        <span>Download</span>
-                      </button>
-                    </div>
+                  <div className="flex items-center justify-center">
+                    <button 
+                      onClick={handleRequestLicense}
+                      style={{ backgroundColor: roleColor.primary }}
+                    >
+                      <Mail size={16} />
+                      <span>Solicitar Licença</span>
+                    </button>
                   </div>
                 </div>
               ))}
