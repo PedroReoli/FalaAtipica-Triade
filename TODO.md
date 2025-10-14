@@ -7,6 +7,33 @@
 
 ## 🚨 PRIORIDADE CRÍTICA
 
+### 🔴 **Refatoração do Tutors**
+
+- [ ] **Remover dados hardcoded:**
+  - [ ] Perfil - remover dados fixos
+  - [ ] Dashboard - usar dados dinâmicos
+  - [ ] Progresso - sincronizar com 4 jogos do Kids
+- [ ] **Melhorias de UX:**
+  - [ ] Renomear "Dicas" para nome mais apropriado (ex: "Orientações", "Guia de Apoio")
+  - [ ] Implementar download de dicas em PDF
+  - [ ] Melhorar separação visual na página de Suporte
+  - [ ] Substituir TODOS os emojis por ícones Lucide
+- [ ] **Atualizar informações:**
+  - [ ] Trocar todos os emails para: pedrosousa2160@gmail.com
+  - [ ] Remover botão/opção "Cadastrar nova conta"
+- [ ] **Nova página "Jogos" (substituir "Imagens e Sons"):**
+  - [ ] Card do jogo "Adivinha" + descrição + o que a criança aprende
+  - [ ] Card do jogo "Igual-Diferente" + descrição + o que a criança aprende
+  - [ ] Card do jogo "Cena Certa" + descrição + o que a criança aprende
+  - [ ] Card do jogo "Palavras" + descrição + o que a criança aprende
+  - [ ] Layout responsivo e atrativo
+  - [ ] Ícones consistentes para cada jogo
+- [ ] **Página de Progresso:**
+  - [ ] Sincronizar com os 4 jogos do Kids
+  - [ ] Mostrar progresso individual por jogo
+  - [ ] Estatísticas consistentes com dados reais
+  - [ ] Gráficos visuais de evolução
+
 ### 🔴 **Integração API no Pro**
 
 - [ ] **Criar `Pro/src/services/mockDataService.ts`**
@@ -284,6 +311,18 @@ FalaAtipica-Triade/
 - [X] Relatórios - Completo
 - [X] Integração API - Completo
 - [X] Fallback offline - Completo
+- [ ] **Refatoração e Melhorias Pendentes:**
+  - [ ] Remover dados hardcoded (especialmente em Perfil)
+  - [ ] Implementar funcionalidade de baixar dicas
+  - [ ] Renomear seção "Dicas" para nome mais apropriado
+  - [ ] Melhorar separação visual na página de Suporte
+  - [ ] Substituir emojis por ícones da lib (Lucide)
+  - [ ] Atualizar todos os emails para pedrosousa2160@gmail.com
+  - [ ] Remover opção "Cadastrar nova conta"
+  - [ ] Melhorar página de Progresso (consistente com 4 jogos do Kids)
+  - [ ] Substituir "Imagens e Sons" por página de Jogos
+  - [ ] Adicionar informações dos 4 jogos na nova página
+  - [ ] Documentar o que a criança aprende em cada jogo
 
 ### **Pro:**
 
@@ -296,6 +335,11 @@ FalaAtipica-Triade/
 - [X] Aplicações - Modificado (Solicitar Licença)
 - [ ] Integração API - Incompleta
 - [ ] Fallback offline - Incompleta
+- [ ] **Validar interface com os 4 jogos do Kids:**
+  - [ ] Adivinha
+  - [ ] Igual-Diferente
+  - [ ] Cena Certa
+  - [ ] Palavras
 
 ---
 
@@ -355,10 +399,16 @@ FalaAtipica-Triade/
 
 ## 🎯 PRÓXIMOS PASSOS IMEDIATOS
 
-1. **Finalizar integração API no Pro** (🔴 Crítica)
-2. **Criar site institucional** (🟡 Alta)
-3. **Testar tudo antes da apresentação** (🔴 Crítica)
-4. **Documentar pendências** (🟡 Alta)
+1. **Refatorar e melhorar Tutors** (🔴 Crítica)
+   - Remover hardcoded
+   - Sincronizar com 4 jogos do Kids
+   - Nova página de Jogos
+   - Melhorias de UX
+2. **Finalizar integração API no Pro** (🔴 Crítica)
+3. **Validar Pro com os 4 jogos do Kids** (🔴 Crítica)
+4. **Criar site institucional** (🟡 Alta)
+5. **Testar tudo antes da apresentação** (🔴 Crítica)
+6. **Documentar pendências** (🟡 Alta)
 
 ---
 
