@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "install:all": "cd api && npm install && cd ../Kids && npm install && cd ../Pro && npm install && cd ../Tutors && npm install",
     "api": "cd api && npm start",
     "api:dev": "cd api && npm run dev",
     "kids": "cd Kids && npm start",
