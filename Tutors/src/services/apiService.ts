@@ -69,6 +69,85 @@ class APIService {
       throw error;
     }
   }
+
+  // Buscar dicas
+  async getTips(category?: string) {
+    try {
+      const url = category 
+        ? `${API_URL}/tutors/tips?category=${category}`
+        : `${API_URL}/tutors/tips`;
+        
+      const response = await fetch(url);
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error?.message || 'Erro ao buscar dicas');
+      }
+
+      return result.data;
+    } catch (error) {
+      console.error('❌ Erro ao buscar dicas:', error);
+      throw error;
+    }
+  }
+
+  // Buscar suporte/FAQ
+  async getSupport() {
+    try {
+      const response = await fetch(`${API_URL}/tutors/support`);
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error?.message || 'Erro ao buscar suporte');
+      }
+
+      return result.data;
+    } catch (error) {
+      console.error('❌ Erro ao buscar suporte:', error);
+      throw error;
+    }
+  }
+
+  // Buscar configurações
+  async getSettings(tutorId: string) {
+    try {
+      const response = await fetch(`${API_URL}/tutors/settings/${tutorId}`);
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error?.message || 'Erro ao buscar configurações');
+      }
+
+      return result.data;
+    } catch (error) {
+      console.error('❌ Erro ao buscar configurações:', error);
+      throw error;
+    }
+  }
+
+  // Atualizar configurações
+  async updateSettings(tutorId: string, configuracoes: any) {
+    try {
+      const response = await fetch(`${API_URL}/tutors/settings/${tutorId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ configuracoes }),
+      });
+
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error?.message || 'Erro ao atualizar configurações');
+      }
+
+      return result.data;
+    } catch (error) {
+      console.error('❌ Erro ao atualizar configurações:', error);
+      throw error;
+    }
+  }
 }
 
 export const apiService = new APIService();

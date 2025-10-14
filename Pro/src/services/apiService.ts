@@ -121,6 +121,47 @@ class APIService {
       return false;
     }
   }
+
+  // Buscar medicamentos
+  async getMedications() {
+    try {
+      const response = await fetch(`${API_URL}/pro/medications`);
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error?.message || 'Erro ao buscar medicamentos');
+      }
+
+      return result.data;
+    } catch (error) {
+      console.error('❌ Erro ao buscar medicamentos:', error);
+      throw error;
+    }
+  }
+
+  // Adicionar medicamento
+  async addMedication(medicationData: any) {
+    try {
+      const response = await fetch(`${API_URL}/pro/medication`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(medicationData),
+      });
+
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error?.message || 'Erro ao adicionar medicamento');
+      }
+
+      return result.data;
+    } catch (error) {
+      console.error('❌ Erro ao adicionar medicamento:', error);
+      throw error;
+    }
+  }
 }
 
 export const apiService = new APIService();

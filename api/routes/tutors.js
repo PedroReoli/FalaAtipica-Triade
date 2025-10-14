@@ -198,6 +198,112 @@ router.get('/reports/:childId', async (req, res) => {
   }
 });
 
+// GET /api/tutors/tips - Buscar dicas
+router.get('/tips', async (req, res) => {
+  try {
+    const { category } = req.query;
+    
+    // Buscar dicas do JSON
+    const dicasData = await jsonService.readJSON('TUTORS/dicas.json');
+    
+    let tips = dicasData.dicas || [];
+    
+    // Filtrar por categoria se fornecida
+    if (category) {
+      tips = tips.filter(tip => tip.categoria === category);
+    }
+    
+    res.json(successResponse(tips));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar dicas:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar dicas', error.message)
+    );
+  }
+});
+
+// GET /api/tutors/support - Buscar suporte/FAQ
+router.get('/support', async (req, res) => {
+  try {
+    // Buscar dados de suporte do JSON
+    const suporteData = await jsonService.readJSON('TUTORS/suporte.json');
+    
+    res.json(successResponse(suporteData));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar suporte:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar suporte', error.message)
+    );
+  }
+});
+
+// GET /api/tutors/settings/:tutorId - Configurações do tutor
+router.get('/settings/:tutorId', async (req, res) => {
+  try {
+    const { tutorId } = req.params;
+    
+    // Buscar tutor
+    const tutorsData = await jsonService.readJSON('TUTORS/usuarios.json');
+    const tutor = tutorsData.tutores?.find(t => t.id === tutorId);
+    
+    if (!tutor) {
+      return res.status(404).json(
+        errorResponse('TUTOR_NOT_FOUND', 'Tutor não encontrado')
+      );
+    }
+    
+    res.json(successResponse({
+      configuracoes: tutor.configuracoes || {}
+    }));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar configurações:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar configurações', error.message)
+    );
+  }
+});
+
+// PUT /api/tutors/settings/:tutorId - Atualizar configurações
+router.put('/settings/:tutorId', async (req, res) => {
+  try {
+    const { tutorId } = req.params;
+    const { configuracoes } = req.body;
+    
+    // Atualizar configurações
+    const tutorsData = await jsonService.readJSON('TUTORS/usuarios.json');
+    const tutorIndex = tutorsData.tutores?.findIndex(t => t.id === tutorId);
+    
+    if (tutorIndex === -1 || tutorIndex === undefined) {
+      return res.status(404).json(
+        errorResponse('TUTOR_NOT_FOUND', 'Tutor não encontrado')
+      );
+    }
+    
+    tutorsData.tutores[tutorIndex].configuracoes = {
+      ...tutorsData.tutores[tutorIndex].configuracoes,
+      ...configuracoes
+    };
+    
+    await jsonService.writeJSON('TUTORS/usuarios.json', tutorsData);
+    
+    console.log(`✅ Configurações atualizadas: ${tutorId}`);
+    
+    res.json(successResponse(
+      tutorsData.tutores[tutorIndex].configuracoes,
+      'Configurações atualizadas com sucesso'
+    ));
+    
+  } catch (error) {
+    console.error('❌ Erro ao atualizar configurações:', error);
+    res.status(500).json(
+      errorResponse('UPDATE_ERROR', 'Erro ao atualizar configurações', error.message)
+    );
+  }
+});
+
 // Função auxiliar
 function getGameName(gameId) {
   const names = {

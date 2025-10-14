@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BarChart3, Calendar, Clock, Dog, Trophy, Flame, Map, Crown, Check } from 'lucide-react-native';
@@ -8,10 +8,12 @@ import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { mockAuthService } from '../services/mockAuthService';
+import { apiService } from '../services/apiService';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-// Dados mockados do MOCAP/TUTORS
+// Dados mockados do MOCAP/TUTORS (FALLBACK)
 const mockProgressData = {
   criancas: [
     {
@@ -77,11 +79,59 @@ const mockProgressData = {
 export const ProgressScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const [progressData, setProgressData] = useState(mockProgressData);
+  const [isLoading, setIsLoading] = useState(true);
+  const [usingAPI, setUsingAPI] = useState(false);
 
   useEffect(() => {
-    // Carregar dados do MOCAP/TUTORS
-    setProgressData(mockProgressData);
+    loadProgressData();
   }, []);
+
+  const loadProgressData = async () => {
+    try {
+      setIsLoading(true);
+      const currentUser = mockAuthService.getCurrentUser();
+      
+      if (!currentUser || !currentUser.criancasIds || currentUser.criancasIds.length === 0) {
+        // Usar dados mockados se não tiver usuário
+        setProgressData(mockProgressData);
+        setUsingAPI(false);
+        return;
+      }
+
+      const childId = currentUser.criancasIds[0]; // Primeira criança
+      
+      // ✅ TENTAR API PRIMEIRO
+      try {
+        const apiData = await apiService.getChildProgress(childId);
+        
+        // Transformar dados da API para formato do componente
+        if (apiData) {
+          setProgressData({
+            criancas: [{
+              id: apiData.childId,
+              nome: apiData.childName,
+              progressoGeral: apiData.progressoGeral,
+              estatisticas: apiData.estatisticas,
+              ...mockProgressData.criancas[0] // Manter estrutura completa
+            }]
+          });
+          setUsingAPI(true);
+          console.log('✅ Progresso carregado da API');
+        }
+      } catch (apiError) {
+        // ✅ FALLBACK: USAR DADOS MOCKADOS
+        console.log('⚠️ API falhou, usando dados mockados locais');
+        setProgressData(mockProgressData);
+        setUsingAPI(false);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar progresso:', error);
+      setProgressData(mockProgressData);
+      setUsingAPI(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleHome = () => {
     navigation.navigate('Dashboard');

@@ -9,11 +9,16 @@ import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { adivinhaService } from '../services/adivinhaService';
 import type { ItemAdivinha, Alternativa } from '../services/adivinhaService';
+import { useAPIIntegration } from '../hooks/useAPIIntegration';
+import { mockAuthService } from '../services/mockAuthService';
 
 type GuessGameScreenNavigationProp = StackNavigationProp<RootStackParamList, 'GuessGame'>;
 
 export const GuessGameScreen: React.FC = () => {
   const navigation = useNavigation<GuessGameScreenNavigationProp>();
+  
+  // ✅ Hook de integração com API
+  const { sendProgress, emitGameStarted, emitGameCompleted } = useAPIIntegration();
   
   // Estados do jogo
   const [currentItem, setCurrentItem] = useState<ItemAdivinha | null>(null);
@@ -23,6 +28,7 @@ export const GuessGameScreen: React.FC = () => {
   const [gameCompleted, setGameCompleted] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const [gameStartTime, setGameStartTime] = useState(Date.now());
   const totalRounds = 5;
 
   // Inicializar jogo
@@ -31,6 +37,10 @@ export const GuessGameScreen: React.FC = () => {
   }, []);
 
   const startNewGame = () => {
+    // ✅ EMITIR EVENTO: Jogo iniciado
+    emitGameStarted('adivinha', 'Adivinha');
+    setGameStartTime(Date.now());
+    
     loadNewItem();
     setScore(0);
     setCurrentRound(1);
@@ -78,7 +88,35 @@ export const GuessGameScreen: React.FC = () => {
     setShowResult(false);
   };
 
-  const finishGame = () => {
+  const finishGame = async () => {
+    // Calcular percentual
+    const percentual = Math.round((score / totalRounds) * 100);
+    const timeSpent = Math.round((Date.now() - gameStartTime) / 1000);
+    
+    // ✅ ENVIAR PROGRESSO PARA API (com fallback)
+    try {
+      const currentUser = mockAuthService.getCurrentUser();
+      
+      if (currentUser) {
+        await sendProgress({
+          userId: currentUser.id,
+          gameId: 'adivinha',
+          level: 1,
+          score: percentual,
+          correctAnswers: score,
+          wrongAnswers: totalRounds - score,
+          timeSpent,
+          category: 'animais'
+        });
+        
+        // ✅ EMITIR EVENTO: Jogo completado
+        emitGameCompleted('adivinha', 'Adivinha', percentual);
+      }
+    } catch (error) {
+      console.log('⚠️ Erro ao enviar progresso, jogo continua:', error);
+    }
+    
+    // ✅ SEMPRE MOSTRA RESULTADO (COM OU SEM API)
     setGameCompleted(true);
   };
 

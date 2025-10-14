@@ -8,12 +8,17 @@ import { InternalHeader } from '../components/InternalHeader';
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { cenaCertaService, type CenaCerta } from '../services/cenaCertaService';
+import { useAPIIntegration } from '../hooks/useAPIIntegration';
+import { mockAuthService } from '../services/mockAuthService';
 
 type CenaCertaScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CenaCerta'>;
 
 export const CenaCertaScreen: React.FC = () => {
   const navigation = useNavigation<CenaCertaScreenNavigationProp>();
   const config = cenaCertaService.getConfig();
+  
+  // ✅ Hook de integração com API
+  const { sendProgress, emitGameStarted, emitGameCompleted } = useAPIIntegration();
   
   // Estados do jogo
   const [cenas, setCenas] = useState<CenaCerta[]>([]);
@@ -25,6 +30,7 @@ export const CenaCertaScreen: React.FC = () => {
   const [showResult, setShowResult] = useState(false);
   const [acertosSeguidos, setAcertosSeguidos] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [gameStartTime, setGameStartTime] = useState(Date.now());
   const [respostas, setRespostas] = useState<Array<{ cena: CenaCerta; correto: boolean; tempoResposta: number; usouPrompt: boolean }>>([]);
   
   // Refs
@@ -55,6 +61,10 @@ export const CenaCertaScreen: React.FC = () => {
   }, [currentIndex, showResult]);
 
   const startNewGame = () => {
+    // ✅ EMITIR EVENTO: Jogo iniciado
+    emitGameStarted('cena-certa', 'Cena Certa');
+    setGameStartTime(Date.now());
+    
     const cenasSelecionadas = cenaCertaService.getCenasMisturadas(config.totalRodadasPorSessao);
     setCenas(cenasSelecionadas);
     loadCena(0, cenasSelecionadas);
@@ -198,11 +208,37 @@ export const CenaCertaScreen: React.FC = () => {
     imageHighlightAnim.setValue(0);
   };
 
-  const finishGame = () => {
-    setGameCompleted(true);
-    
-    // Estatísticas para TUTORS/PRO
+  const finishGame = async () => {
+    // Calcular estatísticas
     const stats = calculateStats();
+    const percentual = Math.round(stats.percentualAcerto);
+    const timeSpent = Math.round((Date.now() - gameStartTime) / 1000);
+    
+    // ✅ ENVIAR PROGRESSO PARA API (com fallback)
+    try {
+      const currentUser = mockAuthService.getCurrentUser();
+      
+      if (currentUser) {
+        await sendProgress({
+          userId: currentUser.id,
+          gameId: 'cena-certa',
+          level: 1,
+          score: percentual,
+          correctAnswers: stats.acertos,
+          wrongAnswers: stats.erros,
+          timeSpent,
+          category: 'geral'
+        });
+        
+        // ✅ EMITIR EVENTO: Jogo completado
+        emitGameCompleted('cena-certa', 'Cena Certa', percentual);
+      }
+    } catch (error) {
+      console.log('⚠️ Erro ao enviar progresso, jogo continua:', error);
+    }
+    
+    // ✅ SEMPRE MOSTRA RESULTADO (COM OU SEM API)
+    setGameCompleted(true);
     console.log('Estatísticas Cena Certa:', stats);
   };
 

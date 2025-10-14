@@ -8,12 +8,17 @@ import { InternalHeader } from '../components/InternalHeader';
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { igualDiferenteService, type ParIgualDiferente } from '../services/igualDiferenteService';
+import { useAPIIntegration } from '../hooks/useAPIIntegration';
+import { mockAuthService } from '../services/mockAuthService';
 
 type IgualDiferenteScreenNavigationProp = StackNavigationProp<RootStackParamList, 'IgualDiferente'>;
 
 export const IgualDiferenteScreen: React.FC = () => {
   const navigation = useNavigation<IgualDiferenteScreenNavigationProp>();
   const config = igualDiferenteService.getConfig();
+  
+  // ✅ Hook de integração com API
+  const { sendProgress, emitGameStarted, emitGameCompleted } = useAPIIntegration();
   
   // Estados do jogo
   const [pares, setPares] = useState<ParIgualDiferente[]>([]);
@@ -24,6 +29,7 @@ export const IgualDiferenteScreen: React.FC = () => {
   const [showResult, setShowResult] = useState(false);
   const [acertosSeguidos, setAcertosSeguidos] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [gameStartTime, setGameStartTime] = useState(Date.now());
   const [respostas, setRespostas] = useState<Array<{ par: ParIgualDiferente; correto: boolean; tempoResposta: number; usouPrompt: boolean }>>([]);
   
   // Refs para timers
@@ -53,6 +59,10 @@ export const IgualDiferenteScreen: React.FC = () => {
   }, [currentIndex, showResult]);
 
   const startNewGame = () => {
+    // ✅ EMITIR EVENTO: Jogo iniciado
+    emitGameStarted('igual-diferente', 'Igual ou Diferente');
+    setGameStartTime(Date.now());
+    
     const paresSelecionados = igualDiferenteService.getParesMisturados(config.totalRodadasPorSessao);
     setPares(paresSelecionados);
     setCurrentIndex(0);
@@ -167,11 +177,37 @@ export const IgualDiferenteScreen: React.FC = () => {
     startTimeRef.current = Date.now();
   };
 
-  const finishGame = () => {
-    setGameCompleted(true);
-    
-    // Aqui você pode salvar estatísticas para TUTORS/PRO
+  const finishGame = async () => {
+    // Calcular estatísticas
     const stats = calculateStats();
+    const percentual = stats.percentualAcertos;
+    const timeSpent = Math.round((Date.now() - gameStartTime) / 1000);
+    
+    // ✅ ENVIAR PROGRESSO PARA API (com fallback)
+    try {
+      const currentUser = mockAuthService.getCurrentUser();
+      
+      if (currentUser) {
+        await sendProgress({
+          userId: currentUser.id,
+          gameId: 'igual-diferente',
+          level: 1,
+          score: percentual,
+          correctAnswers: stats.acertos,
+          wrongAnswers: stats.erros,
+          timeSpent,
+          category: 'geral'
+        });
+        
+        // ✅ EMITIR EVENTO: Jogo completado
+        emitGameCompleted('igual-diferente', 'Igual ou Diferente', percentual);
+      }
+    } catch (error) {
+      console.log('⚠️ Erro ao enviar progresso, jogo continua:', error);
+    }
+    
+    // ✅ SEMPRE MOSTRA RESULTADO (COM OU SEM API)
+    setGameCompleted(true);
     console.log('Estatísticas do jogo:', stats);
   };
 

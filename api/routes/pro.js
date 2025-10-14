@@ -256,5 +256,55 @@ router.put('/patient/:patientId', async (req, res) => {
   }
 });
 
+// GET /api/pro/medications - Lista de medicamentos
+router.get('/medications', async (req, res) => {
+  try {
+    // Buscar medicamentos do JSON
+    const medicamentosData = await jsonService.readJSON('PRO/medicamentos.json');
+    
+    res.json(successResponse(medicamentosData));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar medicamentos:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar medicamentos', error.message)
+    );
+  }
+});
+
+// POST /api/pro/medication - Adicionar medicamento
+router.post('/medication', async (req, res) => {
+  try {
+    const medicamentoData = {
+      id: generateId('med'),
+      ...req.body,
+      timestamp: new Date().toISOString()
+    };
+    
+    // Adicionar ao JSON
+    let medicamentosFile = await jsonService.readJSON('PRO/medicamentos.json').catch(() => ({ medicamentos: [] }));
+    
+    if (!medicamentosFile.medicamentos) {
+      medicamentosFile = { medicamentos: [] };
+    }
+    
+    medicamentosFile.medicamentos.push(medicamentoData);
+    await jsonService.writeJSON('PRO/medicamentos.json', medicamentosFile);
+    
+    console.log(`✅ Medicamento adicionado: ${medicamentoData.nome}`);
+    
+    res.status(201).json(successResponse(
+      medicamentoData,
+      'Medicamento adicionado com sucesso'
+    ));
+    
+  } catch (error) {
+    console.error('❌ Erro ao adicionar medicamento:', error);
+    res.status(500).json(
+      errorResponse('CREATE_ERROR', 'Erro ao adicionar medicamento', error.message)
+    );
+  }
+});
+
 module.exports = router;
 

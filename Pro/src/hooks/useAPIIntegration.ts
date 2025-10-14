@@ -124,6 +124,42 @@ export const useAPIIntegration = (professionalId?: string, professionalName?: st
     }
   };
 
+  // Buscar medicamentos (com fallback)
+  const getMedications = async (fallbackData?: any) => {
+    try {
+      if (isAPIAvailable) {
+        const result = await apiService.getMedications();
+        console.log('✅ Medicamentos carregados da API');
+        return result;
+      } else {
+        console.log('⚠️ Usando dados mockados locais');
+        return fallbackData || null;
+      }
+    } catch (error) {
+      console.error('❌ Erro ao buscar medicamentos, usando fallback');
+      return fallbackData || null;
+    }
+  };
+
+  // Adicionar medicamento
+  const addMedication = async (medicationData: any, onSuccess?: () => void) => {
+    try {
+      if (isAPIAvailable) {
+        const result = await apiService.addMedication(medicationData);
+        console.log('✅ Medicamento adicionado na API');
+        onSuccess?.();
+        return result;
+      } else {
+        console.log('⚠️ API offline - medicamento não sincronizado');
+        onSuccess?.();
+        return { id: 'local_' + Date.now() };
+      }
+    } catch (error) {
+      console.error('❌ Erro ao adicionar medicamento:', error);
+      return null;
+    }
+  };
+
   return {
     isAPIAvailable,
     getPatients,
@@ -131,6 +167,8 @@ export const useAPIIntegration = (professionalId?: string, professionalName?: st
     createSession,
     getReports,
     updatePatient,
+    getMedications,
+    addMedication,
     checkAPIAvailability
   };
 };

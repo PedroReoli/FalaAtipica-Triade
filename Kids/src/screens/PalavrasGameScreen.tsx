@@ -8,6 +8,8 @@ import { InternalHeader } from '../components/InternalHeader';
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { palavrasService, type PalavraJogo } from '../services/palavrasService';
+import { useAPIIntegration } from '../hooks/useAPIIntegration';
+import { mockAuthService } from '../services/mockAuthService';
 
 type PalavrasGameScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PalavrasGame'>;
 type PalavrasGameScreenRouteProp = RouteProp<RootStackParamList, 'PalavrasGame'>;
@@ -38,6 +40,14 @@ export const PalavrasGameScreen: React.FC = () => {
   const { categoryId } = route.params;
   const config = palavrasService.getConfig();
   
+  // ✅ Hook de integração com API
+  const {
+    isAPIAvailable,
+    sendProgress,
+    emitGameStarted,
+    emitGameCompleted
+  } = useAPIIntegration();
+  
   // Estados
   const [palavras, setPalavras] = useState<PalavraJogo[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,6 +57,7 @@ export const PalavrasGameScreen: React.FC = () => {
   const [acertosSeguidos, setAcertosSeguidos] = useState(0);
   const [tentativasAtuais, setTentativasAtuais] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [gameStartTime, setGameStartTime] = useState(Date.now());
   
   // Estados para sistema de cliques
   const [items, setItems] = useState<ClickableItem[]>([]);
@@ -101,6 +112,12 @@ export const PalavrasGameScreen: React.FC = () => {
   const loadPalavra = (index: number, palavrasList: PalavraJogo[] = palavras) => {
     if (index < palavrasList.length) {
       const palavra = palavrasList[index];
+      
+      // ✅ EMITIR EVENTO: Jogo iniciado (se for a primeira palavra)
+      if (index === 0) {
+        emitGameStarted('palavras', 'Jogo das Palavras');
+        setGameStartTime(Date.now());
+      }
       
       // Resetar estados e inicializar formedWord conforme o tipo
       if (palavra.tipo === 'completar' && palavra.lacunas) {
@@ -475,7 +492,44 @@ export const PalavrasGameScreen: React.FC = () => {
     loadPalavra(currentIndex + 1);
   };
 
-  const finishGame = () => {
+  const finishGame = async () => {
+    // Calcular estatísticas finais
+    const totalPalavras = respostas.length;
+    const acertos = respostas.filter(r => r.correto).length;
+    const erros = totalPalavras - acertos;
+    const percentual = Math.round((acertos / totalPalavras) * 100);
+    const timeSpent = Math.round((Date.now() - gameStartTime) / 1000); // em segundos
+    
+    // ✅ ENVIAR PROGRESSO PARA API (com fallback)
+    try {
+      const currentUser = mockAuthService.getCurrentUser();
+      
+      if (currentUser) {
+        const progressResult = await sendProgress({
+          userId: currentUser.id,
+          gameId: 'palavras',
+          level: 1, // Pode ser dinâmico no futuro
+          score: percentual,
+          correctAnswers: acertos,
+          wrongAnswers: erros,
+          timeSpent,
+          category: categoryId
+        });
+        
+        if (progressResult) {
+          console.log('✅ Progresso salvo na API:', progressResult);
+        } else {
+          console.log('⚠️ API offline - progresso não sincronizado (jogo continua normal)');
+        }
+        
+        // ✅ EMITIR EVENTO: Jogo completado
+        emitGameCompleted('palavras', 'Jogo das Palavras', percentual);
+      }
+    } catch (error) {
+      console.log('⚠️ Erro ao enviar progresso, mas jogo continua:', error);
+    }
+    
+    // ✅ SEMPRE MOSTRA TELA DE RESULTADO (COM OU SEM API)
     setGameCompleted(true);
   };
 
