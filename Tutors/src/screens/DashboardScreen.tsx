@@ -14,7 +14,10 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import { mockAuthService } from '../services/mockAuthService';
-import MocapService from '../services/mocapService';
+import { apiService } from '../services/apiService';
+import { socketService } from '../services/socketService';
+import { useToast } from '../hooks/useToast';
+import { ToastContainer } from '../components/Toast';
 
 type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
@@ -28,13 +31,62 @@ interface Crianca {
 
 export const DashboardScreen: React.FC = () => {
   const navigation = useNavigation<DashboardScreenNavigationProp>();
+  const { toasts, removeToast, success, info } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [userName, setUserName] = useState('');
   const [criancas, setCriancas] = useState<Crianca[]>([]);
 
   useEffect(() => {
     loadUserData();
+    setupWebSocket();
+
+    return () => {
+      // Limpar listeners ao desmontar
+      socketService.off('progress-updated');
+      socketService.off('child-game-completed');
+      socketService.off('child-achievement-unlocked');
+    };
   }, []);
+
+  const setupWebSocket = () => {
+    const currentUser = mockAuthService.getCurrentUser();
+    
+    if (currentUser) {
+      // Conectar WebSocket
+      socketService.connect(currentUser.id, currentUser.nome);
+
+      // Escutar progresso atualizado
+      socketService.on('progress-updated', (data: any) => {
+        console.log('📊 Progresso atualizado:', data);
+        // Atualizar UI
+        updateChildProgress(data.userId, data.score);
+      });
+
+      // Escutar jogo completado
+      socketService.on('child-game-completed', (data: any) => {
+        success(`🎉 ${data.userName} completou ${data.gameName}!`);
+        // Recarregar dados
+        loadUserData();
+      });
+
+      // Escutar conquista desbloqueada
+      socketService.on('child-achievement-unlocked', (data: any) => {
+        info(`⭐ ${data.userName} desbloqueou: ${data.achievementName}`);
+      });
+    }
+  };
+
+  const updateChildProgress = (childId: string, newScore: number) => {
+    setCriancas(prev => prev.map(crianca => {
+      if (crianca.id === childId) {
+        return {
+          ...crianca,
+          progressoGeral: Math.round((crianca.progressoGeral + newScore) / 2)
+        };
+      }
+      return crianca;
+    }));
+  };
 
   const loadUserData = async () => {
     try {
@@ -46,8 +98,8 @@ export const DashboardScreen: React.FC = () => {
       if (currentUser) {
         setUserName(currentUser.nome);
         
-        // Carregar perfil do tutor
-        const perfilData = await MocapService.getTutorProfile(currentUser.id);
+        // Carregar perfil do tutor via API
+        const perfilData = await apiService.getTutorProfile(currentUser.id);
         
         if (perfilData && perfilData.criancas) {
           setCriancas(perfilData.criancas);
@@ -55,6 +107,16 @@ export const DashboardScreen: React.FC = () => {
       }
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
+      // Fallback para dados mockados locais se API falhar
+      try {
+        const MocapService = require('../services/mocapService').default;
+        const perfilData = await MocapService.getTutorProfile(currentUser.id);
+        if (perfilData && perfilData.criancas) {
+          setCriancas(perfilData.criancas);
+        }
+      } catch (fallbackError) {
+        console.error('Erro ao carregar dados mockados:', fallbackError);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -89,6 +151,9 @@ export const DashboardScreen: React.FC = () => {
 
   return (
     <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
+      {/* Toast Container */}
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
+
       {/* Header Section */}
       <View style={styles.header}>
         {/* Profile Area */}

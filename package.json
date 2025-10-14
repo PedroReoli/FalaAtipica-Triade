@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "api": "cd api && npm start",
+    "api:dev": "cd api && npm run dev"
+  },
   "dependencies": {
     "react-native-gesture-handler": "~2.16.1",
     "react-native-reanimated": "~3.10.1"

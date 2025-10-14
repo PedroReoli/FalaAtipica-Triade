@@ -30,8 +30,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Disponibilizar io para as rotas
+// Setup avançado de WebSocket
+const setupWebSocket = require('./socket');
+const socketHelpers = setupWebSocket(io);
+
+// Disponibilizar io e helpers para as rotas
 app.set('io', io);
+app.set('socketHelpers', socketHelpers);
 
 // Rotas
 const authRoutes = require('./routes/auth');
@@ -52,28 +57,6 @@ app.get('/api/health', (req, res) => {
     status: 'online',
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
-  });
-});
-
-// WebSocket - Conexões
-io.on('connection', (socket) => {
-  console.log(`✅ Cliente conectado: ${socket.id}`);
-  
-  // Join em rooms específicas
-  socket.on('join-room', (roomId) => {
-    socket.join(roomId);
-    console.log(`📍 Socket ${socket.id} entrou na room: ${roomId}`);
-  });
-  
-  // Leave de rooms
-  socket.on('leave-room', (roomId) => {
-    socket.leave(roomId);
-    console.log(`📍 Socket ${socket.id} saiu da room: ${roomId}`);
-  });
-  
-  // Desconexão
-  socket.on('disconnect', () => {
-    console.log(`❌ Cliente desconectado: ${socket.id}`);
   });
 });
 
