@@ -110,6 +110,7 @@ export const AppsManagementPage: React.FC = () => {
                   <div className="flex items-center justify-center">
                     <button 
                       onClick={handleRequestLicense}
+                      className="px-6 py-3 rounded-lg text-white font-medium flex items-center justify-center space-x-2 transition-colors hover:opacity-90" 
                       style={{ backgroundColor: roleColor.primary }}
                     >
                       <Mail size={16} />
