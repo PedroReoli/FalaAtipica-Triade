@@ -1,0 +1,11 @@
+# Ignorar todos os arquivos de log
+*.json
+
+# Manter a estrutura de pastas
+!.gitkeep
+!README.md
+!.gitignore
+
+# Ignorar todas as pastas de ano/mês
+20*/
+

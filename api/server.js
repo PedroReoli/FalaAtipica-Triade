@@ -26,7 +26,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Logger customizado
+// Sistema de Logs Avançado
+const loggerMiddleware = require('./src/middleware/loggerMiddleware');
+app.use(loggerMiddleware);
+
+// Logger customizado (console)
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
   next();

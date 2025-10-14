@@ -1,0 +1,134 @@
+{
+  "timeBlock": {
+    "date": "2025-10-14",
+    "startTime": "12:00",
+    "endTime": "12:29",
+    "weekNumber": 41
+  },
+  "summary": {
+    "totalRequests": 8,
+    "successfulRequests": 7,
+    "failedRequests": 1,
+    "apps": {
+      "kids": 3,
+      "tutors": 2,
+      "pro": 3
+    }
+  },
+  "requests": [
+    {
+      "id": 1,
+      "timestamp": "12:05:23",
+      "app": "kids",
+      "method": "POST",
+      "endpoint": "/api/auth/login",
+      "status": 200,
+      "responseTime": "125ms",
+      "success": true,
+      "error": null
+    },
+    {
+      "id": 2,
+      "timestamp": "12:08:45",
+      "app": "kids",
+      "method": "POST",
+      "endpoint": "/api/kids/progress",
+      "status": 201,
+      "responseTime": "89ms",
+      "success": true,
+      "error": null
+    },
+    {
+      "id": 3,
+      "timestamp": "12:15:10",
+      "app": "tutors",
+      "method": "GET",
+      "endpoint": "/api/tutors/children",
+      "status": 200,
+      "responseTime": "156ms",
+      "success": true,
+      "error": null
+    },
+    {
+      "id": 4,
+      "timestamp": "12:20:33",
+      "app": "pro",
+      "method": "POST",
+      "endpoint": "/api/pro/patients",
+      "status": 500,
+      "responseTime": "1200ms",
+      "success": false,
+      "error": "HTTP 500"
+    },
+    {
+      "id": 5,
+      "timestamp": "12:22:10",
+      "app": "kids",
+      "method": "GET",
+      "endpoint": "/api/kids/games",
+      "status": 200,
+      "responseTime": "95ms",
+      "success": true,
+      "error": null
+    },
+    {
+      "id": 6,
+      "timestamp": "12:25:45",
+      "app": "tutors",
+      "method": "GET",
+      "endpoint": "/api/tutors/reports",
+      "status": 200,
+      "responseTime": "210ms",
+      "success": true,
+      "error": null
+    },
+    {
+      "id": 7,
+      "timestamp": "12:27:12",
+      "app": "pro",
+      "method": "GET",
+      "endpoint": "/api/pro/sessions",
+      "status": 200,
+      "responseTime": "178ms",
+      "success": true,
+      "error": null
+    },
+    {
+      "id": 8,
+      "timestamp": "12:28:50",
+      "app": "pro",
+      "method": "PUT",
+      "endpoint": "/api/pro/patients/123",
+      "status": 200,
+      "responseTime": "145ms",
+      "success": true,
+      "error": null
+    }
+  ],
+  "tableSummary": [
+    "╔════════════════════════════════════════════════════════════════╗",
+    "║           RESUMO DO BLOCO 12:00-12:29                        ║",
+    "║           2025-10-14 (Semana 41)                             ║",
+    "╠════════════════════════════════════════════════════════════════╣",
+    "║ Total de Requisições            │ 8                            ║",
+    "║ Sucesso                         │ 7          (87.5%)           ║",
+    "║ Falhas                          │ 1          (12.5%)            ║",
+    "╠════════════════════════════════════════════════════════════════╣",
+    "║ KIDS                            │ 3 req (37.5%)                ║",
+    "║ TUTORS                          │ 2 req (25.0%)                ║",
+    "║ PRO                             │ 3 req (37.5%)                ║",
+    "╠════════════════════════════════════════════════════════════════╣",
+    "║ Tempo Médio                     │ 387ms                        ║",
+    "║ Mais Rápido                     │ 89ms                         ║",
+    "║ Mais Lento                      │ 1200ms                       ║",
+    "╠════════════════════════════════════════════════════════════════╣",
+    "║ Top 1 Endpoint                  │ POST /api/auth/login (1x)    ║",
+    "║ Top 2 Endpoint                  │ POST /api/kids/progress (1x) ║",
+    "║ Top 3 Endpoint                  │ GET /api/tutors/children ... ║",
+    "╠════════════════════════════════════════════════════════════════╣",
+    "║ Total de Erros                  │ 1                            ║",
+    "║ [12:20:33] 500                  │ HTTP 500                     ║",
+    "╚════════════════════════════════════════════════════════════════╝"
+  ]
+}
+

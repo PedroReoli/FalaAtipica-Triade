@@ -1,0 +1,32 @@
+# Pasta de Logs
+
+Esta pasta armazena os logs da API do FalaAtípica.
+
+## Estrutura
+
+```
+logs/
+├── YYYY-MM/                      # Mês
+│   └── semana-XX/                # Semana do ano
+│       └── YYYY-MM-DD/           # Dia
+│           └── api-YYYY-MM-DD-HHhMM.json  # Bloco de 30 minutos
+```
+
+## Blocos de Tempo
+
+Cada arquivo representa um bloco de 30 minutos:
+- `00h00` → 00:00-00:29
+- `00h30` → 00:30-00:59
+- `01h00` → 01:00-01:29
+- `01h30` → 01:30-01:59
+- ...
+- `23h30` → 23:30-23:59
+
+## Formato
+
+Cada arquivo JSON contém:
+- `timeBlock`: Informações do bloco de tempo
+- `summary`: Resumo estatístico
+- `requests`: Array de todas as requisições
+- `tableSummary`: Resumo visual em formato de tabela
+
