@@ -191,13 +191,39 @@ FalaAtipica-Triade/
 npm run api
 
 # Kids App (Crianças)
-npm run kids
+npm run kids          # Desenvolvimento local
+npm run kids:t        # 🌐 Com Tunnel (para apresentações)
 
 # Tutors App (Pais/Responsáveis)
-npm run tutors
+npm run tutors        # Desenvolvimento local
+npm run tutors:t      # 🌐 Com Tunnel (para apresentações)
 
 # Pro App (Profissionais)
 npm run pro
+```
+
+### **🌐 Modo Tunnel (Apresentações):**
+
+**Use quando:**
+- ✅ Apresentar na faculdade/empresa
+- ✅ Testar com celular em 4G
+- ✅ Não depender de rede local
+- ✅ Atravessar firewalls
+
+**Vantagens:**
+- Funciona em **qualquer rede**
+- Celular **não precisa** estar na mesma WiFi
+- **Atravessa firewalls**
+- **Zero configuração** de IP
+
+```bash
+# Exemplo de uso:
+npm run api        # Terminal 1: API
+npm run kids:t     # Terminal 2: Kids (tunnel)
+npm run tutors:t   # Terminal 3: Tutors (tunnel)
+npm run pro        # Terminal 4: Pro
+
+# Escanear QR codes no celular (pode estar em 4G!)
 ```
 
 ### **Swagger Documentation:**
