@@ -1,7 +1,10 @@
 {
   "scripts": {
     "api": "cd api && npm start",
-    "api:dev": "cd api && npm run dev"
+    "api:dev": "cd api && npm run dev",
+    "kids": "cd Kids && npm start",
+    "tutors": "cd Tutors && npm start",
+    "pro": "cd Pro && npm run dev"
   },
   "dependencies": {
     "react-native-gesture-handler": "~2.16.1",
