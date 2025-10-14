@@ -59,6 +59,23 @@ class Logger {
 
   // Calcular estatísticas do bloco
   calculateStats(requests) {
+    // Validação: verificar se há requisições
+    if (!requests || requests.length === 0) {
+      return {
+        total: 0,
+        successful: 0,
+        failed: 0,
+        successRate: '0.0',
+        failureRate: '0.0',
+        apps: {},
+        avgResponseTime: 0,
+        minResponseTime: 0,
+        maxResponseTime: 0,
+        topEndpoints: [],
+        errors: []
+      };
+    }
+
     const total = requests.length;
     const successful = requests.filter(r => r.success).length;
     const failed = total - successful;
@@ -68,7 +85,12 @@ class Logger {
       return acc;
     }, {});
 
-    const responseTimes = requests.map(r => parseInt(r.responseTime));
+    // Converter responseTime de string (ex: "125ms") para número
+    const responseTimes = requests.map(r => {
+      const timeStr = String(r.responseTime || '0ms');
+      return parseInt(timeStr.replace(/[^0-9]/g, ''), 10) || 0;
+    });
+    
     const avgResponseTime = Math.round(responseTimes.reduce((a, b) => a + b, 0) / total);
     const minResponseTime = Math.min(...responseTimes);
     const maxResponseTime = Math.max(...responseTimes);
@@ -108,52 +130,78 @@ class Logger {
     };
   }
 
+  // Função auxiliar para garantir padding correto
+  padRight(text, totalLength) {
+    const str = String(text);
+    const padding = totalLength - str.length;
+    return str + ' '.repeat(Math.max(0, padding));
+  }
+
   // Gerar resumo em formato de tabela
   generateTableSummary(timeBlock, stats) {
     const lines = [];
+    const tableWidth = 64;
     
+    // Cabeçalho
     lines.push("╔════════════════════════════════════════════════════════════════╗");
-    lines.push(`║           RESUMO DO BLOCO ${timeBlock.startTime}-${timeBlock.endTime}                        ║`);
-    lines.push(`║           ${timeBlock.date} (Semana ${timeBlock.weekNumber})                      ║`);
+    
+    const headerLine1 = `RESUMO DO BLOCO ${timeBlock.startTime}-${timeBlock.endTime}`;
+    const headerPadding1 = Math.floor((tableWidth - headerLine1.length - 2) / 2);
+    lines.push(`║${' '.repeat(headerPadding1)}${headerLine1}${' '.repeat(tableWidth - headerLine1.length - headerPadding1 - 2)}║`);
+    
+    const headerLine2 = `${timeBlock.date} (Semana ${timeBlock.weekNumber})`;
+    const headerPadding2 = Math.floor((tableWidth - headerLine2.length - 2) / 2);
+    lines.push(`║${' '.repeat(headerPadding2)}${headerLine2}${' '.repeat(tableWidth - headerLine2.length - headerPadding2 - 2)}║`);
+    
     lines.push("╠════════════════════════════════════════════════════════════════╣");
-    lines.push(`║ Total de Requisições            │ ${String(stats.total).padEnd(28)} ║`);
-    lines.push(`║ Sucesso                         │ ${String(stats.successful).padEnd(10)} (${stats.successRate}%)${' '.repeat(13)} ║`);
-    lines.push(`║ Falhas                          │ ${String(stats.failed).padEnd(10)} (${stats.failureRate}%)${' '.repeat(14)} ║`);
+    
+    // Estatísticas gerais
+    lines.push(`║ ${this.padRight('Total de Requisições', 31)} │ ${this.padRight(stats.total, 28)} ║`);
+    lines.push(`║ ${this.padRight('Sucesso', 31)} │ ${this.padRight(`${stats.successful} (${stats.successRate}%)`, 28)} ║`);
+    lines.push(`║ ${this.padRight('Falhas', 31)} │ ${this.padRight(`${stats.failed} (${stats.failureRate}%)`, 28)} ║`);
+    
     lines.push("╠════════════════════════════════════════════════════════════════╣");
     
     // Apps
     Object.entries(stats.apps).forEach(([app, count]) => {
       const percentage = ((count / stats.total) * 100).toFixed(1);
-      const appName = app.toUpperCase().padEnd(27);
-      lines.push(`║ ${appName} │ ${count} req (${percentage}%)${' '.repeat(17 - percentage.length - String(count).length)} ║`);
+      const appName = app.toUpperCase();
+      const value = `${count} req (${percentage}%)`;
+      lines.push(`║ ${this.padRight(appName, 31)} │ ${this.padRight(value, 28)} ║`);
     });
     
     lines.push("╠════════════════════════════════════════════════════════════════╣");
-    lines.push(`║ Tempo Médio                     │ ${stats.avgResponseTime}ms${' '.repeat(25 - String(stats.avgResponseTime).length)} ║`);
-    lines.push(`║ Mais Rápido                     │ ${stats.minResponseTime}ms${' '.repeat(26 - String(stats.minResponseTime).length)} ║`);
-    lines.push(`║ Mais Lento                      │ ${stats.maxResponseTime}ms${' '.repeat(25 - String(stats.maxResponseTime).length)} ║`);
+    
+    // Performance
+    lines.push(`║ ${this.padRight('Tempo Médio', 31)} │ ${this.padRight(`${stats.avgResponseTime}ms`, 28)} ║`);
+    lines.push(`║ ${this.padRight('Mais Rápido', 31)} │ ${this.padRight(`${stats.minResponseTime}ms`, 28)} ║`);
+    lines.push(`║ ${this.padRight('Mais Lento', 31)} │ ${this.padRight(`${stats.maxResponseTime}ms`, 28)} ║`);
+    
     lines.push("╠════════════════════════════════════════════════════════════════╣");
     
     // Top Endpoints
     if (stats.topEndpoints.length > 0) {
       stats.topEndpoints.forEach(([endpoint, count], index) => {
-        const shortEndpoint = endpoint.length > 35 ? endpoint.substring(0, 32) + '...' : endpoint;
-        lines.push(`║ Top ${index + 1} Endpoint${' '.repeat(20)} │ ${shortEndpoint} (${count}x)${' '.repeat(22 - shortEndpoint.length - String(count).length)} ║`);
+        const label = `Top ${index + 1} Endpoint`;
+        const shortEndpoint = endpoint.length > 30 ? endpoint.substring(0, 27) + '...' : endpoint;
+        const value = `${shortEndpoint} (${count}x)`;
+        lines.push(`║ ${this.padRight(label, 31)} │ ${this.padRight(value, 28)} ║`);
       });
       lines.push("╠════════════════════════════════════════════════════════════════╣");
     }
     
     // Erros
     if (stats.errors.length > 0) {
-      lines.push(`║ Total de Erros                  │ ${stats.errors.length}${' '.repeat(28 - String(stats.errors.length).length)} ║`);
+      lines.push(`║ ${this.padRight('Total de Erros', 31)} │ ${this.padRight(stats.errors.length, 28)} ║`);
       stats.errors.forEach((error, index) => {
-        if (index < 3) { // Mostrar no máximo 3 erros
-          const errorMsg = error.error ? error.error.substring(0, 30) : 'Unknown';
-          lines.push(`║ [${error.timestamp}] ${error.status}${' '.repeat(18)} │ ${errorMsg}${' '.repeat(28 - errorMsg.length)} ║`);
+        if (index < 3) {
+          const label = `[${error.timestamp}] ${error.status}`;
+          const errorMsg = error.error ? (error.error.length > 28 ? error.error.substring(0, 25) + '...' : error.error) : 'Unknown';
+          lines.push(`║ ${this.padRight(label, 31)} │ ${this.padRight(errorMsg, 28)} ║`);
         }
       });
     } else {
-      lines.push(`║ Erros                           │ Nenhum erro registrado${' '.repeat(6)} ║`);
+      lines.push(`║ ${this.padRight('Erros', 31)} │ ${this.padRight('Nenhum erro registrado', 28)} ║`);
     }
     
     lines.push("╚════════════════════════════════════════════════════════════════╝");
