@@ -13,6 +13,8 @@ import { useToast } from '../hooks/useToast';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
+const API_URL = 'http://localhost:3001/api';
+
 export const LoginScreen: React.FC = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const { toasts, removeToast, success, error: showError, warning } = useToast();
@@ -22,7 +24,7 @@ export const LoginScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showCredentialsModal, setShowCredentialsModal] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Validações
     if (!email || !password) {
       warning('Por favor, preencha todos os campos');
@@ -41,14 +43,65 @@ export const LoginScreen: React.FC = () => {
 
     setIsLoading(true);
 
-    // Simular delay de autenticação
+    try {
+      // ✅ TENTAR LOGIN VIA API PRIMEIRO
+      const apiResponse = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          senha: password,
+          appType: 'tutors'
+        }),
+        signal: AbortSignal.timeout(3000) // 3 segundos timeout
+      });
+
+      if (apiResponse.ok) {
+        const result = await apiResponse.json();
+        
+        if (result.success && result.data.user) {
+          // Login via API bem-sucedido
+          console.log('✅ Login via API:', result.data.user.nome);
+          
+          // Salvar usuário no mockAuthService (compatibilidade)
+          const user = {
+            id: result.data.user.id,
+            nome: result.data.user.nome,
+            email: result.data.user.email,
+            senha: password,
+            telefone: result.data.user.telefone || '',
+            relacionamento: result.data.user.relacionamento || '',
+            dataCadastro: result.data.user.dataCadastro || new Date().toISOString(),
+            ultimoAcesso: new Date().toISOString(),
+            criancasIds: result.data.user.criancasIds || [],
+            profissionalId: result.data.user.profissionalId || '',
+            configuracoes: result.data.user.configuracoes || {}
+          };
+          
+          mockAuthService['currentUser'] = user;
+          
+          success(`Bem-vindo(a), ${user.nome}!`, true);
+          
+          setTimeout(() => {
+            navigation.navigate('Dashboard');
+          }, 2200);
+          
+          setIsLoading(false);
+          return;
+        }
+      }
+    } catch (apiError) {
+      console.log('⚠️ API offline ou erro - usando login local');
+    }
+
+    // ✅ FALLBACK: LOGIN LOCAL (mockAuthService)
     setTimeout(() => {
       const response = mockAuthService.login(email, password);
       
       if (response.success && response.user) {
+        console.log('✅ Login local (mockAuthService)');
         success(`Bem-vindo(a), ${response.user.nome}!`, true);
         
-        // Navegar após mostrar toast
         setTimeout(() => {
           navigation.navigate('Dashboard');
         }, 2200);

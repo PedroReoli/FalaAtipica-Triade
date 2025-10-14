@@ -6,6 +6,8 @@ import { mockAuthService, mockUsers } from '../services/mockAuthService';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useToast } from '../hooks/useToast';
 
+const API_URL = 'http://localhost:3001/api';
+
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { setCurrentUser, setProfessionalType } = useProfessional();
@@ -41,17 +43,64 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // ✅ TENTAR LOGIN VIA API PRIMEIRO
+      try {
+        const apiResponse = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            senha: formData.password,
+            appType: 'pro'
+          }),
+          signal: AbortSignal.timeout(3000) // 3 segundos timeout
+        });
+
+        if (apiResponse.ok) {
+          const result = await apiResponse.json();
+          
+          if (result.success && result.data.user) {
+            // Login via API bem-sucedido
+            console.log('✅ Login via API:', result.data.user.nome);
+            
+            // Converter para formato do Pro
+            const user = {
+              email: result.data.user.email,
+              password: formData.password,
+              name: result.data.user.nome,
+              type: result.data.user.tipo || 'fonoaudiologo',
+              license: result.data.user.licenca || '',
+              specialty: result.data.user.especialidade || ''
+            };
+            
+            success(`Bem-vindo(a), ${user.name}!`, true);
+            setCurrentUser(user);
+            setProfessionalType(user.type);
+            
+            setTimeout(() => {
+              navigate('/dashboard');
+            }, 2200);
+            
+            setIsLoading(false);
+            return;
+          }
+        }
+      } catch (apiError) {
+        console.log('⚠️ API offline ou erro - usando login local');
+      }
+
+      // ✅ FALLBACK: LOGIN LOCAL (mockAuthService)
       const response = await mockAuthService.login(formData.email, formData.password);
       
       if (response.success && response.user) {
-        success(`Bem-vindo(a), ${response.user.name}!`, true); // true = centered
+        console.log('✅ Login local (mockAuthService)');
+        success(`Bem-vindo(a), ${response.user.name}!`, true);
         setCurrentUser(response.user);
         setProfessionalType(response.user.type);
         
-        // Delay para mostrar o toast centralizado de boas-vindas
         setTimeout(() => {
           navigate('/dashboard');
-        }, 2200); // 2s do toast + 200ms extra
+        }, 2200);
       } else {
         showError(response.message || 'Email ou senha incorretos');
       }

@@ -3,7 +3,9 @@
     "api": "cd api && npm start",
     "api:dev": "cd api && npm run dev",
     "kids": "cd Kids && npm start",
+    "kids:t": "cd Kids && npx expo start --tunnel",
     "tutors": "cd Tutors && npm start",
+    "tutors:t": "cd Tutors && npx expo start --tunnel",
     "pro": "cd Pro && npm run dev"
   },
   "dependencies": {
