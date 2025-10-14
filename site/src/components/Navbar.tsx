@@ -17,17 +17,17 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
             <Image
               src="/images/falaatipica-logo.png"
               alt="FalaAtípica Logo"
-              width={40}
-              height={40}
-              className="w-10 h-10"
+              width={50}
+              height={50}
+              className="w-12 h-12"
             />
-            <span className="text-xl font-bold text-[#054776]">
+            <span className="text-2xl font-bold text-[#054776]">
               FalaAtípica
             </span>
           </Link>
