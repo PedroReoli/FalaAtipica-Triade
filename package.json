@@ -1,13 +1,14 @@
 {
   "scripts": {
-    "install:all": "cd api && npm install && cd ../Kids && npm install && cd ../Pro && npm install && cd ../Tutors && npm install",
+    "install:all": "cd api && npm install && cd ../Kids && npm install && cd ../Pro && npm install && cd ../Tutors && npm install && cd ../site && npm install",
     "api": "cd api && npm start",
     "api:dev": "cd api && npm run dev",
     "kids": "cd Kids && npm start",
     "kids:t": "cd Kids && npx expo start --tunnel",
     "tutors": "cd Tutors && npm start",
     "tutors:t": "cd Tutors && npx expo start --tunnel",
-    "pro": "cd Pro && npm run dev"
+    "pro": "cd Pro && npm run dev",
+    "site": "cd site && npm run dev"
   },
   "dependencies": {
     "react-native-gesture-handler": "~2.16.1",
