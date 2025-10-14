@@ -4,7 +4,26 @@ const router = express.Router();
 const jsonService = require('../services/jsonService');
 const { successResponse, errorResponse, calculateOverallProgress, getLatest } = require('../utils/helpers');
 
-// GET /api/tutors/profile/:tutorId - Perfil completo do tutor
+/**
+ * @swagger
+ * /api/tutors/profile/{tutorId}:
+ *   get:
+ *     tags: [Tutors]
+ *     summary: Perfil completo do tutor
+ *     description: Retorna dados do tutor e suas crianças com progresso
+ *     parameters:
+ *       - in: path
+ *         name: tutorId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: tutor_001
+ *     responses:
+ *       200:
+ *         description: Perfil retornado com sucesso
+ *       404:
+ *         description: Tutor não encontrado
+ */
 router.get('/profile/:tutorId', async (req, res) => {
   try {
     const { tutorId } = req.params;

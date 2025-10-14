@@ -4,7 +4,25 @@ const router = express.Router();
 const jsonService = require('../services/jsonService');
 const { successResponse, errorResponse, generateId, calculateOverallProgress } = require('../utils/helpers');
 
-// POST /api/kids/progress - Salvar progresso de jogo
+/**
+ * @swagger
+ * /api/kids/progress:
+ *   post:
+ *     tags: [Kids]
+ *     summary: Salvar progresso de jogo
+ *     description: Registra o progresso da criança após completar um jogo
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Progress'
+ *     responses:
+ *       201:
+ *         description: Progresso salvo com sucesso
+ *       400:
+ *         description: Dados inválidos
+ */
 router.post('/progress', async (req, res) => {
   try {
     const {
@@ -111,7 +129,23 @@ router.post('/progress', async (req, res) => {
   }
 });
 
-// GET /api/kids/progress/:userId - Buscar progresso de uma criança
+/**
+ * @swagger
+ * /api/kids/progress/{userId}:
+ *   get:
+ *     tags: [Kids]
+ *     summary: Buscar progresso de uma criança
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "1"
+ *     responses:
+ *       200:
+ *         description: Progresso retornado com sucesso
+ */
 router.get('/progress/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
@@ -152,7 +186,16 @@ router.get('/progress/:userId', async (req, res) => {
   }
 });
 
-// GET /api/kids/games - Lista de jogos disponíveis
+/**
+ * @swagger
+ * /api/kids/games:
+ *   get:
+ *     tags: [Kids]
+ *     summary: Lista de jogos disponíveis
+ *     responses:
+ *       200:
+ *         description: Lista de jogos retornada
+ */
 router.get('/games', (req, res) => {
   const games = [
     { id: 'palavras', nome: 'Jogo das Palavras', categoria: 'linguagem' },

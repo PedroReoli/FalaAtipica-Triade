@@ -182,6 +182,35 @@ FalaAtipica-Triade/
 
 ---
 
+## 🚀 Comandos Rápidos
+
+### **Rodar Aplicações:**
+
+```bash
+# API Local (Sincronização)
+npm run api
+
+# Kids App (Crianças)
+npm run kids
+
+# Tutors App (Pais/Responsáveis)
+npm run tutors
+
+# Pro App (Profissionais)
+npm run pro
+```
+
+### **Swagger Documentation:**
+
+Após iniciar a API, acesse:
+**http://localhost:3001/api/docs**
+
+- ✅ Documentação interativa de todas as rotas
+- ✅ Testar endpoints direto no navegador
+- ✅ 24 rotas documentadas
+
+---
+
 ## 🚀 Do TCC à Startup
 
 ### Começamos como um Trabalho de Conclusão de Curso...

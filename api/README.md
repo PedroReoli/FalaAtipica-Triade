@@ -26,7 +26,25 @@ npm start
 npm run dev
 ```
 
+### Da Raiz do Projeto
+```bash
+npm run api
+```
+
 A API estará disponível em: **http://localhost:3001**
+
+## 📚 Swagger Documentation
+
+**Acesse a documentação interativa:**
+
+**http://localhost:3001/api/docs**
+
+- ✅ Visualize todas as 24 rotas
+- ✅ Teste endpoints direto no navegador
+- ✅ Veja exemplos de request/response
+- ✅ Sem precisar Postman!
+
+Leia mais: [SWAGGER.md](./SWAGGER.md)
 
 ## 📡 Endpoints Principais
 

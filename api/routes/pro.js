@@ -4,7 +4,22 @@ const router = express.Router();
 const jsonService = require('../services/jsonService');
 const { successResponse, errorResponse, generateId, calculateOverallProgress } = require('../utils/helpers');
 
-// GET /api/pro/patients - Lista de pacientes do profissional
+/**
+ * @swagger
+ * /api/pro/patients:
+ *   get:
+ *     tags: [Pro]
+ *     summary: Lista de pacientes do profissional
+ *     parameters:
+ *       - in: query
+ *         name: professionalId
+ *         schema:
+ *           type: string
+ *         example: prof_001
+ *     responses:
+ *       200:
+ *         description: Lista de pacientes retornada
+ */
 router.get('/patients', async (req, res) => {
   try {
     const { professionalId } = req.query;
@@ -110,7 +125,39 @@ router.get('/patient/:patientId', async (req, res) => {
   }
 });
 
-// POST /api/pro/session - Criar sessão
+/**
+ * @swagger
+ * /api/pro/session:
+ *   post:
+ *     tags: [Pro]
+ *     summary: Criar sessão para paciente
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - patientId
+ *               - profissionalId
+ *             properties:
+ *               patientId:
+ *                 type: string
+ *                 example: "1"
+ *               profissionalId:
+ *                 type: string
+ *                 example: prof_001
+ *               tipo:
+ *                 type: string
+ *                 example: Terapia
+ *               observacoes:
+ *                 type: string
+ *               atividades:
+ *                 type: array
+ *     responses:
+ *       201:
+ *         description: Sessão criada com sucesso
+ */
 router.post('/session', async (req, res) => {
   try {
     const {

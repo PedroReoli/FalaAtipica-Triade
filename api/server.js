@@ -5,6 +5,8 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 require('dotenv').config();
 
 const app = express();
@@ -37,6 +39,18 @@ const socketHelpers = setupWebSocket(io);
 // Disponibilizar io e helpers para as rotas
 app.set('io', io);
 app.set('socketHelpers', socketHelpers);
+
+// Swagger UI
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'FalaAtípica API Docs'
+}));
+
+// Swagger JSON
+app.get('/api/docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 // Rotas
 const authRoutes = require('./routes/auth');
@@ -91,6 +105,7 @@ server.listen(PORT, () => {
   console.log(`🚀 API Local - FalaAtípica`);
   console.log(`🚀 Rodando em: http://localhost:${PORT}`);
   console.log(`🚀 WebSocket: ws://localhost:${PORT}`);
+  console.log(`📚 Swagger Docs: http://localhost:${PORT}/api/docs`);
   console.log(`🚀 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log('🚀 ========================================');
   console.log('');

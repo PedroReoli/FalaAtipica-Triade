@@ -4,7 +4,46 @@ const router = express.Router();
 const jsonService = require('../services/jsonService');
 const { successResponse, errorResponse, isValidEmail } = require('../utils/helpers');
 
-// POST /api/auth/login
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Login de usuário
+ *     description: Autentica usuário (Kids, Tutors ou Pro) e retorna token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - senha
+ *               - appType
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: carlos@tutors.com
+ *               senha:
+ *                 type: string
+ *                 example: "123456"
+ *               appType:
+ *                 type: string
+ *                 enum: [kids, tutors, pro]
+ *                 example: tutors
+ *     responses:
+ *       200:
+ *         description: Login bem-sucedido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       400:
+ *         description: Dados inválidos
+ *       401:
+ *         description: Credenciais incorretas
+ */
 router.post('/login', async (req, res) => {
   try {
     const { email, senha, appType } = req.body;
