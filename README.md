@@ -421,6 +421,4 @@ Para cada bug que corrigimos, existe um profissional que queremos empoderar.
 
 **"Toda criança merece ser ouvida. Toda voz merece ser celebrada."**
 
-💙 FalaAtípica - Transformando silêncios em histórias
-
 </div>
