@@ -77,6 +77,32 @@
         "estado": "SP",
         "cep": "01305-000"
       }
+    },
+    {
+      "id": "4",
+      "nome": "Lucas Silva",
+      "idade": 5,
+      "dataNascimento": "2019-08-22",
+      "responsavel": "Carlos Silva",
+      "telefone": "(11) 99999-8888",
+      "email": "carlos@tutors.com",
+      "tutorId": "tutor_001",
+      "profissionalId": "prof_001",
+      "profissionalNome": "Dra. Ana Paula Santos",
+      "dataInicio": "2024-10-01",
+      "status": "ativo",
+      "diagnostico": "Atraso leve na fala",
+      "observacoes": "Criança iniciante, ainda se adaptando aos jogos. Mostra interesse.",
+      "progressoGeral": 25,
+      "ultimaSessao": "2024-10-14T15:20:00Z",
+      "proximaSessao": "2025-10-19T10:00:00Z",
+      "foto": "lucas_silva.jpg",
+      "endereco": {
+        "rua": "Rua das Flores, 123",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01234-567"
+      }
     }
   ]
 }

@@ -95,6 +95,38 @@
       "observacoes": "Terapia de comunicação alternativa",
       "local": "Instituto de Fonoaudiologia - Sala 5",
       "criadoEm": "2025-10-13T11:00:00Z"
+    },
+    {
+      "id": "agenda_007",
+      "criancaId": "4",
+      "criancaNome": "Lucas Silva",
+      "profissionalId": "prof_001",
+      "profissionalNome": "Dra. Ana Paula Santos",
+      "profissionalEspecialidade": "Fonoaudióloga",
+      "data": "2025-10-19",
+      "horario": "10:00",
+      "duracao": 45,
+      "tipo": "Consulta Presencial",
+      "status": "confirmada",
+      "observacoes": "Primeira avaliação fonoaudiológica",
+      "local": "Clínica FalaAtípica - Sala 2",
+      "criadoEm": "2025-10-11T09:00:00Z"
+    },
+    {
+      "id": "agenda_008",
+      "criancaId": "4",
+      "criancaNome": "Lucas Silva",
+      "profissionalId": "prof_001",
+      "profissionalNome": "Dra. Ana Paula Santos",
+      "profissionalEspecialidade": "Fonoaudióloga",
+      "data": "2025-10-26",
+      "horario": "10:30",
+      "duracao": 45,
+      "tipo": "Consulta Online",
+      "status": "agendada",
+      "observacoes": "Acompanhamento inicial",
+      "local": "Zoom",
+      "criadoEm": "2025-10-14T10:00:00Z"
     }
   ]
 }

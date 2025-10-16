@@ -9,7 +9,7 @@
       "relacionamento": "Pai",
       "dataCadastro": "2024-01-10",
       "ultimoAcesso": "2024-01-21T14:30:00Z",
-      "criancasIds": ["1"],
+      "criancasIds": ["1", "4"],
       "profissionalId": "prof_001",
       "configuracoes": {
         "notificacoes": true,

@@ -56,6 +56,25 @@
         "nivel": 5,
         "jogosCompletos": 20
       }
+    },
+    {
+      "id": "4",
+      "nome": "Lucas Silva",
+      "idade": 5,
+      "email": "lucas@kids.com",
+      "senha": "123456",
+      "avatar": "avatar1.png",
+      "responsavel": {
+        "nome": "Carlos Silva",
+        "parentesco": "Pai",
+        "telefone": "(11) 99999-8888",
+        "email": "carlos.silva@email.com"
+      },
+      "progresso": {
+        "pontos": 45,
+        "nivel": 1,
+        "jogosCompletos": 3
+      }
     }
   ]
 }

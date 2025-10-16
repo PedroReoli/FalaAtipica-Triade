@@ -8,10 +8,18 @@ import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { ChildSelector } from '../components/ChildSelector';
 import { mockAuthService } from '../services/mockAuthService';
 import { API_BASE_URL } from '../config/api';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
+
+interface Child {
+  id: string;
+  nome: string;
+  idade: number;
+  progressoGeral?: number;
+}
 
 interface Agenda {
   id: string;
@@ -37,10 +45,72 @@ export const AgendaScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState<'todas' | 'proximas' | 'concluidas'>('proximas');
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
+  const [selectedChild, setSelectedChild] = useState<string>('');
+  const [availableChildren, setAvailableChildren] = useState<Child[]>([]);
 
   useEffect(() => {
+    loadAvailableChildren();
     loadAgendas();
   }, []);
+
+  useEffect(() => {
+    if (selectedChild) {
+      loadAgendas();
+    }
+  }, [selectedChild]);
+
+  const loadAvailableChildren = async () => {
+    try {
+      const currentUser = mockAuthService.getCurrentUser();
+      
+      if (!currentUser || !currentUser.criancasIds) return;
+
+      // Buscar dados das crianças via API
+      try {
+        const response = await fetch(`${API_BASE_URL}/tutors/profile/${currentUser.id}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(3000),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data.criancas) {
+            const children = data.data.criancas.map((c: any) => ({
+              id: c.id,
+              nome: c.nome,
+              idade: c.idade,
+              progressoGeral: c.progressoGeral,
+            }));
+            setAvailableChildren(children);
+            if (!selectedChild && children.length > 0) {
+              setSelectedChild(children[0].id);
+            }
+            return;
+          }
+        }
+      } catch (error) {
+        console.log('⚠️ API erro - usando dados mockados');
+      }
+
+      // Fallback: usar perfil mockado
+      const perfilData = require('../../mockup-data/perfil.json');
+      if (perfilData.criancas) {
+        const children = perfilData.criancas.map((c: any) => ({
+          id: c.id,
+          nome: c.nome,
+          idade: c.idade,
+          progressoGeral: c.progressoGeral,
+        }));
+        setAvailableChildren(children);
+        if (!selectedChild && children.length > 0) {
+          setSelectedChild(children[0].id);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar crianças:', error);
+    }
+  };
 
   const loadAgendas = async (isRefreshing = false) => {
     try {
@@ -48,6 +118,9 @@ export const AgendaScreen: React.FC = () => {
       const currentUser = mockAuthService.getCurrentUser();
       
       if (!currentUser) return;
+
+      // Usar criança selecionada ou primeira criança
+      const childIdToFilter = selectedChild || currentUser.criancasIds?.[0];
 
       // Tentar buscar da API
       try {
@@ -60,7 +133,11 @@ export const AgendaScreen: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.agendas) {
-            setAgendas(data.agendas);
+            // Filtrar por criança selecionada
+            const agendasFiltradas = childIdToFilter
+              ? data.agendas.filter((a: any) => a.criancaId === childIdToFilter)
+              : data.agendas;
+            setAgendas(agendasFiltradas);
             if (!isRefreshing) setIsLoading(false);
             return;
           }
@@ -69,14 +146,14 @@ export const AgendaScreen: React.FC = () => {
         console.log('⚠️ API erro - usando dados mockados');
       }
 
-      // Fallback: carregar dados mockados e filtrar por criança do tutor
+      // Fallback: carregar dados mockados e filtrar por criança selecionada
       const agendasData = require('../../mockup-data/agendas.json');
       const todasAgendas = agendasData.agendas || [];
       
-      // Filtrar apenas agendas das crianças deste tutor
-      const agendasFiltradas = todasAgendas.filter((agenda: any) => 
-        currentUser.criancasIds?.includes(agenda.criancaId)
-      );
+      // Filtrar por criança selecionada (ou todas as crianças do tutor)
+      const agendasFiltradas = childIdToFilter
+        ? todasAgendas.filter((agenda: any) => agenda.criancaId === childIdToFilter)
+        : todasAgendas.filter((agenda: any) => currentUser.criancasIds?.includes(agenda.criancaId));
       
       setAgendas(agendasFiltradas);
     } catch (error) {
@@ -199,6 +276,13 @@ export const AgendaScreen: React.FC = () => {
         onBack={handleBack}
         showBackButton={true}
         showLogo={true}
+      />
+
+      {/* Seletor de Criança - Apenas se tiver 2+ crianças */}
+      <ChildSelector
+        children={availableChildren}
+        selectedChildId={selectedChild}
+        onSelectChild={setSelectedChild}
       />
       
       {/* Filtros */}

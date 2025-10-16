@@ -58,14 +58,49 @@
           "icone": "trophy"
         }
       ]
+    },
+    {
+      "id": "4",
+      "nome": "Lucas Silva",
+      "idade": 5,
+      "dataNascimento": "2019-08-22",
+      "relacionamento": "Filho",
+      "dataInicio": "2024-10-01",
+      "status": "ativo",
+      "progressoGeral": 25,
+      "ultimaAtividade": "2024-10-14T15:20:00Z",
+      "foto": "lucas_silva.jpg",
+      "diagnostico": "Atraso leve na fala",
+      "observacoes": "Criança iniciante, ainda se adaptando aos jogos. Mostra interesse.",
+      "preferencias": {
+        "categoriaFavorita": "objetos",
+        "horarioPreferido": "tarde",
+        "dificuldadePreferida": "facil"
+      },
+      "jogos": {
+        "totalJogos": 5,
+        "jogosCompletos": 3,
+        "tempoTotal": 12,
+        "sequenciaAtual": 1,
+        "melhorSequencia": 2
+      },
+      "conquistas": [
+        {
+          "id": "primeira_conquista",
+          "nome": "Primeira Estrela",
+          "descricao": "Completou o primeiro jogo",
+          "data": "2024-10-05T14:10:00Z",
+          "icone": "star"
+        }
+      ]
     }
   ],
   "estatisticas": {
-    "totalCriancas": 1,
-    "criancasAtivas": 1,
-    "progressoMedio": 75,
-    "totalTempoJogado": 45,
-    "conquistasTotais": 2,
-    "relatoriosGerados": 3
+    "totalCriancas": 2,
+    "criancasAtivas": 2,
+    "progressoMedio": 50,
+    "totalTempoJogado": 57,
+    "conquistasTotais": 3,
+    "relatoriosGerados": 4
   }
 }

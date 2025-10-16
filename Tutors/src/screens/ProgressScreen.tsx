@@ -8,6 +8,7 @@ import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { ChildSelector } from '../components/ChildSelector';
 import { mockAuthService } from '../services/mockAuthService';
 import { API_BASE_URL } from '../config/api';
 
@@ -23,6 +24,13 @@ interface GameProgress {
   bestScore: number;
   totalTime: number;
   lastPlayed: string | null;
+}
+
+interface Child {
+  id: string;
+  nome: string;
+  idade: number;
+  progressoGeral?: number;
 }
 
 interface ProgressData {
@@ -45,10 +53,71 @@ export const ProgressScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedChild, setSelectedChild] = useState<string>('');
   const [expandedGame, setExpandedGame] = useState<string | null>(null);
+  const [availableChildren, setAvailableChildren] = useState<Child[]>([]);
 
   useEffect(() => {
+    loadAvailableChildren();
     loadProgressData();
   }, []);
+
+  useEffect(() => {
+    if (selectedChild) {
+      loadProgressData();
+    }
+  }, [selectedChild]);
+
+  const loadAvailableChildren = async () => {
+    try {
+      const currentUser = mockAuthService.getCurrentUser();
+      
+      if (!currentUser || !currentUser.criancasIds) return;
+
+      // Buscar dados das crianças via API
+      try {
+        const response = await fetch(`${API_BASE_URL}/tutors/profile/${currentUser.id}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(3000),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data.criancas) {
+            const children = data.data.criancas.map((c: any) => ({
+              id: c.id,
+              nome: c.nome,
+              idade: c.idade,
+              progressoGeral: c.progressoGeral,
+            }));
+            setAvailableChildren(children);
+            if (!selectedChild && children.length > 0) {
+              setSelectedChild(children[0].id);
+            }
+            return;
+          }
+        }
+      } catch (error) {
+        console.log('⚠️ API erro - usando dados mockados');
+      }
+
+      // Fallback: usar perfil mockado
+      const perfilData = require('../../mockup-data/perfil.json');
+      if (perfilData.criancas) {
+        const children = perfilData.criancas.map((c: any) => ({
+          id: c.id,
+          nome: c.nome,
+          idade: c.idade,
+          progressoGeral: c.progressoGeral,
+        }));
+        setAvailableChildren(children);
+        if (!selectedChild && children.length > 0) {
+          setSelectedChild(children[0].id);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar crianças:', error);
+    }
+  };
 
   const loadProgressData = async (isRefreshing = false) => {
     try {
@@ -62,8 +131,9 @@ export const ProgressScreen: React.FC = () => {
         return;
       }
 
-      const childId = currentUser.criancasIds[0]; // Primeira criança
-      setSelectedChild(childId);
+      // Usar criança selecionada, ou primeira se não houver seleção
+      const childId = selectedChild || currentUser.criancasIds[0];
+      if (!selectedChild) setSelectedChild(childId);
       
       // Tentar API primeiro
       try {
@@ -333,6 +403,13 @@ export const ProgressScreen: React.FC = () => {
         onBack={handleBack}
         showBackButton={true}
         showLogo={true}
+      />
+
+      {/* Seletor de Criança - Apenas se tiver 2+ crianças */}
+      <ChildSelector
+        children={availableChildren}
+        selectedChildId={selectedChild}
+        onSelectChild={setSelectedChild}
       />
       
       <ScrollView 
