@@ -11,7 +11,9 @@
 7. **Público-alvo e Aplicações** - KIDS, TUTORS e PRO
 8. **Arquitetura Geral** - Ecossistema digital integrado
 9. **Design e Identidade Visual** - Paleta de cores e acessibilidade
-10. **Conclusão e Impacto Social** - Tecnologia que transforma vidas
+10. **Metodologias e Pesquisa** - Design Thinking, Growth Hacking, GWP
+11. **Análise SWOT** - Forças, fraquezas, oportunidades e ameaças
+12. **Conclusão e Impacto Social** - Tecnologia que transforma vidas
 
 ---
 
@@ -274,7 +276,84 @@ Design limpo, intuitivo e humano
 
 ---
 
-### Slide 7: Conclusão e Impacto Social
+### Slide 10: Metodologias e Pesquisa
+
+#### O que aparece no slide (pouco texto):
+
+```
+Metodologias utilizadas:
+🔹 Design Thinking – foco no usuário e empatia
+🔹 Growth Hacking – engajamento e progressão
+🔹 GWP (Game Waterfall Process) – estrutura e controle de produção
+
+Tipos de pesquisa:
+📚 Pesquisa bibliográfica
+🧠 Pesquisa de campo com psicólogos, fonoaudiólogos e pedagogos
+```
+
+#### O que você fala (apoio para a apresentação):
+
+> O desenvolvimento do FalaAtípica foi baseado em uma combinação de métodos de pesquisa e metodologias ativas, o que garantiu tanto o rigor acadêmico quanto a efetividade prática da solução.
+>
+> Começamos com uma **pesquisa bibliográfica**, estudando autores e artigos sobre tecnologia assistiva, comunicação alternativa e metodologias ativas.
+>
+> Em seguida, realizamos **pesquisas de campo**, com psicólogos, psicopedagogos e fonoaudiólogos, para entender as reais necessidades das crianças com atraso de fala e dos profissionais que as acompanham.
+>
+> No processo de desenvolvimento, usamos três metodologias principais:
+>
+> 🔹 **Design Thinking**, que nos ajudou a entender o usuário e criar empatia com as três personas principais: criança, tutor e profissional.
+>
+> 🔹 **Growth Hacking**, aplicado principalmente no módulo KIDS, criando estratégias de engajamento e recompensas que estimulam a repetição e o aprendizado.
+>
+> 🔹 E o **GWP – Game Waterfall Process**, que trouxe estrutura, documentação e controle de qualidade ao longo de todas as fases do projeto.
+>
+> Essa combinação metodológica garantiu que o projeto tivesse **base científica, foco no usuário e desenvolvimento consistente** — do conceito à aplicação funcional.
+
+---
+
+### Slide 11: Análise SWOT
+
+#### O que aparece no slide (pouco texto):
+
+```
+Forças (Strengths)
+✅ Inclusão e acessibilidade comunicacional
+✅ Aplicação de metodologias modernas (Design Thinking e GWP)
+✅ Interface intuitiva e gamificada
+
+Fraquezas (Weaknesses)
+⚠️ Necessidade de atualizações constantes
+⚠️ Recursos financeiros limitados
+⚠️ Dependência do engajamento familiar
+
+Oportunidades (Opportunities)
+🌱 Crescimento da inclusão digital e educacional no Brasil
+🌱 Parcerias com escolas, clínicas e ONGs
+🌱 Políticas públicas voltadas à neurodiversidade
+
+Ameaças (Threats)
+🚫 Alta competitividade de apps educacionais
+🚫 Barreiras de acesso à tecnologia em regiões com baixa conectividade
+🚫 Resistência de profissionais ao uso de novas ferramentas
+```
+
+#### O que você fala (apoio para a apresentação):
+
+> Durante o planejamento estratégico, realizamos uma **análise SWOT** para compreender os fatores que fortalecem e desafiam o FalaAtípica.
+>
+> Entre as **forças**, destacam-se a **acessibilidade comunicacional**, o uso de **metodologias modernas** e a **interface gamificada**, que aproxima a criança do aprendizado de forma natural.
+>
+> As **fraquezas** envolvem a necessidade de **atualizações constantes** e a **dependência do engajamento familiar**, já que o progresso depende da continuidade fora do ambiente clínico.
+>
+> Nas **oportunidades**, observamos o **crescimento da inclusão digital e educacional no Brasil**, o avanço das **políticas públicas para o autismo** e as possibilidades de **parceria com escolas e ONGs**.
+>
+> E por fim, entre as **ameaças**, identificamos a **alta competitividade de aplicativos educacionais**, as **diferenças de acesso à tecnologia** e a **resistência de alguns profissionais** à adoção de novas práticas digitais.
+>
+> Essa análise reforça que o FalaAtípica tem **grande potencial de impacto social**, especialmente se for fortalecido por **políticas públicas e redes de apoio à inclusão**.
+
+---
+
+### Slide 12: Conclusão e Impacto Social
 
 #### O que aparece no slide (pouco texto):
 
