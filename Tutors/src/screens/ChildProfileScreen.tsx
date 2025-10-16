@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Trash2, Check } from 'lucide-react-native';
+import { Trash2 } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
@@ -113,42 +113,10 @@ export const ChildProfileScreen: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const loadDevices = async () => {
-    try {
-      // Tentar buscar dispositivos da API
-      const response = await fetch(`${apiService['apiBaseUrl']}/tutors/devices/${childId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        signal: AbortSignal.timeout(3000),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.devices) {
-          // Formatar timestamps
-          const formattedDevices = data.devices.map((device: any) => ({
-            id: device.id,
-            name: device.name,
-            type: device.type,
-            lastSync: formatTimestamp(device.lastSync),
-          }));
-          setConnectedDevices(formattedDevices);
-          return;
-        }
-      }
-    } catch (error) {
-      console.log('⚠️ API erro - usando dados locais');
-    }
-
-    // Fallback: dados mockados
-    setConnectedDevices([
-      { id: '1', name: 'iPad da Escola', type: 'Tablet', lastSync: 'Há 2 horas' },
-      { id: '2', name: 'iPhone da Mãe', type: 'Smartphone', lastSync: 'Há 1 dia' },
-    ]);
-  };
-
-  const formatTimestamp = (timestamp: string): string => {
-    const date = new Date(timestamp);
+  const formatLastAccess = (isoDate: string | null): string => {
+    if (!isoDate) return 'Nunca acessou';
+    
+    const date = new Date(isoDate);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
@@ -158,7 +126,16 @@ export const ChildProfileScreen: React.FC = () => {
     if (diffMins < 1) return 'Agora';
     if (diffMins < 60) return `Há ${diffMins} ${diffMins === 1 ? 'minuto' : 'minutos'}`;
     if (diffHours < 24) return `Há ${diffHours} ${diffHours === 1 ? 'hora' : 'horas'}`;
-    return `Há ${diffDays} ${diffDays === 1 ? 'dia' : 'dias'}`;
+    if (diffDays < 7) return `Há ${diffDays} ${diffDays === 1 ? 'dia' : 'dias'}`;
+    
+    // Para mais de 7 dias, mostrar data formatada
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${day}/${month}/${year} às ${hours}:${minutes}`;
   };
 
   const setupRealtimeUpdates = () => {
@@ -176,9 +153,8 @@ export const ChildProfileScreen: React.FC = () => {
       if (data.userId === childId) {
         console.log('✅ Atualizando perfil da criança:', data.userName);
         
-        // Recarregar dados da criança e dispositivos
+        // Recarregar dados da criança
         loadChildData();
-        loadDevices();
         
         // Opcional: Mostrar notificação
         Alert.alert(
@@ -197,9 +173,8 @@ export const ChildProfileScreen: React.FC = () => {
       if (data.userId === childId) {
         console.log('✅ Criança iniciou jogo:', data.gameName);
         
-        // Recarregar dispositivos e dados
+        // Recarregar dados da criança
         loadChildData();
-        loadDevices();
       }
     });
   };
@@ -243,10 +218,6 @@ export const ChildProfileScreen: React.FC = () => {
     }
   };
 
-  const handleDevicePress = (deviceId: string) => {
-    // TODO: Implementar ação do dispositivo
-    console.log('Dispositivo selecionado:', deviceId);
-  };
 
   const handleHome = () => {
     navigation.navigate('Dashboard');
@@ -274,18 +245,6 @@ export const ChildProfileScreen: React.FC = () => {
     );
   };
 
-  const renderDevice = ({ item }: { item: typeof connectedDevices[0] }) => (
-    <TouchableOpacity
-      style={styles.deviceCard}
-      onPress={() => handleDevicePress(item.id)}
-    >
-      <View style={styles.deviceInfo}>
-        <Text style={styles.deviceName}>{item.name}</Text>
-        <Text style={styles.deviceType}>{item.type}</Text>
-      </View>
-      <Text style={styles.deviceSync}>{item.lastSync}</Text>
-    </TouchableOpacity>
-  );
 
   return (
     <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
@@ -324,6 +283,16 @@ export const ChildProfileScreen: React.FC = () => {
                 <Text style={styles.statLabel}>Data de Início</Text>
               </View>
             </View>
+
+            {/* Último Acesso */}
+            <View style={styles.lastAccessSection}>
+              <Text style={styles.sectionTitle}>Último Acesso</Text>
+              <View style={styles.lastAccessCard}>
+                <Text style={styles.lastAccessValue}>
+                  {formatLastAccess(childData.ultimoAcesso)}
+                </Text>
+              </View>
+            </View>
           </>
         ) : null}
 
@@ -333,18 +302,6 @@ export const ChildProfileScreen: React.FC = () => {
           <FlatList
             data={generalSettings}
             renderItem={renderSetting}
-            keyExtractor={(item) => item.id}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
-
-        {/* Dispositivos Conectados */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Dispositivos Conectados</Text>
-          <FlatList
-            data={connectedDevices}
-            renderItem={renderDevice}
             keyExtractor={(item) => item.id}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
@@ -458,32 +415,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.GREEN,
   },
-  deviceCard: {
+  lastAccessSection: {
+    marginBottom: 24,
+  },
+  lastAccessCard: {
     backgroundColor: COLORS.TEXT_WHITE,
-    borderWidth: 1,
-    borderColor: COLORS.YELLOW,
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 8,
-    flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: COLORS.GREEN,
+    borderRadius: 12,
+    padding: 20,
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
-  deviceInfo: {
-    flex: 1,
-  },
-  deviceName: {
+  lastAccessValue: {
     fontSize: 16,
     fontWeight: '600',
     color: COLORS.TEXT_BLACK,
-  },
-  deviceType: {
-    fontSize: 14,
-    color: COLORS.GREEN,
-    marginTop: 2,
-  },
-  deviceSync: {
-    fontSize: 12,
-    color: COLORS.GREEN,
+    textAlign: 'center',
   },
 });
