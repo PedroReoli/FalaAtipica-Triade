@@ -145,25 +145,48 @@ router.get('/progress/:childId', async (req, res) => {
     const progressoGeral = calculateOverallProgress(progressoCrianca);
     const ultimasAtividades = getLatest(progressoCrianca, 10);
     
-    // Agrupar por jogo
-    const porJogo = progressoCrianca.reduce((acc, p) => {
-      if (!acc[p.gameId]) {
-        acc[p.gameId] = {
-          gameId: p.gameId,
-          gameName: getGameName(p.gameId),
-          jogos: [],
-          mediaScore: 0
-        };
+    // Definir TODOS os jogos disponíveis
+    const todosOsJogos = {
+      'igual-diferente': {
+        gameId: 'igual-diferente',
+        gameName: 'Igual-Diferente',
+        jogos: [],
+        mediaScore: 0
+      },
+      'cena-certa': {
+        gameId: 'cena-certa',
+        gameName: 'Cena Certa',
+        jogos: [],
+        mediaScore: 0
+      },
+      'adivinha': {
+        gameId: 'adivinha',
+        gameName: 'Adivinha',
+        jogos: [],
+        mediaScore: 0
+      },
+      'palavras': {
+        gameId: 'palavras',
+        gameName: 'Jogo das Palavras',
+        jogos: [],
+        mediaScore: 0
       }
-      acc[p.gameId].jogos.push(p);
-      return acc;
-    }, {});
+    };
     
-    // Calcular média por jogo
-    Object.values(porJogo).forEach(game => {
-      game.mediaScore = Math.round(
-        game.jogos.reduce((sum, j) => sum + j.score, 0) / game.jogos.length
-      );
+    // Agrupar progresso por jogo
+    progressoCrianca.forEach(p => {
+      if (todosOsJogos[p.gameId]) {
+        todosOsJogos[p.gameId].jogos.push(p);
+      }
+    });
+    
+    // Calcular média por jogo (apenas para jogos jogados)
+    Object.values(todosOsJogos).forEach(game => {
+      if (game.jogos.length > 0) {
+        game.mediaScore = Math.round(
+          game.jogos.reduce((sum, j) => sum + j.score, 0) / game.jogos.length
+        );
+      }
     });
     
     res.json(successResponse({
@@ -179,7 +202,7 @@ router.get('/progress/:childId', async (req, res) => {
         ),
         mediaGeral: progressoGeral
       },
-      porJogo: Object.values(porJogo)
+      porJogo: Object.values(todosOsJogos) // Retorna TODOS os 4 jogos
     }));
     
   } catch (error) {

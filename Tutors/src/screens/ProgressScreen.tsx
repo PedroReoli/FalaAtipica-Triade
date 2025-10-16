@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, RefreshControl, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { BarChart3, Eye, Film, Gamepad2, Brain, Trophy, Clock, Target } from 'lucide-react-native';
+import { BarChart3, Eye, Film, Gamepad2, Brain, Trophy, Clock, Target, ChevronDown, ChevronUp } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
@@ -42,21 +42,23 @@ export const ProgressScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const [progressData, setProgressData] = useState<ProgressData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedChild, setSelectedChild] = useState<string>('');
+  const [expandedGame, setExpandedGame] = useState<string | null>(null);
 
   useEffect(() => {
     loadProgressData();
   }, []);
 
-  const loadProgressData = async () => {
+  const loadProgressData = async (isRefreshing = false) => {
     try {
-      setIsLoading(true);
+      if (!isRefreshing) setIsLoading(true);
       const currentUser = mockAuthService.getCurrentUser();
       
       if (!currentUser || !currentUser.criancasIds || currentUser.criancasIds.length === 0) {
         // Fallback: dados mockados
         setProgressData(getMockProgressData());
-        setIsLoading(false);
+        if (!isRefreshing) setIsLoading(false);
         return;
       }
 
@@ -76,7 +78,7 @@ export const ProgressScreen: React.FC = () => {
           if (data.success) {
             const formattedData = formatAPIData(data.data);
             setProgressData(formattedData);
-            setIsLoading(false);
+            if (!isRefreshing) setIsLoading(false);
             return;
           }
         }
@@ -90,8 +92,14 @@ export const ProgressScreen: React.FC = () => {
       console.error('Erro ao carregar progresso:', error);
       setProgressData(getMockProgressData());
     } finally {
-      setIsLoading(false);
+      if (!isRefreshing) setIsLoading(false);
     }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadProgressData(true);
+    setRefreshing(false);
   };
 
   const formatAPIData = (data: any): ProgressData => {
@@ -102,26 +110,44 @@ export const ProgressScreen: React.FC = () => {
       'palavras': { name: 'Jogo das Palavras', icon: 'brain', color: COLORS.GREEN },
     };
 
-    const games: GameProgress[] = (data.porJogo || []).map((game: any) => {
-      const gameInfo = gameMap[game.gameId] || { name: game.gameName, icon: 'gamepad', color: COLORS.BLUE };
+    // Criar array com TODOS os jogos (mesmo os que não foram jogados)
+    const allGames: GameProgress[] = Object.keys(gameMap).map(gameId => {
+      const gameInfo = gameMap[gameId];
+      const gameData = (data.porJogo || []).find((g: any) => g.gameId === gameId);
       
-      return {
-        gameId: game.gameId,
-        gameName: gameInfo.name,
-        icon: gameInfo.icon,
-        color: gameInfo.color,
-        totalSessions: game.jogos?.length || 0,
-        averageScore: game.mediaScore || 0,
-        bestScore: Math.max(...(game.jogos?.map((j: any) => j.score) || [0])),
-        totalTime: Math.round((game.jogos?.reduce((sum: number, j: any) => sum + (j.timeSpent || 0), 0) || 0) / 60),
-        lastPlayed: game.jogos?.[game.jogos.length - 1]?.timestamp || null,
-      };
+      if (gameData) {
+        // Jogo foi jogado - usar dados reais
+        return {
+          gameId,
+          gameName: gameInfo.name,
+          icon: gameInfo.icon,
+          color: gameInfo.color,
+          totalSessions: gameData.jogos?.length || 0,
+          averageScore: gameData.mediaScore || 0,
+          bestScore: Math.max(...(gameData.jogos?.map((j: any) => j.score) || [0])),
+          totalTime: Math.round((gameData.jogos?.reduce((sum: number, j: any) => sum + (j.timeSpent || 0), 0) || 0) / 60),
+          lastPlayed: gameData.jogos?.[gameData.jogos.length - 1]?.timestamp || null,
+        };
+      } else {
+        // Jogo nunca foi jogado - dados zerados
+        return {
+          gameId,
+          gameName: gameInfo.name,
+          icon: gameInfo.icon,
+          color: gameInfo.color,
+          totalSessions: 0,
+          averageScore: 0,
+          bestScore: 0,
+          totalTime: 0,
+          lastPlayed: null,
+        };
+      }
     });
 
     // Calcular melhor jogo
     let bestGame = 'Nenhum';
     let highestScore = 0;
-    games.forEach(game => {
+    allGames.forEach(game => {
       if (game.averageScore > highestScore) {
         highestScore = game.averageScore;
         bestGame = game.gameName;
@@ -132,7 +158,7 @@ export const ProgressScreen: React.FC = () => {
       childId: data.childId,
       childName: data.childName,
       progressoGeral: data.progressoGeral || 0,
-      games,
+      games: allGames, // Retorna TODOS os 4 jogos
       statistics: {
         totalGames: data.estatisticas?.totalJogos || 0,
         totalTimeMinutes: data.estatisticas?.tempoTotal || 0,
@@ -143,56 +169,59 @@ export const ProgressScreen: React.FC = () => {
   };
 
   const getMockProgressData = (): ProgressData => {
+    // SEMPRE retornar TODOS os 4 jogos
+    const allGames: GameProgress[] = [
+      {
+        gameId: 'igual-diferente',
+        gameName: 'Igual-Diferente',
+        icon: 'eye',
+        color: COLORS.YELLOW,
+        totalSessions: 15,
+        averageScore: 82,
+        bestScore: 95,
+        totalTime: 25,
+        lastPlayed: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        gameId: 'cena-certa',
+        gameName: 'Cena Certa',
+        icon: 'film',
+        color: COLORS.RED,
+        totalSessions: 12,
+        averageScore: 75,
+        bestScore: 90,
+        totalTime: 20,
+        lastPlayed: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        gameId: 'adivinha',
+        gameName: 'Adivinha',
+        icon: 'gamepad',
+        color: COLORS.BLUE,
+        totalSessions: 18,
+        averageScore: 88,
+        bestScore: 100,
+        totalTime: 30,
+        lastPlayed: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        gameId: 'palavras',
+        gameName: 'Jogo das Palavras',
+        icon: 'brain',
+        color: COLORS.GREEN,
+        totalSessions: 20,
+        averageScore: 70,
+        bestScore: 85,
+        totalTime: 35,
+        lastPlayed: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+      },
+    ];
+
     return {
       childId: 'child_001',
       childName: 'João Silva',
       progressoGeral: 75,
-      games: [
-        {
-          gameId: 'igual-diferente',
-          gameName: 'Igual-Diferente',
-          icon: 'eye',
-          color: COLORS.YELLOW,
-          totalSessions: 15,
-          averageScore: 82,
-          bestScore: 95,
-          totalTime: 25,
-          lastPlayed: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        },
-        {
-          gameId: 'cena-certa',
-          gameName: 'Cena Certa',
-          icon: 'film',
-          color: COLORS.RED,
-          totalSessions: 12,
-          averageScore: 75,
-          bestScore: 90,
-          totalTime: 20,
-          lastPlayed: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-        },
-        {
-          gameId: 'adivinha',
-          gameName: 'Adivinha',
-          icon: 'gamepad',
-          color: COLORS.BLUE,
-          totalSessions: 18,
-          averageScore: 88,
-          bestScore: 100,
-          totalTime: 30,
-          lastPlayed: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-        },
-        {
-          gameId: 'palavras',
-          gameName: 'Jogo das Palavras',
-          icon: 'brain',
-          color: COLORS.GREEN,
-          totalSessions: 20,
-          averageScore: 70,
-          bestScore: 85,
-          totalTime: 35,
-          lastPlayed: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-        },
-      ],
+      games: allGames, // TODOS os 4 jogos sempre presentes
       statistics: {
         totalGames: 65,
         totalTimeMinutes: 110,
@@ -212,9 +241,10 @@ export const ProgressScreen: React.FC = () => {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return 'Agora';
+    if (diffMins < 1) return 'Agora mesmo';
     if (diffMins < 60) return `Há ${diffMins} min`;
     if (diffHours < 24) return `Há ${diffHours}h`;
+    if (diffDays === 1) return 'Ontem';
     return `Há ${diffDays} dias`;
   };
 
@@ -243,6 +273,10 @@ export const ProgressScreen: React.FC = () => {
 
   const handleBack = () => {
     navigation.goBack();
+  };
+
+  const toggleGameExpansion = (gameId: string) => {
+    setExpandedGame(expandedGame === gameId ? null : gameId);
   };
 
   if (isLoading) {
@@ -301,37 +335,70 @@ export const ProgressScreen: React.FC = () => {
         showLogo={true}
       />
       
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={styles.content} 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[COLORS.BLUE]}
+            tintColor={COLORS.BLUE}
+            title="Atualizando progresso..."
+            titleColor={COLORS.BLUE}
+          />
+        }
+      >
         {/* Header - Info da Criança */}
         <View style={styles.header}>
           <Text style={styles.childName}>{progressData.childName}</Text>
           <View style={styles.overallProgressContainer}>
-            <Text style={styles.overallProgressLabel}>Progresso Geral</Text>
             <Text style={styles.overallProgressValue}>{progressData.progressoGeral}%</Text>
+            <Text style={styles.overallProgressLabel}>Progresso Geral</Text>
           </View>
         </View>
 
-        {/* Estatísticas Gerais */}
+        {/* Estatísticas Gerais - Stack Vertical */}
         <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <Target size={20} color={COLORS.BLUE} />
-            <Text style={styles.statValue}>{progressData.statistics.totalGames}</Text>
-            <Text style={styles.statLabel}>Sessões</Text>
+          <View style={[styles.statCard, { borderColor: COLORS.BLUE }]}>
+            <View style={[styles.statIconContainer, { backgroundColor: COLORS.BLUE + '15' }]}>
+              <Target size={18} color={COLORS.BLUE} />
+            </View>
+            <View style={styles.statInfo}>
+              <Text style={styles.statValue}>{progressData.statistics.totalGames}</Text>
+              <Text style={styles.statLabel}>Sessões Totais</Text>
+            </View>
           </View>
-          <View style={styles.statCard}>
-            <Clock size={20} color={COLORS.GREEN} />
-            <Text style={styles.statValue}>{progressData.statistics.totalTimeMinutes}min</Text>
-            <Text style={styles.statLabel}>Tempo Total</Text>
+          
+          <View style={[styles.statCard, { borderColor: COLORS.GREEN }]}>
+            <View style={[styles.statIconContainer, { backgroundColor: COLORS.GREEN + '15' }]}>
+              <Clock size={18} color={COLORS.GREEN} />
+            </View>
+            <View style={styles.statInfo}>
+              <Text style={styles.statValue}>{progressData.statistics.totalTimeMinutes} minutos</Text>
+              <Text style={styles.statLabel}>Tempo Total de Jogo</Text>
+            </View>
           </View>
-          <View style={styles.statCard}>
-            <BarChart3 size={20} color={COLORS.YELLOW} />
-            <Text style={styles.statValue}>{progressData.statistics.averageScore}%</Text>
-            <Text style={styles.statLabel}>Média Geral</Text>
+
+          <View style={[styles.statCard, { borderColor: COLORS.YELLOW }]}>
+            <View style={[styles.statIconContainer, { backgroundColor: COLORS.YELLOW + '15' }]}>
+              <BarChart3 size={18} color={COLORS.YELLOW} />
+            </View>
+            <View style={styles.statInfo}>
+              <Text style={styles.statValue}>{progressData.statistics.averageScore}%</Text>
+              <Text style={styles.statLabel}>Média Geral de Acertos</Text>
+            </View>
           </View>
-          <View style={styles.statCard}>
-            <Trophy size={20} color={COLORS.RED} />
-            <Text style={styles.statValue} numberOfLines={1}>{progressData.statistics.bestGame}</Text>
-            <Text style={styles.statLabel}>Melhor Jogo</Text>
+          
+          <View style={[styles.statCard, { borderColor: COLORS.RED }]}>
+            <View style={[styles.statIconContainer, { backgroundColor: COLORS.RED + '15' }]}>
+              <Trophy size={18} color={COLORS.RED} />
+            </View>
+            <View style={styles.statInfo}>
+              <Text style={styles.statValue} numberOfLines={1} adjustsFontSizeToFit>{progressData.statistics.bestGame}</Text>
+              <Text style={styles.statLabel}>Jogo com Melhor Desempenho</Text>
+            </View>
           </View>
         </View>
 
@@ -340,52 +407,94 @@ export const ProgressScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>Progresso por Jogo</Text>
           {progressData.games.map((game) => {
             const IconComponent = getGameIcon(game.icon);
+            const isExpanded = expandedGame === game.gameId;
+            
             return (
-              <View key={game.gameId} style={[styles.gameCard, { borderColor: game.color }]}>
-                {/* Header do Jogo */}
-                <View style={styles.gameHeader}>
-                  <View style={styles.gameHeaderLeft}>
-                    <View style={[styles.gameIconContainer, { backgroundColor: game.color + '20' }]}>
-                      <IconComponent size={24} color={game.color} />
-                    </View>
-                    <View>
-                      <Text style={styles.gameName}>{game.gameName}</Text>
-                      <Text style={styles.lastPlayed}>{formatLastPlayed(game.lastPlayed)}</Text>
-                    </View>
+              <TouchableOpacity
+                key={game.gameId}
+                activeOpacity={0.7}
+                onPress={() => toggleGameExpansion(game.gameId)}
+                style={[
+                  isExpanded ? styles.gameCardExpanded : styles.gameCardCompact,
+                  { borderLeftColor: game.color }
+                ]}
+              >
+                {/* Cabeçalho Compacto - SEMPRE VISÍVEL */}
+                <View style={styles.compactGameHeader}>
+                  <View style={[styles.compactGameIcon, { backgroundColor: game.color + '20' }]}>
+                    <IconComponent size={20} color={game.color} />
                   </View>
-                  <View style={[styles.scoreCircle, { borderColor: game.color }]}>
-                    <Text style={[styles.scoreValue, { color: game.color }]}>{game.averageScore}%</Text>
+                  <View style={styles.compactGameInfo}>
+                    <Text style={styles.compactGameName}>{game.gameName}</Text>
+                    <Text style={styles.compactGameScore}>
+                      {game.totalSessions === 0 
+                        ? 'Nunca jogado' 
+                        : `${game.averageScore}% média • ${game.totalSessions} sessões`
+                      }
+                    </Text>
+                  </View>
+                  <View style={styles.expandIconGame}>
+                    {isExpanded ? (
+                      <ChevronUp size={20} color={game.color} />
+                    ) : (
+                      <ChevronDown size={20} color={game.color} />
+                    )}
                   </View>
                 </View>
 
-                {/* Estatísticas do Jogo */}
-                <View style={styles.gameStats}>
-                  <View style={styles.gameStatItem}>
-                    <Text style={styles.gameStatLabel}>Sessões</Text>
-                    <Text style={styles.gameStatValue}>{game.totalSessions}</Text>
-                  </View>
-                  <View style={styles.gameStatItem}>
-                    <Text style={styles.gameStatLabel}>Melhor</Text>
-                    <Text style={styles.gameStatValue}>{game.bestScore}%</Text>
-                  </View>
-                  <View style={styles.gameStatItem}>
-                    <Text style={styles.gameStatLabel}>Tempo</Text>
-                    <Text style={styles.gameStatValue}>{game.totalTime}min</Text>
-                  </View>
-                </View>
+                {/* Detalhes Expandidos - CONDICIONAL */}
+                {isExpanded && (
+                  <View style={styles.expandedGameContent}>
+                    {game.totalSessions === 0 ? (
+                      // Jogo nunca foi jogado
+                      <View style={styles.emptyGameState}>
+                        <Text style={styles.emptyGameText}>
+                          Este jogo ainda não foi jogado pela criança.
+                        </Text>
+                        <Text style={styles.emptyGameHint}>
+                          Incentive a criança a experimentar!
+                        </Text>
+                      </View>
+                    ) : (
+                      // Jogo foi jogado - mostrar estatísticas
+                      <>
+                        {/* Última vez jogado */}
+                        <Text style={styles.lastPlayedExpanded}>
+                          Última vez: {formatLastPlayed(game.lastPlayed)}
+                        </Text>
 
-                {/* Barra de Progresso */}
-                <View style={styles.progressBarContainer}>
-                  <View style={styles.progressBarBackground}>
-                    <View 
-                      style={[
-                        styles.progressBarFill, 
-                        { width: `${game.averageScore}%`, backgroundColor: game.color }
-                      ]} 
-                    />
+                        {/* Estatísticas do Jogo */}
+                        <View style={styles.gameStatsGrid}>
+                          <View style={styles.gameStatBox}>
+                            <Text style={styles.gameStatValue}>{game.totalSessions}</Text>
+                            <Text style={styles.gameStatLabel}>Sessões</Text>
+                          </View>
+                          <View style={styles.gameStatBox}>
+                            <Text style={styles.gameStatValue}>{game.bestScore}%</Text>
+                            <Text style={styles.gameStatLabel}>Melhor</Text>
+                          </View>
+                          <View style={styles.gameStatBox}>
+                            <Text style={styles.gameStatValue}>{game.totalTime}min</Text>
+                            <Text style={styles.gameStatLabel}>Tempo</Text>
+                          </View>
+                        </View>
+
+                        {/* Barra de Progresso */}
+                        <View style={styles.progressBarContainer}>
+                          <View style={styles.progressBarBackground}>
+                            <View 
+                              style={[
+                                styles.progressBarFill, 
+                                { width: `${game.averageScore}%`, backgroundColor: game.color }
+                              ]} 
+                            />
+                          </View>
+                        </View>
+                      </>
+                    )}
                   </View>
-                </View>
-              </View>
+                )}
+              </TouchableOpacity>
             );
           })}
         </View>
@@ -403,7 +512,7 @@ export const ProgressScreen: React.FC = () => {
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   loadingContainer: {
     flex: 1,
@@ -422,163 +531,255 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
   },
   emptyStateTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '700',
     color: COLORS.TEXT_BLACK,
     marginTop: 16,
     marginBottom: 8,
   },
   emptyStateText: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 15,
+    color: '#888',
     textAlign: 'center',
+    lineHeight: 22,
   },
   header: {
-    paddingVertical: 24,
+    paddingVertical: 10,
     alignItems: 'center',
+    backgroundColor: '#F8F9FA',
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
+    marginHorizontal: -16,
+    paddingHorizontal: 16,
   },
   childName: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: '700',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 16,
+    marginBottom: 8,
   },
   overallProgressContainer: {
     alignItems: 'center',
-  },
-  overallProgressLabel: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
-  },
-  overallProgressValue: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: COLORS.BLUE,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    paddingVertical: 20,
-    gap: 8,
-  },
-  statCard: {
-    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     backgroundColor: COLORS.TEXT_WHITE,
-    borderRadius: 12,
-    padding: 12,
-    alignItems: 'center',
+    borderRadius: 10,
     borderWidth: 2,
     borderColor: COLORS.BLUE,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  overallProgressLabel: {
+    fontSize: 9,
+    fontWeight: '600',
+    color: '#888',
+    marginTop: 3,
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+  },
+  overallProgressValue: {
+    fontSize: 28,
+    fontWeight: '900',
+    color: COLORS.BLUE,
+    letterSpacing: -0.8,
+  },
+  statsContainer: {
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+    gap: 6,
+  },
+  statCard: {
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderRadius: 8,
+    padding: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 1,
+    elevation: 1,
+    gap: 10,
+  },
+  statIconContainer: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statInfo: {
+    flex: 1,
   },
   statValue: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 13,
+    fontWeight: '700',
     color: COLORS.TEXT_BLACK,
-    marginTop: 8,
+    marginBottom: 1,
+    letterSpacing: -0.2,
   },
   statLabel: {
-    fontSize: 11,
+    fontSize: 9,
+    fontWeight: '500',
     color: '#666',
-    marginTop: 4,
-    textAlign: 'center',
   },
   gamesSection: {
-    paddingVertical: 20,
+    paddingVertical: 8,
+    paddingBottom: 12,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 12,
+    fontWeight: '700',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 16,
+    marginBottom: 10,
+    marginLeft: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
-  gameCard: {
+  gameCardCompact: {
     backgroundColor: COLORS.TEXT_WHITE,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 2,
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 8,
+    borderLeftWidth: 4,
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderTopColor: '#F0F0F0',
+    borderRightColor: '#F0F0F0',
+    borderBottomColor: '#F0F0F0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  gameCardExpanded: {
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 10,
+    borderLeftWidth: 5,
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderTopColor: '#F0F0F0',
+    borderRightColor: '#F0F0F0',
+    borderBottomColor: '#F0F0F0',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 3,
   },
-  gameHeader: {
+  compactGameHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    gap: 8,
   },
-  gameHeaderLeft: {
-    flexDirection: 'row',
+  compactGameIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 12,
+  },
+  compactGameInfo: {
     flex: 1,
   },
-  gameIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  gameName: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  compactGameName: {
+    fontSize: 13,
+    fontWeight: '700',
     color: COLORS.TEXT_BLACK,
+    marginBottom: 2,
   },
-  lastPlayed: {
-    fontSize: 12,
+  compactGameScore: {
+    fontSize: 10,
+    fontWeight: '500',
     color: '#666',
-    marginTop: 2,
   },
-  scoreCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    borderWidth: 3,
+  expandIconGame: {
+    width: 24,
+    height: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  scoreValue: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  expandedGameContent: {
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#E8E8E8',
   },
-  gameStats: {
+  lastPlayedExpanded: {
+    fontSize: 10,
+    fontWeight: '500',
+    color: '#999',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  gameStatsGrid: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 16,
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#E0E0E0',
+    marginBottom: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 6,
+    backgroundColor: '#F8F9FA',
+    borderRadius: 6,
   },
-  gameStatItem: {
+  gameStatBox: {
     alignItems: 'center',
+    flex: 1,
   },
   gameStatLabel: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 4,
+    fontSize: 8,
+    fontWeight: '600',
+    color: '#888',
+    marginTop: 3,
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
   },
   gameStatValue: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '700',
     color: COLORS.TEXT_BLACK,
+    letterSpacing: -0.2,
   },
   progressBarContainer: {
-    marginTop: 8,
+    marginTop: 6,
   },
   progressBarBackground: {
-    height: 8,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 4,
+    height: 6,
+    backgroundColor: '#E8E8E8',
+    borderRadius: 3,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    borderRadius: 4,
+    borderRadius: 3,
+  },
+  emptyGameState: {
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    backgroundColor: '#F8F9FA',
+    borderRadius: 8,
+  },
+  emptyGameText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#888',
+    textAlign: 'center',
+    marginBottom: 6,
+  },
+  emptyGameHint: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: '#999',
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
 });
