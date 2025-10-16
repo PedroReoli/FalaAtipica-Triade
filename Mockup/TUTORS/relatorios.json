@@ -2,7 +2,7 @@
   "relatorios": [
     {
       "id": "relatorio_001",
-      "criancaId": "crianca_001",
+      "criancaId": "1",
       "criancaNome": "João Silva",
       "data": "2024-01-20",
       "tipo": "semanal",
@@ -43,8 +43,8 @@
     },
     {
       "id": "relatorio_002",
-      "criancaId": "crianca_002",
-      "criancaNome": "Ana Costa",
+      "criancaId": "2",
+      "criancaNome": "Maria Santos",
       "data": "2024-01-21",
       "tipo": "semanal",
       "resumo": {
@@ -81,12 +81,53 @@
           "Ótimo trabalho!"
         ]
       }
+    },
+    {
+      "id": "relatorio_003",
+      "criancaId": "3",
+      "criancaNome": "Pedro Costa",
+      "data": "2024-01-22",
+      "tipo": "semanal",
+      "resumo": {
+        "progressoGeral": 85,
+        "categoriasCompletas": 2,
+        "novasConquistas": 3,
+        "tempoJogado": 20
+      },
+      "detalhes": {
+        "categorias": [
+          {
+            "nome": "Animais",
+            "progresso": 90,
+            "melhoria": "+5%",
+            "observacoes": "Excelente domínio da categoria animais"
+          },
+          {
+            "nome": "Objetos",
+            "progresso": 80,
+            "melhoria": "+12%",
+            "observacoes": "Ótimo progresso na categoria objetos"
+          }
+        ],
+        "conquistas": [
+          {
+            "nome": "Mestre dos Objetos",
+            "data": "2024-01-22",
+            "descricao": "Completou todos os jogos de objetos"
+          }
+        ],
+        "recomendacoes": [
+          "Excelente trabalho! Continue assim",
+          "Explorar novas categorias para manter o interesse",
+          "Progresso excepcional!"
+        ]
+      }
     }
   ],
   "estatisticasGerais": {
-    "totalCriancas": 2,
-    "progressoMedio": 67.5,
-    "conquistasTotais": 3,
-    "tempoTotalJogado": 27
+    "totalCriancas": 3,
+    "progressoMedio": 73.3,
+    "conquistasTotais": 6,
+    "tempoTotalJogado": 47
   }
 }

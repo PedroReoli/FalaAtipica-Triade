@@ -2,10 +2,10 @@
   "sessoes": [
     {
       "id": "sessao_001",
-      "pacienteId": "paciente_001",
+      "pacienteId": "1",
       "pacienteNome": "João Silva",
       "profissionalId": "prof_001",
-      "profissionalNome": "Dra. Maria Silva",
+      "profissionalNome": "Dra. Ana Paula Santos",
       "data": "2024-01-20",
       "hora": "10:30",
       "duracao": 45,
@@ -37,19 +37,19 @@
         }
       ],
       "observacoes": "Sessão muito produtiva. João demonstrou grande interesse e participação ativa.",
-      "proximaSessao": "2024-01-25T14:00:00Z",
+      "proximaSessao": "2025-10-18T14:00:00Z",
       "relatorio": "relatorio_001"
     },
     {
       "id": "sessao_002",
-      "pacienteId": "paciente_002",
-      "pacienteNome": "Ana Costa",
-      "profissionalId": "prof_002",
-      "profissionalNome": "Dr. João Santos",
+      "pacienteId": "2",
+      "pacienteNome": "Maria Santos",
+      "profissionalId": "prof_001",
+      "profissionalNome": "Dra. Ana Paula Santos",
       "data": "2024-01-19",
       "hora": "15:30",
       "duracao": 50,
-      "tipo": "psicologia",
+      "tipo": "fonoaudiologia",
       "status": "concluida",
       "objetivos": [
         "Trabalhar comunicação social",
@@ -61,7 +61,7 @@
           "nome": "Atividade de Comunicação",
           "duracao": 25,
           "resultado": "Bom",
-          "observacoes": "Ana se comunicou mais espontaneamente"
+          "observacoes": "Maria se comunicou mais espontaneamente"
         },
         {
           "nome": "Jogos Emocionais",
@@ -76,24 +76,24 @@
           "observacoes": "Interagiu bem com o terapeuta"
         }
       ],
-      "observacoes": "Ana está se soltando mais a cada sessão. Progresso significativo na comunicação.",
-      "proximaSessao": "2024-01-24T10:00:00Z",
+      "observacoes": "Maria está se soltando mais a cada sessão. Progresso significativo na comunicação.",
+      "proximaSessao": "2025-10-20T10:00:00Z",
       "relatorio": "relatorio_002"
     },
     {
       "id": "sessao_003",
-      "pacienteId": "paciente_003",
-      "pacienteNome": "Carlos Oliveira",
-      "profissionalId": "prof_003",
-      "profissionalNome": "Dra. Ana Costa",
+      "pacienteId": "3",
+      "pacienteNome": "Pedro Costa",
+      "profissionalId": "prof_002",
+      "profissionalNome": "Dr. Roberto Alves",
       "data": "2024-01-21",
       "hora": "09:00",
       "duracao": 60,
-      "tipo": "psiquiatria",
+      "tipo": "psicologia",
       "status": "concluida",
       "objetivos": [
         "Avaliar evolução do tratamento",
-        "Ajustar medicação se necessário",
+        "Ajustar estratégias se necessário",
         "Orientar família"
       ],
       "atividades": [
@@ -101,13 +101,13 @@
           "nome": "Avaliação Clínica",
           "duracao": 30,
           "resultado": "Excelente",
-          "observacoes": "Carlos está respondendo muito bem ao tratamento"
+          "observacoes": "Pedro está respondendo muito bem ao tratamento"
         },
         {
-          "nome": "Revisão de Medicação",
+          "nome": "Revisão de Estratégias",
           "duracao": 20,
           "resultado": "Bom",
-          "observacoes": "Mantida a medicação atual"
+          "observacoes": "Mantidas as estratégias atuais"
         },
         {
           "nome": "Orientação Familiar",
@@ -116,49 +116,9 @@
           "observacoes": "Família orientada sobre próximos passos"
         }
       ],
-      "observacoes": "Excelente evolução. Carlos está mais comunicativo e interativo.",
-      "proximaSessao": "2024-01-26T16:00:00Z",
+      "observacoes": "Excelente evolução. Pedro está mais comunicativo e interativo.",
+      "proximaSessao": "2025-10-22T16:00:00Z",
       "relatorio": "relatorio_003"
-    },
-    {
-      "id": "sessao_004",
-      "pacienteId": "paciente_004",
-      "pacienteNome": "Lucas Ferreira",
-      "profissionalId": "prof_004",
-      "profissionalNome": "Prof. Maria Santos",
-      "data": "2024-01-18",
-      "hora": "11:30",
-      "duracao": 40,
-      "tipo": "pedagogia",
-      "status": "concluida",
-      "objetivos": [
-        "Trabalhar dificuldades de leitura",
-        "Desenvolver habilidades matemáticas",
-        "Melhorar concentração"
-      ],
-      "atividades": [
-        {
-          "nome": "Exercícios de Leitura",
-          "duracao": 20,
-          "resultado": "Bom",
-          "observacoes": "Lucas leu 3 palavras novas com ajuda"
-        },
-        {
-          "nome": "Atividades Matemáticas",
-          "duracao": 15,
-          "resultado": "Muito Bom",
-          "observacoes": "Resolveu 5 problemas simples"
-        },
-        {
-          "nome": "Exercícios de Concentração",
-          "duracao": 5,
-          "resultado": "Excelente",
-          "observacoes": "Manteve foco por 15 minutos"
-        }
-      ],
-      "observacoes": "Lucas está progredindo bem. Foco nas atividades de leitura.",
-      "proximaSessao": "2024-01-23T15:30:00Z",
-      "relatorio": "relatorio_004"
     }
   ]
 }
