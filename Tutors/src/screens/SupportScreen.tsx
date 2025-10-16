@@ -5,13 +5,13 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { 
   Mail, 
   Instagram, 
-  AlertCircle, 
-  ChevronDown, 
-  ChevronUp,
+  AlertCircle,
   CheckCircle,
   XCircle,
   Clock,
-  Info
+  Info,
+  HelpCircle,
+  ChevronRight
 } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
@@ -29,37 +29,9 @@ const contactInfo = [
   { id: '2', title: 'Instagram', value: '@falaatipica', icon: 'instagram' },
 ];
 
-const faqData = [
-  {
-    id: '1',
-    question: 'Como acompanho o progresso da minha criança?',
-    answer: 'Acesse a aba "Progresso" no menu principal. Lá você verá estatísticas detalhadas de cada jogo, tempo jogado e evolução geral. Se tiver mais de uma criança, use as setas para alternar entre elas.'
-  },
-  {
-    id: '2',
-    question: 'Como agendo consultas com o profissional?',
-    answer: 'As consultas são agendadas pelo profissional que acompanha sua criança. Você receberá notificações e pode visualizar todas as agendas na aba "Agenda".'
-  },
-  {
-    id: '3',
-    question: 'Minha criança não está jogando. O que fazer?',
-    answer: 'Verifique se a criança tem acesso ao app KIDS. Incentive-a a jogar diariamente por 15-20 minutos. Se persistir, entre em contato com o profissional responsável.'
-  },
-  {
-    id: '4',
-    question: 'Como adiciono outra criança?',
-    answer: 'Entre em contato com o suporte através do email abaixo. Nossa equipe irá configurar o acesso para a nova criança.'
-  },
-  {
-    id: '5',
-    question: 'O app funciona offline?',
-    answer: 'Sim! O app funciona offline. Os dados serão sincronizados automaticamente quando a conexão for restaurada.'
-  },
-];
 
 export const SupportScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
-  const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
   const [apiStatus, setApiStatus] = useState<'online' | 'offline' | 'checking'>('checking');
 
   useEffect(() => {
@@ -119,10 +91,6 @@ ${currentUser?.nome || 'Usuário'}`;
         }
       ]
     );
-  };
-
-  const toggleFaq = (faqId: string) => {
-    setExpandedFaq(expandedFaq === faqId ? null : faqId);
   };
 
   const handleContactPress = async (type: string, value: string) => {
@@ -246,33 +214,21 @@ ${currentUser?.nome || 'Usuário'}`;
           </View>
         </View>
 
-        {/* FAQ */}
-        <Text style={styles.sectionTitle}>Perguntas Frequentes</Text>
-        <View style={styles.faqSection}>
-          {faqData.map((faq) => {
-            const isExpanded = expandedFaq === faq.id;
-            return (
-              <TouchableOpacity
-                key={faq.id}
-                style={styles.faqCard}
-                onPress={() => toggleFaq(faq.id)}
-                activeOpacity={0.7}
-              >
-                <View style={styles.faqHeader}>
-                  <Text style={styles.faqQuestion}>{faq.question}</Text>
-                  {isExpanded ? (
-                    <ChevronUp size={20} color={COLORS.BLUE} />
-                  ) : (
-                    <ChevronDown size={20} color={COLORS.BLUE} />
-                  )}
-                </View>
-                {isExpanded && (
-                  <Text style={styles.faqAnswer}>{faq.answer}</Text>
-                )}
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+        {/* Perguntas Frequentes - Link para tela */}
+        <TouchableOpacity 
+          style={styles.faqLinkCard}
+          onPress={() => navigation.navigate('FAQ')}
+          activeOpacity={0.7}
+        >
+          <View style={styles.faqLinkIcon}>
+            <HelpCircle size={24} color={COLORS.BLUE} />
+          </View>
+          <View style={styles.faqLinkInfo}>
+            <Text style={styles.faqLinkTitle}>Perguntas Frequentes</Text>
+            <Text style={styles.faqLinkDesc}>Veja respostas para dúvidas comuns</Text>
+          </View>
+          <ChevronRight size={20} color={COLORS.BLUE} />
+        </TouchableOpacity>
 
         {/* Informações do App */}
         <View style={styles.appInfoCard}>
@@ -415,43 +371,43 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 2,
   },
-  faqSection: {
-    marginBottom: 20,
-    gap: 10,
-  },
-  faqCard: {
+  faqLinkCard: {
     backgroundColor: COLORS.TEXT_WHITE,
     borderWidth: 2,
     borderColor: COLORS.BLUE,
     borderRadius: 10,
-    padding: 12,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
+    shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
+    gap: 12,
   },
-  faqHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  faqLinkIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.BLUE + '15',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 10,
   },
-  faqQuestion: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: COLORS.TEXT_BLACK,
+  faqLinkInfo: {
     flex: 1,
   },
-  faqAnswer: {
-    fontSize: 12,
+  faqLinkTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: COLORS.TEXT_BLACK,
+    marginBottom: 2,
+  },
+  faqLinkDesc: {
+    fontSize: 11,
     fontWeight: '500',
     color: '#666',
-    marginTop: 10,
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#E8E8E8',
-    lineHeight: 18,
   },
   appInfoCard: {
     flexDirection: 'row',

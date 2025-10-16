@@ -77,7 +77,7 @@ export const AboutAppScreen: React.FC = () => {
            <Text style={styles.contactText}>
              Para dúvidas, sugestões ou suporte técnico:
            </Text>
-           <Text style={styles.contactEmail}>contato@falaatipica.com</Text>
+           <Text style={styles.contactEmail}>pedrosousa2160@gmail.com</Text>
          </View>
 
                    {/* Copyright */}

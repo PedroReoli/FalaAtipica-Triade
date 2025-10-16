@@ -77,7 +77,7 @@ export const TermsPrivacyScreen: React.FC = () => {
            <Text style={styles.contactText}>
              Se você tiver dúvidas sobre estes termos ou nossa política de privacidade:
            </Text>
-           <Text style={styles.contactEmail}>privacidade@falaatipica.com</Text>
+           <Text style={styles.contactEmail}>pedrosousa2160@gmail.com</Text>
          </View>
        </ScrollView>
 

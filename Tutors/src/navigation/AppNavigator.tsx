@@ -9,6 +9,7 @@ import { DashboardScreen } from '../screens/DashboardScreen';
 import { AgendaScreen } from '../screens/AgendaScreen';
 import { ProgressScreen } from '../screens/ProgressScreen';
 import { SupportScreen } from '../screens/SupportScreen';
+import { FAQScreen } from '../screens/FAQScreen';
 import { TipsScreen } from '../screens/TipsScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { ChildProfileScreen } from '../screens/ChildProfileScreen';
@@ -27,6 +28,7 @@ export type RootStackParamList = {
   Agenda: undefined;
   Progress: undefined;
   Support: undefined;
+  FAQ: undefined;
   Tips: undefined;
   Profile: undefined;
   ChildProfile: { childId: string };
@@ -56,6 +58,7 @@ export const AppNavigator: React.FC = () => {
         <Stack.Screen name="Agenda" component={AgendaScreen} />
         <Stack.Screen name="Progress" component={ProgressScreen} />
         <Stack.Screen name="Support" component={SupportScreen} />
+        <Stack.Screen name="FAQ" component={FAQScreen} />
         <Stack.Screen name="Tips" component={TipsScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="ChildProfile" component={ChildProfileScreen} />
