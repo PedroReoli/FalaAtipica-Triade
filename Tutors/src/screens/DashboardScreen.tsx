@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { 
-  FileImage, 
+  Calendar, 
   BarChart3, 
   HelpCircle, 
   Lightbulb, 
@@ -210,12 +210,12 @@ export const DashboardScreen: React.FC = () => {
           <View style={styles.functionalitiesGrid}>
             <TouchableOpacity 
               style={styles.functionalityCard}
-              onPress={() => handleNavigateToFeature('ImagesAndSounds')}
+              onPress={() => handleNavigateToFeature('Agenda')}
             >
               <View style={styles.cardIcon}>
-                <FileImage size={24} color={COLORS.BLUE} />
+                <Calendar size={24} color={COLORS.BLUE} />
               </View>
-              <Text style={styles.cardText}>Imagens e sons</Text>
+              <Text style={styles.cardText}>Agenda</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 

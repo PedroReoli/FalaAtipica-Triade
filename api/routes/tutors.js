@@ -323,6 +323,75 @@ router.put('/settings/:tutorId', async (req, res) => {
   }
 });
 
+// GET /api/tutors/agendas/:tutorId - Buscar agendas do tutor
+router.get('/agendas/:tutorId', async (req, res) => {
+  try {
+    const { tutorId } = req.params;
+    
+    // Buscar agendas
+    const agendasData = await jsonService.readJSON('TUTORS/agendas.json');
+    const agendas = agendasData.agendas || [];
+    
+    // Filtrar agendas das crianças do tutor
+    const tutorsData = await jsonService.readJSON('TUTORS/usuarios.json');
+    const tutor = tutorsData.tutores?.find(t => t.id === tutorId);
+    
+    if (!tutor) {
+      return res.status(404).json(
+        errorResponse('TUTOR_NOT_FOUND', 'Tutor não encontrado')
+      );
+    }
+    
+    // Filtrar agendas das crianças do tutor
+    const agendasDoTutor = agendas.filter(agenda => 
+      tutor.criancasIds?.includes(agenda.criancaId)
+    );
+    
+    res.json(successResponse({
+      agendas: agendasDoTutor
+    }));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar agendas:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar agendas', error.message)
+    );
+  }
+});
+
+// GET /api/tutors/devices/:childId - Buscar dispositivos conectados
+router.get('/devices/:childId', async (req, res) => {
+  try {
+    const { childId } = req.params;
+    
+    // Mock de dispositivos - em produção virá do banco de dados
+    const devices = [
+      {
+        id: 'device_001',
+        name: 'iPad da Escola',
+        type: 'Tablet',
+        lastSync: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 horas atrás
+      },
+      {
+        id: 'device_002',
+        name: 'iPhone da Mãe',
+        type: 'Smartphone',
+        lastSync: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 1 dia atrás
+      }
+    ];
+    
+    res.json(successResponse({
+      devices
+    }));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar dispositivos:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar dispositivos', error.message)
+    );
+  }
+});
+
 // Função auxiliar
 function getGameName(gameId) {
   const names = {

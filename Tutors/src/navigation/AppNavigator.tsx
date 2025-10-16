@@ -6,7 +6,7 @@ import { LoginScreen } from '../screens/LoginScreen';
 import { ResetPasswordScreen } from '../screens/ResetPasswordScreen';
 import { RequestAccessScreen } from '../screens/RequestAccessScreen';
 import { DashboardScreen } from '../screens/DashboardScreen';
-import { ImagesAndSoundsScreen } from '../screens/ImagesAndSoundsScreen';
+import { AgendaScreen } from '../screens/AgendaScreen';
 import { ProgressScreen } from '../screens/ProgressScreen';
 import { SupportScreen } from '../screens/SupportScreen';
 import { TipsScreen } from '../screens/TipsScreen';
@@ -24,7 +24,7 @@ export type RootStackParamList = {
   ResetPassword: undefined;
   RequestAccess: undefined;
   Dashboard: undefined;
-  ImagesAndSounds: undefined;
+  Agenda: undefined;
   Progress: undefined;
   Support: undefined;
   Tips: undefined;
@@ -53,7 +53,7 @@ export const AppNavigator: React.FC = () => {
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
         <Stack.Screen name="RequestAccess" component={RequestAccessScreen} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} />
-        <Stack.Screen name="ImagesAndSounds" component={ImagesAndSoundsScreen} />
+        <Stack.Screen name="Agenda" component={AgendaScreen} />
         <Stack.Screen name="Progress" component={ProgressScreen} />
         <Stack.Screen name="Support" component={SupportScreen} />
         <Stack.Screen name="Tips" component={TipsScreen} />
