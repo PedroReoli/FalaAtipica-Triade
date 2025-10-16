@@ -1,43 +1,39 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Edit, Key, Smartphone, FileText, Shield, ChevronRight } from 'lucide-react-native';
+import { Edit, Key, FileText, Shield, ChevronRight } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { mockAuthService } from '../services/mockAuthService';
+import { emailService } from '../utils/emailService';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const menuItems = [
   {
     id: '1',
-    title: 'Mudar a senha',
+    title: 'Solicitar mudança de senha',
     icon: Key,
-    route: 'ChangePassword' as keyof RootStackParamList,
+    action: 'requestPasswordChange' as const,
   },
   {
     id: '2',
-    title: 'Cadastrar nova conta',
-    icon: Smartphone,
-    route: 'RegisterDevice' as keyof RootStackParamList,
-  },
-  {
-    id: '3',
     title: 'Sobre o App',
-    icon: Smartphone,
+    icon: FileText,
     route: 'AboutApp' as keyof RootStackParamList,
   },
   {
-    id: '4',
+    id: '3',
     title: 'Termos e Privacidade',
     icon: FileText,
     route: 'TermsPrivacy' as keyof RootStackParamList,
   },
   {
-    id: '5',
+    id: '4',
     title: 'Minha Assinatura',
     icon: Shield,
     route: 'Subscription' as keyof RootStackParamList,
@@ -46,9 +42,44 @@ const menuItems = [
 
 export const ProfileScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
+  const [userName, setUserName] = useState('Usuário');
+  const [userEmail, setUserEmail] = useState('email@exemplo.com');
+  const [userInitial, setUserInitial] = useState('U');
 
-  const handleMenuPress = (route: keyof RootStackParamList) => {
-    navigation.navigate(route);
+  useEffect(() => {
+    // Buscar dados do usuário logado
+    const currentUser = mockAuthService.getCurrentUser();
+    if (currentUser) {
+      setUserName(currentUser.nome);
+      setUserEmail(currentUser.email);
+      setUserInitial(currentUser.nome.charAt(0).toUpperCase());
+    }
+  }, []);
+
+  const handleMenuPress = async (item: typeof menuItems[0]) => {
+    // Se tem action, executar ação especial
+    if ('action' in item && item.action === 'requestPasswordChange') {
+      Alert.alert(
+        'Solicitar mudança de senha',
+        'Deseja enviar um email para solicitar a mudança de senha?',
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          {
+            text: 'Enviar',
+            onPress: async () => {
+              const success = await emailService.requestPasswordChange(userName, userEmail);
+              if (success) {
+                Alert.alert('Sucesso', 'Email enviado com sucesso! Aguarde o retorno da equipe.');
+              }
+            }
+          }
+        ]
+      );
+    } 
+    // Se tem route, navegar normalmente
+    else if ('route' in item) {
+      navigation.navigate(item.route);
+    }
   };
 
   const handleHome = () => {
@@ -84,7 +115,7 @@ export const ProfileScreen: React.FC = () => {
             <View style={styles.profileImageContainer}>
               <View style={styles.profileImage}>
                 {/* Placeholder para foto do usuário */}
-                <Text style={styles.profileInitial}>U</Text>
+                <Text style={styles.profileInitial}>{userInitial}</Text>
               </View>
               <TouchableOpacity 
                 style={styles.editButton}
@@ -93,8 +124,8 @@ export const ProfileScreen: React.FC = () => {
                 <Edit size={16} color={COLORS.TEXT_WHITE} />
               </TouchableOpacity>
             </View>
-            <Text style={styles.userName}>[NOME DO USUARIO]</Text>
-            <Text style={styles.userEmail}>EMAIL DO USUARIO</Text>
+            <Text style={styles.userName}>{userName}</Text>
+            <Text style={styles.userEmail}>{userEmail}</Text>
           </View>
         </View>
 
@@ -106,7 +137,7 @@ export const ProfileScreen: React.FC = () => {
               <TouchableOpacity
                 key={item.id}
                 style={styles.menuItem}
-                onPress={() => handleMenuPress(item.route)}
+                onPress={() => handleMenuPress(item)}
               >
                 <View style={styles.menuItemLeft}>
                   <IconComponent size={24} color={COLORS.BLUE} />

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft, User } from 'lucide-react-native';
 import { Logo } from './Logo';
 import { COLORS } from '../constants/colors';
 
@@ -9,6 +9,8 @@ interface NavbarProps {
   onBack?: () => void;
   showBackButton?: boolean;
   showLogo?: boolean;
+  showProfile?: boolean;
+  onLogout?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -16,7 +18,36 @@ export const Navbar: React.FC<NavbarProps> = ({
   onBack,
   showBackButton = true,
   showLogo = true,
+  showProfile = false,
+  onLogout,
 }) => {
+  const [tapCount, setTapCount] = useState(0);
+  const tapTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleProfileTap = () => {
+    // Incrementar contador de taps
+    setTapCount(prev => prev + 1);
+
+    // Limpar timer anterior se existir
+    if (tapTimerRef.current) {
+      clearTimeout(tapTimerRef.current);
+    }
+
+    // Verificar se é o segundo tap
+    if (tapCount === 1) {
+      // Segundo tap - fazer logout
+      if (onLogout) {
+        onLogout();
+      }
+      setTapCount(0);
+    } else {
+      // Primeiro tap - esperar 500ms para ver se vem o segundo
+      tapTimerRef.current = setTimeout(() => {
+        setTapCount(0);
+      }, 500);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {showBackButton ? (
@@ -32,7 +63,15 @@ export const Navbar: React.FC<NavbarProps> = ({
       
       <Text style={styles.title}>{title}</Text>
       
-      {showLogo ? (
+      {showProfile ? (
+        <TouchableOpacity
+          style={styles.profileImage}
+          onPress={handleProfileTap}
+          activeOpacity={0.7}
+        >
+          <User size={20} color={COLORS.TEXT_WHITE} />
+        </TouchableOpacity>
+      ) : showLogo ? (
         <Logo size="medium" showText={false} color={COLORS.TEXT_WHITE} />
       ) : (
         <View style={styles.placeholder} />
@@ -61,5 +100,15 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     width: 32,
+  },
+  profileImage: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: COLORS.BLUE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.TEXT_WHITE,
   },
 });

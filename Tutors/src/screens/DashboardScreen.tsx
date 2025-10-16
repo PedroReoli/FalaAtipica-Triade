@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -35,6 +35,8 @@ export const DashboardScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userName, setUserName] = useState('');
   const [criancas, setCriancas] = useState<Crianca[]>([]);
+  const [tapCount, setTapCount] = useState(0);
+  const tapTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     loadUserData();
@@ -138,6 +140,34 @@ export const DashboardScreen: React.FC = () => {
     navigation.navigate('Profile');
   };
 
+  const handleLogout = () => {
+    mockAuthService.logout();
+    socketService.disconnect();
+    navigation.navigate('Login');
+  };
+
+  const handleProfileTap = () => {
+    // Incrementar contador de taps
+    setTapCount(prev => prev + 1);
+
+    // Limpar timer anterior se existir
+    if (tapTimerRef.current) {
+      clearTimeout(tapTimerRef.current);
+    }
+
+    // Verificar se é o segundo tap
+    if (tapCount === 1) {
+      // Segundo tap - fazer logout
+      handleLogout();
+      setTapCount(0);
+    } else {
+      // Primeiro tap - esperar 500ms para ver se vem o segundo
+      tapTimerRef.current = setTimeout(() => {
+        setTapCount(0);
+      }, 500);
+    }
+  };
+
   if (isLoading) {
     return (
       <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
@@ -158,9 +188,13 @@ export const DashboardScreen: React.FC = () => {
       <View style={styles.header}>
         {/* Profile Area */}
         <View style={styles.profileSection}>
-          <View style={styles.profileImage}>
+          <TouchableOpacity
+            style={styles.profileImage}
+            onPress={handleProfileTap}
+            activeOpacity={0.7}
+          >
             <User size={20} color={COLORS.TEXT_WHITE} />
-          </View>
+          </TouchableOpacity>
           <View style={styles.profileInfo}>
             <Text style={styles.greeting}>Olá</Text>
             <Text style={styles.userName}>{userName || 'Usuário'}</Text>

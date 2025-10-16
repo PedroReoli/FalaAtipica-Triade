@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Shield, Check, Crown, Star } from 'lucide-react-native';
@@ -8,6 +8,8 @@ import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { mockAuthService } from '../services/mockAuthService';
+import { emailService } from '../utils/emailService';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -32,10 +34,39 @@ const premiumFeatures = [
 export const SubscriptionScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const [currentPlan, setCurrentPlan] = useState<'free' | 'premium'>('free');
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    // Buscar dados do usuário logado
+    const currentUser = mockAuthService.getCurrentUser();
+    if (currentUser) {
+      setUserName(currentUser.nome);
+      setUserEmail(currentUser.email);
+    }
+  }, []);
 
   const handleUpgradeToPremium = () => {
-    // TODO: Implementar upgrade para premium
-    console.log('Upgrade para premium');
+    Alert.alert(
+      'Fazer Upgrade para Premium',
+      'Deseja solicitar o upgrade para o plano Premium?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Solicitar',
+          onPress: async () => {
+            const success = await emailService.requestPremiumUpgrade(userName, userEmail);
+            if (success) {
+              Alert.alert(
+                'Solicitação enviada!',
+                'Você receberá as instruções de pagamento em breve.',
+                [{ text: 'OK' }]
+              );
+            }
+          }
+        }
+      ]
+    );
   };
 
   const handleHome = () => {

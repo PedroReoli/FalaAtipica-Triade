@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Trash2, Check } from 'lucide-react-native';
@@ -9,6 +9,9 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import { getCurrentYear } from '../utils/dateUtils';
+import { mockAuthService } from '../services/mockAuthService';
+import { emailService } from '../utils/emailService';
+import { apiService } from '../services/apiService';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 type ChildProfileRouteProp = RouteProp<RootStackParamList, 'ChildProfile'>;
@@ -17,16 +20,81 @@ const generalSettings = [
   { id: '1', title: 'Solicitar Exclusão', icon: Trash2, action: 'requestDeletion' },
 ];
 
-const connectedDevices = [
-  { id: '1', name: 'iPad da Escola', type: 'Tablet', lastSync: '2 horas atrás' },
-  { id: '2', name: 'iPhone da Mãe', type: 'Smartphone', lastSync: '1 dia atrás' },
-];
-
 export const ChildProfileScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<ChildProfileRouteProp>();
   const { childId } = route.params;
   const currentYear = getCurrentYear();
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [connectedDevices, setConnectedDevices] = useState<Array<{
+    id: string;
+    name: string;
+    type: string;
+    lastSync: string;
+  }>>([]);
+
+  useEffect(() => {
+    loadUserData();
+    loadDevices();
+  }, []);
+
+  const loadUserData = () => {
+    // Buscar dados do usuário logado
+    const currentUser = mockAuthService.getCurrentUser();
+    if (currentUser) {
+      setUserName(currentUser.nome);
+      setUserEmail(currentUser.email);
+    }
+  };
+
+  const loadDevices = async () => {
+    try {
+      // Tentar buscar dispositivos da API
+      const response = await fetch(`${apiService['apiBaseUrl']}/tutors/devices/${childId}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        signal: AbortSignal.timeout(3000),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.devices) {
+          // Formatar timestamps
+          const formattedDevices = data.devices.map((device: any) => ({
+            id: device.id,
+            name: device.name,
+            type: device.type,
+            lastSync: formatTimestamp(device.lastSync),
+          }));
+          setConnectedDevices(formattedDevices);
+          return;
+        }
+      }
+    } catch (error) {
+      console.log('⚠️ API erro - usando dados locais');
+    }
+
+    // Fallback: dados mockados
+    setConnectedDevices([
+      { id: '1', name: 'iPad da Escola', type: 'Tablet', lastSync: 'Há 2 horas' },
+      { id: '2', name: 'iPhone da Mãe', type: 'Smartphone', lastSync: 'Há 1 dia' },
+    ]);
+  };
+
+  const formatTimestamp = (timestamp: string): string => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Agora';
+    if (diffMins < 60) return `Há ${diffMins} ${diffMins === 1 ? 'minuto' : 'minutos'}`;
+    if (diffHours < 24) return `Há ${diffHours} ${diffHours === 1 ? 'hora' : 'horas'}`;
+    return `Há ${diffDays} ${diffDays === 1 ? 'dia' : 'dias'}`;
+  };
 
   // Mock data - em uma aplicação real, buscaríamos os dados baseado no childId
   const childData = {
@@ -38,8 +106,39 @@ export const ChildProfileScreen: React.FC = () => {
   };
 
   const handleSettingPress = (action: string) => {
-    // TODO: Implementar ações das configurações
-    console.log('Configuração selecionada:', action);
+    if (action === 'requestDeletion') {
+      Alert.alert(
+        'Solicitar Exclusão',
+        `Deseja solicitar a exclusão do perfil de ${childData.name}?\n\nEsta ação não pode ser desfeita.`,
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          {
+            text: 'Solicitar Exclusão',
+            style: 'destructive',
+            onPress: async () => {
+              const success = await emailService.requestChildDeletion(
+                userName,
+                userEmail,
+                childData.name,
+                childId
+              );
+              if (success) {
+                Alert.alert(
+                  'Solicitação enviada!',
+                  'A equipe FalaAtípica analisará sua solicitação e entrará em contato.',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => navigation.goBack()
+                    }
+                  ]
+                );
+              }
+            }
+          }
+        ]
+      );
+    }
   };
 
   const handleDevicePress = (deviceId: string) => {
