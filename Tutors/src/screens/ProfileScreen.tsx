@@ -59,22 +59,8 @@ export const ProfileScreen: React.FC = () => {
   const handleMenuPress = async (item: typeof menuItems[0]) => {
     // Se tem action, executar ação especial
     if ('action' in item && item.action === 'requestPasswordChange') {
-      Alert.alert(
-        'Solicitar mudança de senha',
-        'Deseja enviar um email para solicitar a mudança de senha?',
-        [
-          { text: 'Cancelar', style: 'cancel' },
-          {
-            text: 'Enviar',
-            onPress: async () => {
-              const success = await emailService.requestPasswordChange(userName, userEmail);
-              if (success) {
-                Alert.alert('Sucesso', 'Email enviado com sucesso! Aguarde o retorno da equipe.');
-              }
-            }
-          }
-        ]
-      );
+      // Abre email diretamente sem confirmação
+      await emailService.requestPasswordChange(userName, userEmail);
     } 
     // Se tem route, navegar normalmente
     else if ('route' in item) {

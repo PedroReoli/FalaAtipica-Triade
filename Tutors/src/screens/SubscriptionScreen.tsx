@@ -46,27 +46,9 @@ export const SubscriptionScreen: React.FC = () => {
     }
   }, []);
 
-  const handleUpgradeToPremium = () => {
-    Alert.alert(
-      'Fazer Upgrade para Premium',
-      'Deseja solicitar o upgrade para o plano Premium?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Solicitar',
-          onPress: async () => {
-            const success = await emailService.requestPremiumUpgrade(userName, userEmail);
-            if (success) {
-              Alert.alert(
-                'Solicitação enviada!',
-                'Você receberá as instruções de pagamento em breve.',
-                [{ text: 'OK' }]
-              );
-            }
-          }
-        }
-      ]
-    );
+  const handleUpgradeToPremium = async () => {
+    // Abre email diretamente sem confirmação
+    await emailService.requestPremiumUpgrade(userName, userEmail);
   };
 
   const handleHome = () => {
