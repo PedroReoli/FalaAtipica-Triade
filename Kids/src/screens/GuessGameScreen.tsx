@@ -128,10 +128,6 @@ export const GuessGameScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
-  const handlePlayAgain = () => {
-    startNewGame();
-  };
-
   // Tela de resultado final
   if (gameCompleted) {
     return (
@@ -151,8 +147,8 @@ export const GuessGameScreen: React.FC = () => {
               <Text style={styles.goodScore}>Muito bem! 🌟</Text>
             )}
             
-            <TouchableOpacity style={styles.playAgainButton} onPress={handlePlayAgain}>
-              <Text style={styles.playAgainText}>Jogar Novamente</Text>
+            <TouchableOpacity style={styles.homeButton} onPress={handleHome}>
+              <Text style={styles.homeButtonText}>Voltar para Home</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -401,14 +397,14 @@ const styles = StyleSheet.create({
     color: COLORS.GREEN,
     marginBottom: 20,
   },
-  playAgainButton: {
+  homeButton: {
     backgroundColor: COLORS.BLUE,
     borderRadius: 12,
     padding: 16,
     minWidth: 150,
     alignItems: 'center',
   },
-  playAgainText: {
+  homeButtonText: {
     fontSize: 16,
     fontWeight: '600',
     color: COLORS.TEXT_WHITE,

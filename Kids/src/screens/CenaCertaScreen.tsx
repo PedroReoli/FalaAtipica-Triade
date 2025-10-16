@@ -283,10 +283,6 @@ export const CenaCertaScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
-  const handlePlayAgain = () => {
-    startNewGame();
-  };
-
   // Tela de resultado
   if (gameCompleted) {
     const stats = calculateStats();
@@ -317,8 +313,8 @@ export const CenaCertaScreen: React.FC = () => {
               <Text style={styles.goodScore}>Muito bem! 🌟</Text>
             )}
             
-            <TouchableOpacity style={styles.playAgainButton} onPress={handlePlayAgain}>
-              <Text style={styles.playAgainText}>Jogar Novamente</Text>
+            <TouchableOpacity style={styles.homeButton} onPress={handleHome}>
+              <Text style={styles.homeButtonText}>Voltar para Home</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -669,7 +665,7 @@ const styles = StyleSheet.create({
     color: COLORS.GREEN,
     marginTop: 8,
   },
-  playAgainButton: {
+  homeButton: {
     backgroundColor: COLORS.BLUE,
     borderRadius: 12,
     padding: 16,
@@ -677,7 +673,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 16,
   },
-  playAgainText: {
+  homeButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: COLORS.TEXT_WHITE,

@@ -538,10 +538,6 @@ export const PalavrasGameScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
-  const handlePlayAgain = () => {
-    startNewGame();
-  };
-
   // Tela de resultado
   if (gameCompleted) {
     const totalPalavras = respostas.length;
@@ -568,8 +564,8 @@ export const PalavrasGameScreen: React.FC = () => {
               <Text style={styles.perfectScore}>Perfeito! ⭐⭐⭐</Text>
             )}
             
-            <TouchableOpacity style={styles.playAgainButton} onPress={handlePlayAgain}>
-              <Text style={styles.playAgainText}>Jogar Novamente</Text>
+            <TouchableOpacity style={styles.homeButton} onPress={handleHome}>
+              <Text style={styles.homeButtonText}>Voltar para Home</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -1038,7 +1034,7 @@ const styles = StyleSheet.create({
     color: COLORS.YELLOW,
     marginTop: 8,
   },
-  playAgainButton: {
+  homeButton: {
     backgroundColor: COLORS.GREEN,
     borderRadius: 16,
     padding: 18,
@@ -1048,7 +1044,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: '#2d7a30',
   },
-  playAgainText: {
+  homeButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: COLORS.TEXT_WHITE,
