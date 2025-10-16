@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Mail, Instagram } from 'lucide-react-native';
+import { 
+  Mail, 
+  Instagram, 
+  AlertCircle, 
+  ChevronDown, 
+  ChevronUp,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Info
+} from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import { mockAuthService } from '../services/mockAuthService';
+import { emailService } from '../utils/emailService';
+import { API_BASE_URL } from '../config/api';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -16,14 +29,101 @@ const contactInfo = [
   { id: '2', title: 'Instagram', value: '@falaatipica', icon: 'instagram' },
 ];
 
-const badges = [
-  { id: '1', title: 'Suporte Premium', description: 'Atendimento prioritário', icon: '⭐', available: true },
-  { id: '2', title: 'Comunidade', description: 'Grupo de tutores', icon: '👥', available: true },
-  { id: '3', title: 'Webinar', description: 'Treinamentos mensais', icon: '🎓', available: false },
+const faqData = [
+  {
+    id: '1',
+    question: 'Como acompanho o progresso da minha criança?',
+    answer: 'Acesse a aba "Progresso" no menu principal. Lá você verá estatísticas detalhadas de cada jogo, tempo jogado e evolução geral. Se tiver mais de uma criança, use as setas para alternar entre elas.'
+  },
+  {
+    id: '2',
+    question: 'Como agendo consultas com o profissional?',
+    answer: 'As consultas são agendadas pelo profissional que acompanha sua criança. Você receberá notificações e pode visualizar todas as agendas na aba "Agenda".'
+  },
+  {
+    id: '3',
+    question: 'Minha criança não está jogando. O que fazer?',
+    answer: 'Verifique se a criança tem acesso ao app KIDS. Incentive-a a jogar diariamente por 15-20 minutos. Se persistir, entre em contato com o profissional responsável.'
+  },
+  {
+    id: '4',
+    question: 'Como adiciono outra criança?',
+    answer: 'Entre em contato com o suporte através do email abaixo. Nossa equipe irá configurar o acesso para a nova criança.'
+  },
+  {
+    id: '5',
+    question: 'O app funciona offline?',
+    answer: 'Sim! O app funciona offline. Os dados serão sincronizados automaticamente quando a conexão for restaurada.'
+  },
 ];
 
 export const SupportScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
+  const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
+  const [apiStatus, setApiStatus] = useState<'online' | 'offline' | 'checking'>('checking');
+
+  useEffect(() => {
+    checkAPIStatus();
+  }, []);
+
+  const checkAPIStatus = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/health`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(2000),
+      });
+      
+      if (response.ok) {
+        setApiStatus('online');
+      } else {
+        setApiStatus('offline');
+      }
+    } catch (error) {
+      setApiStatus('offline');
+    }
+  };
+
+  const handleReportProblem = async () => {
+    const currentUser = mockAuthService.getCurrentUser();
+    
+    Alert.alert(
+      'Reportar Problema',
+      'Deseja enviar um email descrevendo o problema encontrado?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Enviar Email',
+          onPress: async () => {
+            const subject = 'Relato de Problema - FalaAtípica Tutors';
+            const body = `Olá equipe FalaAtípica,
+
+Gostaria de reportar um problema no aplicativo.
+
+Dados da conta:
+- Nome: ${currentUser?.nome || 'Não informado'}
+- Email: ${currentUser?.email || 'Não informado'}
+
+Descrição do problema:
+[Descreva aqui o problema encontrado]
+
+Atenciosamente,
+${currentUser?.nome || 'Usuário'}`;
+
+            try {
+              const mailtoUrl = `mailto:pedrosousa2160@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+              await Linking.openURL(mailtoUrl);
+            } catch (error) {
+              Alert.alert('Erro', 'Não foi possível abrir o cliente de email.');
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  const toggleFaq = (faqId: string) => {
+    setExpandedFaq(expandedFaq === faqId ? null : faqId);
+  };
 
   const handleContactPress = async (type: string, value: string) => {
     if (type === 'Email') {
@@ -93,12 +193,28 @@ export const SupportScreen: React.FC = () => {
       />
       
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Entre em Contato</Text>
-        <Text style={styles.subtitle}>
-          Estamos aqui para ajudar você e suas crianças.
-        </Text>
+        {/* Status do Sistema */}
+        <View style={[styles.statusCard, apiStatus === 'online' ? styles.statusOnline : styles.statusOffline]}>
+          {apiStatus === 'online' ? (
+            <CheckCircle size={18} color={COLORS.GREEN} />
+          ) : apiStatus === 'offline' ? (
+            <XCircle size={18} color={COLORS.RED} />
+          ) : (
+            <AlertCircle size={18} color={COLORS.YELLOW} />
+          )}
+          <Text style={styles.statusText}>
+            Sistema: {apiStatus === 'online' ? 'Online' : apiStatus === 'offline' ? 'Offline (modo local)' : 'Verificando...'}
+          </Text>
+        </View>
 
-        {/* Informações de Contato */}
+        {/* Reportar Problema */}
+        <TouchableOpacity style={styles.reportButton} onPress={handleReportProblem}>
+          <AlertCircle size={20} color={COLORS.TEXT_WHITE} />
+          <Text style={styles.reportButtonText}>Reportar Problema</Text>
+        </TouchableOpacity>
+
+        {/* Entre em Contato */}
+        <Text style={styles.sectionTitle}>Entre em Contato</Text>
         <View style={styles.contactSection}>
           {contactInfo.map((contact) => {
             const IconComponent = getContactIcon(contact.icon);
@@ -120,28 +236,48 @@ export const SupportScreen: React.FC = () => {
           })}
         </View>
 
-        <Text style={styles.title}>Recursos</Text>
-        
-        {/* Lista de Badges */}
-        <View style={styles.badgesList}>
-          {badges.map((badge) => (
-            <TouchableOpacity
-              key={badge.id}
-              style={[styles.badgeCard, !badge.available && styles.badgeLocked]}
-              onPress={() => handleBadgePress(badge.id)}
-            >
-              <Text style={styles.badgeIcon}>{badge.icon}</Text>
-              <View style={styles.badgeInfo}>
-                <Text style={[styles.badgeTitle, !badge.available && styles.badgeTitleLocked]}>
-                  {badge.title}
-                </Text>
-                <Text style={[styles.badgeDescription, !badge.available && styles.badgeDescriptionLocked]}>
-                  {badge.description}
-                </Text>
-              </View>
-              {badge.available && <Text style={styles.badgeAvailable}>Disponível</Text>}
-            </TouchableOpacity>
-          ))}
+        {/* Horário de Atendimento */}
+        <View style={styles.scheduleCard}>
+          <Clock size={18} color={COLORS.BLUE} />
+          <View style={styles.scheduleInfo}>
+            <Text style={styles.scheduleTitle}>Horário de Atendimento</Text>
+            <Text style={styles.scheduleText}>Segunda a Sexta: 9h às 18h</Text>
+            <Text style={styles.scheduleText}>Sábado: 9h às 13h</Text>
+          </View>
+        </View>
+
+        {/* FAQ */}
+        <Text style={styles.sectionTitle}>Perguntas Frequentes</Text>
+        <View style={styles.faqSection}>
+          {faqData.map((faq) => {
+            const isExpanded = expandedFaq === faq.id;
+            return (
+              <TouchableOpacity
+                key={faq.id}
+                style={styles.faqCard}
+                onPress={() => toggleFaq(faq.id)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.faqHeader}>
+                  <Text style={styles.faqQuestion}>{faq.question}</Text>
+                  {isExpanded ? (
+                    <ChevronUp size={20} color={COLORS.BLUE} />
+                  ) : (
+                    <ChevronDown size={20} color={COLORS.BLUE} />
+                  )}
+                </View>
+                {isExpanded && (
+                  <Text style={styles.faqAnswer}>{faq.answer}</Text>
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        {/* Informações do App */}
+        <View style={styles.appInfoCard}>
+          <Info size={16} color={COLORS.BLUE} />
+          <Text style={styles.appInfoText}>FalaAtípica Tutors v1.0.0</Text>
         </View>
       </ScrollView>
 
@@ -157,104 +293,177 @@ export const SupportScreen: React.FC = () => {
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
-  title: {
-    fontSize: 18,
+  statusCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 16,
+    gap: 10,
+  },
+  statusOnline: {
+    backgroundColor: COLORS.GREEN + '15',
+    borderWidth: 1,
+    borderColor: COLORS.GREEN,
+  },
+  statusOffline: {
+    backgroundColor: COLORS.YELLOW + '15',
+    borderWidth: 1,
+    borderColor: COLORS.YELLOW,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.TEXT_BLACK,
+  },
+  reportButton: {
+    backgroundColor: COLORS.RED,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 20,
+    gap: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  reportButtonText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: COLORS.TEXT_WHITE,
+  },
+  sectionTitle: {
+    fontSize: 14,
     fontWeight: '700',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 20,
-    lineHeight: 20,
+    marginBottom: 12,
+    marginTop: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   contactSection: {
-    marginBottom: 24,
+    marginBottom: 20,
+    gap: 10,
   },
   contactCard: {
     backgroundColor: COLORS.TEXT_WHITE,
     borderWidth: 2,
     borderColor: COLORS.GREEN,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 12,
+    borderRadius: 10,
+    padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.04,
     shadowRadius: 2,
     elevation: 1,
   },
   contactIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: COLORS.GREEN + '15',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 14,
+    marginRight: 12,
   },
   contactInfoContainer: {
     flex: 1,
   },
   contactTitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 3,
+    color: '#666',
+    marginBottom: 2,
   },
   contactValue: {
     fontSize: 13,
     color: COLORS.BLUE,
-    fontWeight: '500',
+    fontWeight: '600',
   },
-  badgesList: {
-    gap: 12,
-  },
-  badgeCard: {
-    backgroundColor: COLORS.TEXT_WHITE,
-    borderWidth: 2,
-    borderColor: COLORS.GREEN,
-    borderRadius: 12,
-    padding: 16,
+  scheduleCard: {
+    backgroundColor: COLORS.BLUE + '10',
+    borderWidth: 1,
+    borderColor: COLORS.BLUE,
+    borderRadius: 10,
+    padding: 12,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    marginBottom: 20,
+    gap: 10,
   },
-  badgeLocked: {
-    borderColor: COLORS.YELLOW,
-    opacity: 0.6,
-  },
-  badgeIcon: {
-    fontSize: 32,
-    marginRight: 16,
-  },
-  badgeInfo: {
+  scheduleInfo: {
     flex: 1,
   },
-  badgeTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+  scheduleTitle: {
+    fontSize: 13,
+    fontWeight: '700',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 4,
+    marginBottom: 6,
   },
-  badgeTitleLocked: {
-    color: COLORS.GREEN,
+  scheduleText: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: '#666',
+    marginBottom: 2,
   },
-  badgeDescription: {
-    fontSize: 14,
-    color: COLORS.GREEN,
+  faqSection: {
+    marginBottom: 20,
+    gap: 10,
   },
-  badgeDescriptionLocked: {
-    color: COLORS.YELLOW,
+  faqCard: {
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderWidth: 2,
+    borderColor: COLORS.BLUE,
+    borderRadius: 10,
+    padding: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
   },
-  badgeAvailable: {
+  faqHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 10,
+  },
+  faqQuestion: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: COLORS.TEXT_BLACK,
+    flex: 1,
+  },
+  faqAnswer: {
     fontSize: 12,
-    color: COLORS.BLUE,
+    fontWeight: '500',
+    color: '#666',
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#E8E8E8',
+    lineHeight: 18,
+  },
+  appInfoCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+    marginBottom: 20,
+    gap: 8,
+  },
+  appInfoText: {
+    fontSize: 11,
     fontWeight: '600',
+    color: '#999',
   },
 });
