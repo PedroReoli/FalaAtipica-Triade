@@ -143,7 +143,13 @@ export const DashboardScreen: React.FC = () => {
   const handleLogout = () => {
     mockAuthService.logout();
     socketService.disconnect();
-    navigation.navigate('Login');
+    
+    // Limpa o histórico de navegação e vai para Login
+    // Isso impede que o usuário volte para Dashboard ao clicar em "voltar"
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
   };
 
   const handleProfileTap = () => {

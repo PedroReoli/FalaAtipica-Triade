@@ -132,7 +132,8 @@ export const LoginScreen: React.FC = () => {
   };
 
   const handleBack = () => {
-    navigation.goBack();
+    // Volta para Splash (tela inicial), não usa goBack() para evitar voltar ao Dashboard após logout
+    navigation.navigate('Splash');
   };
 
   return (
