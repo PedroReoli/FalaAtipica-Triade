@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { User } from 'lucide-react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { User, ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { COLORS } from '../constants/colors';
 
 interface Child {
@@ -26,50 +26,54 @@ export const ChildSelector: React.FC<ChildSelectorProps> = ({
     return null;
   }
 
+  // Encontrar índice da criança atual
+  const currentIndex = children.findIndex(child => child.id === selectedChildId);
+  const currentChild = children[currentIndex] || children[0];
+  
+  // Navegação
+  const goToPrevious = () => {
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : children.length - 1;
+    onSelectChild(children[newIndex].id);
+  };
+
+  const goToNext = () => {
+    const newIndex = currentIndex < children.length - 1 ? currentIndex + 1 : 0;
+    onSelectChild(children[newIndex].id);
+  };
+
   return (
     <View style={styles.container}>
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+      {/* Seta Esquerda */}
+      <TouchableOpacity
+        style={styles.arrowButton}
+        onPress={goToPrevious}
+        activeOpacity={0.7}
       >
-        {children.map((child) => {
-          const isSelected = child.id === selectedChildId;
-          
-          return (
-            <TouchableOpacity
-              key={child.id}
-              style={[
-                styles.childCard,
-                isSelected && styles.childCardSelected
-              ]}
-              onPress={() => onSelectChild(child.id)}
-              activeOpacity={0.7}
-            >
-              <View style={[
-                styles.childIcon,
-                isSelected && styles.childIconSelected
-              ]}>
-                <User size={16} color={isSelected ? COLORS.TEXT_WHITE : COLORS.BLUE} />
-              </View>
-              <View style={styles.childInfo}>
-                <Text style={[
-                  styles.childName,
-                  isSelected && styles.childNameSelected
-                ]}>
-                  {child.nome}
-                </Text>
-                <Text style={[
-                  styles.childAge,
-                  isSelected && styles.childAgeSelected
-                ]}>
-                  {child.idade} anos
-                </Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+        <ChevronLeft size={20} color={COLORS.BLUE} strokeWidth={3} />
+      </TouchableOpacity>
+
+      {/* Card da Criança Atual */}
+      <View style={styles.childCard}>
+        <View style={styles.childIcon}>
+          <User size={18} color={COLORS.TEXT_WHITE} />
+        </View>
+        <View style={styles.childInfo}>
+          <Text style={styles.childName}>{currentChild.nome}</Text>
+          <Text style={styles.childAge}>{currentChild.idade} anos</Text>
+        </View>
+        <View style={styles.indicator}>
+          <Text style={styles.indicatorText}>{currentIndex + 1}/{children.length}</Text>
+        </View>
+      </View>
+
+      {/* Seta Direita */}
+      <TouchableOpacity
+        style={styles.arrowButton}
+        onPress={goToNext}
+        activeOpacity={0.7}
+      >
+        <ChevronRight size={20} color={COLORS.BLUE} strokeWidth={3} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -79,38 +83,49 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
-    paddingVertical: 8,
-  },
-  scrollContent: {
-    paddingHorizontal: 16,
-    gap: 10,
-  },
-  childCard: {
+    paddingVertical: 10,
+    paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 12,
+  },
+  arrowButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: COLORS.TEXT_WHITE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.BLUE,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  childCard: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.BLUE,
     borderRadius: 10,
     padding: 10,
-    paddingHorizontal: 14,
-    borderWidth: 2,
-    borderColor: '#E0E0E0',
+    paddingHorizontal: 12,
     gap: 10,
-    minWidth: 140,
-  },
-  childCardSelected: {
-    backgroundColor: COLORS.BLUE,
-    borderColor: COLORS.BLUE,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   childIcon: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: COLORS.BLUE + '15',
+    backgroundColor: COLORS.TEXT_WHITE + '30',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  childIconSelected: {
-    backgroundColor: COLORS.TEXT_WHITE + '30',
   },
   childInfo: {
     flex: 1,
@@ -118,19 +133,25 @@ const styles = StyleSheet.create({
   childName: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 2,
-  },
-  childNameSelected: {
     color: COLORS.TEXT_WHITE,
+    marginBottom: 2,
   },
   childAge: {
     fontSize: 10,
     fontWeight: '500',
-    color: '#666',
+    color: COLORS.TEXT_WHITE + 'DD',
   },
-  childAgeSelected: {
-    color: COLORS.TEXT_WHITE + 'CC',
+  indicator: {
+    backgroundColor: COLORS.TEXT_WHITE + '30',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  indicatorText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: COLORS.TEXT_WHITE,
+    letterSpacing: 0.3,
   },
 });
 

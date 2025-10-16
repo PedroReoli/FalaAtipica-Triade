@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Mail, Instagram } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
-import { InternalHeader } from '../components/InternalHeader';
-import { BottomNavigation } from '../components/BottomNavigation';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const contactInfo = [
-  { id: '1', title: 'Email', value: 'suporte@falaatipica.com', icon: '📧' },
-  { id: '2', title: 'Instagram', value: '@falaatipica', icon: '📱' },
+  { id: '1', title: 'Email', value: 'pedrosousa2160@gmail.com', icon: 'mail' },
+  { id: '2', title: 'Instagram', value: '@falaatipica', icon: 'instagram' },
 ];
 
 const badges = [
@@ -23,9 +25,34 @@ const badges = [
 export const SupportScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  const handleContactPress = (type: string, value: string) => {
-    // TODO: Implementar ação de contato
-    console.log('Contato:', type, value);
+  const handleContactPress = async (type: string, value: string) => {
+    if (type === 'Email') {
+      try {
+        const mailtoUrl = `mailto:${value}?subject=Suporte FalaAtípica - Tutors`;
+        const canOpen = await Linking.canOpenURL(mailtoUrl);
+        
+        if (canOpen) {
+          await Linking.openURL(mailtoUrl);
+        } else {
+          Alert.alert('Email', `Entre em contato: ${value}`);
+        }
+      } catch (error) {
+        Alert.alert('Email', `Entre em contato: ${value}`);
+      }
+    } else if (type === 'Instagram') {
+      try {
+        const instagramUrl = `instagram://user?username=${value.replace('@', '')}`;
+        const canOpen = await Linking.canOpenURL(instagramUrl);
+        
+        if (canOpen) {
+          await Linking.openURL(instagramUrl);
+        } else {
+          await Linking.openURL(`https://instagram.com/${value.replace('@', '')}`);
+        }
+      } catch (error) {
+        Alert.alert('Instagram', `Visite: ${value}`);
+      }
+    }
   };
 
   const handleBadgePress = (badgeId: string) => {
@@ -37,9 +64,33 @@ export const SupportScreen: React.FC = () => {
     navigation.navigate('Dashboard');
   };
 
+  const handleProfiles = () => {
+    navigation.navigate('Profile');
+  };
+
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
+  const getContactIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'mail':
+        return Mail;
+      case 'instagram':
+        return Instagram;
+      default:
+        return Mail;
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <InternalHeader title="Suporte" />
+    <SafeAreaWrapper backgroundColor={COLORS.BACKGROUND_WHITE}>
+      <Navbar 
+        title="Suporte"
+        onBack={handleBack}
+        showBackButton={true}
+        showLogo={true}
+      />
       
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Entre em Contato</Text>
@@ -49,19 +100,24 @@ export const SupportScreen: React.FC = () => {
 
         {/* Informações de Contato */}
         <View style={styles.contactSection}>
-          {contactInfo.map((contact) => (
-            <TouchableOpacity
-              key={contact.id}
-              style={styles.contactCard}
-              onPress={() => handleContactPress(contact.title, contact.value)}
-            >
-              <Text style={styles.contactIcon}>{contact.icon}</Text>
-              <View style={styles.contactInfo}>
-                <Text style={styles.contactTitle}>{contact.title}</Text>
-                <Text style={styles.contactValue}>{contact.value}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          {contactInfo.map((contact) => {
+            const IconComponent = getContactIcon(contact.icon);
+            return (
+              <TouchableOpacity
+                key={contact.id}
+                style={styles.contactCard}
+                onPress={() => handleContactPress(contact.title, contact.value)}
+              >
+                <View style={styles.contactIconContainer}>
+                  <IconComponent size={20} color={COLORS.GREEN} />
+                </View>
+                <View style={styles.contactInfoContainer}>
+                  <Text style={styles.contactTitle}>{contact.title}</Text>
+                  <Text style={styles.contactValue}>{contact.value}</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         <Text style={styles.title}>Recursos</Text>
@@ -89,65 +145,73 @@ export const SupportScreen: React.FC = () => {
         </View>
       </ScrollView>
 
-      <BottomNavigation 
-        onHome={handleHome}
-        homeActive={false}
+      <Footer 
+        activeTab="home"
+        onHomePress={handleHome}
+        onProfilesPress={handleProfiles}
       />
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.BACKGROUND_WHITE,
-  },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 24,
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '700',
     color: COLORS.TEXT_BLACK,
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 16,
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 24,
-    lineHeight: 24,
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 20,
+    lineHeight: 20,
   },
   contactSection: {
-    marginBottom: 32,
+    marginBottom: 24,
   },
   contactCard: {
     backgroundColor: COLORS.TEXT_WHITE,
     borderWidth: 2,
     borderColor: COLORS.GREEN,
     borderRadius: 12,
-    padding: 16,
+    padding: 14,
     marginBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
-  contactIcon: {
-    fontSize: 24,
-    marginRight: 16,
+  contactIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.GREEN + '15',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
   },
-  contactInfo: {
+  contactInfoContainer: {
     flex: 1,
   },
   contactTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   contactValue: {
-    fontSize: 14,
+    fontSize: 13,
     color: COLORS.BLUE,
+    fontWeight: '500',
   },
   badgesList: {
     gap: 12,
