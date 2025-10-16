@@ -11,6 +11,7 @@ import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import { ChildSelector } from '../components/ChildSelector';
 import { mockAuthService } from '../services/mockAuthService';
 import { API_BASE_URL } from '../config/api';
+import { socketService } from '../services/socketService';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -58,6 +59,12 @@ export const ProgressScreen: React.FC = () => {
   useEffect(() => {
     loadAvailableChildren();
     loadProgressData();
+    setupRealtimeUpdates();
+
+    return () => {
+      // Limpar listeners ao desmontar
+      socketService.off('child-game-completed');
+    };
   }, []);
 
   useEffect(() => {
@@ -65,6 +72,29 @@ export const ProgressScreen: React.FC = () => {
       loadProgressData();
     }
   }, [selectedChild]);
+
+  const setupRealtimeUpdates = () => {
+    // Conectar WebSocket se ainda não conectou
+    const currentUser = mockAuthService.getCurrentUser();
+    if (currentUser && !socketService.isSocketConnected()) {
+      socketService.connect(currentUser.id, currentUser.nome);
+    }
+
+    // Escutar quando criança completa jogo
+    socketService.on('child-game-completed', (data: any) => {
+      console.log('📊 Progresso atualizado em tempo real:', data);
+      
+      // Verificar se é uma das minhas crianças
+      if (currentUser && currentUser.criancasIds && currentUser.criancasIds.includes(data.userId)) {
+        console.log('✅ Recarregando progresso automaticamente');
+        
+        // Se for a criança atualmente selecionada, recarregar
+        if (data.userId === selectedChild) {
+          loadProgressData();
+        }
+      }
+    });
+  };
 
   const loadAvailableChildren = async () => {
     try {

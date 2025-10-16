@@ -180,7 +180,7 @@ export const IgualDiferenteScreen: React.FC = () => {
   const finishGame = async () => {
     // Calcular estatísticas
     const stats = calculateStats();
-    const percentual = stats.percentualAcertos;
+    const percentual = parseFloat(stats.percentualAcerto);
     const timeSpent = Math.round((Date.now() - gameStartTime) / 1000);
     
     // ✅ ENVIAR PROGRESSO PARA API (com fallback)

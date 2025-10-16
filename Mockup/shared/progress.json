@@ -11,6 +11,30 @@
       "timeSpent": 111,
       "category": "animais",
       "timestamp": "2025-10-14T02:18:49.906Z"
+    },
+    {
+      "id": "progress_1760579092811_0nyk119",
+      "userId": "1",
+      "gameId": "palavras",
+      "level": 1,
+      "score": 88,
+      "correctAnswers": 7,
+      "wrongAnswers": 1,
+      "timeSpent": 44,
+      "category": "animais",
+      "timestamp": "2025-10-16T01:44:52.811Z"
+    },
+    {
+      "id": "progress_1760579766322_itexqo4",
+      "userId": "1",
+      "gameId": "palavras",
+      "level": 1,
+      "score": 100,
+      "correctAnswers": 7,
+      "wrongAnswers": 0,
+      "timeSpent": 51,
+      "category": "animais",
+      "timestamp": "2025-10-16T01:56:06.322Z"
     }
   ]
 }

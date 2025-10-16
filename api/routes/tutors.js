@@ -382,6 +382,63 @@ router.get('/agendas/:tutorId', async (req, res) => {
   }
 });
 
+// GET /api/tutors/child/:childId - Dados completos de uma criança específica
+router.get('/child/:childId', async (req, res) => {
+  try {
+    const { childId } = req.params;
+    
+    // Buscar dados da criança
+    const kidsData = await jsonService.readJSON('KIDS/usuarios.json');
+    const crianca = kidsData.usuarios?.find(u => u.id === childId);
+    
+    if (!crianca) {
+      return res.status(404).json(
+        errorResponse('CHILD_NOT_FOUND', 'Criança não encontrada')
+      );
+    }
+    
+    // Buscar progresso/sessões da criança
+    const progressFile = await jsonService.readJSON('shared/progress.json').catch(() => ({ progress: [] }));
+    const sessoesCrianca = progressFile.progress?.filter(p => p.userId === childId) || [];
+    
+    // Calcular último acesso
+    const ultimoAcesso = sessoesCrianca.length > 0
+      ? new Date(Math.max(...sessoesCrianca.map(s => new Date(s.timestamp).getTime())))
+      : null;
+    
+    // Calcular data de início (primeira sessão ou data de criação)
+    const dataInicio = sessoesCrianca.length > 0
+      ? new Date(Math.min(...sessoesCrianca.map(s => new Date(s.timestamp).getTime())))
+      : new Date(crianca.criadoEm || Date.now() - 90 * 24 * 60 * 60 * 1000); // 90 dias atrás se não houver data
+    
+    // Montar resposta
+    const childProfile = {
+      id: crianca.id,
+      nome: crianca.nome,
+      idade: crianca.idade,
+      diagnostico: 'Atraso no desenvolvimento da linguagem',
+      dataInicio: dataInicio.toISOString(),
+      totalSessoes: sessoesCrianca.length,
+      ultimoAcesso: ultimoAcesso ? ultimoAcesso.toISOString() : null,
+      progressoGeral: calculateOverallProgress(sessoesCrianca),
+      estatisticas: {
+        tempoTotalMinutos: Math.round(sessoesCrianca.reduce((sum, s) => sum + (s.timeSpent || 0), 0) / 60),
+        mediaAcertos: sessoesCrianca.length > 0 
+          ? Math.round(sessoesCrianca.reduce((sum, s) => sum + (s.score || 0), 0) / sessoesCrianca.length)
+          : 0,
+      }
+    };
+    
+    res.json(successResponse(childProfile));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar dados da criança:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar dados da criança', error.message)
+    );
+  }
+});
+
 // GET /api/tutors/devices/:childId - Buscar dispositivos conectados
 router.get('/devices/:childId', async (req, res) => {
   try {

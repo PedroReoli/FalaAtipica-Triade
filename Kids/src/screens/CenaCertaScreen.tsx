@@ -211,7 +211,7 @@ export const CenaCertaScreen: React.FC = () => {
   const finishGame = async () => {
     // Calcular estatísticas
     const stats = calculateStats();
-    const percentual = Math.round(stats.percentualAcerto);
+    const percentual = Math.round(parseFloat(stats.percentualAcerto));
     const timeSpent = Math.round((Date.now() - gameStartTime) / 1000);
     
     // ✅ ENVIAR PROGRESSO PARA API (com fallback)
