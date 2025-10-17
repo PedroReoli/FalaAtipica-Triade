@@ -10,7 +10,7 @@
       "titulo": "🎯 Praticar sons da letra R",
       "mensagem": "Olá João! Lembre-se de praticar os sons da letra R com o jogo das palavras hoje! Faça pelo menos 3 tentativas. Você consegue! 💪",
       "prioridade": "alta",
-      "lido": false,
+      "lido": true,
       "criadoEm": "2025-10-16T08:00:00Z",
       "expirarEm": "2025-10-20T23:59:59Z"
     },
@@ -24,7 +24,7 @@
       "titulo": "📅 Consulta amanhã!",
       "mensagem": "Não esqueça da sua consulta amanhã às 14:00 na clínica! Te vejo lá! 😊",
       "prioridade": "media",
-      "lido": false,
+      "lido": true,
       "criadoEm": "2025-10-15T10:00:00Z",
       "expirarEm": "2025-10-18T14:00:00Z"
     },
@@ -38,7 +38,7 @@
       "titulo": "🎮 Jogue Igual-Diferente",
       "mensagem": "Hoje é dia de treinar a percepção! Tente jogar o Igual-Diferente pelo menos 2 vezes. Vai ser divertido!",
       "prioridade": "baixa",
-      "lido": false,
+      "lido": true,
       "criadoEm": "2025-10-16T10:00:00Z",
       "expirarEm": "2025-10-19T23:59:59Z"
     },
@@ -72,4 +72,3 @@
     }
   ]
 }
-

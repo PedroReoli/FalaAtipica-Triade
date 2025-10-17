@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -379,10 +379,18 @@ export const IgualDiferenteScreen: React.FC = () => {
               {currentPar.item1.tipo === 'texto' ? (
                 <Text style={styles.itemText}>{currentPar.item1.conteudo}</Text>
               ) : (
-                <View style={styles.imagePlaceholder}>
-                  <ImageIcon size={60} color={COLORS.BLUE} />
-                  <Text style={styles.imageName}>{currentPar.item1.conteudo}</Text>
-                </View>
+                currentPar.item1.conteudo ? (
+                  <Image
+                    source={currentPar.item1.conteudo}
+                    style={styles.itemImage}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <View style={styles.imagePlaceholder}>
+                    <ImageIcon size={60} color={COLORS.BLUE} />
+                    <Text style={styles.imageName}>Imagem não encontrada</Text>
+                  </View>
+                )
               )}
             </View>
 
@@ -394,10 +402,18 @@ export const IgualDiferenteScreen: React.FC = () => {
               {currentPar.item2.tipo === 'texto' ? (
                 <Text style={styles.itemText}>{currentPar.item2.conteudo}</Text>
               ) : (
-                <View style={styles.imagePlaceholder}>
-                  <ImageIcon size={60} color={COLORS.BLUE} />
-                  <Text style={styles.imageName}>{currentPar.item2.conteudo}</Text>
-                </View>
+                currentPar.item2.conteudo ? (
+                  <Image
+                    source={currentPar.item2.conteudo}
+                    style={styles.itemImage}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <View style={styles.imagePlaceholder}>
+                    <ImageIcon size={60} color={COLORS.BLUE} />
+                    <Text style={styles.imageName}>Imagem não encontrada</Text>
+                  </View>
+                )
               )}
             </View>
           </View>
@@ -539,9 +555,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 3,
     borderColor: COLORS.BLUE,
-    padding: 24,
-    minWidth: 140,
-    minHeight: 140,
+    padding: 16,
+    width: 160,
+    height: 160,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -555,6 +571,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: COLORS.TEXT_BLACK,
     textAlign: 'center',
+  },
+  itemImage: {
+    width: 130,
+    height: 130,
   },
   imagePlaceholder: {
     alignItems: 'center',

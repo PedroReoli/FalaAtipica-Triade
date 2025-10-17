@@ -12,12 +12,8 @@
           "alternativas": [
             { "id": "cachorro", "nome": "Cachorro", "imagem": "cachorro.png", "correta": true },
             { "id": "gato", "nome": "Gato", "imagem": "gato.png", "correta": false },
-            { "id": "cavalo", "nome": "Cavalo", "imagem": "cavalo.png", "correta": false },
-            { "id": "vaca", "nome": "Vaca", "imagem": "vaca.png", "correta": false },
-            { "id": "porco", "nome": "Porco", "imagem": "porco.png", "correta": false },
-            { "id": "galinha", "nome": "Galinha", "imagem": "galinha.png", "correta": false },
-            { "id": "pato", "nome": "Pato", "imagem": "pato.png", "correta": false },
-            { "id": "coelho", "nome": "Coelho", "imagem": "coelho.png", "correta": false }
+            { "id": "passaro", "nome": "Pássaro", "imagem": "passaro.png", "correta": false },
+            { "id": "leao", "nome": "Leão", "imagem": "leao.png", "correta": false }
           ]
         },
         {
@@ -28,12 +24,50 @@
           "alternativas": [
             { "id": "cachorro", "nome": "Cachorro", "imagem": "cachorro.png", "correta": false },
             { "id": "gato", "nome": "Gato", "imagem": "gato.png", "correta": true },
-            { "id": "cavalo", "nome": "Cavalo", "imagem": "cavalo.png", "correta": false },
-            { "id": "vaca", "nome": "Vaca", "imagem": "vaca.png", "correta": false },
-            { "id": "porco", "nome": "Porco", "imagem": "porco.png", "correta": false },
-            { "id": "galinha", "nome": "Galinha", "imagem": "galinha.png", "correta": false },
-            { "id": "pato", "nome": "Pato", "imagem": "pato.png", "correta": false },
-            { "id": "coelho", "nome": "Coelho", "imagem": "coelho.png", "correta": false }
+            { "id": "passaro", "nome": "Pássaro", "imagem": "passaro.png", "correta": false },
+            { "id": "tigre", "nome": "Tigre", "imagem": "tigre.png", "correta": false }
+          ]
+        },
+        {
+          "id": "passaro",
+          "nome": "Pássaro",
+          "sombra": "sombra_passaro.png",
+          "imagem": "passaro.png",
+          "alternativas": [
+            { "id": "cachorro", "nome": "Cachorro", "imagem": "cachorro.png", "correta": false },
+            { "id": "gato", "nome": "Gato", "imagem": "gato.png", "correta": false },
+            { "id": "passaro", "nome": "Pássaro", "imagem": "passaro.png", "correta": true },
+            { "id": "borboleta", "nome": "Borboleta", "imagem": "borboleta.png", "correta": false }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "frutas",
+      "nome": "Frutas",
+      "itens": [
+        {
+          "id": "banana",
+          "nome": "Banana",
+          "sombra": "sombra_banana.png",
+          "imagem": "banana.png",
+          "alternativas": [
+            { "id": "banana", "nome": "Banana", "imagem": "banana.png", "correta": true },
+            { "id": "maca", "nome": "Maçã", "imagem": "maca.png", "correta": false },
+            { "id": "laranja", "nome": "Laranja", "imagem": "laranja.png", "correta": false },
+            { "id": "uva", "nome": "Uva", "imagem": "uva.png", "correta": false }
+          ]
+        },
+        {
+          "id": "maca",
+          "nome": "Maçã",
+          "sombra": "sombra_maca.png",
+          "imagem": "maca.png",
+          "alternativas": [
+            { "id": "banana", "nome": "Banana", "imagem": "banana.png", "correta": false },
+            { "id": "maca", "nome": "Maçã", "imagem": "maca.png", "correta": true },
+            { "id": "pera", "nome": "Pera", "imagem": "pera.png", "correta": false },
+            { "id": "morango", "nome": "Morango", "imagem": "morango.png", "correta": false }
           ]
         }
       ]
@@ -43,19 +77,27 @@
       "nome": "Objetos",
       "itens": [
         {
-          "id": "casa",
-          "nome": "Casa",
-          "sombra": "sombra_casa.png",
-          "imagem": "casa.png",
+          "id": "bola",
+          "nome": "Bola",
+          "sombra": "sombra_bola.png",
+          "imagem": "bola.png",
           "alternativas": [
-            { "id": "casa", "nome": "Casa", "imagem": "casa.png", "correta": true },
-            { "id": "carro", "nome": "Carro", "imagem": "carro.png", "correta": false },
-            { "id": "arvore", "nome": "Árvore", "imagem": "arvore.png", "correta": false },
-            { "id": "bola", "nome": "Bola", "imagem": "bola.png", "correta": false },
+            { "id": "bola", "nome": "Bola", "imagem": "bola.png", "correta": true },
             { "id": "livro", "nome": "Livro", "imagem": "livro.png", "correta": false },
-            { "id": "mesa", "nome": "Mesa", "imagem": "mesa.png", "correta": false },
-            { "id": "cadeira", "nome": "Cadeira", "imagem": "cadeira.png", "correta": false },
-            { "id": "telefone", "nome": "Telefone", "imagem": "telefone.png", "correta": false }
+            { "id": "lapis", "nome": "Lápis", "imagem": "lapis.png", "correta": false },
+            { "id": "caderno", "nome": "Caderno", "imagem": "caderno.png", "correta": false }
+          ]
+        },
+        {
+          "id": "livro",
+          "nome": "Livro",
+          "sombra": "sombra_livro.png",
+          "imagem": "livro.png",
+          "alternativas": [
+            { "id": "bola", "nome": "Bola", "imagem": "bola.png", "correta": false },
+            { "id": "livro", "nome": "Livro", "imagem": "livro.png", "correta": true },
+            { "id": "mochila", "nome": "Mochila", "imagem": "mochila.png", "correta": false },
+            { "id": "caderno", "nome": "Caderno", "imagem": "caderno.png", "correta": false }
           ]
         }
       ]

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -375,7 +375,7 @@ export const CenaCertaScreen: React.FC = () => {
         <Text style={styles.questionText}>Qual frase combina com a cena?</Text>
 
         {/* Imagem da Cena */}
-        <Animated.View 
+        <Animated.View
           style={[
             styles.sceneImageContainer,
             {
@@ -384,10 +384,18 @@ export const CenaCertaScreen: React.FC = () => {
             }
           ]}
         >
-          <View style={styles.imagePlaceholder}>
-            <ImageIcon size={80} color={COLORS.BLUE} />
-            <Text style={styles.imageDescription}>{currentCena.descricao}</Text>
-          </View>
+          {currentCena.imagem ? (
+            <Image
+              source={currentCena.imagem}
+              style={styles.sceneImage}
+              resizeMode="contain"
+            />
+          ) : (
+            <View style={styles.imagePlaceholder}>
+              <ImageIcon size={80} color={COLORS.BLUE} />
+              <Text style={styles.imageDescription}>{currentCena.descricao}</Text>
+            </View>
+          )}
         </Animated.View>
 
         {/* Frases */}
@@ -525,16 +533,21 @@ const styles = StyleSheet.create({
   sceneImageContainer: {
     backgroundColor: COLORS.TEXT_WHITE,
     borderRadius: 16,
-    padding: 20,
+    overflow: 'hidden', // Corta a imagem nas bordas arredondadas
     alignItems: 'center',
     marginBottom: 20,
-    minHeight: 200,
-    justifyContent: 'center',
+    width: 220,
+    height: 220,
+    alignSelf: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 5,
+  },
+  sceneImage: {
+    width: '100%',
+    height: '100%',
   },
   imagePlaceholder: {
     alignItems: 'center',

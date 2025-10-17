@@ -1,9 +1,23 @@
 import adivinhaData from '../../mockup-data/adivinha.json';
 
+// Importar todas as imagens do jogo Adivinha (7 imagens disponíveis)
+const IMAGES = {
+  // Animais
+  'cachorro.png': require('../assets/images/adivinha/cachorro.png'),
+  'gato.png': require('../assets/images/adivinha/gato.png'),
+  'passaro.png': require('../assets/images/adivinha/passaro.png'),
+  // Frutas
+  'banana.png': require('../assets/images/adivinha/banana.png'),
+  'maca.png': require('../assets/images/adivinha/maca.png'),
+  // Objetos
+  'bola.png': require('../assets/images/adivinha/bola.png'),
+  'livro.png': require('../assets/images/adivinha/livro.png'),
+};
+
 export interface Alternativa {
   id: string;
   nome: string;
-  imagem: string;
+  imagem: any; // ImageSourcePropType (require)
   correta: boolean;
 }
 
@@ -11,7 +25,7 @@ export interface ItemAdivinha {
   id: string;
   nome: string;
   sombra: string;
-  imagem: string;
+  imagem: any; // ImageSourcePropType (require)
   alternativas: Alternativa[];
 }
 
@@ -33,7 +47,24 @@ class AdivinhaService {
   }
 
   getCategoria(id: string): CategoriaAdivinha | undefined {
-    return this.categorias.find(cat => cat.id === id);
+    const categoria = this.categorias.find(cat => cat.id === id);
+    
+    // Mapear imagens para todos os itens da categoria
+    if (categoria) {
+      return {
+        ...categoria,
+        itens: categoria.itens.map(item => ({
+          ...item,
+          imagem: this.getImageSource(item.imagem),
+          alternativas: item.alternativas.map(alt => ({
+            ...alt,
+            imagem: this.getImageSource(alt.imagem)
+          }))
+        }))
+      };
+    }
+    
+    return undefined;
   }
 
   getRandomItem(categoriaId: string): ItemAdivinha | null {
@@ -41,7 +72,22 @@ class AdivinhaService {
     if (!categoria || categoria.itens.length === 0) return null;
     
     const randomIndex = Math.floor(Math.random() * categoria.itens.length);
-    return categoria.itens[randomIndex];
+    const item = categoria.itens[randomIndex];
+    
+    // Mapear imagem para o require real
+    return {
+      ...item,
+      imagem: this.getImageSource(item.imagem),
+      alternativas: item.alternativas.map(alt => ({
+        ...alt,
+        imagem: this.getImageSource(alt.imagem)
+      }))
+    };
+  }
+
+  private getImageSource(imageName: string): any {
+    // Retornar a imagem real ou placeholder
+    return IMAGES[imageName as keyof typeof IMAGES] || null;
   }
 
   getAlternativasEmbaralhadas(item: ItemAdivinha, quantidade: number = 4): Alternativa[] {

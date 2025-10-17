@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Eye, Film, Gamepad2, Brain, ArrowLeft } from 'lucide-react-native';
+import { Eye, Film, Gamepad2, Brain, X } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { COLORS } from '../constants/colors';
 import { Navbar } from '../components/Navbar';
@@ -82,6 +82,8 @@ const games: Game[] = [
 
 export const GamesScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   const handleHome = () => {
     navigation.navigate('Dashboard');
@@ -93,6 +95,16 @@ export const GamesScreen: React.FC = () => {
 
   const handleBack = () => {
     navigation.goBack();
+  };
+
+  const handleGamePress = (game: Game) => {
+    setSelectedGame(game);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedGame(null);
   };
 
   return (
@@ -109,63 +121,93 @@ export const GamesScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 20 }}
       >
-        {/* Introdução */}
-        <View style={styles.introContainer}>
-          <Text style={styles.introTitle}>4 Jogos Especializados</Text>
-          <Text style={styles.introText}>
-            Cada jogo foi desenvolvido por fonoaudiólogos para estimular diferentes aspectos do desenvolvimento da fala e linguagem.
-          </Text>
+        {/* Grid de Cards Micro */}
+        <View style={styles.gamesGrid}>
+          {games.map((game) => {
+            const IconComponent = game.icon;
+            
+            return (
+              <TouchableOpacity
+                key={game.id}
+                style={[styles.microCard, { borderColor: game.color }]}
+                onPress={() => handleGamePress(game)}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.microIconContainer, { backgroundColor: game.color + '20' }]}>
+                  <IconComponent size={32} color={game.color} />
+                </View>
+                <Text style={styles.microCardName}>{game.name}</Text>
+                <Text style={styles.microCardAge}>{game.ageRange}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
-
-        {/* Lista de Jogos */}
-        {games.map((game, index) => {
-          const IconComponent = game.icon;
-          
-          return (
-            <View 
-              key={game.id} 
-              style={[
-                styles.gameCard,
-                { borderLeftColor: game.color }
-              ]}
-            >
-              {/* Header do Card */}
-              <View style={styles.gameHeader}>
-                <View style={[styles.gameIconContainer, { backgroundColor: game.color + '20' }]}>
-                  <IconComponent size={28} color={game.color} />
-                </View>
-                <View style={styles.gameHeaderText}>
-                  <Text style={styles.gameName}>{game.name}</Text>
-                  <Text style={styles.gameAge}>Idade recomendada: {game.ageRange}</Text>
-                </View>
-              </View>
-
-              {/* Descrição */}
-              <Text style={styles.gameDescription}>{game.description}</Text>
-
-              {/* O que a criança aprende */}
-              <View style={styles.learningSection}>
-                <Text style={styles.learningSectionTitle}>O que a criança desenvolve:</Text>
-                {game.learningGoals.map((goal, idx) => (
-                  <View key={idx} style={styles.learningItem}>
-                    <View style={[styles.bullet, { backgroundColor: game.color }]} />
-                    <Text style={styles.learningText}>{goal}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          );
-        })}
 
         {/* Nota Informativa */}
         <View style={styles.noteContainer}>
           <Text style={styles.noteTitle}>💡 Dica para Pais</Text>
           <Text style={styles.noteText}>
-            Incentive seu filho a jogar regularmente, mas respeite o ritmo dele. Cada criança aprende no seu tempo. 
-            O importante é tornar o aprendizado divertido e sem pressão!
+            Toque em cada jogo para ver detalhes sobre o que a criança desenvolve e aprende.
           </Text>
         </View>
       </ScrollView>
+
+      {/* Modal de Detalhes do Jogo */}
+      <Modal
+        visible={showModal}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {selectedGame && (
+              <>
+                {/* Header do Modal */}
+                <View style={styles.modalHeader}>
+                  <View style={[styles.modalIconContainer, { backgroundColor: selectedGame.color + '20' }]}>
+                    {React.createElement(selectedGame.icon, { size: 36, color: selectedGame.color })}
+                  </View>
+                  <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+                    <X size={24} color={COLORS.TEXT_BLACK} />
+                  </TouchableOpacity>
+                </View>
+
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  {/* Título */}
+                  <Text style={styles.modalTitle}>{selectedGame.name}</Text>
+                  <Text style={styles.modalAge}>Idade recomendada: {selectedGame.ageRange}</Text>
+
+                  {/* Descrição */}
+                  <View style={styles.modalSection}>
+                    <Text style={styles.modalSectionTitle}>Sobre o Jogo</Text>
+                    <Text style={styles.modalDescription}>{selectedGame.description}</Text>
+                  </View>
+
+                  {/* O que a criança aprende */}
+                  <View style={styles.modalSection}>
+                    <Text style={styles.modalSectionTitle}>O que a criança desenvolve</Text>
+                    {selectedGame.learningGoals.map((goal, idx) => (
+                      <View key={idx} style={styles.learningItem}>
+                        <View style={[styles.bullet, { backgroundColor: selectedGame.color }]} />
+                        <Text style={styles.learningText}>{goal}</Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  {/* Botão Fechar */}
+                  <TouchableOpacity 
+                    style={[styles.closeModalButton, { backgroundColor: selectedGame.color }]}
+                    onPress={closeModal}
+                  >
+                    <Text style={styles.closeModalButtonText}>Fechar</Text>
+                  </TouchableOpacity>
+                </ScrollView>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
 
       <Footer 
         activeTab="home"
@@ -180,130 +222,164 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 16,
+    paddingTop: 16,
   },
-  introContainer: {
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    backgroundColor: COLORS.BACKGROUND_BLUE + '10',
-    borderRadius: 12,
-    marginTop: 12,
+  gamesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: COLORS.BACKGROUND_BLUE + '30',
   },
-  introTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 8,
-  },
-  introText: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
-  },
-  gameCard: {
+  microCard: {
     backgroundColor: COLORS.TEXT_WHITE,
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    borderLeftWidth: 5,
-    borderTopWidth: 1,
-    borderRightWidth: 1,
-    borderBottomWidth: 1,
-    borderTopColor: '#F0F0F0',
-    borderRightColor: '#F0F0F0',
-    borderBottomColor: '#F0F0F0',
+    padding: 12,
+    width: '48%',
+    alignItems: 'center',
+    borderWidth: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  gameHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    gap: 12,
-  },
-  gameIconContainer: {
-    width: 56,
-    height: 56,
+  microIconContainer: {
+    width: 60,
+    height: 60,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 10,
   },
-  gameHeaderText: {
-    flex: 1,
-  },
-  gameName: {
-    fontSize: 18,
+  microCardName: {
+    fontSize: 14,
     fontWeight: '700',
     color: COLORS.TEXT_BLACK,
+    textAlign: 'center',
     marginBottom: 4,
   },
-  gameAge: {
-    fontSize: 12,
-    fontWeight: '600',
+  microCardAge: {
+    fontSize: 11,
+    fontWeight: '500',
     color: '#888',
-  },
-  gameDescription: {
-    fontSize: 14,
-    color: '#555',
-    lineHeight: 20,
-    marginBottom: 16,
-  },
-  learningSection: {
-    backgroundColor: '#F8F9FA',
-    borderRadius: 8,
-    padding: 12,
-  },
-  learningSectionTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: COLORS.TEXT_BLACK,
-    marginBottom: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  learningItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 8,
-    paddingLeft: 4,
-  },
-  bullet: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginTop: 6,
-    marginRight: 10,
-  },
-  learningText: {
-    flex: 1,
-    fontSize: 13,
-    color: '#555',
-    lineHeight: 19,
+    textAlign: 'center',
   },
   noteContainer: {
     backgroundColor: COLORS.BLUE + '10',
     borderRadius: 12,
     padding: 16,
     marginTop: 8,
-    marginBottom: 16,
     borderWidth: 1,
     borderColor: COLORS.BLUE + '30',
   },
   noteTitle: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     color: COLORS.TEXT_BLACK,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   noteText: {
-    fontSize: 13,
+    fontSize: 12,
     color: '#555',
-    lineHeight: 19,
+    lineHeight: 18,
+  },
+  // Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: COLORS.TEXT_WHITE,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 24,
+    maxHeight: '85%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 10,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  modalIconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F0F0F0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: COLORS.TEXT_BLACK,
+    marginBottom: 6,
+  },
+  modalAge: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#888',
+    marginBottom: 20,
+  },
+  modalSection: {
+    marginBottom: 24,
+  },
+  modalSectionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.TEXT_BLACK,
+    marginBottom: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  modalDescription: {
+    fontSize: 15,
+    color: '#555',
+    lineHeight: 22,
+  },
+  learningItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+    paddingLeft: 4,
+  },
+  bullet: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginTop: 7,
+    marginRight: 12,
+  },
+  learningText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#555',
+    lineHeight: 21,
+  },
+  closeModalButton: {
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  closeModalButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.TEXT_WHITE,
   },
 });
 

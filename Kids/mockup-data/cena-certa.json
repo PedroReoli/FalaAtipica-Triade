@@ -29,18 +29,6 @@
           "conceito": "embaixo/sobre"
         },
         {
-          "id": "n1_03",
-          "imagem": "bola_dentro_cesta.png",
-          "descricao": "Bola vermelha dentro de uma cesta",
-          "fraseCerta": "A bola está dentro da cesta.",
-          "frasesErradas": [
-            "A bola está fora da cesta.",
-            "A cesta está dentro da bola."
-          ],
-          "dificuldade": 1,
-          "conceito": "dentro/fora"
-        },
-        {
           "id": "n1_04",
           "imagem": "menino_ao_lado_arvore.png",
           "descricao": "Menino de pé ao lado de uma árvore",

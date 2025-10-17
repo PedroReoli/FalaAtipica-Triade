@@ -35,6 +35,30 @@
       "timeSpent": 51,
       "category": "animais",
       "timestamp": "2025-10-16T01:56:06.322Z"
+    },
+    {
+      "id": "progress_1760699198440_0c14q99",
+      "userId": "1",
+      "gameId": "adivinha",
+      "level": 1,
+      "score": 60,
+      "correctAnswers": 3,
+      "wrongAnswers": 2,
+      "timeSpent": 15,
+      "category": "animais",
+      "timestamp": "2025-10-17T11:06:38.440Z"
+    },
+    {
+      "id": "progress_1760699466252_b4lrn0e",
+      "userId": "1",
+      "gameId": "adivinha",
+      "level": 1,
+      "score": 80,
+      "correctAnswers": 4,
+      "wrongAnswers": 1,
+      "timeSpent": 89,
+      "category": "animais",
+      "timestamp": "2025-10-17T11:11:06.253Z"
     }
   ]
 }

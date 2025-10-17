@@ -37,14 +37,6 @@
           "dificuldade": 1
         },
         {
-          "id": "n1_imagem_02",
-          "tipo": "imagem-imagem",
-          "item1": { "conteudo": "casa.png", "tipo": "imagem" },
-          "item2": { "conteudo": "casa.png", "tipo": "imagem" },
-          "resposta": "igual",
-          "dificuldade": 1
-        },
-        {
           "id": "n1_mista_01",
           "tipo": "imagem-palavra",
           "item1": { "conteudo": "bola.png", "tipo": "imagem" },
@@ -104,14 +96,6 @@
           "item1": { "conteudo": "bolo_chocolate.png", "tipo": "imagem" },
           "item2": { "conteudo": "bolo_morango.png", "tipo": "imagem" },
           "resposta": "diferente",
-          "dificuldade": 2
-        },
-        {
-          "id": "n2_imagem_02",
-          "tipo": "imagem-imagem",
-          "item1": { "conteudo": "arvore_verde.png", "tipo": "imagem" },
-          "item2": { "conteudo": "arvore_verde.png", "tipo": "imagem" },
-          "resposta": "igual",
           "dificuldade": 2
         },
         {
@@ -181,14 +165,6 @@
           "tipo": "imagem-imagem",
           "item1": { "conteudo": "cadeira_esquerda.png", "tipo": "imagem" },
           "item2": { "conteudo": "cadeira_direita.png", "tipo": "imagem" },
-          "resposta": "diferente",
-          "dificuldade": 3
-        },
-        {
-          "id": "n3_imagem_02",
-          "tipo": "imagem-imagem",
-          "item1": { "conteudo": "bicicleta_vermelha.png", "tipo": "imagem" },
-          "item2": { "conteudo": "bicicleta_vermelha.png", "tipo": "imagem" },
           "resposta": "igual",
           "dificuldade": 3
         },

@@ -29,7 +29,8 @@ export const GuessGameScreen: React.FC = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [gameStartTime, setGameStartTime] = useState(Date.now());
-  const totalRounds = 5;
+  const [gameSequence, setGameSequence] = useState<ItemAdivinha[]>([]);
+  const totalRounds = 14;
 
   // Inicializar jogo
   useEffect(() => {
@@ -41,7 +42,15 @@ export const GuessGameScreen: React.FC = () => {
     emitGameStarted('adivinha', 'Adivinha');
     setGameStartTime(Date.now());
     
-    loadNewItem();
+    // Criar sequência de 14 rodadas sem repetir imagens seguidas
+    const sequence = createGameSequence();
+    setGameSequence(sequence);
+    
+    // Carregar primeira rodada
+    if (sequence.length > 0) {
+      loadItemFromSequence(0, sequence);
+    }
+    
     setScore(0);
     setCurrentRound(1);
     setGameCompleted(false);
@@ -49,9 +58,47 @@ export const GuessGameScreen: React.FC = () => {
     setShowResult(false);
   };
 
-  const loadNewItem = () => {
-    // Buscar item aleatório da categoria animais
-    const item = adivinhaService.getRandomItem('animais');
+  const createGameSequence = (): ItemAdivinha[] => {
+    // Pegar TODOS os itens de todas as categorias (7 itens)
+    const todosItens: ItemAdivinha[] = [];
+    const categorias = ['animais', 'frutas', 'objetos'];
+    
+    categorias.forEach(categoriaId => {
+      const categoria = adivinhaService.getCategoria(categoriaId);
+      if (categoria) {
+        todosItens.push(...categoria.itens);
+      }
+    });
+
+    // Duplicar itens (7 × 2 = 14)
+    const itensDuplicados = [...todosItens, ...todosItens];
+    
+    // Embaralhar usando Fisher-Yates
+    for (let i = itensDuplicados.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [itensDuplicados[i], itensDuplicados[j]] = [itensDuplicados[j], itensDuplicados[i]];
+    }
+    
+    // Remover repetições em sequência
+    for (let i = 0; i < itensDuplicados.length - 1; i++) {
+      if (itensDuplicados[i].id === itensDuplicados[i + 1].id) {
+        // Encontrar um item diferente para trocar
+        for (let j = i + 2; j < itensDuplicados.length; j++) {
+          if (itensDuplicados[j].id !== itensDuplicados[i].id && 
+              (j === itensDuplicados.length - 1 || itensDuplicados[j].id !== itensDuplicados[i + 2]?.id)) {
+            // Trocar posições
+            [itensDuplicados[i + 1], itensDuplicados[j]] = [itensDuplicados[j], itensDuplicados[i + 1]];
+            break;
+          }
+        }
+      }
+    }
+    
+    return itensDuplicados;
+  };
+
+  const loadItemFromSequence = (index: number, sequence: ItemAdivinha[]) => {
+    const item = sequence[index];
     if (item) {
       setCurrentItem(item);
       // Embaralhar e pegar 4 alternativas
@@ -82,7 +129,8 @@ export const GuessGameScreen: React.FC = () => {
   };
 
   const nextRound = () => {
-    loadNewItem();
+    const nextIndex = currentRound; // currentRound já é baseado em 1, então usar direto
+    loadItemFromSequence(nextIndex, gameSequence);
     setCurrentRound(currentRound + 1);
     setSelectedAnswer(null);
     setShowResult(false);
@@ -171,12 +219,18 @@ export const GuessGameScreen: React.FC = () => {
           <Text style={styles.scoreText}>✨ {score} pontos</Text>
         </View>
 
-        {/* Sombra/Imagem do item */}
+        {/* Imagem do item */}
         <View style={styles.shadowContainer}>
-          <View style={styles.shadowImage}>
-            <HelpCircle size={80} color={COLORS.TEXT_WHITE} />
+          <View style={styles.imageContainer}>
+            {currentItem?.imagem && (
+              <Image
+                source={currentItem.imagem}
+                style={styles.itemImage}
+                resizeMode="contain"
+              />
+            )}
           </View>
-          <Text style={styles.questionText}>Qual é este animal?</Text>
+          <Text style={styles.questionText}>O que é isso?</Text>
         </View>
 
         {/* Alternativas */}
@@ -265,27 +319,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 40,
   },
-  shadowImage: {
-    width: 150,
-    height: 150,
-    backgroundColor: COLORS.BACKGROUND_BLUE,
-    borderRadius: 75,
+  imageContainer: {
+    width: 250,
+    height: 250,
+    borderRadius: 20,
+    backgroundColor: COLORS.BACKGROUND_WHITE,
+    marginBottom: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowRadius: 12,
+    elevation: 10,
+    borderWidth: 3,
+    borderColor: COLORS.BLUE,
   },
-  shadowText: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_WHITE,
+  itemImage: {
+    width: 220,
+    height: 220,
   },
   questionText: {
     fontSize: 20,
