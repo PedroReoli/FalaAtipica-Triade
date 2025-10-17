@@ -1,15 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { User } from 'lucide-react-native';
+import { User, Bell } from 'lucide-react-native';
 import { Logo } from './Logo';
 import { COLORS } from '../constants/colors';
+import { remindersService } from '../services/remindersService';
 
 interface HeaderProps {
   showProfile?: boolean;
   showLogo?: boolean;
   userName?: string;
   onLogout?: () => void;
+  onNotificationsPress?: () => void;
+  showNotifications?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -17,9 +20,24 @@ export const Header: React.FC<HeaderProps> = ({
   showLogo = true,
   userName = 'Criança',
   onLogout,
+  onNotificationsPress,
+  showNotifications = true,
 }) => {
   const [tapCount, setTapCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0);
   const tapTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    loadUnreadCount();
+    // Atualizar a cada 30 segundos
+    const interval = setInterval(loadUnreadCount, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadUnreadCount = async () => {
+    const count = await remindersService.getUnreadCount();
+    setUnreadCount(count);
+  };
 
   const handleProfileTap = () => {
     // Incrementar contador de taps
@@ -64,9 +82,28 @@ export const Header: React.FC<HeaderProps> = ({
           </View>
         )}
 
-        {showLogo && (
-          <Logo size="large" showText={false} color={COLORS.TEXT_WHITE} />
-        )}
+        <View style={styles.rightSection}>
+          {showNotifications && onNotificationsPress && (
+            <TouchableOpacity 
+              style={styles.notificationButton}
+              onPress={onNotificationsPress}
+              activeOpacity={0.7}
+            >
+              <Bell size={24} color={COLORS.TEXT_WHITE} />
+              {unreadCount > 0 && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          )}
+
+          {showLogo && (
+            <Logo size="large" showText={false} color={COLORS.TEXT_WHITE} />
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -83,6 +120,39 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 4,
     minHeight: 40,
+  },
+  rightSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  notificationButton: {
+    position: 'relative',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badge: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: COLORS.RED,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    borderWidth: 2,
+    borderColor: COLORS.BACKGROUND_BLUE,
+  },
+  badgeText: {
+    color: COLORS.TEXT_WHITE,
+    fontSize: 11,
+    fontWeight: 'bold',
   },
   profileSection: {
     flexDirection: 'row',

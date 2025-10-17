@@ -47,6 +47,9 @@ export const DashboardScreen: React.FC = () => {
       socketService.off('progress-updated');
       socketService.off('child-game-completed');
       socketService.off('child-achievement-unlocked');
+      socketService.off('session-created');
+      socketService.off('agenda-created');
+      socketService.off('agenda-updated');
     };
   }, []);
 
@@ -74,6 +77,23 @@ export const DashboardScreen: React.FC = () => {
       // Escutar conquista desbloqueada
       socketService.on('child-achievement-unlocked', (data: any) => {
         info(`⭐ ${data.userName} desbloqueou: ${data.achievementName}`);
+      });
+
+      // Escutar sessão criada
+      socketService.on('session-created', (data: any) => {
+        success(`📝 Nova sessão agendada para ${data.patientName}`);
+        // Recarregar dados para atualizar contadores
+        loadUserData();
+      });
+
+      // Escutar agenda criada
+      socketService.on('agenda-created', (data: any) => {
+        success(`📅 Nova consulta agendada: ${data.criancaNome} - ${data.data} às ${data.horario}`);
+      });
+
+      // Escutar agenda atualizada
+      socketService.on('agenda-updated', (data: any) => {
+        info(`📅 Consulta atualizada: ${data.criancaNome} - Status: ${data.status}`);
       });
     }
   };

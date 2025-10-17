@@ -58,6 +58,8 @@ export const DashboardScreen: React.FC = () => {
         showLogo={true}
         userName={userName}
         onLogout={handleLogout}
+        onNotificationsPress={() => navigation.navigate('Reminders')}
+        showNotifications={true}
       />
 
       {/* Conteúdo Principal - Grid 2x2 */}

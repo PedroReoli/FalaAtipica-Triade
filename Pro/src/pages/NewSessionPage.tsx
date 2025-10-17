@@ -2,17 +2,23 @@
 
 import type React from "react"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { Calendar, Clock, User, FileText, Save, ArrowLeft } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
 import { useRoleColor } from "../hooks/useRoleColor"
 
 export const NewSessionPage: React.FC = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { professionalType, professionalData } = useProfessional()
   const roleColor = useRoleColor()
+  
+  // Receber dados do paciente da navegação (se vier de PatientDetails)
+  const preselectedPatient = location.state as { patientId?: string; patientName?: string } | null
+  
   const [formData, setFormData] = useState({
-    patient: "",
+    patient: preselectedPatient?.patientId || "",
+    patientName: preselectedPatient?.patientName || "",
     date: "",
     time: "",
     duration: "60",
@@ -72,18 +78,36 @@ export const NewSessionPage: React.FC = () => {
                     <User size={16} className="inline mr-2" />
                     Paciente
                   </label>
-                  <select
-                    value={formData.patient}
-                    onChange={(e) => setFormData({ ...formData, patient: e.target.value })}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  >
-                    <option value="">Selecione um paciente</option>
-                    <option value="joao-silva">João Silva</option>
-                    <option value="maria-santos">Maria Santos</option>
-                    <option value="pedro-costa">Pedro Costa</option>
-                    <option value="ana-oliveira">Ana Oliveira</option>
-                  </select>
+                  {preselectedPatient ? (
+                    // Campo bloqueado se veio de PatientDetails
+                    <div className="w-full p-3 border-2 rounded-lg bg-gray-100 flex items-center justify-between" style={{ borderColor: roleColor.primary }}>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold" style={{ backgroundColor: roleColor.primary }}>
+                          {formData.patientName.split(' ').map(n => n[0]).join('').toUpperCase()}
+                        </div>
+                        <span className="font-medium" style={{ color: "var(--text-black)" }}>
+                          {formData.patientName}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-3 py-1 rounded-full">
+                        Selecionado automaticamente
+                      </span>
+                    </div>
+                  ) : (
+                    // Select normal se acessar direto /sessions/new
+                    <select
+                      value={formData.patient}
+                      onChange={(e) => setFormData({ ...formData, patient: e.target.value })}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="">Selecione um paciente</option>
+                      <option value="joao-silva">João Silva</option>
+                      <option value="maria-santos">Maria Santos</option>
+                      <option value="pedro-costa">Pedro Costa</option>
+                      <option value="ana-oliveira">Ana Oliveira</option>
+                    </select>
+                  )}
                 </div>
 
                 {/* Data e Hora */}

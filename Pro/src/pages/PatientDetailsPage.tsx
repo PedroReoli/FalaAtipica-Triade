@@ -453,7 +453,12 @@ export const PatientDetailsPage: React.FC = () => {
                         Histórico de Sessões
                       </h3>
                       <button
-                        onClick={() => navigate('/sessions/new')}
+                        onClick={() => navigate('/sessions/new', { 
+                          state: { 
+                            patientId: id, 
+                            patientName: patient.name 
+                          } 
+                        })}
                         className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
                         style={{ backgroundColor: roleColor.primary }}
                       >

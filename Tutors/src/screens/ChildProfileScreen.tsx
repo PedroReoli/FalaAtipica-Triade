@@ -263,26 +263,26 @@ export const ChildProfileScreen: React.FC = () => {
           </View>
         ) : childData ? (
           <>
-            {/* Informações da Criança */}
-            <View style={styles.childSection}>
-              <View style={styles.childInfo}>
+        {/* Informações da Criança */}
+        <View style={styles.childSection}>
+          <View style={styles.childInfo}>
                 <Text style={styles.childName}>{childData.nome}</Text>
                 <Text style={styles.childAge}>{childData.idade} anos</Text>
                 <Text style={styles.childDiagnosis}>{childData.diagnostico}</Text>
-              </View>
-            </View>
+          </View>
+        </View>
 
-            {/* Estatísticas */}
-            <View style={styles.statsSection}>
-              <View style={styles.statCard}>
+        {/* Estatísticas */}
+        <View style={styles.statsSection}>
+          <View style={styles.statCard}>
                 <Text style={styles.statValue}>{childData.totalSessoes}</Text>
-                <Text style={styles.statLabel}>Sessões Totais</Text>
-              </View>
-              <View style={styles.statCard}>
+            <Text style={styles.statLabel}>Sessões Totais</Text>
+          </View>
+          <View style={styles.statCard}>
                 <Text style={styles.statValue}>{childData.dataInicio}</Text>
-                <Text style={styles.statLabel}>Data de Início</Text>
-              </View>
-            </View>
+            <Text style={styles.statLabel}>Data de Início</Text>
+          </View>
+        </View>
 
             {/* Último Acesso */}
             <View style={styles.lastAccessSection}>

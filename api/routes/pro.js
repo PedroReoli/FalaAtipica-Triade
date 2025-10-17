@@ -353,5 +353,175 @@ router.post('/medication', async (req, res) => {
   }
 });
 
+// GET /api/pro/agendas/:professionalId - Buscar agendas do profissional
+router.get('/agendas/:professionalId', async (req, res) => {
+  try {
+    const { professionalId } = req.params;
+    
+    // Buscar agendas do arquivo compartilhado
+    const agendasData = await jsonService.readJSON('shared/agendas.json');
+    const agendas = agendasData.agendas || [];
+    
+    // Filtrar agendas do profissional
+    const agendasDoProfissional = agendas.filter(agenda => 
+      agenda.profissionalId === professionalId
+    );
+    
+    console.log(`✅ Agendas buscadas: ${agendasDoProfissional.length} agendas para profissional ${professionalId}`);
+    
+    res.json(successResponse({
+      agendas: agendasDoProfissional,
+      total: agendasDoProfissional.length
+    }));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar agendas:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar agendas', error.message)
+    );
+  }
+});
+
+// POST /api/pro/agenda - Criar nova agenda
+router.post('/agenda', async (req, res) => {
+  try {
+    const agendaData = {
+      id: generateId('agenda'),
+      ...req.body,
+      criadoEm: new Date().toISOString()
+    };
+    
+    // Salvar no arquivo compartilhado
+    let agendasFile = await jsonService.readJSON('shared/agendas.json').catch(() => ({ agendas: [] }));
+    
+    if (!agendasFile.agendas) {
+      agendasFile = { agendas: [] };
+    }
+    
+    agendasFile.agendas.push(agendaData);
+    await jsonService.writeJSON('shared/agendas.json', agendasFile);
+    
+    // Emitir evento para tutor
+    const io = req.app.get('io');
+    if (agendaData.tutorId) {
+      io.to(`user_${agendaData.tutorId}`).emit('agenda-created', {
+        agendaId: agendaData.id,
+        criancaNome: agendaData.criancaNome,
+        data: agendaData.data,
+        horario: agendaData.horario,
+        tipo: agendaData.tipo
+      });
+    }
+    
+    console.log(`📅 Agenda criada: ${agendaData.criancaNome} - ${agendaData.data} ${agendaData.horario}`);
+    
+    res.status(201).json(successResponse(
+      agendaData,
+      'Agenda criada com sucesso'
+    ));
+    
+  } catch (error) {
+    console.error('❌ Erro ao criar agenda:', error);
+    res.status(500).json(
+      errorResponse('CREATE_ERROR', 'Erro ao criar agenda', error.message)
+    );
+  }
+});
+
+// POST /api/pro/reminder - Criar lembrete para criança
+router.post('/reminder', async (req, res) => {
+  try {
+    const reminderData = {
+      id: generateId('reminder'),
+      ...req.body,
+      lido: false,
+      criadoEm: new Date().toISOString()
+    };
+    
+    // Salvar no arquivo compartilhado
+    let remindersFile = await jsonService.readJSON('shared/reminders.json').catch(() => ({ reminders: [] }));
+    
+    if (!remindersFile.reminders) {
+      remindersFile = { reminders: [] };
+    }
+    
+    remindersFile.reminders.push(reminderData);
+    await jsonService.writeJSON('shared/reminders.json', remindersFile);
+    
+    // Emitir evento para criança
+    const io = req.app.get('io');
+    if (reminderData.childId) {
+      io.to(`user_${reminderData.childId}`).emit('reminder-received', {
+        reminderId: reminderData.id,
+        titulo: reminderData.titulo,
+        mensagem: reminderData.mensagem,
+        prioridade: reminderData.prioridade
+      });
+    }
+    
+    console.log(`🔔 Lembrete criado: ${reminderData.childName} - ${reminderData.titulo}`);
+    
+    res.status(201).json(successResponse(
+      reminderData,
+      'Lembrete criado com sucesso'
+    ));
+    
+  } catch (error) {
+    console.error('❌ Erro ao criar lembrete:', error);
+    res.status(500).json(
+      errorResponse('CREATE_ERROR', 'Erro ao criar lembrete', error.message)
+    );
+  }
+});
+
+// PUT /api/pro/agenda/:agendaId - Atualizar agenda
+router.put('/agenda/:agendaId', async (req, res) => {
+  try {
+    const { agendaId } = req.params;
+    const updates = req.body;
+    
+    // Buscar e atualizar agenda
+    const agendasFile = await jsonService.readJSON('shared/agendas.json');
+    const agendaIndex = agendasFile.agendas?.findIndex(a => a.id === agendaId);
+    
+    if (agendaIndex === -1 || agendaIndex === undefined) {
+      return res.status(404).json(
+        errorResponse('AGENDA_NOT_FOUND', 'Agenda não encontrada')
+      );
+    }
+    
+    agendasFile.agendas[agendaIndex] = {
+      ...agendasFile.agendas[agendaIndex],
+      ...updates
+    };
+    
+    await jsonService.writeJSON('shared/agendas.json', agendasFile);
+    
+    // Emitir evento para tutor
+    const io = req.app.get('io');
+    const agenda = agendasFile.agendas[agendaIndex];
+    if (agenda.tutorId) {
+      io.to(`user_${agenda.tutorId}`).emit('agenda-updated', {
+        agendaId: agenda.id,
+        criancaNome: agenda.criancaNome,
+        status: agenda.status
+      });
+    }
+    
+    console.log(`✅ Agenda atualizada: ${agendaId}`);
+    
+    res.json(successResponse(
+      agendasFile.agendas[agendaIndex],
+      'Agenda atualizada com sucesso'
+    ));
+    
+  } catch (error) {
+    console.error('❌ Erro ao atualizar agenda:', error);
+    res.status(500).json(
+      errorResponse('UPDATE_ERROR', 'Erro ao atualizar agenda', error.message)
+    );
+  }
+});
+
 module.exports = router;
 

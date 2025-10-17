@@ -1,0 +1,33 @@
+{
+  "recommendations": [
+    {
+      "id": "rec_001",
+      "professionalId": "prof_001",
+      "professionalName": "Dra. Ana Paula Santos",
+      "childId": "1",
+      "childName": "João Silva",
+      "tutorId": "tutor_001",
+      "titulo": "Exercícios para praticar em casa",
+      "descricao": "Pratique exercícios de sopro com canudo e bolhas de sabão por 10 minutos, 3x por semana. Isso ajudará no fortalecimento da musculatura oral.",
+      "tipo": "exercicio",
+      "prioridade": "alta",
+      "lido": false,
+      "criadoEm": "2025-10-14T10:00:00Z"
+    },
+    {
+      "id": "rec_002",
+      "professionalId": "prof_001",
+      "professionalName": "Dra. Ana Paula Santos",
+      "childId": "1",
+      "childName": "João Silva",
+      "tutorId": "tutor_001",
+      "titulo": "Material de apoio",
+      "descricao": "Utilize livros ilustrados durante a leitura e peça para João apontar as imagens. Isso estimula a associação entre palavra e objeto.",
+      "tipo": "material",
+      "prioridade": "media",
+      "lido": false,
+      "criadoEm": "2025-10-13T14:20:00Z"
+    }
+  ]
+}
+

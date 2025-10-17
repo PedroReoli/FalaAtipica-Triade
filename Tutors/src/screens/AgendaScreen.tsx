@@ -143,19 +143,46 @@ export const AgendaScreen: React.FC = () => {
           }
         }
       } catch (apiError) {
-        console.log('⚠️ API erro - usando dados mockados');
+        console.log('⚠️ API erro - usando dados mockados do perfil');
       }
 
-      // Fallback: carregar dados mockados e filtrar por criança selecionada
-      const agendasData = require('../../mockup-data/agendas.json');
-      const todasAgendas = agendasData.agendas || [];
-      
-      // Filtrar por criança selecionada (ou todas as crianças do tutor)
-      const agendasFiltradas = childIdToFilter
-        ? todasAgendas.filter((agenda: any) => agenda.criancaId === childIdToFilter)
-        : todasAgendas.filter((agenda: any) => currentUser.criancasIds?.includes(agenda.criancaId));
-      
-      setAgendas(agendasFiltradas);
+      // Fallback: carregar dados mockados do perfil (agendas foram movidas para shared)
+      // Como não temos acesso direto ao shared, vamos usar dados do perfil
+      try {
+        const perfilData = require('../../mockup-data/perfil.json');
+        
+        // Criar agendas mockadas baseadas nas crianças do perfil
+        const mockAgendas = perfilData.criancas?.flatMap((crianca: any) => [
+          {
+            id: `agenda_mock_${crianca.id}_1`,
+            criancaId: crianca.id,
+            criancaNome: crianca.nome,
+            tutorId: currentUser.id,
+            tutorNome: currentUser.nome,
+            profissionalId: 'prof_001',
+            profissionalNome: 'Dra. Ana Paula Santos',
+            data: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            horario: '14:00',
+            duracao: 60,
+            tipo: 'Consulta Presencial',
+            status: 'agendada',
+            observacoes: 'Sessão de acompanhamento mensal',
+            local: 'Clínica FalaAtípica',
+            criadoEm: new Date().toISOString()
+          }
+        ]) || [];
+
+        // Filtrar por criança selecionada
+        const agendasFiltradas = childIdToFilter
+          ? mockAgendas.filter((agenda: any) => agenda.criancaId === childIdToFilter)
+          : mockAgendas;
+        
+        console.log('✅ Agendas mockadas carregadas:', agendasFiltradas.length);
+        setAgendas(agendasFiltradas);
+      } catch (mockError) {
+        console.error('❌ Erro ao carregar agendas mockadas:', mockError);
+        setAgendas([]);
+      }
     } catch (error) {
       console.error('Erro ao carregar agendas:', error);
       setAgendas([]);

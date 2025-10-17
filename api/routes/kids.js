@@ -98,6 +98,7 @@ router.post('/progress', async (req, res) => {
       // Emitir para tutor e profissional
       const responsavelEmail = child.responsavel?.email;
       
+      // Evento genérico de progresso
       io.emit('progress-updated', {
         userId,
         childName: child.nome,
@@ -108,7 +109,30 @@ router.post('/progress', async (req, res) => {
         timestamp: progressData.timestamp
       });
       
+      // Evento específico para Tutors (child-game-completed)
+      io.emit('child-game-completed', {
+        userId,
+        userName: child.nome,
+        gameId,
+        gameName: getGameName(gameId),
+        score,
+        category,
+        timestamp: progressData.timestamp
+      });
+      
+      // Evento específico para Pro (patient-game-completed)
+      io.emit('patient-game-completed', {
+        patientId: userId,
+        patientName: child.nome,
+        gameId,
+        gameName: getGameName(gameId),
+        score,
+        category,
+        timestamp: progressData.timestamp
+      });
+      
       console.log(`🎮 Progresso salvo: ${child.nome} - ${gameId} - ${score}%`);
+      console.log(`📡 Eventos emitidos: progress-updated, child-game-completed, patient-game-completed`);
     }
     
     // Calcular próximo nível
@@ -253,6 +277,72 @@ router.get('/achievements/:userId', async (req, res) => {
     console.error('❌ Erro ao buscar conquistas:', error);
     res.status(500).json(
       errorResponse('FETCH_ERROR', 'Erro ao buscar conquistas', error.message)
+    );
+  }
+});
+
+// GET /api/kids/reminders/:userId - Buscar lembretes da criança
+router.get('/reminders/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    // Buscar lembretes do arquivo compartilhado
+    const remindersFile = await jsonService.readJSON('shared/reminders.json').catch(() => ({ reminders: [] }));
+    const todosLembretes = remindersFile.reminders || [];
+    
+    // Filtrar apenas lembretes da criança
+    const lembretesUsuario = todosLembretes.filter(reminder => reminder.childId === userId);
+    
+    // Separar entre não lidos e lidos
+    const naoLidos = lembretesUsuario.filter(r => !r.lido);
+    const lidos = lembretesUsuario.filter(r => r.lido);
+    
+    console.log(`✅ Lembretes buscados: ${naoLidos.length} não lidos, ${lidos.length} lidos para criança ${userId}`);
+    
+    res.json(successResponse({
+      naoLidos,
+      lidos,
+      totalNaoLidos: naoLidos.length,
+      totalLidos: lidos.length
+    }));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar lembretes:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar lembretes', error.message)
+    );
+  }
+});
+
+// PUT /api/kids/reminder/:reminderId/read - Marcar lembrete como lido
+router.put('/reminder/:reminderId/read', async (req, res) => {
+  try {
+    const { reminderId } = req.params;
+    
+    // Buscar e atualizar lembrete
+    const remindersFile = await jsonService.readJSON('shared/reminders.json');
+    const reminderIndex = remindersFile.reminders?.findIndex(r => r.id === reminderId);
+    
+    if (reminderIndex === -1 || reminderIndex === undefined) {
+      return res.status(404).json(
+        errorResponse('REMINDER_NOT_FOUND', 'Lembrete não encontrado')
+      );
+    }
+    
+    remindersFile.reminders[reminderIndex].lido = true;
+    await jsonService.writeJSON('shared/reminders.json', remindersFile);
+    
+    console.log(`✅ Lembrete marcado como lido: ${reminderId}`);
+    
+    res.json(successResponse(
+      remindersFile.reminders[reminderIndex],
+      'Lembrete marcado como lido'
+    ));
+    
+  } catch (error) {
+    console.error('❌ Erro ao marcar lembrete como lido:', error);
+    res.status(500).json(
+      errorResponse('UPDATE_ERROR', 'Erro ao atualizar lembrete', error.message)
     );
   }
 });

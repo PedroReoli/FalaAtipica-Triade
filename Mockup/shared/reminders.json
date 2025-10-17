@@ -1,0 +1,75 @@
+{
+  "reminders": [
+    {
+      "id": "reminder_001",
+      "childId": "1",
+      "childName": "João Silva",
+      "professionalId": "prof_001",
+      "professionalName": "Dra. Ana Paula Santos",
+      "tipo": "atividade",
+      "titulo": "🎯 Praticar sons da letra R",
+      "mensagem": "Olá João! Lembre-se de praticar os sons da letra R com o jogo das palavras hoje! Faça pelo menos 3 tentativas. Você consegue! 💪",
+      "prioridade": "alta",
+      "lido": false,
+      "criadoEm": "2025-10-16T08:00:00Z",
+      "expirarEm": "2025-10-20T23:59:59Z"
+    },
+    {
+      "id": "reminder_002",
+      "childId": "1",
+      "childName": "João Silva",
+      "professionalId": "prof_001",
+      "professionalName": "Dra. Ana Paula Santos",
+      "tipo": "lembrete",
+      "titulo": "📅 Consulta amanhã!",
+      "mensagem": "Não esqueça da sua consulta amanhã às 14:00 na clínica! Te vejo lá! 😊",
+      "prioridade": "media",
+      "lido": false,
+      "criadoEm": "2025-10-15T10:00:00Z",
+      "expirarEm": "2025-10-18T14:00:00Z"
+    },
+    {
+      "id": "reminder_003",
+      "childId": "1",
+      "childName": "João Silva",
+      "professionalId": "prof_001",
+      "professionalName": "Dra. Ana Paula Santos",
+      "tipo": "atividade",
+      "titulo": "🎮 Jogue Igual-Diferente",
+      "mensagem": "Hoje é dia de treinar a percepção! Tente jogar o Igual-Diferente pelo menos 2 vezes. Vai ser divertido!",
+      "prioridade": "baixa",
+      "lido": false,
+      "criadoEm": "2025-10-16T10:00:00Z",
+      "expirarEm": "2025-10-19T23:59:59Z"
+    },
+    {
+      "id": "reminder_004",
+      "childId": "2",
+      "childName": "Maria Santos",
+      "professionalId": "prof_001",
+      "professionalName": "Dra. Ana Paula Santos",
+      "tipo": "atividade",
+      "titulo": "🎨 Desenhar e falar",
+      "mensagem": "Maria, hoje desenhe seus 3 animais favoritos e tente falar o nome deles bem alto!",
+      "prioridade": "alta",
+      "lido": false,
+      "criadoEm": "2025-10-16T09:00:00Z",
+      "expirarEm": "2025-10-20T23:59:59Z"
+    },
+    {
+      "id": "reminder_005",
+      "childId": "1",
+      "childName": "João Silva",
+      "professionalId": "prof_001",
+      "professionalName": "Dra. Ana Paula Santos",
+      "tipo": "lembrete",
+      "titulo": "✅ Parabéns pelo progresso!",
+      "mensagem": "Vi que você completou 3 jogos essa semana! Está indo muito bem, continue assim!",
+      "prioridade": "baixa",
+      "lido": true,
+      "criadoEm": "2025-10-10T14:00:00Z",
+      "expirarEm": "2025-10-16T23:59:59Z"
+    }
+  ]
+}
+

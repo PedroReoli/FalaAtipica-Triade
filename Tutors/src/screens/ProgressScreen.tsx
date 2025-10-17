@@ -434,7 +434,7 @@ export const ProgressScreen: React.FC = () => {
         showBackButton={true}
         showLogo={true}
       />
-
+      
       {/* Seletor de Criança - Apenas se tiver 2+ crianças */}
       <ChildSelector
         children={availableChildren}
@@ -463,7 +463,7 @@ export const ProgressScreen: React.FC = () => {
           <View style={styles.overallProgressContainer}>
             <Text style={styles.overallProgressValue}>{progressData.progressoGeral}%</Text>
             <Text style={styles.overallProgressLabel}>Progresso Geral</Text>
-          </View>
+              </View>
         </View>
 
         {/* Estatísticas Gerais - Stack Vertical */}
@@ -501,7 +501,7 @@ export const ProgressScreen: React.FC = () => {
           <View style={[styles.statCard, { borderColor: COLORS.RED }]}>
             <View style={[styles.statIconContainer, { backgroundColor: COLORS.RED + '15' }]}>
               <Trophy size={18} color={COLORS.RED} />
-            </View>
+              </View>
             <View style={styles.statInfo}>
               <Text style={styles.statValue} numberOfLines={1} adjustsFontSizeToFit>{progressData.statistics.bestGame}</Text>
               <Text style={styles.statLabel}>Jogo com Melhor Desempenho</Text>
@@ -538,7 +538,7 @@ export const ProgressScreen: React.FC = () => {
                         ? 'Nunca jogado' 
                         : `${game.averageScore}% média • ${game.totalSessions} sessões`
                       }
-                    </Text>
+                  </Text>
                   </View>
                   <View style={styles.expandIconGame}>
                     {isExpanded ? (
@@ -599,7 +599,7 @@ export const ProgressScreen: React.FC = () => {
                         </View>
                       </>
                     )}
-                  </View>
+              </View>
                 )}
               </TouchableOpacity>
             );

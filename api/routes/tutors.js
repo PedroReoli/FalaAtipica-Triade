@@ -351,8 +351,8 @@ router.get('/agendas/:tutorId', async (req, res) => {
   try {
     const { tutorId } = req.params;
     
-    // Buscar agendas
-    const agendasData = await jsonService.readJSON('TUTORS/agendas.json');
+    // Buscar agendas do arquivo compartilhado
+    const agendasData = await jsonService.readJSON('shared/agendas.json');
     const agendas = agendasData.agendas || [];
     
     // Filtrar agendas das crianças do tutor
@@ -369,6 +369,8 @@ router.get('/agendas/:tutorId', async (req, res) => {
     const agendasDoTutor = agendas.filter(agenda => 
       tutor.criancasIds?.includes(agenda.criancaId)
     );
+    
+    console.log(`✅ Agendas buscadas: ${agendasDoTutor.length} agendas para tutor ${tutorId}`);
     
     res.json(successResponse({
       agendas: agendasDoTutor

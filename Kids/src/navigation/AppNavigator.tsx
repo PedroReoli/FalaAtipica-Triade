@@ -9,6 +9,7 @@ import { IgualDiferenteScreen } from '../screens/IgualDiferenteScreen';
 import { CenaCertaScreen } from '../screens/CenaCertaScreen';
 import { PalavrasGameScreen } from '../screens/PalavrasGameScreen';
 import { RequestAccessScreen } from '../screens/RequestAccessScreen';
+import { RemindersScreen } from '../screens/RemindersScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   CenaCerta: undefined;
   PalavrasGame: { categoryId: string };
   RequestAccess: undefined;
+  Reminders: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -40,6 +42,7 @@ export const AppNavigator: React.FC = () => {
         <Stack.Screen name="PalavrasGame" component={PalavrasGameScreen} />
         <Stack.Screen name="GuessGame" component={GuessGameScreen} />
         <Stack.Screen name="RequestAccess" component={RequestAccessScreen} />
+        <Stack.Screen name="Reminders" component={RemindersScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
