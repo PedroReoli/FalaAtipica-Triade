@@ -37,9 +37,18 @@
 
 ### **2. Jogo: Igual-Diferente** ⏳ FALTA GERAR
 
+⚠️ **ATENÇÃO - MUDANÇA CRÍTICA PLANEJADA:** Ver `TODO.md` → "PRIORIDADE CRÍTICA"
+
 **Como funciona:** Aparecem 2 itens lado a lado, criança decide se são IGUAIS ou DIFERENTES
 
+**⚠️ LÓGICA SERÁ ALTERADA:**
+- **Atual:** Compara objetos DIFERENTES (cachorro ≠ gato, bicicleta ≠ carro)
+- **Nova (a implementar):** Comparar objetos SEMELHANTES (flor1 vs flor2, casa_azul vs casa_vermelha)
+- **Motivo:** Melhor alinhamento pedagógico para crianças com atraso de fala
+
 **Pasta:** `Kids/src/assets/images/igual-diferente/` (todas as imagens na mesma pasta)
+
+**📝 Nota:** As imagens atuais serão substituídas quando a nova lógica for implementada
 
 #### **Imagens que JÁ EXISTEM no Adivinha (reutilizar):**
 - ✅ `cachorro.png` - Usar de `adivinha/cachorro.png`

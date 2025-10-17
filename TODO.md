@@ -144,6 +144,55 @@
 
 ## 🚨 PRIORIDADE CRÍTICA
 
+### 🔴 **MUDANÇA DE LÓGICA - Jogo "Igual ou Diferente" (Kids)** ⚠️
+
+**CRÍTICO:** Refatorar completamente a mecânica do jogo!
+
+**Problema Atual:**
+- Compara objetos DIFERENTES (ex: cachorro vs gato, bicicleta vs carro)
+- Não é adequado para o objetivo pedagógico do jogo
+
+**Nova Lógica (a implementar):**
+- Comparar imagens SEMELHANTES do mesmo objeto
+- Exemplo: `flor1.png` vs `flor2.png` (cores diferentes, detalhes sutis)
+- Exemplo: `cachorro_sentado.png` vs `cachorro_em_pe.png`
+- Exemplo: `casa_azul.png` vs `casa_vermelha.png`
+
+**Ações Necessárias:**
+- [ ] Gerar novas imagens em pares semelhantes (mantendo 500x500px)
+- [ ] Atualizar `Kids/mockup-data/igual-diferente.json` com nova estrutura
+- [ ] Atualizar `Kids/src/services/igualDiferenteService.ts` 
+- [ ] Documentar novos pares em `docs/IMAGENS-NECESSARIAS.md`
+- [ ] Testar novas comparações com público-alvo
+
+**Impacto:** 
+- 🎯 Melhora significativa na eficácia pedagógica
+- 🖼️ Requer geração de novos assets
+- 💻 Mínimo impacto no código (apenas troca de dados)
+
+**Estimativa:** 2-3 horas (incluindo geração de imagens)
+
+---
+
+### 🔴 **VALIDAR SLIDES DA APRESENTAÇÃO** ⚠️
+
+**CRÍTICO:** Revisar e validar conteúdo dos slides antes da apresentação final!
+
+**Ações Necessárias:**
+- [ ] Revisar conteúdo de todos os slides
+- [ ] Validar estrutura da apresentação
+- [ ] Verificar dados e estatísticas apresentadas
+- [ ] Testar transições e animações
+- [ ] Validar tempo de apresentação (não ultrapassar limite)
+- [ ] Preparar notas do apresentador
+- [ ] Testar modo apresentador
+- [ ] Fazer ensaio completo
+
+**Responsável:** Equipe completa
+**Deadline:** ANTES da apresentação oficial
+
+---
+
 ### 🔴 **Refatoração do Tutors**
 
 - [X] **Remover dados hardcoded:**
@@ -216,21 +265,21 @@
 
 ### 🔴 **Crítica:**
 
-- [ ] **Documentar integração API no Pro** (`docs/pro/integracao-api.md`)
-- [ ] **Atualizar README do Pro** com instruções de API
-- [ ] **Criar guia de troubleshooting** para API offline
+- [X] **Documentar integração API no Pro** (`docs/pro/integracao-api.md`)
+- [X] **Atualizar README do Pro** com instruções de API
+- [X] **Criar guia de troubleshooting** para API offline
 
 ### 🟡 **Alta:**
 
-- [ ] **Documentar mockDataService** (`docs/pro/mock-data-service.md`)
-- [ ] **Atualizar diagramas de arquitetura** incluindo API
-- [ ] **Documentar fluxo de fallback** para cada funcionalidade
+- [X] **Documentar mockDataService** (`docs/pro/mock-data-service.md`)
+- [X] **Atualizar diagramas de arquitetura** incluindo API
+- [X] **Documentar fluxo de fallback** para cada funcionalidade
 
 ### 🟢 **Média:**
 
-- [ ] **Criar changelog** das mudanças de integração API
-- [ ] **Documentar boas práticas** de integração API
-- [ ] **Atualizar guia de desenvolvimento** do Pro
+- [X] **Criar changelog** das mudanças de integração API
+- [X] **Documentar boas práticas** de integração API
+- [X] **Atualizar guia de desenvolvimento** do Pro
 
 ---
 
