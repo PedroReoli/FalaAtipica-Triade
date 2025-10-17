@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Edit2, Trash2, Calendar, Phone, Mail, Users, Clock, FileText, Activity, Eye, FolderOpen, History } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useRoleColor } from '../hooks/useRoleColor';
+import { mockDataService } from '../services/mockDataService';
+import { socketService } from '../hooks/useAPIIntegration';
 import patientDetailsData from '../../../Mockup/PRO/paciente-detalhes.json';
 
 interface Session {
@@ -44,19 +46,75 @@ interface Summary {
 export const PatientDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { professionalType } = useProfessional();
+  const { professionalType, professionalData } = useProfessional();
   const roleColor = useRoleColor();
   const [activeTab, setActiveTab] = useState<'info' | 'sessions' | 'reports' | 'documents' | 'history' | 'mobile'>('info');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showEditHistoryModal, setShowEditHistoryModal] = useState(false);
   const [showAddHistoryModal, setShowAddHistoryModal] = useState(false);
   const [showManagementModal, setShowManagementModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [patient, setPatient] = useState<any>(null);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [mobileApps, setMobileApps] = useState<any>(null);
+  const [summary, setSummary] = useState<Summary | null>(null);
 
-  // Dados importados da pasta Mockup
-  const patient = { ...patientDetailsData.patient, id: id };
-  const sessions: Session[] = patientDetailsData.sessions as Session[];
-  const mobileApps = patientDetailsData.mobileApps as { kids: MobileApp; tutors: MobileApp };
-  const summary: Summary = patientDetailsData.summary as Summary;
+  useEffect(() => {
+    loadPatientData();
+    setupRealtimeUpdates();
+
+    return () => {
+      socketService.off('patient-game-completed');
+      socketService.off('child-game-completed');
+    };
+  }, [id]);
+
+  const setupRealtimeUpdates = () => {
+    const currentUser = professionalData;
+    if (currentUser && !socketService.isSocketConnected()) {
+      socketService.connect(currentUser.id, currentUser.name);
+    }
+
+    // Atualizar quando paciente jogar
+    socketService.on('patient-game-completed', (data: any) => {
+      if (data.userId === id) {
+        console.log('🎮 Paciente jogou, atualizando dados...');
+        loadPatientData(); // Recarregar tudo
+      }
+    });
+
+    socketService.on('child-game-completed', (data: any) => {
+      if (data.userId === id) {
+        console.log('🎮 Criança jogou, atualizando dados...');
+        loadPatientData(); // Recarregar tudo
+      }
+    });
+  };
+
+  const loadPatientData = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Carregar dados do paciente via API
+      const patientData = await mockDataService.loadPatient(id || '1');
+      
+      // Normalizar dados
+      setPatient(patientData.patient || { ...patientDetailsData.patient, id });
+      setSessions(patientData.sessions || patientDetailsData.sessions as Session[]);
+      setMobileApps(patientData.mobileApps || patientDetailsData.mobileApps);
+      setSummary(patientData.summary || patientDetailsData.summary as Summary);
+      
+    } catch (error) {
+      console.error('Erro ao carregar paciente:', error);
+      // Fallback completo
+      setPatient({ ...patientDetailsData.patient, id });
+      setSessions(patientDetailsData.sessions as Session[]);
+      setMobileApps(patientDetailsData.mobileApps);
+      setSummary(patientDetailsData.summary as Summary);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleEdit = () => {
     navigate(`/patients/${id}/edit`);

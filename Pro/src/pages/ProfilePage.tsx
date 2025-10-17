@@ -27,15 +27,15 @@ export const ProfilePage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [formData, setFormData] = useState({
-    name: "Dr. Ana Silva",
-    email: "ana.silva@email.com",
-    phone: "(11) 99999-9999",
-    address: "São Paulo, SP",
-    license: "06/123456",
-    specialty: "Psicologia Infantil",
-    experience: "5 anos",
-    education: "Graduação em Psicologia - USP",
-    certifications: ["CRP 06/123456", "Especialização em Psicologia Infantil"]
+    name: professionalData?.name || "Profissional",
+    email: professionalData?.email || "email@exemplo.com",
+    phone: professionalData?.phone || "(11) 99999-9999",
+    address: professionalData?.address || "São Paulo, SP",
+    license: professionalData?.license || "06/123456",
+    specialty: professionalData?.specialty || "Especialidade",
+    experience: professionalData?.experience || "5 anos",
+    education: professionalData?.education || "Graduação",
+    certifications: professionalData?.certifications || ["Certificação 1"]
   })
   const [newCertification, setNewCertification] = useState("")
   const [passwordData, setPasswordData] = useState({

@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { 
   BarChart3, 
@@ -20,6 +20,7 @@ import {
 } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
 import { useRoleColor } from "../hooks/useRoleColor"
+import { mockDataService } from "../services/mockDataService"
 
 interface Report {
   id: string
@@ -37,7 +38,7 @@ interface Report {
 
 export const ReportsPage: React.FC = () => {
   const navigate = useNavigate()
-  const { professionalType } = useProfessional()
+  const { professionalType, professionalData } = useProfessional()
   const roleColor = useRoleColor()
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState<string>("all")
@@ -55,11 +56,31 @@ export const ReportsPage: React.FC = () => {
     description: ""
   })
   const [isDragOver, setIsDragOver] = useState(false)
+  const [reports, setReports] = useState<Report[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Dados mockados
-  const reports: Report[] = [
+  useEffect(() => {
+    loadReports();
+  }, []);
+
+  const loadReports = async () => {
+    try {
+      setIsLoading(true);
+      // Por enquanto usar mockado (precisa criar endpoint)
+      const reportsData = await mockDataService.loadReports('all');
+      setReports(reportsData.relatorios || mockReports);
+    } catch (error) {
+      console.error('Erro ao carregar relatórios:', error);
+      setReports(mockReports);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Dados mockados (fallback)
+  const mockReports: Report[] = [
     {
       id: "1",
       title: "Relatório de Progresso - João Silva",
@@ -126,6 +147,9 @@ export const ReportsPage: React.FC = () => {
       lastModified: "2024-01-28"
     }
   ]
+
+  // Usar reports do state ou fallback
+  const activeReports = reports.length > 0 ? reports : mockReports;
 
   // Funções de upload e geração
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -243,7 +267,7 @@ export const ReportsPage: React.FC = () => {
   }
 
   // Filtros
-  const filteredReports = reports.filter(report => {
+  const filteredReports = activeReports.filter(report => {
     const matchesSearch = report.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          report.patient.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesType = filterType === "all" || report.type === filterType

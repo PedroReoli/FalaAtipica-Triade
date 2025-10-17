@@ -4,6 +4,155 @@ const router = express.Router();
 const jsonService = require('../services/jsonService');
 const { successResponse, errorResponse, generateId, calculateOverallProgress } = require('../utils/helpers');
 
+// POST /api/pro/patient - Criar novo paciente
+router.post('/patient', async (req, res) => {
+  try {
+    const patientData = {
+      id: generateId('patient'),
+      ...req.body,
+      criadoEm: new Date().toISOString()
+    };
+    
+    // Salvar no JSON de crianças (Kids)
+    let kidsData = await jsonService.readJSON('KIDS/usuarios.json');
+    
+    if (!kidsData.usuarios) {
+      kidsData = { usuarios: [] };
+    }
+    
+    // Criar usuário criança
+    const newChild = {
+      id: patientData.id,
+      nome: patientData.nome,
+      email: `${patientData.nome.toLowerCase().replace(/\s/g, '')}@kids.com`,
+      senha: '123456',
+      idade: patientData.idade,
+      dataNascimento: patientData.dataNascimento
+    };
+    
+    kidsData.usuarios.push(newChild);
+    await jsonService.writeJSON('KIDS/usuarios.json', kidsData);
+    
+    // Criar relação com tutor (se tiver email do tutor)
+    if (patientData.tutor && patientData.tutor.email) {
+      const tutorsData = await jsonService.readJSON('TUTORS/usuarios.json');
+      const tutor = tutorsData.tutores?.find((t) => t.email === patientData.tutor.email);
+      
+      if (tutor) {
+        if (!tutor.criancasIds) tutor.criancasIds = [];
+        if (!tutor.criancasIds.includes(patientData.id)) {
+          tutor.criancasIds.push(patientData.id);
+          tutor.profissionalId = patientData.profissionalId;
+          await jsonService.writeJSON('TUTORS/usuarios.json', tutorsData);
+        }
+      }
+    }
+    
+    console.log(`✅ Paciente criado: ${patientData.nome}`);
+    
+    res.status(201).json(successResponse(
+      patientData,
+      'Paciente criado com sucesso'
+    ));
+    
+  } catch (error) {
+    console.error('❌ Erro ao criar paciente:', error);
+    res.status(500).json(
+      errorResponse('CREATE_ERROR', 'Erro ao criar paciente', error.message)
+    );
+  }
+});
+
+// GET /api/pro/sessions - Listar todas as sessões do profissional
+router.get('/sessions', async (req, res) => {
+  try {
+    const { professionalId } = req.query;
+    
+    // Buscar sessões do arquivo compartilhado
+    const sessionsData = await jsonService.readJSON('shared/sessions.json').catch(() => ({ sessions: [] }));
+    const allSessions = sessionsData.sessions || [];
+    
+    // Filtrar por profissional se fornecido
+    const filteredSessions = professionalId 
+      ? allSessions.filter(s => s.profissionalId === professionalId)
+      : allSessions;
+    
+    console.log(`✅ Sessões listadas: ${filteredSessions.length} sessões`);
+    
+    res.json(successResponse({
+      sessions: filteredSessions,
+      total: filteredSessions.length
+    }));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar sessões:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar sessões', error.message)
+    );
+  }
+});
+
+// GET /api/pro/dashboard/:professionalId - Estatísticas do dashboard
+router.get('/dashboard/:professionalId', async (req, res) => {
+  try {
+    const { professionalId } = req.params;
+    
+    // Buscar pacientes
+    const kidsData = await jsonService.readJSON('KIDS/usuarios.json');
+    const tutorsData = await jsonService.readJSON('TUTORS/usuarios.json');
+    
+    const pacientes = kidsData.usuarios?.filter(crianca => {
+      const tutor = tutorsData.tutores?.find(t => 
+        t.criancasIds?.includes(crianca.id) && t.profissionalId === professionalId
+      );
+      return !!tutor;
+    }) || [];
+    
+    // Buscar sessões
+    const sessionsData = await jsonService.readJSON('shared/sessions.json').catch(() => ({ sessions: [] }));
+    const sessions = sessionsData.sessions?.filter((s) => s.profissionalId === professionalId) || [];
+    
+    // Calcular sessões desta semana
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const sessionsThisWeek = sessions.filter((s) => new Date(s.timestamp) >= weekAgo);
+    
+    const stats = {
+      totalPatients: pacientes.length,
+      totalSessions: sessions.length,
+      sessionsThisWeek: sessionsThisWeek.length,
+      pendingReports: 0
+    };
+    
+    console.log(`✅ Dashboard stats: ${stats.totalPatients} pacientes, ${stats.totalSessions} sessões`);
+    
+    res.json(successResponse(stats));
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar dashboard stats:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao buscar estatísticas', error.message)
+    );
+  }
+});
+
+/**
+ * @swagger
+ * /api/pro/patients:
+ *   get:
+ *     tags: [Pro]
+ *     summary: Lista de pacientes do profissional
+ *     parameters:
+ *       - in: query
+ *         name: professionalId
+ *         schema:
+ *           type: string
+ *         example: prof_001
+ *     responses:
+ *       200:
+ *         description: Lista de pacientes retornada
+ */
+router.get('/patients', async (req, res) => {
+
 /**
  * @swagger
  * /api/pro/patients:

@@ -1,36 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, User, Phone, Mail, Users, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useRoleColor } from '../hooks/useRoleColor';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import type { ProfessionalType } from '../types';
+import { mockDataService } from '../services/mockDataService';
 
 interface Patient {
   id: string;
-  name: string;
-  age: number;
-  lastSession: string;
-  nextSession: string;
-  status: 'active' | 'inactive' | 'pending';
-  professionalType: ProfessionalType;
-  tutor: {
-    name: string;
-    phone: string;
-    email: string;
+  name?: string;
+  nome?: string;
+  age?: number;
+  idade?: number;
+  lastSession?: string;
+  ultimaSessao?: string;
+  nextSession?: string;
+  status: 'active' | 'inactive' | 'pending' | 'ativo';
+  professionalType?: ProfessionalType;
+  tutor?: {
+    name?: string;
+    nome?: string;
+    phone?: string;
+    telefone?: string;
+    email?: string;
   };
+  tutorEmail?: string;
+  progressoGeral?: number;
 }
 
 export const PatientsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { professionalType } = useProfessional();
+  const { professionalType, professionalData } = useProfessional();
   const roleColor = useRoleColor();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Dados mockados
-  const patients: Patient[] = [
+  useEffect(() => {
+    loadPatients();
+  }, []);
+
+  const loadPatients = async () => {
+    try {
+      setIsLoading(true);
+      const professionalId = professionalData?.id || 'prof_001';
+      const data = await mockDataService.loadPatients(professionalId);
+      
+      // Normalizar dados (API vs Mockup)
+      const normalizedPatients = (data.patients || data.pacientes || []).map((p: any) => ({
+        id: p.id,
+        name: p.name || p.nome,
+        age: p.age || p.idade,
+        lastSession: p.lastSession || p.ultimaSessao,
+        nextSession: p.nextSession,
+        status: (p.status === 'ativo' ? 'active' : p.status) as 'active' | 'inactive' | 'pending',
+        professionalType: professionalType,
+        tutor: p.tutor ? {
+          name: p.tutor.nome || p.tutor.name,
+          phone: p.tutor.telefone || p.tutor.phone,
+          email: p.tutor.email || p.tutorEmail
+        } : undefined,
+        progressoGeral: p.progressoGeral
+      }));
+      
+      setPatients(normalizedPatients);
+    } catch (error) {
+      console.error('Erro ao carregar pacientes:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fallback mockado para desenvolvimento
+  const mockPatients: Patient[] = [
     {
       id: '1',
       name: 'João Silva',
@@ -115,23 +160,26 @@ export const PatientsPage: React.FC = () => {
     }
   };
 
-  const filteredPatients = patients.filter(patient => {
-    const matchesSearch = patient.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === 'all' || patient.status === filterStatus;
+  const filteredPatients = (patients.length > 0 ? patients : mockPatients).filter(patient => {
+    const patientName = (patient.name || patient.nome || '').toLowerCase();
+    const matchesSearch = patientName.includes(searchTerm.toLowerCase());
+    const normalizedStatus = patient.status === 'ativo' ? 'active' : patient.status;
+    const matchesStatus = filterStatus === 'all' || normalizedStatus === filterStatus;
     return matchesSearch && matchesStatus;
   });
 
   // Dados para o gráfico com cores melhoradas
+  const activePatientsForChart = patients.length > 0 ? patients : mockPatients;
   const chartData = [
     { 
       name: 'Ativos', 
-      value: patients.filter(p => p.status === 'active').length, 
+      value: activePatientsForChart.filter(p => p.status === 'active' || p.status === 'ativo').length, 
       color: '#22C55E',
       lightColor: '#86EFAC' 
     },
     { 
       name: 'Pendentes', 
-      value: patients.filter(p => p.status === 'pending').length, 
+      value: activePatientsForChart.filter(p => p.status === 'pending').length, 
       color: '#F59E0B',
       lightColor: '#FCD34D' 
     },
@@ -197,6 +245,14 @@ export const PatientsPage: React.FC = () => {
   return (
     <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
       <div className="dashboard-content">
+        {isLoading ? (
+          <div className="w-full min-h-full flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-4 mx-auto mb-4" style={{ borderColor: roleColor.primary }}></div>
+              <p className="text-lg font-semibold" style={{ color: roleColor.primary }}>Carregando pacientes...</p>
+            </div>
+          </div>
+        ) : (
         <div className="w-full min-h-full flex flex-col space-y-2">
       {/* Header */}
           <div className="dashboard-spacing">
@@ -491,6 +547,7 @@ export const PatientsPage: React.FC = () => {
         </div>
       )}
         </div>
+        )}
       </div>
     </div>
   );

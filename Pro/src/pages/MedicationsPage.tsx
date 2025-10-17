@@ -1,11 +1,12 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Pill, Plus, ArrowLeft, Search, Filter, User, Calendar } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
 import { useRoleColor } from "../hooks/useRoleColor"
+import { mockDataService } from "../services/mockDataService"
 
 interface Medication {
   id: string
@@ -25,9 +26,28 @@ export const MedicationsPage: React.FC = () => {
   const roleColor = useRoleColor()
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState<string>("all")
+  const [medications, setMedications] = useState<Medication[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Dados mockados
-  const medications: Medication[] = [
+  useEffect(() => {
+    loadMedications();
+  }, []);
+
+  const loadMedications = async () => {
+    try {
+      setIsLoading(true);
+      const data = await mockDataService.loadMedications();
+      setMedications(data.medicamentos || mockMedications);
+    } catch (error) {
+      console.error('Erro ao carregar medicamentos:', error);
+      setMedications(mockMedications);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Dados mockados (fallback)
+  const mockMedications: Medication[] = [
     {
       id: "1",
       name: "Fluoxetina",
@@ -71,6 +91,8 @@ export const MedicationsPage: React.FC = () => {
     },
   ]
 
+  // Usar medications do state ou fallback
+  const activeMedications = medications.length > 0 ? medications : mockMedications;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -98,7 +120,7 @@ export const MedicationsPage: React.FC = () => {
     }
   }
 
-  const filteredMedications = medications.filter((medication) => {
+  const filteredMedications = activeMedications.filter((medication) => {
     const matchesSearch = medication.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          medication.patient.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesFilter = filterStatus === "all" || medication.status === filterStatus

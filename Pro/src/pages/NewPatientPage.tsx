@@ -3,11 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, User, Users, Phone, Mail, MapPin, Calendar, FileText } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useRoleColor } from '../hooks/useRoleColor';
+import { useToast } from '../hooks/useToast';
+import { mockDataService } from '../services/mockDataService';
 
 export const NewPatientPage: React.FC = () => {
   const navigate = useNavigate();
-  const { professionalType } = useProfessional();
+  const { professionalType, professionalData } = useProfessional();
   const roleColor = useRoleColor();
+  const { showToast } = useToast();
+  const [isSaving, setIsSaving] = useState(false);
 
   const [formData, setFormData] = useState({
     // Informações do Paciente
@@ -38,12 +42,60 @@ export const NewPatientPage: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Novo paciente:', formData);
-    // Aqui você implementaria a lógica de salvar o paciente
-    alert('Paciente cadastrado com sucesso!');
-    navigate('/patients');
+    
+    try {
+      setIsSaving(true);
+      
+      // Preparar dados para enviar
+      const patientData = {
+        nome: formData.name,
+        dataNascimento: formData.birthDate,
+        idade: calculateAge(formData.birthDate),
+        tutor: {
+          nome: formData.tutorName,
+          relacionamento: formData.tutorRelationship,
+          telefone: formData.tutorPhone,
+          email: formData.tutorEmail
+        },
+        endereco: {
+          rua: formData.street,
+          cidade: formData.city,
+          estado: formData.state,
+          cep: formData.zipCode
+        },
+        diagnostico: formData.diagnosis,
+        alergias: formData.allergies,
+        medicamentos: formData.medications,
+        observacoes: formData.observations,
+        profissionalId: professionalData?.id || 'prof_001',
+        status: 'ativo'
+      };
+      
+      // Salvar via API (com fallback automático)
+      const savedPatient = await mockDataService.savePatient(patientData);
+      
+      showToast('Paciente cadastrado com sucesso!', 'success');
+      navigate('/patients');
+    } catch (error) {
+      console.error('Erro ao salvar paciente:', error);
+      showToast('Erro ao cadastrar paciente', 'error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const calculateAge = (birthDate: string): number => {
+    if (!birthDate) return 0;
+    const birth = new Date(birthDate);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
   };
 
   return (

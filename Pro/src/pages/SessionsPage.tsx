@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Plus, Edit, ChevronLeft, ChevronRight, Move, Calendar
@@ -6,6 +6,7 @@ import {
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useRoleColor } from '../hooks/useRoleColor';
 import type { ProfessionalType } from '../types';
+import { mockDataService } from '../services/mockDataService';
 
 interface Session {
   id: string;
@@ -23,7 +24,7 @@ interface Session {
 
 export const SessionsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { professionalType } = useProfessional();
+  const { professionalType, professionalData } = useProfessional();
   const roleColor = useRoleColor();
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -33,9 +34,33 @@ export const SessionsPage: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [draggedSession, setDraggedSession] = useState<Session | null>(null);
   const [dragOverDate, setDragOverDate] = useState<string | null>(null);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Dados mockados das sessões
-  const sessions: Session[] = [
+  useEffect(() => {
+    loadSessions();
+  }, []);
+
+  const loadSessions = async () => {
+    try {
+      setIsLoading(true);
+      const professionalId = professionalData?.id || 'prof_001';
+      const data = await mockDataService.loadSessions(professionalId);
+      const loadedSessions = (data.sessions || []).map((s: any) => ({
+        ...s,
+        professionalType
+      }));
+      setSessions(loadedSessions);
+    } catch (error) {
+      console.error('Erro ao carregar sessões:', error);
+      setSessions(mockSessions);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Dados mockados das sessões (fallback)
+  const mockSessions: Session[] = [
     {
       id: '1',
       patient: 'João Silva',

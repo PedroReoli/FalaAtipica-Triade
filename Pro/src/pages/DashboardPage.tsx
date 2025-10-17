@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import {
   Users,
@@ -22,6 +22,7 @@ import { useProfessional } from "../contexts/ProfessionalContext"
 import { ProgressSection, WeeklySchedule, DataSummary } from "../components/dashboardComponents"
 import { DashboardWidget } from "../components/morph"
 import { useProfessionalMetrics } from "../hooks/useProfessionalMetrics"
+import { mockDataService } from "../services/mockDataService"
 
 // Dados mockados para os gráficos
 const progressData = [
@@ -61,6 +62,25 @@ export const DashboardPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'quarter'>('week')
+  const [dashboardStats, setDashboardStats] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    try {
+      setIsLoading(true);
+      const professionalId = professionalData?.id || 'prof_001';
+      const stats = await mockDataService.loadDashboardStats(professionalId);
+      setDashboardStats(stats);
+    } catch (error) {
+      console.error('Erro ao carregar dashboard:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Configurações específicas por tipo de profissional
   const getProfessionalConfig = () => {
@@ -73,14 +93,14 @@ export const DashboardPage: React.FC = () => {
           stats: [
             {
               title: "Pacientes",
-              value: "24",
+              value: dashboardStats?.totalPatients?.toString() || "24",
               icon: Users,
               color: "var(--green)",
               change: "+12%",
             },
             {
               title: "Sessões",
-              value: "156",
+              value: dashboardStats?.totalSessions?.toString() || "156",
               icon: Calendar,
               color: "var(--green)",
               change: "+8%",
@@ -94,7 +114,7 @@ export const DashboardPage: React.FC = () => {
             },
             {
               title: "Relatórios",
-              value: "42",
+              value: dashboardStats?.pendingReports?.toString() || "42",
               icon: FileText,
               color: "var(--green)",
               change: "+15%",
