@@ -7,7 +7,8 @@ import {
   BarChart3, 
   HelpCircle, 
   Lightbulb, 
-  User
+  User,
+  Gamepad2
 } from 'lucide-react-native';
 import { COLORS } from '../constants/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -271,7 +272,17 @@ export const DashboardScreen: React.FC = () => {
               <View style={styles.cardIcon}>
                 <Lightbulb size={24} color={COLORS.BLUE} />
               </View>
-              <Text style={styles.cardText}>Dicas</Text>
+              <Text style={styles.cardText}>Dicas e Recursos</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.functionalityCard}
+              onPress={() => handleNavigateToFeature('Games')}
+            >
+              <View style={styles.cardIcon}>
+                <Gamepad2 size={24} color={COLORS.BLUE} />
+              </View>
+              <Text style={styles.cardText}>Jogos</Text>
             </TouchableOpacity>
           </View>
         </View>

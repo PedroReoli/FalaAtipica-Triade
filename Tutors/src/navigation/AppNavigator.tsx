@@ -18,6 +18,7 @@ import { RegisterDeviceScreen } from '../screens/RegisterDeviceScreen';
 import { AboutAppScreen } from '../screens/AboutAppScreen';
 import { TermsPrivacyScreen } from '../screens/TermsPrivacyScreen';
 import { SubscriptionScreen } from '../screens/SubscriptionScreen';
+import { GamesScreen } from '../screens/GamesScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -30,6 +31,7 @@ export type RootStackParamList = {
   Support: undefined;
   FAQ: undefined;
   Tips: undefined;
+  Games: undefined;
   Profile: undefined;
   ChildProfile: { childId: string };
   ChangePassword: undefined;
@@ -60,6 +62,7 @@ export const AppNavigator: React.FC = () => {
         <Stack.Screen name="Support" component={SupportScreen} />
         <Stack.Screen name="FAQ" component={FAQScreen} />
         <Stack.Screen name="Tips" component={TipsScreen} />
+        <Stack.Screen name="Games" component={GamesScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="ChildProfile" component={ChildProfileScreen} />
         <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />

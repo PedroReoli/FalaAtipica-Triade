@@ -1,11 +1,46 @@
 # 📋 TODO - FalaAtípica Triade
 
 **Última Atualização:** 17 de Outubro de 2025
-**Versão:** 1.2.0
+**Versão:** 1.3.0
 
 ---
 
-## ✅ **IMPLEMENTAÇÕES RECENTES (v1.2.0)**
+## ✅ **IMPLEMENTAÇÕES RECENTES (v1.3.0)**
+
+### **Tutors - Refatoração Completa:**
+
+#### 1. ✅ **Página de Jogos Educativos (Novo)**
+- Nova tela `GamesScreen.tsx` com os 4 jogos
+- Cards bonitos com ícones Lucide (Eye, Film, Gamepad2, Brain)
+- Descrição completa de cada jogo
+- Objetivos de aprendizagem (4 itens por jogo)
+- Faixa etária recomendada
+- Layout responsivo e atrativo
+- Dica informativa para pais no final
+- **Arquivo:** `Tutors/src/screens/GamesScreen.tsx`
+
+#### 2. ✅ **Dashboard Atualizado**
+- Adicionado card "Jogos" com ícone Gamepad2
+- Renomeado "Dicas" para "Dicas e Recursos"
+- Agora 5 funcionalidades: Agenda, Progresso, Suporte, Dicas, Jogos
+- **Arquivo:** `Tutors/src/screens/DashboardScreen.tsx`
+
+#### 3. ✅ **Remoção de Dados Hardcoded**
+- Perfil usa `mockAuthService` (dados dinâmicos)
+- Dashboard usa `apiService` (dados dinâmicos)
+- Progresso sincronizado com 4 jogos do Kids
+
+#### 4. ✅ **Documentação Consolidada**
+- Apenas README.md e TODO.md na raiz
+- docs/ com arquivos consolidados:
+  - IMPLEMENTACOES-COMPLETAS.md
+  - IMAGENS-NECESSARIAS.md
+  - GUIA-TESTES-COMPLETO.md
+  - API-COMPLETA.md
+
+---
+
+## ✅ **IMPLEMENTAÇÕES ANTERIORES (v1.2.0)**
 
 ### **Funcionalidades Críticas Concluídas:**
 
@@ -61,30 +96,30 @@
 
 ### 🔴 **Refatoração do Tutors**
 
-- [ ] **Remover dados hardcoded:**
-  - [ ] Perfil - remover dados fixos
-  - [ ] Dashboard - usar dados dinâmicos
-  - [ ] Progresso - sincronizar com 4 jogos do Kids
-- [ ] **Melhorias de UX:**
-  - [ ] Renomear "Dicas" para nome mais apropriado (ex: "Orientações", "Guia de Apoio")
+- [X] **Remover dados hardcoded:**
+  - [X] Perfil - usa mockAuthService (dados dinâmicos)
+  - [X] Dashboard - usa apiService (dados dinâmicos)
+  - [X] Progresso - sincronizado com 4 jogos do Kids
+- [X] **Melhorias de UX:**
+  - [X] Renomear "Dicas" para nome mais apropriado ("Dicas e Recursos")
   - [ ] Implementar download de dicas em PDF
-  - [ ] Melhorar separação visual na página de Suporte
-  - [ ] Substituir TODOS os emojis por ícones Lucide
-- [ ] **Atualizar informações:**
-  - [ ] Trocar todos os emails para: pedrosousa2160@gmail.com
-  - [ ] Remover botão/opção "Cadastrar nova conta"
-- [ ] **Nova página "Jogos" (substituir "Imagens e Sons"):**
-  - [ ] Card do jogo "Adivinha" + descrição + o que a criança aprende
-  - [ ] Card do jogo "Igual-Diferente" + descrição + o que a criança aprende
-  - [ ] Card do jogo "Cena Certa" + descrição + o que a criança aprende
-  - [ ] Card do jogo "Palavras" + descrição + o que a criança aprende
-  - [ ] Layout responsivo e atrativo
-  - [ ] Ícones consistentes para cada jogo
-- [ ] **Página de Progresso:**
-  - [ ] Sincronizar com os 4 jogos do Kids
-  - [ ] Mostrar progresso individual por jogo
-  - [ ] Estatísticas consistentes com dados reais
-  - [ ] Gráficos visuais de evolução
+  - [X] Melhorar separação visual na página de Suporte
+  - [X] Substituir TODOS os emojis por ícones Lucide
+- [X] **Atualizar informações:**
+  - [X] Trocar todos os emails para: pedrosousa2160@gmail.com
+  - [X] Remover botão/opção "Cadastrar nova conta"
+- [X] **Nova página "Jogos":**
+  - [X] Card do jogo "Adivinha" + descrição + o que a criança aprende
+  - [X] Card do jogo "Igual-Diferente" + descrição + o que a criança aprende
+  - [X] Card do jogo "Cena Certa" + descrição + o que a criança aprende
+  - [X] Card do jogo "Palavras" + descrição + o que a criança aprende
+  - [X] Layout responsivo e atrativo
+  - [X] Ícones consistentes para cada jogo (Lucide)
+- [X] **Página de Progresso:**
+  - [X] Sincronizar com os 4 jogos do Kids
+  - [X] Mostrar progresso individual por jogo
+  - [X] Estatísticas consistentes com dados reais
+  - [X] Gráficos visuais de evolução (barras de progresso)
 
 ### 🔴 **Integração API no Pro**
 
@@ -104,10 +139,10 @@
   - [ ] `SessionsPage.tsx`
   - [ ] `ReportsPage.tsx`
   - [ ] `NewPatientPage.tsx`
-  - [ ] `NewSessionPage.tsx`
+  - [X] `NewSessionPage.tsx` (contexto de paciente implementado)
   - [ ] `PatientDetailsPage.tsx`
   - [ ] `MedicationsPage.tsx`
-  - [ ] `SettingsPage.tsx`
+  - [X] `SettingsPage.tsx` (sistema de parcerias com API)
 - [ ] **Implementar fallback offline em todas as páginas**
 
   - [ ] Testar cada página com API online
@@ -363,18 +398,18 @@ FalaAtipica-Triade/
 - [X] Relatórios - Completo
 - [X] Integração API - Completo
 - [X] Fallback offline - Completo
-- [ ] **Refatoração e Melhorias Pendentes:**
-  - [ ] Remover dados hardcoded (especialmente em Perfil)
-  - [ ] Implementar funcionalidade de baixar dicas
-  - [ ] Renomear seção "Dicas" para nome mais apropriado
-  - [ ] Melhorar separação visual na página de Suporte
-  - [ ] Substituir emojis por ícones da lib (Lucide)
-  - [ ] Atualizar todos os emails para pedrosousa2160@gmail.com
-  - [ ] Remover opção "Cadastrar nova conta"
-  - [ ] Melhorar página de Progresso (consistente com 4 jogos do Kids)
-  - [ ] Substituir "Imagens e Sons" por página de Jogos
-  - [ ] Adicionar informações dos 4 jogos na nova página
-  - [ ] Documentar o que a criança aprende em cada jogo
+- [X] **Refatoração e Melhorias Pendentes:**
+  - [X] Remover dados hardcoded (Perfil já usa mockAuthService)
+  - [ ] Implementar funcionalidade de baixar dicas em PDF
+  - [X] Renomear seção "Dicas" para "Dicas e Recursos"
+  - [X] Melhorar separação visual na página de Suporte
+  - [X] Substituir emojis por ícones da lib (Lucide)
+  - [X] Atualizar todos os emails para pedrosousa2160@gmail.com
+  - [X] Remover opção "Cadastrar nova conta"
+  - [X] Melhorar página de Progresso (consistente com 4 jogos do Kids)
+  - [X] Página de Jogos criada e adicionada ao Dashboard
+  - [X] Adicionar informações dos 4 jogos na nova página
+  - [X] Documentar o que a criança aprende em cada jogo
 
 ### **Pro:**
 
@@ -383,15 +418,15 @@ FalaAtipica-Triade/
 - [ ] Sessões - Precisa integração API
 - [ ] Relatórios - Precisa integração API
 - [ ] Novo Paciente - Precisa integração API
-- [ ] Nova Sessão - Precisa integração API
-- [X] Aplicações - Modificado (Solicitar Licença)
-- [ ] Integração API - Incompleta
-- [ ] Fallback offline - Incompleta
-- [ ] **Validar interface com os 4 jogos do Kids:**
-  - [ ] Adivinha
-  - [ ] Igual-Diferente
-  - [ ] Cena Certa
-  - [ ] Palavras
+- [X] Nova Sessão - Contexto de paciente implementado
+- [X] Configurações - Sistema de parcerias com API completo
+- [ ] Integração API - Parcial (Login, SettingsPage, NewSessionPage)
+- [X] Fallback offline - Implementado (parcerias)
+- [X] **Validar interface com os 4 jogos do Kids:**
+  - [X] Adivinha (integrado e funcional)
+  - [X] Igual-Diferente (integrado e funcional)
+  - [X] Cena Certa (integrado e funcional)
+  - [X] Palavras (integrado e funcional)
 
 ---
 
