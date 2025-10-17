@@ -523,5 +523,233 @@ router.put('/agenda/:agendaId', async (req, res) => {
   }
 });
 
+// POST /api/pro/partnership-token - Gerar token de parceria
+router.post('/partnership-token', async (req, res) => {
+  try {
+    const { professionalId, professionalName, professionalType } = req.body;
+    
+    if (!professionalId || !professionalName || !professionalType) {
+      return res.status(400).json(
+        errorResponse('MISSING_FIELDS', 'professionalId, professionalName e professionalType são obrigatórios')
+      );
+    }
+    
+    // Gerar token único
+    const tokenString = `PARCERIA_${Math.random().toString(36).substring(2, 15)}${Date.now().toString(36)}`;
+    
+    const tokenData = {
+      id: generateId('token'),
+      token: tokenString,
+      professionalId,
+      professionalName,
+      professionalType,
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 dias
+      status: 'pending',
+      claimedBy: null,
+      claimedAt: null
+    };
+    
+    // Salvar no arquivo
+    let tokensFile = await jsonService.readJSON('shared/partnership-tokens.json').catch(() => ({ tokens: [] }));
+    
+    if (!tokensFile.tokens) {
+      tokensFile = { tokens: [] };
+    }
+    
+    tokensFile.tokens.push(tokenData);
+    await jsonService.writeJSON('shared/partnership-tokens.json', tokensFile);
+    
+    console.log(`🔗 Token de parceria gerado: ${tokenString} por ${professionalName}`);
+    
+    res.status(201).json(successResponse({
+      token: tokenString,
+      expiresAt: tokenData.expiresAt
+    }, 'Token gerado com sucesso'));
+    
+  } catch (error) {
+    console.error('❌ Erro ao gerar token:', error);
+    res.status(500).json(
+      errorResponse('TOKEN_ERROR', 'Erro ao gerar token', error.message)
+    );
+  }
+});
+
+// POST /api/pro/claim-partnership - Reivindicar token de parceria
+router.post('/claim-partnership', async (req, res) => {
+  try {
+    const { token, professionalId, professionalName, professionalType } = req.body;
+    
+    if (!token || !professionalId || !professionalName || !professionalType) {
+      return res.status(400).json(
+        errorResponse('MISSING_FIELDS', 'token, professionalId, professionalName e professionalType são obrigatórios')
+      );
+    }
+    
+    // Buscar token
+    const tokensFile = await jsonService.readJSON('shared/partnership-tokens.json');
+    const tokenData = tokensFile.tokens?.find(t => t.token === token);
+    
+    if (!tokenData) {
+      return res.status(404).json(
+        errorResponse('TOKEN_NOT_FOUND', 'Token inválido ou não encontrado')
+      );
+    }
+    
+    // Verificar se token já foi usado
+    if (tokenData.status === 'claimed') {
+      return res.status(400).json(
+        errorResponse('TOKEN_ALREADY_USED', 'Este token já foi utilizado')
+      );
+    }
+    
+    // Verificar se token expirou
+    if (new Date(tokenData.expiresAt) < new Date()) {
+      return res.status(400).json(
+        errorResponse('TOKEN_EXPIRED', 'Este token expirou')
+      );
+    }
+    
+    // Verificar se não está tentando fazer parceria consigo mesmo
+    if (tokenData.professionalId === professionalId) {
+      return res.status(400).json(
+        errorResponse('SELF_PARTNERSHIP', 'Você não pode fazer parceria consigo mesmo')
+      );
+    }
+    
+    // Atualizar token
+    const tokenIndex = tokensFile.tokens.findIndex(t => t.token === token);
+    tokensFile.tokens[tokenIndex].status = 'claimed';
+    tokensFile.tokens[tokenIndex].claimedBy = professionalId;
+    tokensFile.tokens[tokenIndex].claimedAt = new Date().toISOString();
+    await jsonService.writeJSON('shared/partnership-tokens.json', tokensFile);
+    
+    // Criar parceria
+    const partnershipData = {
+      id: generateId('partnership'),
+      professionalA: tokenData.professionalId,
+      professionalB: professionalId,
+      nameA: tokenData.professionalName,
+      nameB: professionalName,
+      typeA: tokenData.professionalType,
+      typeB: professionalType,
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      token: token
+    };
+    
+    let partnershipsFile = await jsonService.readJSON('shared/partnerships.json').catch(() => ({ partnerships: [] }));
+    
+    if (!partnershipsFile.partnerships) {
+      partnershipsFile = { partnerships: [] };
+    }
+    
+    partnershipsFile.partnerships.push(partnershipData);
+    await jsonService.writeJSON('shared/partnerships.json', partnershipsFile);
+    
+    // Emitir evento Socket.IO para ambos profissionais
+    const io = req.app.get('io');
+    
+    // Notificar profissional A (quem gerou o token)
+    io.to(`user_${tokenData.professionalId}`).emit('partnership-established', {
+      partnershipId: partnershipData.id,
+      partnerName: professionalName,
+      partnerType: professionalType,
+      message: `${professionalName} aceitou sua parceria!`
+    });
+    
+    // Notificar profissional B (quem reivindicou)
+    io.to(`user_${professionalId}`).emit('partnership-established', {
+      partnershipId: partnershipData.id,
+      partnerName: tokenData.professionalName,
+      partnerType: tokenData.professionalType,
+      message: `Parceria estabelecida com ${tokenData.professionalName}!`
+    });
+    
+    console.log(`🤝 Parceria estabelecida: ${tokenData.professionalName} ↔ ${professionalName}`);
+    
+    res.status(201).json(successResponse({
+      partnershipId: partnershipData.id,
+      partner: {
+        name: tokenData.professionalName,
+        type: tokenData.professionalType
+      }
+    }, 'Parceria estabelecida com sucesso'));
+    
+  } catch (error) {
+    console.error('❌ Erro ao reivindicar parceria:', error);
+    res.status(500).json(
+      errorResponse('CLAIM_ERROR', 'Erro ao reivindicar parceria', error.message)
+    );
+  }
+});
+
+// GET /api/pro/partnerships/:professionalId - Listar parcerias do profissional
+router.get('/partnerships/:professionalId', async (req, res) => {
+  try {
+    const { professionalId } = req.params;
+    
+    // Buscar parcerias
+    const partnershipsFile = await jsonService.readJSON('shared/partnerships.json');
+    const allPartnerships = partnershipsFile.partnerships || [];
+    
+    // Filtrar parcerias onde o profissional está envolvido
+    const myPartnerships = allPartnerships.filter(p => 
+      p.professionalA === professionalId || p.professionalB === professionalId
+    ).map(p => {
+      // Retornar dados do parceiro (não do próprio profissional)
+      const isA = p.professionalA === professionalId;
+      return {
+        id: p.id,
+        partnerId: isA ? p.professionalB : p.professionalA,
+        partnerName: isA ? p.nameB : p.nameA,
+        partnerType: isA ? p.typeB : p.typeA,
+        status: p.status,
+        createdAt: p.createdAt
+      };
+    });
+    
+    console.log(`✅ Parcerias listadas: ${myPartnerships.length} parcerias para profissional ${professionalId}`);
+    
+    res.json(successResponse({
+      partnerships: myPartnerships,
+      total: myPartnerships.length
+    }));
+    
+  } catch (error) {
+    console.error('❌ Erro ao listar parcerias:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao listar parcerias', error.message)
+    );
+  }
+});
+
+// GET /api/pro/my-tokens/:professionalId - Listar tokens gerados pelo profissional
+router.get('/my-tokens/:professionalId', async (req, res) => {
+  try {
+    const { professionalId } = req.params;
+    
+    // Buscar tokens
+    const tokensFile = await jsonService.readJSON('shared/partnership-tokens.json');
+    const allTokens = tokensFile.tokens || [];
+    
+    // Filtrar tokens criados pelo profissional
+    const myTokens = allTokens.filter(t => t.professionalId === professionalId);
+    
+    console.log(`✅ Tokens listados: ${myTokens.length} tokens para profissional ${professionalId}`);
+    
+    res.json(successResponse({
+      tokens: myTokens,
+      total: myTokens.length
+    }));
+    
+  } catch (error) {
+    console.error('❌ Erro ao listar tokens:', error);
+    res.status(500).json(
+      errorResponse('FETCH_ERROR', 'Erro ao listar tokens', error.message)
+    );
+  }
+});
+
 module.exports = router;
 

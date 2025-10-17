@@ -1,0 +1,29 @@
+{
+  "tokens": [
+    {
+      "id": "token_001",
+      "token": "PARCERIA_ghi789rst",
+      "professionalId": "prof_004",
+      "professionalName": "Dra. Maria Oliveira",
+      "professionalType": "psicologo",
+      "createdAt": "2025-10-16T20:00:00.000Z",
+      "expiresAt": "2025-10-23T20:00:00.000Z",
+      "status": "pending",
+      "claimedBy": null,
+      "claimedAt": null
+    },
+    {
+      "id": "token_002",
+      "token": "PARCERIA_abc123xyz",
+      "professionalId": "prof_001",
+      "professionalName": "Dr. Carlos Silva",
+      "professionalType": "fonoaudiologo",
+      "createdAt": "2025-01-14T09:00:00.000Z",
+      "expiresAt": "2025-01-21T09:00:00.000Z",
+      "status": "claimed",
+      "claimedBy": "prof_002",
+      "claimedAt": "2025-01-15T10:30:00.000Z"
+    }
+  ]
+}
+

@@ -1,0 +1,29 @@
+{
+  "partnerships": [
+    {
+      "id": "partnership_001",
+      "professionalA": "prof_001",
+      "professionalB": "prof_002",
+      "nameA": "Dr. Carlos Silva",
+      "nameB": "Dra. Ana Santos",
+      "typeA": "fonoaudiologo",
+      "typeB": "psicologo",
+      "status": "active",
+      "createdAt": "2025-01-15T10:30:00.000Z",
+      "token": "PARCERIA_abc123xyz"
+    },
+    {
+      "id": "partnership_002",
+      "professionalA": "prof_001",
+      "professionalB": "prof_003",
+      "nameA": "Dr. Carlos Silva",
+      "nameB": "Dr. João Costa",
+      "typeA": "fonoaudiologo",
+      "typeB": "fonoaudiologo",
+      "status": "active",
+      "createdAt": "2025-01-20T14:20:00.000Z",
+      "token": "PARCERIA_def456uvw"
+    }
+  ]
+}
+

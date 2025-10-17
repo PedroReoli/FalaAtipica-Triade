@@ -127,3 +127,4 @@ Se seguiu os passos e viu:
 
 **Próximo:** Use o `docs/GUIA-DE-TESTES-MANUAL.md` para testar TODAS as funcionalidades!
 
+

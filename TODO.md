@@ -1,7 +1,59 @@
 # 📋 TODO - FalaAtípica Triade
 
-**Última Atualização:** 14 de Outubro de 2025
-**Versão:** 1.0.0
+**Última Atualização:** 17 de Outubro de 2025
+**Versão:** 1.2.0
+
+---
+
+## ✅ **IMPLEMENTAÇÕES RECENTES (v1.2.0)**
+
+### **Funcionalidades Críticas Concluídas:**
+
+#### 1. ✅ **Progresso por Jogo em Tempo Real (Tutors)**
+
+- Listener `child-game-completed` otimizado
+- Cards de jogos atualizam automaticamente quando criança completa jogo
+- **SEM necessidade de Pull to Refresh**
+- Logs informativos para debugging
+- **Arquivo:** `Tutors/src/screens/ProgressScreen.tsx`
+
+#### 2. ✅ **Sistema de Parcerias Simplificado (Pro)**
+
+- Sistema baseado em **TOKEN** (não mais convites complexos)
+- **Fluxo simples:**
+  1. Profissional A gera token
+  2. Profissional A compartilha token (WhatsApp, email, etc.)
+  3. Profissional B reivindica token
+  4. Parceria estabelecida instantaneamente!
+- **Rotas API:**
+  - `POST /api/pro/partnership-token` - Gera token
+  - `POST /api/pro/claim-partnership` - Reivindica token
+  - `GET /api/pro/partnerships/:professionalId` - Lista parcerias
+  - `GET /api/pro/my-tokens/:professionalId` - Lista tokens gerados
+- **Mockup:**
+  - `Mockup/shared/partnerships.json`
+  - `Mockup/shared/partnership-tokens.json`
+- **UI Completa:**
+  - Botão "Gerar Token de Parceria"
+  - Modal com token copiável
+  - Campo "Reivindicar Parceria"
+  - Lista de parcerias ativas
+  - Lista de tokens gerados
+- **Socket.IO:** Notificações em tempo real quando parceria é estabelecida
+- **Validações:** Token único, expira em 7 dias, não pode usar consigo mesmo
+- **Arquivo:** `Pro/src/pages/SettingsPage.tsx`, `api/routes/pro.js`
+
+### **Funcionalidades Anteriores (v1.0.0 - v1.1.0):**
+
+- ✅ Sistema de Lembretes (Pro → Kids)
+- ✅ Notificações em Tempo Real (Kids → Tutors, Kids → Pro)
+- ✅ Agendas Unificadas (shared/agendas.json)
+- ✅ Último Acesso em Tempo Real (Tutors)
+- ✅ Contexto de Paciente (Pro - campo bloqueado)
+- ✅ 4 Jogos Completos (Kids)
+- ✅ Compartilhamento de Dados entre Apps
+- ✅ Fallbacks Offline Completos
+- ✅ Socket.IO em Tempo Real
 
 ---
 

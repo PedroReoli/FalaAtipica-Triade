@@ -86,11 +86,12 @@ export const ProgressScreen: React.FC = () => {
       
       // Verificar se é uma das minhas crianças
       if (currentUser && currentUser.criancasIds && currentUser.criancasIds.includes(data.userId)) {
-        console.log('✅ Recarregando progresso automaticamente');
+        console.log('✅ Recarregando progresso automaticamente (incluindo cards de jogos)');
         
-        // Se for a criança atualmente selecionada, recarregar
+        // Se for a criança atualmente selecionada, recarregar TUDO
         if (data.userId === selectedChild) {
-          loadProgressData();
+          loadProgressData(); // Atualiza estatísticas gerais E cards de jogos
+          console.log(`🎮 Card do jogo "${data.gameName}" será atualizado automaticamente`);
         }
       }
     });

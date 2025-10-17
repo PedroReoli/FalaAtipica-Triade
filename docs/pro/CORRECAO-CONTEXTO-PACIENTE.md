@@ -271,3 +271,4 @@ Permitir escolha de paciente quando:
 **Última Atualização:** 16/10/2025 - 23:55  
 **Testado:** ⏳ Pendente
 
+
