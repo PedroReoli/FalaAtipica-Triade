@@ -37,7 +37,6 @@
 
 ### **2. Jogo: Igual-Diferente** ✅ REFATORADO - ⏳ GERAR IMAGENS
 
-⚠️ **ATENÇÃO - MUDANÇA CRÍTICA PLANEJADA:** Ver `TODO.md` → "PRIORIDADE CRÍTICA"
 ✅ **LÓGICA ATUALIZADA!** Agora compara objetos SEMELHANTES!
 
 **Como funciona:** Aparecem 2 itens lado a lado (variações do MESMO objeto), criança decide se são IGUAIS ou DIFERENTES
