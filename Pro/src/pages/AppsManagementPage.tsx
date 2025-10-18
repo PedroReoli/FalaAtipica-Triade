@@ -39,7 +39,7 @@ export const AppsManagementPage: React.FC = () => {
       version: '1.2.0',
       status: 'active',
       users: 156,
-      lastUpdate: '2024-01-15',
+      lastUpdate: '2025-10-09',
       description: 'Aplicativo para crianças com jogos e atividades educativas',
       icon: Brain
     },
@@ -50,7 +50,7 @@ export const AppsManagementPage: React.FC = () => {
       version: '1.1.5',
       status: 'active',
       users: 89,
-      lastUpdate: '2024-01-10',
+      lastUpdate: '2025-10-10',
       description: 'Aplicativo para pais acompanharem o progresso das crianças',
       icon: Brain
     }
