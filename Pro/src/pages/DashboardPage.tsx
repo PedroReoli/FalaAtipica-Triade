@@ -137,6 +137,13 @@ export const DashboardPage: React.FC = () => {
               color: "var(--green)",
               change: "+12%",
             },
+            {
+              title: "Relatórios",
+              value: dashboardStats?.totalReports?.toString() || "0",
+              icon: FileText,
+              color: "var(--green)",
+              change: "+8%",
+            },
             // DESABILITADO - Sistema de agenda
             // {
             //   title: "Sessões",
@@ -160,6 +167,13 @@ export const DashboardPage: React.FC = () => {
               icon: Users,
               color: "var(--blue)",
               change: "+8%",
+            },
+            {
+              title: "Relatórios",
+              value: dashboardStats?.totalReports?.toString() || "0",
+              icon: FileText,
+              color: "var(--blue)",
+              change: "+10%",
             },
             // DESABILITADO - Sistema de agenda
             // {
@@ -192,6 +206,13 @@ export const DashboardPage: React.FC = () => {
               color: "var(--red)",
               change: "+18%",
             },
+            {
+              title: "Relatórios",
+              value: dashboardStats?.totalReports?.toString() || "0",
+              icon: FileText,
+              color: "var(--red)",
+              change: "+15%",
+            },
           ],
         }
 
@@ -207,6 +228,13 @@ export const DashboardPage: React.FC = () => {
               icon: Users,
               color: "var(--yellow)",
               change: "+15%",
+            },
+            {
+              title: "Relatórios",
+              value: dashboardStats?.totalReports?.toString() || "0",
+              icon: FileText,
+              color: "var(--yellow)",
+              change: "+12%",
             },
             // DESABILITADO - Sistema de agenda
             // {
@@ -231,6 +259,13 @@ export const DashboardPage: React.FC = () => {
               icon: Users,
               color: "var(--purple)",
               change: "+10%",
+            },
+            {
+              title: "Relatórios",
+              value: dashboardStats?.totalReports?.toString() || "0",
+              icon: FileText,
+              color: "var(--purple)",
+              change: "+9%",
             },
             // DESABILITADO - Sistema de agenda
             // {
