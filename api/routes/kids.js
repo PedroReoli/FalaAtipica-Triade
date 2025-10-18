@@ -4,6 +4,9 @@ const router = express.Router();
 const jsonService = require('../services/jsonService');
 const { successResponse, errorResponse, generateId, calculateOverallProgress } = require('../utils/helpers');
 
+// Cache para lembretes (evitar spam de logs)
+const remindersCache = new Map();
+
 /**
  * @swagger
  * /api/kids/progress:
@@ -297,7 +300,15 @@ router.get('/reminders/:userId', async (req, res) => {
     const naoLidos = lembretesUsuario.filter(r => !r.lido);
     const lidos = lembretesUsuario.filter(r => r.lido);
     
-    console.log(`✅ Lembretes buscados: ${naoLidos.length} não lidos, ${lidos.length} lidos para criança ${userId}`);
+    // Verificar se houve mudança nos dados
+    const cacheKey = `user_${userId}`;
+    const currentState = `${naoLidos.length}-${lidos.length}`;
+    const cachedState = remindersCache.get(cacheKey);
+    
+    if (currentState !== cachedState) {
+      console.log(`✅ Lembretes atualizados: ${naoLidos.length} não lidos, ${lidos.length} lidos para criança ${userId}`);
+      remindersCache.set(cacheKey, currentState);
+    }
     
     res.json(successResponse({
       naoLidos,
