@@ -7,9 +7,9 @@ import {
   Home, 
   Smartphone, 
   Users, 
-  Calendar, 
+  // Calendar, 
   FileText, 
-  Settings, 
+  //  Settings, 
   LogOut
 } from 'lucide-react';
 
@@ -50,12 +50,13 @@ export const DesktopSidebar: React.FC = () => {
       path: '/reports', 
       label: 'Relatórios', 
       icon: FileText 
-    },
-    { 
-      path: '/settings', 
-      label: 'Configurações', 
-      icon: Settings 
     }
+    // DESABILITADO - Configurações
+    // { 
+    //   path: '/settings', 
+    //   label: 'Configurações', 
+    //   icon: Settings 
+    // }
   ];
 
   const isActive = (path: string) => {
