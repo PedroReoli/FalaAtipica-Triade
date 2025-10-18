@@ -42,7 +42,7 @@ export const SettingsPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
   const roleColor = useRoleColor()
-  const { showToast } = useToast()
+  const { success: showSuccess, error: showError } = useToast()
   
   const [partnerships, setPartnerships] = useState<Partnership[]>([])
   const [tokens, setTokens] = useState<Token[]>([])
@@ -143,19 +143,19 @@ export const SettingsPage: React.FC = () => {
         setGeneratedToken(data.data.token)
         setShowGenerateTokenModal(true)
         await loadTokens()
-        showToast('Token gerado com sucesso!', 'success')
+        showSuccess('Token gerado com sucesso!')
       } else {
-        showToast(data.message || 'Erro ao gerar token', 'error')
+        showError(data.message || 'Erro ao gerar token')
       }
     } catch (error) {
       console.error('Erro ao gerar token:', error)
-      showToast('Erro ao gerar token', 'error')
+      showError('Erro ao gerar token')
     }
   }
 
   const handleClaimToken = async () => {
     if (!claimTokenInput.trim()) {
-      showToast('Digite um token válido', 'error')
+      showError('Digite um token válido')
       return
     }
 
@@ -177,23 +177,23 @@ export const SettingsPage: React.FC = () => {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        showToast(`Parceria estabelecida com ${data.data.partner.name}!`, 'success')
+        showSuccess(`Parceria estabelecida com ${data.data.partner.name}!`)
         setShowClaimTokenModal(false)
         setClaimTokenInput('')
         await loadPartnerships()
       } else {
-        showToast(data.message || 'Erro ao reivindicar parceria', 'error')
+        showError(data.message || 'Erro ao reivindicar parceria')
       }
     } catch (error) {
       console.error('Erro ao reivindicar parceria:', error)
-      showToast('Erro ao reivindicar parceria', 'error')
+      showError('Erro ao reivindicar parceria')
     }
   }
 
   const handleCopyToken = () => {
     navigator.clipboard.writeText(generatedToken)
     setCopiedToken(true)
-    showToast('Token copiado!', 'success')
+    showSuccess('Token copiado!')
     setTimeout(() => setCopiedToken(false), 2000)
   }
 

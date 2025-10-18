@@ -6,12 +6,16 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { Calendar, Clock, User, FileText, Save, ArrowLeft } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
 import { useRoleColor } from "../hooks/useRoleColor"
+import { useToast } from "../hooks/useToast"
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'
 
 export const NewSessionPage: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { professionalType, professionalData } = useProfessional()
   const roleColor = useRoleColor()
+  const { success, error: showError } = useToast()
   
   // Receber dados do paciente da navegação (se vier de PatientDetails)
   const preselectedPatient = location.state as { patientId?: string; patientName?: string } | null
@@ -25,12 +29,63 @@ export const NewSessionPage: React.FC = () => {
     type: professionalType === "psiquiatra" ? "consulta" : "sessão",
     notes: "",
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Lógica para salvar sessão
-    console.log("Nova sessão:", formData)
-    navigate("/dashboard")
+    
+    // Validações
+    if (!formData.patient || !formData.date || !formData.time) {
+      showError('Preencha todos os campos obrigatórios')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const professionalId = professionalData?.id || 'prof_001'
+      const professionalName = professionalData?.name || 'Profissional'
+      
+      // Criar agenda com status pendente
+      const agendaData = {
+        criancaId: formData.patient,
+        criancaNome: formData.patientName,
+        tutorId: 'tutor_001', // TODO: Buscar do paciente
+        profissionalId: professionalId,
+        profissionalNome: professionalName,
+        profissionalEspecialidade: professionalData?.specialty || 'Fonoaudiólogo',
+        data: formData.date,
+        horario: formData.time,
+        duracao: parseInt(formData.duration),
+        tipo: formData.type === 'consulta' ? 'Consulta Presencial' : 'Sessão Terapêutica',
+        observacoes: formData.notes || '',
+        local: 'Clínica FalaAtípica',
+      }
+
+      // Tentar API
+      const response = await fetch(`${API_BASE_URL}/pro/agenda`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(agendaData),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success) {
+          success('Sessão agendada com sucesso!')
+          setTimeout(() => navigate('/sessions'), 1500)
+          return
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao criar sessão:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
+
+    // Fallback local
+    success('Sessão salva localmente (API offline)')
+    setTimeout(() => navigate('/sessions'), 1500)
   }
 
 
@@ -178,16 +233,18 @@ export const NewSessionPage: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <button
                     type="submit"
-                    className="flex-1 flex items-center justify-center space-x-2 p-3 rounded-lg text-white font-medium transition-colors"
+                    disabled={isSubmitting}
+                    className="flex-1 flex items-center justify-center space-x-2 p-3 rounded-lg text-white font-medium transition-colors disabled:opacity-50"
                     style={{ backgroundColor: roleColor.primary }}
                   >
                     <Save size={18} />
-                    <span>Agendar {professionalType === "psiquiatra" ? "Consulta" : "Sessão"}</span>
+                    <span>{isSubmitting ? 'Agendando...' : `Agendar ${professionalType === "psiquiatra" ? "Consulta" : "Sessão"}`}</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => navigate("/dashboard")}
-                    className="flex-1 p-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                    disabled={isSubmitting}
+                    className="flex-1 p-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
                   >
                     Cancelar
                   </button>

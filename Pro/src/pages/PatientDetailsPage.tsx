@@ -18,7 +18,7 @@ const PatientDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { professionalType } = useProfessional();
   const colors = useProfessionalColors(professionalType);
-  const [activeTab, setActiveTab] = useState<'info' | 'sessions' | 'reports' | 'documents' | 'history' | 'mobile'>('info');
+  const [activeTab, setActiveTab] = useState<'info' | 'sessions' | 'reports' | 'documents' | 'history'>('info');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showEditHistoryModal, setShowEditHistoryModal] = useState(false);
   const [showAddHistoryModal, setShowAddHistoryModal] = useState(false);
@@ -329,24 +329,6 @@ const PatientDetailsPage: React.FC = () => {
                     <span>Histórico</span>
                   </div>
                 </button>
-                <button
-                  onClick={() => setActiveTab('mobile')}
-                  className={`flex-1 px-6 py-3 font-medium transition-colors ${
-                    activeTab === 'mobile'
-                      ? 'border-b-2 text-white'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                  style={{
-                    borderBottomColor: activeTab === 'mobile' ? colors.primary : 'transparent',
-                    backgroundColor: activeTab === 'mobile' ? colors.primary : 'transparent',
-                    color: activeTab === 'mobile' ? 'white' : undefined
-                  }}
-                >
-                  <div className="flex items-center justify-center space-x-2">
-                    <Smartphone size={18} />
-                    <span>Aplicações</span>
-                  </div>
-                </button>
               </div>
 
               <div className="p-6">
@@ -561,26 +543,25 @@ const PatientDetailsPage: React.FC = () => {
                       </div>
                     )}
 
-                    {/* Seção de upload */}
-                    <div className="text-center py-12">
-                      <FileText size={64} className="mx-auto text-gray-400 mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {uploadedFiles.length > 0 ? 'Adicionar Mais Relatórios' : 'Nenhum relatório disponível'}
-                      </h3>
-                      <p className="text-gray-600 mb-6">
-                        {uploadedFiles.length > 0 
-                          ? 'Faça upload de mais relatórios para este paciente'
-                          : 'Os relatórios gerados para este paciente aparecerão aqui'
-                        }
-                      </p>
-                      <button
-                        onClick={() => triggerFileUpload('report-upload')}
-                        className="px-6 py-3 rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: colors.primary }}
-                      >
-                        Upload Relatório
-                      </button>
-                    </div>
+                    {/* Empty state se não houver uploads */}
+                    {uploadedFiles.length === 0 && (
+                      <div className="text-center py-12">
+                        <FileText size={64} className="mx-auto text-gray-400 mb-4" />
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          Nenhum relatório enviado
+                        </h3>
+                        <p className="text-gray-600 mb-6">
+                          Faça upload de relatórios para este paciente
+                        </p>
+                        <button
+                          onClick={() => triggerFileUpload('report-upload')}
+                          className="px-6 py-3 rounded-lg text-white font-medium transition-colors"
+                          style={{ backgroundColor: colors.primary }}
+                        >
+                          Upload Relatório
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -629,56 +610,18 @@ const PatientDetailsPage: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {/* Documentos mockados */}
-                      <div className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <FileText size={24} className="text-blue-500" />
-                            <div>
-                              <p className="font-medium text-gray-900">Avaliação Inicial</p>
-                              <p className="text-sm text-gray-500">PDF • 2.3 MB</p>
-                              <p className="text-xs text-gray-400">15/01/2024</p>
-                            </div>
-                          </div>
-                          <button className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors">
-                            Download
-                          </button>
-                        </div>
+                    {/* Empty state se não houver uploads */}
+                    {uploadedFiles.length === 0 && (
+                      <div className="text-center py-12">
+                        <FolderOpen size={64} style={{ color: '#D1D5DB', margin: '0 auto 16px' }} />
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                          Nenhum documento enviado
+                        </h3>
+                        <p className="text-gray-600 mb-6">
+                          Faça upload de documentos para este paciente
+                        </p>
                       </div>
-                      
-                      <div className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <FileText size={24} className="text-green-500" />
-                            <div>
-                              <p className="font-medium text-gray-900">Relatório de Progresso</p>
-                              <p className="text-sm text-gray-500">PDF • 1.8 MB</p>
-                              <p className="text-xs text-gray-400">22/01/2024</p>
-                            </div>
-                          </div>
-                          <button className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors">
-                            Download
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <div className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <FileText size={24} className="text-purple-500" />
-                            <div>
-                              <p className="font-medium text-gray-900">Exames Complementares</p>
-                              <p className="text-sm text-gray-500">PDF • 3.1 MB</p>
-                              <p className="text-xs text-gray-400">28/01/2024</p>
-                            </div>
-                          </div>
-                          <button className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors">
-                            Download
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 )}
 
@@ -764,298 +707,6 @@ const PatientDetailsPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                )}
-
-                {/* Tab: Aplicações Vinculadas */}
-                {activeTab === 'mobile' && (
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
-                        Aplicações Vinculadas
-                      </h3>
-                      <button
-                        className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: colors.primary }}
-                      >
-                        <Activity size={18} className="inline mr-2" />
-                        Gerenciar Acessos
-                      </button>
-                    </div>
-                    
-                    {/* Resumo Geral */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                      <div className="bg-white p-2 rounded-lg border border-gray-200 shadow-sm" style={{ borderLeft: `4px solid ${colors.primary}` }}>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                            <Smartphone size={16} className="text-white" />
-                          </div>
-                          <div>
-                            <p className="text-2xl font-bold text-gray-900">3</p>
-                            <p className="text-sm text-gray-600">Dispositivos</p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                            <Activity size={20} className="text-white" />
-                          </div>
-                          <div>
-                            <p className="text-2xl font-bold text-gray-900">2</p>
-                            <p className="text-sm text-gray-600">Apps Ativos</p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
-                            <Clock size={20} className="text-white" />
-                          </div>
-                          <div>
-                            <p className="text-2xl font-bold text-gray-900">15</p>
-                            <p className="text-sm text-gray-600">Dias Restantes</p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-                            <FileText size={20} className="text-white" />
-                          </div>
-                          <div>
-                            <p className="text-2xl font-bold text-gray-900">24h</p>
-                            <p className="text-sm text-gray-600">Último Acesso</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Apps KIDS e TUTORS */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                      {/* App KIDS */}
-                      <div className="bg-white rounded-lg shadow-sm border border-gray-200" style={{ borderLeft: `4px solid ${colors.primary}` }}>
-                        <div className="p-3">
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-base">K</span>
-                              </div>
-                              <div>
-                                <h4 className="text-base font-semibold text-gray-900">App KIDS</h4>
-                                <p className="text-xs text-gray-600">Aplicativo para crianças</p>
-                              </div>
-                            </div>
-                            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">
-                              Ativo
-                            </span>
-                          </div>
-                          
-                          <div className="space-y-4">
-                            {/* Dispositivos e Assinatura */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                              <div className="border border-gray-200 rounded-lg p-2">
-                                <div className="flex items-center justify-between mb-2">
-                                  <h5 className="text-sm font-semibold text-gray-900">Dispositivos</h5>
-                                  <span className="text-xs text-gray-500">2 de 3</span>
-                                </div>
-                                <div className="space-y-1">
-                                <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-200">
-                                  <div className="flex items-center space-x-2">
-                                    <Smartphone size={16} className="text-blue-500" />
-                                    <div>
-                                      <p className="text-sm font-medium text-gray-900">iPhone 13</p>
-                                      <p className="text-xs text-gray-500">iOS 16.0 • 2h atrás</p>
-                                    </div>
-                                  </div>
-                                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">
-                                    Ativo
-                                  </span>
-                                </div>
-                                
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                  <div className="flex items-center space-x-3">
-                                    <Smartphone size={18} className="text-blue-500" />
-                                    <div>
-                                      <p className="text-sm font-medium text-gray-900">iPad Air</p>
-                                      <p className="text-xs text-gray-500">iOS 15.7 • Último acesso: 5 dias atrás</p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-center space-x-2">
-                                    <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                                    <span className="text-xs text-yellow-600 font-medium">Inativo</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                              <div className="border border-gray-200 rounded-lg p-2">
-                                <div className="flex items-center justify-between mb-2">
-                                  <h5 className="text-sm font-semibold text-gray-900">Assinatura</h5>
-                                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">Ativa</span>
-                                </div>
-                                <div className="grid grid-cols-2 gap-2">
-                                  <div>
-                                    <p className="text-sm font-medium text-gray-900">Premium</p>
-                                    <p className="text-xs text-gray-500">R$ 29,90/mês</p>
-                                  </div>
-                                  <div className="text-right">
-                                    <p className="text-sm font-medium text-gray-900">3 dispositivos</p>
-                                    <p className="text-xs text-gray-500">Vence: 15/03/24</p>
-                                  </div>
-                                </div>
-                              </div>
-                            
-                            {/* Token de Acesso */}
-                            <div className="border border-gray-200 rounded-lg p-2">
-                              <div className="flex items-center justify-between mb-2">
-                                <h5 className="text-sm font-semibold text-gray-900">Token de Acesso</h5>
-                                <button className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200 transition-colors">
-                                  Revogar
-                                </button>
-                              </div>
-                              <div className="space-y-2">
-                                <div className="flex items-center space-x-2">
-                                  <input
-                                    type="text"
-                                    value="KIDS-ABC123-XYZ789"
-                                    readOnly
-                                    className="flex-1 px-2 py-1 text-sm bg-gray-100 border border-gray-200 rounded-lg font-mono"
-                                  />
-                                  <button className="px-3 py-1 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                                    Copiar
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* App TUTORS */}
-                      <div className="bg-white rounded-lg shadow-sm border border-gray-200" style={{ border: `1px solid ${colors.primary}` }}>
-                        <div className="p-4">
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-base">T</span>
-                              </div>
-                              <div>
-                                <h4 className="text-base font-semibold text-gray-900">App TUTORS</h4>
-                                <p className="text-xs text-gray-600">Aplicativo para tutores</p>
-                              </div>
-                            </div>
-                            <span className="px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">
-                              Ativo
-                            </span>
-                          </div>
-                          
-                          <div className="space-y-4">
-                            {/* Dispositivos Conectados */}
-                            <div className="border border-gray-200 rounded-lg p-4">
-                              <div className="flex items-center justify-between mb-3">
-                                <h5 className="font-semibold text-gray-900">Dispositivos Conectados</h5>
-                                <span className="text-xs text-gray-500">1 de 1 dispositivo</span>
-                              </div>
-                              <div className="space-y-2">
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                  <div className="flex items-center space-x-3">
-                                    <Smartphone size={18} className="text-green-500" />
-                                    <div>
-                                      <p className="text-sm font-medium text-gray-900">Samsung Galaxy S22</p>
-                                      <p className="text-xs text-gray-500">Android 13 • Último acesso: 1h atrás</p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-center space-x-2">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                                    <span className="text-xs text-green-600 font-medium">Ativo</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            {/* Assinatura */}
-                            <div className="border border-gray-200 rounded-lg p-4">
-                              <h5 className="font-semibold text-gray-900 mb-3">Plano de Assinatura</h5>
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">Básico</p>
-                                  <p className="text-xs text-gray-500">1 dispositivo • R$ 19,90/mês</p>
-                                </div>
-                                <div className="text-right">
-                                  <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded font-medium">Ativa</span>
-                                  <p className="text-xs text-gray-500 mt-1">Vence em 20/03/2024</p>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            {/* Token de Acesso */}
-                            <div className="border border-gray-200 rounded-lg p-4">
-                              <h5 className="font-semibold text-gray-900 mb-3">Token de Acesso</h5>
-                              <div className="space-y-3">
-                                <div className="flex items-center space-x-2">
-                                  <input
-                                    type="text"
-                                    value="TUTORS-DEF456-UVW012"
-                                    readOnly
-                                    className="flex-1 p-3 text-sm bg-gray-100 border border-gray-300 rounded-lg font-mono"
-                                  />
-                                  <button className="px-4 py-3 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                                    Copiar
-                                  </button>
-                                </div>
-                                <div className="flex space-x-2">
-                                  <button className="flex-1 px-4 py-2 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                                    Gerar Novo Token
-                                  </button>
-                                  <button className="px-4 py-2 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                                    Revogar
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Ações Gerais */}
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200" style={{ borderLeft: `4px solid ${colors.primary}` }}>
-                      <div className="p-3">
-                        <h4 className="text-sm font-semibold text-gray-900 mb-3" style={{ color: colors.primary }}>
-                          Ações de Gerenciamento
-                        </h4>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                          <button className="p-2 bg-white rounded-lg border border-gray-200 hover:shadow-sm transition-shadow text-center hover:border-red-300 flex flex-col items-center">
-                            <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center mb-1">
-                              <Smartphone size={16} className="text-white" />
-                            </div>
-                            <p className="text-xs font-medium text-gray-900">Revogar Tokens</p>
-                          </button>
-                          
-                          <button className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center hover:border-yellow-300">
-                            <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mx-auto mb-3">
-                              <Activity size={20} className="text-white" />
-                            </div>
-                            <p className="text-sm font-medium text-gray-900 mb-1">Histórico de Acessos</p>
-                            <p className="text-xs text-gray-500">Ver logs de login e logout</p>
-                          </button>
-                          
-                          <button className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center hover:border-purple-300">
-                            <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-3">
-                              <FileText size={20} className="text-white" />
-                            </div>
-                            <p className="text-sm font-medium text-gray-900 mb-1">Relatório de Uso</p>
-                            <p className="text-xs text-gray-500">Estatísticas de uso dos apps</p>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Applications tab content end */}
-                </div>
                 )}
               </div>
             </div>
