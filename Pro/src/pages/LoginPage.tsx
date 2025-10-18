@@ -240,12 +240,18 @@ const LoginPage: React.FC = () => {
         </div>
       )}
       
-      {/* Lado Esquerdo - Vazio */}
-      <div className="hidden lg:flex lg:w-1/2 bg-white"></div>
+      {/* Lado Esquerdo - Imagem com fundo branco (70%) */}
+      <div className="hidden lg:flex lg:w-[70%] bg-white">
+        <img 
+          src="/assets/login.png" 
+          alt="FalaAtípica" 
+          className="w-full h-full object-cover"
+        />
+      </div>
 
-      {/* Lado Direito - Formulário com fundo azul */}
+      {/* Lado Direito - Formulário com fundo azul (30%) */}
       <div 
-        className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8"
+        className="w-full lg:w-[30%] flex items-center justify-center p-4 sm:p-6 lg:p-8"
         style={{ backgroundColor: 'var(--background-blue)' }}
       >
         <div className="w-full max-w-sm sm:max-w-md">
