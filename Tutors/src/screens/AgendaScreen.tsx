@@ -53,6 +53,8 @@ export const AgendaScreen: React.FC = () => {
     loadAvailableChildren();
     loadAgendas();
     
+    // DESABILITADO - Sistema de agenda
+    /*
     // Socket.IO: escutar novas agendas criadas pelo Pro
     socketService.on('agenda-created', (data: any) => {
       console.log('📅 Nova agenda recebida do Pro:', data);
@@ -66,6 +68,7 @@ export const AgendaScreen: React.FC = () => {
     return () => {
       socketService.off('agenda-created');
     };
+    */
   }, []);
 
   useEffect(() => {
@@ -127,6 +130,8 @@ export const AgendaScreen: React.FC = () => {
     }
   };
 
+  // DESABILITADO - Sistema de agenda
+  /*
   const loadAgendas = async (isRefreshing = false) => {
     try {
       if (!isRefreshing) setIsLoading(true);
@@ -188,6 +193,14 @@ export const AgendaScreen: React.FC = () => {
     } finally {
       if (!isRefreshing) setIsLoading(false);
     }
+  };
+  */
+
+  // Função simplificada - sem agenda por enquanto
+  const loadAgendas = async (isRefreshing = false) => {
+    setIsLoading(true);
+    setAgendas([]); // Lista vazia por enquanto
+    setIsLoading(false);
   };
 
   const onRefresh = async () => {

@@ -502,8 +502,9 @@ export const PatientsPage: React.FC = () => {
               </div>
             </div>
 
+            {/* DESABILITADO - Sistema de agenda */}
             {/* Sessions Info */}
-                  <div className="space-y-1">
+                  {/* <div className="space-y-1">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-gray-600">Última:</span>
                       <span className="font-medium text-xs">
@@ -516,7 +517,7 @@ export const PatientsPage: React.FC = () => {
                   {new Date(patient.nextSession).toLocaleDateString('pt-BR')}
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
         ))}
                   </div>

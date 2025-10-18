@@ -1,20 +1,3 @@
 {
-  "observations": [
-    {
-      "id": "obs_001",
-      "tutorId": "tutor_001",
-      "tutorName": "Carlos Silva",
-      "childId": "1",
-      "childName": "João Silva",
-      "professionalId": "prof_001",
-      "titulo": "Comportamento em casa",
-      "mensagem": "João tem mostrado mais interesse em conversar durante as refeições. Está fazendo perguntas e tentando pronunciar palavras novas.",
-      "tipo": "progresso",
-      "prioridade": "media",
-      "lido": false,
-      "criadoEm": "2025-10-15T18:30:00Z"
-    }
-  ]
+  "observations": []
 }
-
-

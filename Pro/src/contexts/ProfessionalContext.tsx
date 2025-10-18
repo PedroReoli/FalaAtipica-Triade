@@ -22,6 +22,7 @@ export const ProfessionalProvider: React.FC<ProfessionalProviderProps> = ({ chil
   const [professionalType, setProfessionalType] = useState<ProfessionalType>('fonoaudiologo');
   const [currentUser, setCurrentUser] = useState<MockUser | null>(null);
   const [professionalData, setProfessionalData] = useState({
+    id: 'prof_001', // ID padrão
     name: 'Dr. Silva',
     license: 'CRFa 12345',
     specialty: 'Fonoaudiologia Infantil',
@@ -36,6 +37,7 @@ export const ProfessionalProvider: React.FC<ProfessionalProviderProps> = ({ chil
       setCurrentUser(user);
       setProfessionalType(user.type);
       setProfessionalData({
+        id: user.id, // Usar ID do usuário logado
         name: user.name,
         license: user.license,
         specialty: user.specialty,
@@ -68,6 +70,7 @@ export const ProfessionalProvider: React.FC<ProfessionalProviderProps> = ({ chil
       const data = getProfessionalData(professionalType);
       setProfessionalData(prev => ({
         ...prev,
+        id: currentUser.id, // Garantir que o ID está sempre presente
         name: currentUser.name,
         license: currentUser.license,
         specialty: currentUser.specialty,

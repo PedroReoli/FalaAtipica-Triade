@@ -1,4 +1,4 @@
 {
-  "sessions": []
+  "sessions": [],
+  "_note": "Este arquivo não é mais usado. Todas as sessões agora são gerenciadas através de agendas.json"
 }
-

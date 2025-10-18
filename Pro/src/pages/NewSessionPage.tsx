@@ -8,14 +8,14 @@ import { useProfessional } from "../contexts/ProfessionalContext"
 import { useRoleColor } from "../hooks/useRoleColor"
 import { useToast } from "../hooks/useToast"
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api' // DESABILITADO - Sistema de agenda
 
 export const NewSessionPage: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { professionalType, professionalData } = useProfessional()
+  const { professionalType } = useProfessional() // professionalData removido
   const roleColor = useRoleColor()
-  const { success, error: showError } = useToast()
+  const { error: showError } = useToast() // success removido
   
   // Receber dados do paciente da navegação (se vier de PatientDetails)
   const preselectedPatient = location.state as { patientId?: string; patientName?: string } | null
@@ -24,13 +24,17 @@ export const NewSessionPage: React.FC = () => {
     patient: preselectedPatient?.patientId || "",
     patientName: preselectedPatient?.patientName || "",
     date: "",
-    time: "",
+    time: "09:00", // Horário padrão inicial
     duration: "60",
     type: professionalType === "psiquiatra" ? "consulta" : "sessão",
     notes: "",
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  // const [isSubmitting, setIsSubmitting] = useState(false) // DESABILITADO - Sistema de agenda
+  const [selectedHour, setSelectedHour] = useState("09")
+  const [selectedMinute, setSelectedMinute] = useState("00")
 
+  // DESABILITADO - Sistema de agenda
+  /*
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -46,11 +50,38 @@ export const NewSessionPage: React.FC = () => {
       const professionalId = professionalData?.id || 'prof_001'
       const professionalName = professionalData?.name || 'Profissional'
       
-      // Criar agenda com status pendente
+      // Buscar informações do paciente para pegar o tutorId
+      let tutorId = 'tutor_001'; // Padrão
+      let tutorNome = '';
+      let tutorEmail = '';
+      let tutorTelefone = '';
+      
+      try {
+        const patientResponse = await fetch(`${API_BASE_URL}/pro/patient/${formData.patient}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        
+        if (patientResponse.ok) {
+          const patientData = await patientResponse.json();
+          if (patientData.success && patientData.data.patient.tutor) {
+            tutorNome = patientData.data.patient.tutor.nome || '';
+            tutorEmail = patientData.data.patient.tutor.email || '';
+            tutorTelefone = patientData.data.patient.tutor.telefone || '';
+          }
+        }
+      } catch (error) {
+        console.warn('⚠️ Não foi possível carregar dados do tutor');
+      }
+      
+      // Criar agenda com status pendente (tutor precisa confirmar)
       const agendaData = {
         criancaId: formData.patient,
         criancaNome: formData.patientName,
-        tutorId: 'tutor_001', // TODO: Buscar do paciente
+        tutorId: tutorId,
+        tutorNome: tutorNome,
+        tutorEmail: tutorEmail,
+        tutorTelefone: tutorTelefone,
         profissionalId: professionalId,
         profissionalNome: professionalName,
         profissionalEspecialidade: professionalData?.specialty || 'Fonoaudiólogo',
@@ -62,6 +93,8 @@ export const NewSessionPage: React.FC = () => {
         local: 'Clínica FalaAtípica',
       }
 
+      console.log('📝 [NEW SESSION] Criando agenda:', agendaData);
+
       // Tentar API
       const response = await fetch(`${API_BASE_URL}/pro/agenda`, {
         method: 'POST',
@@ -72,22 +105,28 @@ export const NewSessionPage: React.FC = () => {
       if (response.ok) {
         const data = await response.json()
         if (data.success) {
-          success('Sessão agendada com sucesso!')
+          console.log('✅ [NEW SESSION] Agenda criada com sucesso');
+          success('Sessão agendada com sucesso! O tutor receberá uma notificação.')
           setTimeout(() => navigate('/sessions'), 1500)
           return
         }
       }
+      
+      throw new Error('Resposta da API não foi bem-sucedida');
     } catch (error) {
-      console.error('Erro ao criar sessão:', error)
+      console.error('❌ [NEW SESSION] Erro ao criar sessão:', error)
+      showError('Erro ao agendar sessão. Tente novamente.')
     } finally {
       setIsSubmitting(false)
     }
-
-    // Fallback local
-    success('Sessão salva localmente (API offline)')
-    setTimeout(() => navigate('/sessions'), 1500)
   }
+  */
 
+  // Função simplificada - sem agenda por enquanto
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    showError('Sistema de agenda temporariamente desabilitado')
+  }
 
   return (
     <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
@@ -183,15 +222,52 @@ export const NewSessionPage: React.FC = () => {
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: "var(--text-black)" }}>
                       <Clock size={16} className="inline mr-2" />
-                      Hora
+                      Horário
                     </label>
-                    <input
-                      type="time"
-                      value={formData.time}
-                      onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
-                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Seletor de Hora */}
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-1">Hora</label>
+                        <select
+                          value={selectedHour}
+                          onChange={(e) => {
+                            setSelectedHour(e.target.value);
+                            setFormData({ ...formData, time: `${e.target.value}:${selectedMinute}` });
+                          }}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg font-semibold"
+                          required
+                        >
+                          {Array.from({ length: 14 }, (_, i) => i + 7).map((hour) => (
+                            <option key={hour} value={hour.toString().padStart(2, '0')}>
+                              {hour.toString().padStart(2, '0')}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Seletor de Minuto */}
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-1">Minuto</label>
+                        <select
+                          value={selectedMinute}
+                          onChange={(e) => {
+                            setSelectedMinute(e.target.value);
+                            setFormData({ ...formData, time: `${selectedHour}:${e.target.value}` });
+                          }}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg font-semibold"
+                          required
+                        >
+                          {['00', '15', '30', '45'].map((minute) => (
+                            <option key={minute} value={minute}>
+                              {minute}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2 text-center">
+                      Horário selecionado: <span className="font-bold" style={{ color: roleColor.primary }}>{selectedHour}:{selectedMinute}</span>
+                    </p>
                   </div>
                 </div>
 
@@ -233,17 +309,17 @@ export const NewSessionPage: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={true} // DESABILITADO - Sistema de agenda
                     className="flex-1 flex items-center justify-center space-x-2 p-3 rounded-lg text-white font-medium transition-colors disabled:opacity-50"
                     style={{ backgroundColor: roleColor.primary }}
                   >
                     <Save size={18} />
-                    <span>{isSubmitting ? 'Agendando...' : `Agendar ${professionalType === "psiquiatra" ? "Consulta" : "Sessão"}`}</span>
+                    <span>Sistema Desabilitado</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => navigate("/dashboard")}
-                    disabled={isSubmitting}
+                    disabled={false}
                     className="flex-1 p-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
                   >
                     Cancelar

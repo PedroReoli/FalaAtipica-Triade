@@ -47,8 +47,7 @@ import { MedicationsPage } from '../pages/MedicationsPage';
 // 📋 Prescrições (Psiquiatras)
 import { PrescriptionsPage } from '../pages/PrescriptionsPage';
 
-// 📅 Calendário
-import { FullCalendarPage } from '../pages/FullCalendarPage';
+// 📅 Calendário - REMOVIDO (refatoração para grid de cards)
 
 // 👤 Perfil e Configurações
 import { ProfilePage } from '../pages/ProfilePage';
@@ -149,8 +148,7 @@ export const AppRoutes = () => {
         <Route path="/prescriptions/new" element={<div className="p-8 text-center">Nova Prescrição - Em desenvolvimento</div>} />
         <Route path="/prescriptions/:id" element={<div className="p-8 text-center">Visualizar Prescrição - Em desenvolvimento</div>} />
         
-        {/* 📅 CALENDÁRIO */}
-        <Route path="/full-calendar" element={<FullCalendarPage />} />
+        {/* 📅 CALENDÁRIO - REMOVIDO (refatoração para grid de cards) */}
         
         {/* 👤 PERFIL E CONFIGURAÇÕES */}
         <Route path="/profile" element={<ProfilePage />} />

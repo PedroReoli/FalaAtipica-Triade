@@ -40,11 +40,12 @@ export const DesktopSidebar: React.FC = () => {
       label: professionalData.type === 'pedagogo' ? 'Alunos' : 'Pacientes',
       icon: Users 
     },
-    { 
-      path: '/sessions', 
-      label: professionalData.type === 'psiquiatra' ? 'Consultas' : 'Sessões',
-      icon: Calendar 
-    },
+    // DESABILITADO - Sistema de agenda
+    // { 
+    //   path: '/sessions', 
+    //   label: professionalData.type === 'psiquiatra' ? 'Consultas' : 'Sessões',
+    //   icon: Calendar 
+    // },
     { 
       path: '/reports', 
       label: 'Relatórios', 

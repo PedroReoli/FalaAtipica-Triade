@@ -64,20 +64,118 @@ router.post('/patient', async (req, res) => {
 });
 
 // GET /api/pro/sessions - Listar todas as sessões do profissional
+// GET /api/pro/sessions - Listar sessões (DESABILITADO - usa agendas)
+/*
 router.get('/sessions', async (req, res) => {
   try {
     const { professionalId } = req.query;
     
-    // Buscar sessões do arquivo compartilhado
-    const sessionsData = await jsonService.readJSON('shared/sessions.json').catch(() => ({ sessions: [] }));
-    const allSessions = sessionsData.sessions || [];
+    console.log('📋 [API] GET /pro/sessions - Query completo:', req.query);
+    console.log('📋 [API] GET /pro/sessions - professionalId:', professionalId);
     
-    // Filtrar por profissional se fornecido
+    // Buscar agendas (novo sistema)
+    const agendasData = await jsonService.readJSON('shared/agendas.json').catch(() => ({ agendas: [] }));
+    let allAgendas = agendasData.agendas || [];
+    
+    // Fallback mockado se não houver dados
+    if (allAgendas.length === 0) {
+      console.log('📋 [API] Arquivo agendas.json vazio, usando fallback mockado');
+      allAgendas = [
+        {
+          id: 'fallback_001',
+          criancaId: '1',
+          criancaNome: 'João Silva',
+          tutorId: 'tutor_001',
+          tutorNome: 'Carlos Silva',
+          tutorEmail: 'carlos@tutors.com',
+          tutorTelefone: '(11) 99999-8888',
+          profissionalId: 'prof_001',
+          profissionalNome: 'Dr. Silva',
+          profissionalEspecialidade: 'Fonoaudiologia Infantil',
+          data: '2025-10-22',
+          horario: '14:00',
+          duracao: 60,
+          tipo: 'Consulta Presencial',
+          status: 'pendente',
+          observacoes: 'Sessão de avaliação inicial',
+          local: 'Clínica FalaAtípica',
+          criadoEm: new Date().toISOString()
+        },
+        {
+          id: 'fallback_002',
+          criancaId: '2',
+          criancaNome: 'Maria Santos',
+          tutorId: 'tutor_002',
+          tutorNome: 'Ana Santos',
+          tutorEmail: 'ana@tutors.com',
+          tutorTelefone: '(11) 88888-7777',
+          profissionalId: 'prof_001',
+          profissionalNome: 'Dr. Silva',
+          profissionalEspecialidade: 'Fonoaudiologia Infantil',
+          data: '2025-10-25',
+          horario: '10:00',
+          duracao: 45,
+          tipo: 'Consulta Online',
+          status: 'pendente',
+          observacoes: 'Acompanhamento de progresso',
+          local: 'Google Meet',
+          criadoEm: new Date().toISOString()
+        }
+      ];
+    }
+    
+    console.log('📋 [API] Total de agendas no arquivo:', allAgendas.length);
+    console.log('📋 [API] Todas as agendas:', JSON.stringify(allAgendas.map(a => ({
+      id: a.id, 
+      profissionalId: a.profissionalId,
+      criancaNome: a.criancaNome,
+      data: a.data
+    })), null, 2));
+    
+    // Filtrar por profissional se fornecido e converter para formato de sessão
+    console.log('📋 [API] Filtrando por professionalId:', professionalId);
+    console.log('📋 [API] Tipo de professionalId:', typeof professionalId);
+    
     const filteredSessions = professionalId 
-      ? allSessions.filter(s => s.profissionalId === professionalId)
-      : allSessions;
+      ? allAgendas
+          .filter(agenda => {
+            const match = agenda.profissionalId === professionalId;
+            console.log(`📋 [API] Agenda ${agenda.id}: profissionalId="${agenda.profissionalId}" (tipo: ${typeof agenda.profissionalId}) === "${professionalId}" (tipo: ${typeof professionalId}) ? ${match}`);
+            return match;
+          })
+          .map(agenda => ({
+            id: agenda.id,
+            patient: agenda.criancaNome,
+            patientId: agenda.criancaId,
+            profissionalId: agenda.profissionalId,
+            date: agenda.data,
+            time: agenda.horario,
+            duration: agenda.duracao || 60,
+            status: agenda.status === 'confirmada' ? 'completed' : 
+                    agenda.status === 'cancelada' ? 'cancelled' : 'pending',
+            type: agenda.tipo || 'Sessão Terapêutica',
+            notes: agenda.observacoes || '',
+            professionalType: 'fonoaudiologo', // TODO: pegar do profissional
+            criadoEm: agenda.criadoEm
+          }))
+      : allAgendas.map(agenda => ({
+          id: agenda.id,
+          patient: agenda.criancaNome,
+          patientId: agenda.criancaId,
+          profissionalId: agenda.profissionalId,
+          date: agenda.data,
+          time: agenda.horario,
+          duration: agenda.duracao || 60,
+          status: agenda.status === 'confirmada' ? 'completed' : 
+                  agenda.status === 'cancelada' ? 'cancelled' : 'pending',
+          type: agenda.tipo || 'Sessão Terapêutica',
+          notes: agenda.observacoes || '',
+          professionalType: 'fonoaudiologo',
+          criadoEm: agenda.criadoEm
+        }));
     
-    console.log(`✅ Sessões listadas: ${filteredSessions.length} sessões`);
+    console.log(`✅ [API] Sessões filtradas para ${professionalId}: ${filteredSessions.length} sessões`);
+    console.log('📋 [API] Sessões filtradas:', JSON.stringify(filteredSessions, null, 2));
     
     res.json(successResponse({
       sessions: filteredSessions,
@@ -91,6 +189,7 @@ router.get('/sessions', async (req, res) => {
     );
   }
 });
+*/
 
 // GET /api/pro/dashboard/:professionalId - Estatísticas do dashboard
 router.get('/dashboard/:professionalId', async (req, res) => {
@@ -108,13 +207,14 @@ router.get('/dashboard/:professionalId', async (req, res) => {
       return !!tutor;
     }) || [];
     
-    // Buscar sessões
-    const sessionsData = await jsonService.readJSON('shared/sessions.json').catch(() => ({ sessions: [] }));
-    const sessions = sessionsData.sessions?.filter((s) => s.profissionalId === professionalId) || [];
+    // Buscar sessões (agendas) - DESABILITADO
+    // const agendasData = await jsonService.readJSON('shared/agendas.json').catch(() => ({ agendas: [] }));
+    // const sessions = agendasData.agendas?.filter((s) => s.profissionalId === professionalId) || [];
+    const sessions = []; // Temporariamente vazio
     
     // Calcular sessões desta semana
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    const sessionsThisWeek = sessions.filter((s) => new Date(s.timestamp) >= weekAgo);
+    const sessionsThisWeek = sessions.filter((s) => new Date(s.criadoEm) >= weekAgo);
     
     const stats = {
       totalPatients: pacientes.length,
@@ -182,12 +282,17 @@ router.get('/patients', async (req, res) => {
         id: crianca.id,
         nome: crianca.nome,
         idade: crianca.idade,
-        tutor: tutor.nome,
-        tutorEmail: tutor.email,
+        tutor: {
+          name: tutor.nome,
+          email: tutor.email,
+          phone: tutor.telefone || '(00) 00000-0000',
+          relationship: tutor.relacionamento || 'Responsável'
+        },
         progressoGeral,
-        ultimaSessao: progressoCrianca.length > 0 
+        lastSession: progressoCrianca.length > 0 
           ? progressoCrianca[progressoCrianca.length - 1].timestamp 
-          : null,
+          : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        nextSession: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         diagnostico: 'Atraso no desenvolvimento da linguagem', // Mockado
         status: 'ativo'
       };
@@ -291,30 +396,42 @@ router.get('/patient/:patientId', async (req, res) => {
  */
 router.post('/session', async (req, res) => {
   try {
+    console.log('📝 [API] POST /pro/session - Dados recebidos:', req.body);
+    
     const {
       patientId,
+      patient,
       profissionalId,
-      tipo,
-      observacoes,
-      atividades
+      date,
+      time,
+      duration,
+      type,
+      status,
+      notes
     } = req.body;
     
     // Validações
-    if (!patientId || !profissionalId) {
+    if (!patientId || !profissionalId || !date || !time) {
+      console.error('❌ [API] Campos obrigatórios faltando:', { patientId, profissionalId, date, time });
       return res.status(400).json(
-        errorResponse('MISSING_FIELDS', 'patientId e profissionalId são obrigatórios')
+        errorResponse('MISSING_FIELDS', 'Campos obrigatórios: patientId, profissionalId, date, time')
       );
     }
     
-    // Criar sessão
+    // Criar sessão no formato esperado pelo frontend
     const sessionData = {
       id: generateId('session'),
+      patient: patient || 'Paciente',
       patientId,
-      profissionalId,
-      tipo: tipo || 'Terapia',
-      observacoes: observacoes || '',
-      atividades: atividades || [],
-      timestamp: new Date().toISOString()
+      profissionalId: profissionalId,  // ← Adicionar para filtro
+      date,
+      time,
+      duration: duration || 60,
+      status: status || 'pending',
+      type: type || 'Sessão Terapêutica',
+      notes: notes || '',
+      professionalType: 'fonoaudiologo', // TODO: pegar do profissional
+      criadoEm: new Date().toISOString()
     };
     
     // Salvar no JSON
@@ -326,32 +443,24 @@ router.post('/session', async (req, res) => {
     
     sessionsFile.sessions.push(sessionData);
     await jsonService.writeJSON('shared/sessions.json', sessionsFile);
+    console.log('💾 [API] Sessão salva em shared/sessions.json');
     
-    // Emitir evento WebSocket
+    // Emitir evento WebSocket para atualizar em tempo real
     const io = req.app.get('io');
-    
-    // Buscar dados do paciente para notificação
-    const kidsData = await jsonService.readJSON('KIDS/usuarios.json');
-    const patient = kidsData.usuarios?.find(u => u.id === patientId);
-    
-    // Buscar tutor para notificar
-    const tutorsData = await jsonService.readJSON('TUTORS/usuarios.json');
-    const tutor = tutorsData.tutores?.find(t => t.criancasIds?.includes(patientId));
-    
-    if (patient && tutor) {
-      io.to(tutor.id).emit('session-created', {
-        sessionId: sessionData.id,
-        patientName: patient.nome,
-        tipo: sessionData.tipo,
-        timestamp: sessionData.timestamp
+    if (io) {
+      io.emit('session-created', {
+        session: sessionData,
+        professionalId: profissionalId,
       });
-      
-      console.log(`📝 Sessão criada: ${patient.nome} - ${tipo}`);
+      console.log('🔔 [API] Evento session-created emitido via Socket.IO');
+    } else {
+      console.warn('⚠️ [API] Socket.IO não disponível');
     }
     
+    console.log(`✅ [API] Sessão criada com sucesso: ${patient} - ${date} ${time}`);
+    
     res.status(201).json(successResponse({
-      sessionId: sessionData.id,
-      timestamp: sessionData.timestamp
+      session: sessionData
     }, 'Sessão criada com sucesso'));
     
   } catch (error) {
@@ -513,12 +622,82 @@ router.get('/agendas/:professionalId', async (req, res) => {
   }
 });
 
-// POST /api/pro/agenda - Criar nova agenda
+// POST /api/pro/agenda - Criar nova agenda (DESABILITADO)
+/*
 router.post('/agenda', async (req, res) => {
   try {
+    console.log('📅 [API] POST /pro/agenda - Dados recebidos:', req.body);
+    
+    const {
+      criancaId,
+      criancaNome,
+      tutorId,
+      tutorNome,
+      tutorEmail,
+      tutorTelefone,
+      profissionalId,
+      profissionalNome,
+      profissionalEspecialidade,
+      data,
+      horario,
+      duracao,
+      tipo,
+      observacoes,
+      local
+    } = req.body;
+
+    // Buscar dados completos da criança se não fornecidos
+    let criancaNomeFinal = criancaNome;
+    if (!criancaNomeFinal && criancaId) {
+      try {
+        const kidsData = await jsonService.readJSON('KIDS/usuarios.json');
+        const crianca = kidsData.usuarios?.find(c => c.id === criancaId);
+        if (crianca) {
+          criancaNomeFinal = crianca.nome;
+          console.log('👶 [API] Nome da criança encontrado:', criancaNomeFinal);
+        }
+      } catch (error) {
+        console.log('⚠️ [API] Erro ao buscar dados da criança:', error.message);
+      }
+    }
+
+    // Buscar dados completos do tutor se não fornecidos
+    let tutorNomeFinal = tutorNome;
+    let tutorEmailFinal = tutorEmail;
+    let tutorTelefoneFinal = tutorTelefone;
+    
+    if ((!tutorNomeFinal || !tutorEmailFinal || !tutorTelefoneFinal) && tutorId) {
+      try {
+        const tutorsData = await jsonService.readJSON('TUTORS/usuarios.json');
+        const tutor = tutorsData.tutores?.find(t => t.id === tutorId);
+        if (tutor) {
+          tutorNomeFinal = tutorNomeFinal || tutor.nome;
+          tutorEmailFinal = tutorEmailFinal || tutor.email;
+          tutorTelefoneFinal = tutorTelefoneFinal || tutor.telefone;
+          console.log('👨‍👩‍👧‍👦 [API] Dados do tutor encontrados:', { nome: tutorNomeFinal, email: tutorEmailFinal });
+        }
+      } catch (error) {
+        console.log('⚠️ [API] Erro ao buscar dados do tutor:', error.message);
+      }
+    }
+    
     const agendaData = {
       id: generateId('agenda'),
-      ...req.body,
+      criancaId,
+      criancaNome: criancaNomeFinal || '',
+      tutorId,
+      tutorNome: tutorNomeFinal || '',
+      tutorEmail: tutorEmailFinal || '',
+      tutorTelefone: tutorTelefoneFinal || '',
+      profissionalId,
+      profissionalNome: profissionalNome || 'Dr. Silva',
+      profissionalEspecialidade: profissionalEspecialidade || 'Fonoaudiologia Infantil',
+      data,
+      horario,
+      duracao: duracao || 60,
+      tipo: tipo || 'Sessão Terapêutica',
+      observacoes: observacoes || '',
+      local: local || 'Clínica FalaAtípica',
       status: 'pendente', // Status inicial sempre pendente
       criadoEm: new Date().toISOString()
     };
@@ -532,6 +711,7 @@ router.post('/agenda', async (req, res) => {
     
     agendasFile.agendas.push(agendaData);
     await jsonService.writeJSON('shared/agendas.json', agendasFile);
+    console.log('💾 [API] Agenda salva em shared/agendas.json');
     
     // Emitir evento completo para tutor
     const io = req.app.get('io');
@@ -540,10 +720,12 @@ router.post('/agenda', async (req, res) => {
         tutorId: agendaData.tutorId,
         agenda: agendaData,
       });
-      console.log('🔔 Evento agenda-created emitido para Tutors');
+      console.log('🔔 [API] Evento agenda-created emitido via Socket.IO para Tutors');
+    } else {
+      console.warn('⚠️ [API] Socket.IO não disponível');
     }
     
-    console.log(`📅 Agenda criada (pendente): ${agendaData.criancaNome} - ${agendaData.data} ${agendaData.horario}`);
+    console.log(`✅ [API] Agenda criada (pendente): ${agendaData.criancaNome} - ${agendaData.data} ${agendaData.horario}`);
     
     res.status(201).json(successResponse(
       agendaData,
@@ -557,6 +739,7 @@ router.post('/agenda', async (req, res) => {
     );
   }
 });
+*/
 
 // POST /api/pro/reminder - Criar lembrete para criança
 router.post('/reminder', async (req, res) => {

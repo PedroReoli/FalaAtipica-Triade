@@ -49,8 +49,9 @@ export const DashboardScreen: React.FC = () => {
       socketService.off('child-game-completed');
       socketService.off('child-achievement-unlocked');
       socketService.off('session-created');
-      socketService.off('agenda-created');
-      socketService.off('agenda-updated');
+      // DESABILITADO - Sistema de agenda
+      // socketService.off('agenda-created');
+      // socketService.off('agenda-updated');
     };
   }, []);
 
@@ -87,6 +88,8 @@ export const DashboardScreen: React.FC = () => {
         loadUserData();
       });
 
+      // DESABILITADO - Sistema de agenda
+      /*
       // Escutar agenda criada
       socketService.on('agenda-created', (data: any) => {
         success(`📅 Nova consulta agendada: ${data.criancaNome} - ${data.data} às ${data.horario}`);
@@ -96,6 +99,7 @@ export const DashboardScreen: React.FC = () => {
       socketService.on('agenda-updated', (data: any) => {
         info(`📅 Consulta atualizada: ${data.criancaNome} - Status: ${data.status}`);
       });
+      */
     }
   };
 
@@ -235,7 +239,8 @@ export const DashboardScreen: React.FC = () => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Funcionalidades</Text>
           <View style={styles.functionalitiesGrid}>
-            <TouchableOpacity 
+            {/* DESABILITADO - Sistema de agenda */}
+            {/* <TouchableOpacity 
               style={styles.functionalityCard}
               onPress={() => handleNavigateToFeature('Agenda')}
             >
@@ -243,7 +248,7 @@ export const DashboardScreen: React.FC = () => {
                 <Calendar size={24} color={COLORS.BLUE} />
               </View>
               <Text style={styles.cardText}>Agenda</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity 
               style={styles.functionalityCard}

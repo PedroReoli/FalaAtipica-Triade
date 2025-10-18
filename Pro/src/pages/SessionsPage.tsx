@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Plus, Edit, ChevronLeft, ChevronRight, Move, Calendar
-} from 'lucide-react';
+import { Plus, Calendar, Clock, Search } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useRoleColor } from '../hooks/useRoleColor';
+import { socketService } from '../services/socketService';
 import type { ProfessionalType } from '../types';
-import { mockDataService } from '../services/mockDataService';
+
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'; // DESABILITADO - Sistema de agenda
 
 interface Session {
   id: string;
@@ -21,196 +21,162 @@ interface Session {
   professionalType: ProfessionalType;
 }
 
-
 export const SessionsPage: React.FC = () => {
   const navigate = useNavigate();
   const { professionalType, professionalData } = useProfessional();
   const roleColor = useRoleColor();
-  const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [showNewSessionModal, setShowNewSessionModal] = useState(false);
-  const [showDayModal, setShowDayModal] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [draggedSession, setDraggedSession] = useState<Session | null>(null);
-  const [dragOverDate, setDragOverDate] = useState<string | null>(null);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadSessions();
-  }, []);
+    
+    // Socket.IO listeners para atualizações em tempo real
+    socketService.on('session-created', (data: any) => {
+      console.log('📝 Nova sessão recebida via Socket.IO:', data);
+      const professionalId = professionalData?.id || 'prof_001';
+      if (data.professionalId === professionalId && data.session) {
+        setSessions(prevSessions => [data.session, ...prevSessions]);
+      }
+    });
 
+    socketService.on('agenda-confirmed', (data: any) => {
+      console.log('✅ Agenda confirmada via Socket.IO:', data);
+      loadSessions();
+    });
+
+    return () => {
+      socketService.off('session-created');
+      socketService.off('agenda-confirmed');
+    };
+  }, [professionalData]);
+
+  // DESABILITADO - Sistema de agenda
+  /*
   const loadSessions = async () => {
     try {
       setIsLoading(true);
       const professionalId = professionalData?.id || 'prof_001';
-      const data = await mockDataService.loadSessions(professionalId);
-      const loadedSessions = (data.sessions || []).map((s: any) => ({
+      
+      console.log('📋 [SESSIONS] professionalData:', professionalData);
+      console.log('📋 [SESSIONS] professionalId extraído:', professionalId);
+      console.log('📋 [SESSIONS] URL completa:', `${API_BASE_URL}/pro/sessions?professionalId=${professionalId}`);
+      
+      // APENAS API - SEM FALLBACK PARA MOCKUP
+      const response = await fetch(`${API_BASE_URL}/pro/sessions?professionalId=${professionalId}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ [SESSIONS] Sessões carregadas da API:', data);
+        
+        if (data.success && data.data.sessions) {
+          const loadedSessions = data.data.sessions.map((s: any) => ({
         ...s,
-        professionalType
+            professionalType: professionalType || 'fonoaudiologo'
       }));
+          
+          console.log(`📊 [SESSIONS] Total de sessões: ${loadedSessions.length}`);
       setSessions(loadedSessions);
+        } else {
+          console.warn('⚠️ [SESSIONS] Resposta da API sem sessões');
+          setSessions([]);
+        }
+      } else {
+        console.error('❌ [SESSIONS] Erro na resposta da API:', response.status);
+        setSessions([]);
+      }
     } catch (error) {
-      console.error('Erro ao carregar sessões:', error);
-      setSessions(mockSessions);
+      console.error('❌ [SESSIONS] Erro ao carregar sessões:', error);
+      setSessions([]);
     } finally {
       setIsLoading(false);
     }
   };
+  */
 
-  // Dados mockados das sessões (fallback)
-  const mockSessions: Session[] = [
-    {
-      id: '1',
-      patient: 'João Silva',
-      patientId: '1',
-      date: '2024-01-22',
-      time: '09:00',
-      duration: 45,
-      status: 'pending',
-      type: professionalType === 'fonoaudiologo' ? 'Sessão de Fonoaudiologia' :
-            professionalType === 'psicologo' ? 'Sessão de Psicologia' :
-            professionalType === 'psiquiatra' ? 'Consulta Psiquiátrica' :
-            professionalType === 'pedagogo' ? 'Sessão Pedagógica' :
-            'Sessão Psicopedagógica',
-      notes: 'Primeira sessão do mês',
-      professionalType: professionalType
-    },
-    {
-      id: '2',
-      patient: 'Maria Santos',
-      patientId: '2',
-      date: '2024-01-22',
-      time: '10:30',
-      duration: 50,
-      status: 'completed',
-      type: professionalType === 'fonoaudiologo' ? 'Sessão de Fonoaudiologia' :
-            professionalType === 'psicologo' ? 'Sessão de Psicologia' :
-            professionalType === 'psiquiatra' ? 'Consulta Psiquiátrica' :
-            professionalType === 'pedagogo' ? 'Sessão Pedagógica' :
-            'Sessão Psicopedagógica',
-      notes: 'Sessão de acompanhamento',
-      professionalType: professionalType
-    },
-    {
-      id: '3',
-      patient: 'Pedro Costa',
-      patientId: '3',
-      date: '2024-01-23',
-      time: '14:00',
-      duration: 60,
-      status: 'pending',
-      type: professionalType === 'fonoaudiologo' ? 'Sessão de Fonoaudiologia' :
-            professionalType === 'psicologo' ? 'Sessão de Psicologia' :
-            professionalType === 'psiquiatra' ? 'Consulta Psiquiátrica' :
-            professionalType === 'pedagogo' ? 'Sessão Pedagógica' :
-            'Sessão Psicopedagógica',
-      professionalType: professionalType
-    },
-    {
-      id: '4',
-      patient: 'Ana Oliveira',
-      patientId: '4',
-      date: '2024-01-20',
-      time: '16:00',
-      duration: 45,
-      status: 'cancelled',
-      type: professionalType === 'fonoaudiologo' ? 'Sessão de Fonoaudiologia' :
-            professionalType === 'psicologo' ? 'Sessão de Psicologia' :
-            professionalType === 'psiquiatra' ? 'Consulta Psiquiátrica' :
-            professionalType === 'pedagogo' ? 'Sessão Pedagógica' :
-            'Sessão Psicopedagógica',
-      notes: 'Cancelada pelo paciente',
-      professionalType: professionalType
-    }
-  ];
-
-  // Dados mockados dos pacientes
-  const patients = [
-    { id: '1', name: 'João Silva', age: 8 },
-    { id: '2', name: 'Maria Santos', age: 7 },
-    { id: '3', name: 'Pedro Costa', age: 9 },
-    { id: '4', name: 'Ana Oliveira', age: 6 }
-  ];
-
-
-  // Funções de navegação do calendário
-  const navigateCalendar = (direction: 'prev' | 'next') => {
-    const newDate = new Date(currentDate);
-    if (viewMode === 'month') {
-      newDate.setMonth(newDate.getMonth() + (direction === 'next' ? 1 : -1));
-    } else if (viewMode === 'week') {
-      newDate.setDate(newDate.getDate() + (direction === 'next' ? 7 : -7));
-    } else {
-      newDate.setDate(newDate.getDate() + (direction === 'next' ? 1 : -1));
-    }
-    setCurrentDate(newDate);
+  // Função simplificada - sem agenda por enquanto
+  const loadSessions = async () => {
+    setIsLoading(true);
+    setSessions([]); // Lista vazia por enquanto
+    setIsLoading(false);
   };
 
-  // Função para obter sessões do dia
-  const getSessionsForDate = (date: string) => {
-    return sessions.filter(session => session.date === date);
-  };
-
-  // Funções de Drag & Drop
-  const handleDragStart = (session: Session) => {
-    if (!isEditMode) return;
-    setDraggedSession(session);
-  };
-
-  const handleDragEnd = () => {
-    setDraggedSession(null);
-    setDragOverDate(null);
-  };
-
-  const handleDragOver = (e: React.DragEvent, date: string) => {
-    if (!isEditMode || !draggedSession) return;
-    e.preventDefault();
-    setDragOverDate(date);
-  };
-
-  const handleDrop = (e: React.DragEvent, targetDate: string) => {
-    if (!isEditMode || !draggedSession) return;
-    e.preventDefault();
+  // Função para verificar se uma sessão está próxima (nas próximas 2 semanas)
+  const isUpcoming = (date: string) => {
+    const sessionDate = new Date(date);
+    const today = new Date();
+    const twoWeeksFromNow = new Date();
+    twoWeeksFromNow.setDate(today.getDate() + 14);
     
-    // Aqui você implementaria a lógica para mover a sessão
-    console.log(`Movendo sessão ${draggedSession.id} para ${targetDate}`);
-    
-    // Simular atualização da sessão
-    const updatedSession = { ...draggedSession, date: targetDate };
-    console.log('Sessão atualizada:', updatedSession);
-    
-    setDraggedSession(null);
-    setDragOverDate(null);
+    return sessionDate >= today && sessionDate <= twoWeeksFromNow;
   };
 
-  const handleDragLeave = () => {
-    setDragOverDate(null);
-  };
+  // Filtrar e ordenar sessões
+  const filteredSessions = sessions
+    .filter(session => {
+      // Filtro de busca
+      const matchesSearch = searchTerm === '' || 
+        session.patient.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      if (!matchesSearch) return false;
 
-  // Função para abrir modal do dia
-  const handleDayClick = (date: string) => {
-    setSelectedDay(date);
-    setShowDayModal(true);
-  };
-
-  const closeDayModal = () => {
-    setShowDayModal(false);
-    setSelectedDay(null);
-  };
-
-  // Função de scroll sincronizado
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const scrollTop = e.currentTarget.scrollTop;
-    
-    // Sincronizar scroll de todas as colunas
-    const scrollableElements = document.querySelectorAll('.scrollable-column');
-    scrollableElements.forEach((element) => {
-      if (element !== e.currentTarget) {
-        element.scrollTop = scrollTop;
+      // Filtro de status
+      if (filterStatus === 'pending') return session.status === 'pending';
+      if (filterStatus === 'completed') return session.status === 'completed';
+      if (filterStatus === 'upcoming') {
+        return isUpcoming(session.date) && session.status === 'pending';
       }
+      
+      return true; // 'all'
+    })
+    .sort((a, b) => {
+      // Ordenar por data (mais recentes primeiro)
+      const dateA = new Date(`${a.date}T${a.time}`);
+      const dateB = new Date(`${b.date}T${b.time}`);
+      return dateB.getTime() - dateA.getTime();
     });
+
+  // Função para formatar data
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR', { 
+      day: '2-digit', 
+      month: 'short', 
+      year: 'numeric' 
+    });
+  };
+
+  // Função para obter cor de status
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-100 text-green-800 border-green-300';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800 border-red-300';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-300';
+    }
+  };
+
+  // Função para obter texto de status
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return 'Concluída';
+      case 'pending':
+        return 'Agendada';
+      case 'cancelled':
+        return 'Cancelada';
+      default:
+        return 'Desconhecido';
+    }
   };
 
   return (
@@ -220,673 +186,178 @@ export const SessionsPage: React.FC = () => {
       {/* Header */}
           <div className="dashboard-spacing">
             <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" 
+                       style={{ backgroundColor: roleColor.primary }}>
+                    <Calendar size={20} className="text-white" />
+                  </div>
           <div>
-                  <h1 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>
-              {professionalType === 'psiquiatra' ? 'Consultas' : 'Sessões'}
+                    <h1 className="text-xl font-bold" style={{ color: "var(--text-black)" }}>
+                      Sessões Agendadas
             </h1>
-                  <p className="text-gray-600 mt-1">
-                    Calendário de {professionalType === 'psiquiatra' ? 'consultas' : 'sessões'}
+                    <p className="text-sm text-gray-600 mt-1">
+                      Gerencie suas {professionalType === 'psiquiatra' ? 'consultas' : 'sessões'} com pacientes
             </p>
           </div>
-                <div className="flex items-center space-x-3">
+                </div>
                   <button
-                    onClick={() => navigate('/full-calendar')}
-                    className="px-4 py-2 rounded-lg font-medium transition-colors text-gray-600 bg-gray-100 hover:bg-gray-200"
-                  >
-                    <Calendar size={18} className="inline mr-2" />
-                    Agenda Completa
-                  </button>
-                  <button
-                    onClick={() => setIsEditMode(!isEditMode)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                      isEditMode 
-                        ? 'text-white' 
-                        : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
-                    }`}
-                    style={{ backgroundColor: isEditMode ? roleColor.primary : undefined }}
-                  >
-                    <Edit size={18} className="inline mr-2" />
-                    {isEditMode ? 'Sair do Modo Edição' : 'Modo Edição'}
-                  </button>
-          <button
-                    onClick={() => setShowNewSessionModal(true)}
-                    className="px-4 py-2 rounded-lg text-white font-medium flex items-center space-x-2 transition-colors"
+                  onClick={() => navigate('/sessions/new')} 
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg text-white font-medium transition-colors hover:opacity-90"
             style={{ backgroundColor: roleColor.primary }}
           >
-            <Plus size={20} />
+                  <Plus size={18} />
             <span>Nova {professionalType === 'psiquiatra' ? 'Consulta' : 'Sessão'}</span>
           </button>
-                </div>
               </div>
             </div>
         </div>
 
-          {/* Controles do Calendário */}
+          {/* Filtros e Busca */}
           <div className="dashboard-spacing">
             <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => navigateCalendar('prev')}
-                      className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      <ChevronLeft size={20} />
-                    </button>
-                    <button
-                      onClick={() => navigateCalendar('next')}
-                      className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      <ChevronRight size={20} />
-                    </button>
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* Busca */}
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <input 
+                    type="text" 
+                    placeholder="Buscar por paciente..." 
+                    value={searchTerm} 
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
+                    style={{ 
+                      '--tw-ring-color': roleColor.primary 
+                    } as React.CSSProperties}
+                  />
                   </div>
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    {viewMode === 'month' && currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
-                    {viewMode === 'week' && `Semana de ${currentDate.toLocaleDateString('pt-BR')}`}
-                    {viewMode === 'day' && currentDate.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-                  </h2>
-          </div>
-                <div className="flex items-center space-x-2">
+
+                {/* Filtros */}
+                <div className="flex gap-2 flex-wrap">
                   <button
-                    onClick={() => setViewMode('month')}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      viewMode === 'month' 
-                        ? 'text-white' 
-                        : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
+                    onClick={() => setFilterStatus('all')} 
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      filterStatus === 'all' 
+                        ? 'text-white shadow-sm' 
+                        : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
                     }`}
-                    style={{ backgroundColor: viewMode === 'month' ? roleColor.primary : undefined }}
+                    style={filterStatus === 'all' ? { backgroundColor: roleColor.primary } : {}}
                   >
-                    Mês
+                    Todas
                   </button>
                   <button
-                    onClick={() => setViewMode('week')}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      viewMode === 'week' 
-                        ? 'text-white' 
-                        : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
+                    onClick={() => setFilterStatus('upcoming')} 
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      filterStatus === 'upcoming' 
+                        ? 'text-white shadow-sm' 
+                        : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
                     }`}
-                    style={{ backgroundColor: viewMode === 'week' ? roleColor.primary : undefined }}
+                    style={filterStatus === 'upcoming' ? { backgroundColor: roleColor.primary } : {}}
                   >
-                    Semana
+                    Próximas
                   </button>
                   <button
-                    onClick={() => setViewMode('day')}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      viewMode === 'day' 
-                        ? 'text-white' 
-                        : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
+                    onClick={() => setFilterStatus('completed')} 
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      filterStatus === 'completed' 
+                        ? 'text-white shadow-sm' 
+                        : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
                     }`}
-                    style={{ backgroundColor: viewMode === 'day' ? roleColor.primary : undefined }}
+                    style={filterStatus === 'completed' ? { backgroundColor: roleColor.primary } : {}}
                   >
-                    Dia
+                    Concluídas
                   </button>
                 </div>
               </div>
         </div>
       </div>
 
-          {/* Indicador de Drag & Drop */}
-          {isEditMode && draggedSession && (
+          {/* Grid de Sessões */}
             <div className="dashboard-spacing">
-              <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-3 text-center">
-                <div className="flex items-center justify-center space-x-2 text-blue-800">
-                  <Move size={20} />
-                  <span className="font-medium">
-                    Arrastando: {draggedSession.patient} - {draggedSession.time}
-                  </span>
-                </div>
-                <p className="text-sm text-blue-600 mt-1">
-                  Solte em qualquer dia para mover a sessão
-              </p>
+            {isLoading ? (
+              <div className="bg-white rounded-xl p-8 shadow-sm text-center" style={{ border: `2px solid ${roleColor.primary}` }}>
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin" 
+                       style={{ borderColor: `${roleColor.primary} transparent ${roleColor.primary} ${roleColor.primary}` }} />
+                  <span className="text-gray-600">Carregando sessões...</span>
             </div>
             </div>
-          )}
-
-          {/* Calendário */}
-          <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
-              {viewMode === 'month' && (
-                <div className="grid grid-cols-7 gap-0">
-                  {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
-                    <div key={day} className="p-2 text-center font-semibold text-gray-700 bg-gray-50 border-b border-gray-200 text-sm">
-                      {day}
-                    </div>
-                  ))}
-                  {(() => {
-                    const year = currentDate.getFullYear();
-                    const month = currentDate.getMonth();
-                    const firstDay = new Date(year, month, 1);
-                    const startDate = new Date(firstDay);
-                    startDate.setDate(startDate.getDate() - firstDay.getDay());
-                    
-                    const days = [];
-                    const current = new Date(startDate);
-                    
-                    for (let i = 0; i < 42; i++) {
-                      const daySessions = getSessionsForDate(current.toISOString().split('T')[0]);
-                      const isCurrentMonth = current.getMonth() === month;
-                      const isToday = current.toDateString() === new Date().toDateString();
-                      
-                      days.push(
-                        <div
-                          key={i}
-                          className={`p-1 min-h-[80px] border border-gray-200 cursor-pointer ${
-                            isCurrentMonth ? 'bg-white' : 'bg-gray-50'
-                          } ${isToday ? 'bg-blue-50 border-blue-300' : ''} ${
-                            dragOverDate === current.toISOString().split('T')[0] ? 'bg-green-100 border-green-300' : ''
-                          }`}
-                          onDragOver={(e) => handleDragOver(e, current.toISOString().split('T')[0])}
-                          onDrop={(e) => handleDrop(e, current.toISOString().split('T')[0])}
-                          onDragLeave={handleDragLeave}
-                          onClick={() => handleDayClick(current.toISOString().split('T')[0])}
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <span className={`text-xs font-medium ${
-                              isCurrentMonth ? 'text-gray-900' : 'text-gray-400'
-                            }`}>
-                              {current.getDate()}
-                            </span>
-                            {isEditMode && (
+            ) : filteredSessions.length === 0 ? (
+              <div className="bg-white rounded-xl p-8 shadow-sm text-center" style={{ border: `2px solid ${roleColor.primary}` }}>
+                <Calendar size={48} className="mx-auto mb-4 text-gray-400" />
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  Nenhuma sessão encontrada
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  {searchTerm 
+                    ? 'Tente ajustar os filtros de busca' 
+                    : 'Comece agendando uma nova sessão com seus pacientes'}
+                </p>
                               <button
-                                onClick={() => setShowNewSessionModal(true)}
-                                className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-blue-600 transition-colors"
+                  onClick={() => navigate('/sessions/new')}
+                  className="px-6 py-3 rounded-lg text-white font-medium transition-colors hover:opacity-90"
+                  style={{ backgroundColor: roleColor.primary }}
                               >
-                                <Plus size={10} />
+                  <Plus size={18} className="inline mr-2" />
+                  Nova Sessão
                               </button>
-                            )}
                           </div>
-                          <div className="space-y-0.5">
-                            {daySessions.slice(0, 2).map((session) => (
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {filteredSessions.map((session) => (
                               <div
                                 key={session.id}
-                                draggable={isEditMode}
-                                onDragStart={() => handleDragStart(session)}
-                                onDragEnd={handleDragEnd}
-                                className={`p-0.5 rounded text-xs cursor-pointer hover:opacity-80 transition-opacity ${
-                                  session.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                  session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-red-100 text-red-800'
-                                } ${isEditMode ? 'cursor-move' : ''} ${
-                                  draggedSession?.id === session.id ? 'opacity-50' : ''
-                                }`}
-                                onClick={() => !isEditMode && navigate(`/sessions/${session.id}`)}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <div className="flex-1">
-                                    <div className="font-medium truncate text-xs">{session.time}</div>
-                                    <div className="truncate text-xs">{session.patient}</div>
-                                  </div>
-                                  {isEditMode && (
-                                    <Move size={8} className="text-gray-500 ml-1" />
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                            {daySessions.length > 2 && (
-                              <div className="text-xs text-gray-500">
-                                +{daySessions.length - 2} mais
-                              </div>
-                            )}
-          </div>
-        </div>
-                      );
-                      current.setDate(current.getDate() + 1);
-                    }
-                    
-                    return days;
-                  })()}
-                </div>
-              )}
-              
-              {viewMode === 'week' && (
-                <div className="h-[600px] overflow-hidden">
-                  {/* Container único com grid de 8 colunas (1 para horas + 7 para dias) */}
-                  <div className="grid grid-cols-8 h-full">
-                    {/* Coluna de Horas com scroll */}
-                    <div 
-                      className="flex flex-col overflow-y-auto scrollable-column" 
-                      style={{ maxHeight: '600px' }}
-                      onScroll={handleScroll}
-                    >
-                      <div className="h-12 border-b border-gray-200 flex-shrink-0"></div>
-                      {Array.from({ length: 18 }, (_, i) => {
-                        const hour = i + 6; // 6h às 23h
-                        return (
-                          <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500 flex-shrink-0">
-                            {hour.toString().padStart(2, '0')}:00
-                          </div>
-                        );
-                      })}
+                    className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+                    style={{ border: `2px solid ${roleColor.primary}` }}
+                    onClick={() => {
+                      console.log('🔍 Sessão clicada:', session.id);
+                      // TODO: Implementar modal de detalhes ou navegar para /sessions/:id
+                    }}
+                  >
+                    {/* Header do Card */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center space-x-3">
+                        <div 
+                          className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm"
+                          style={{ backgroundColor: roleColor.primary }}
+                        >
+                          {session.patient.split(' ').map(n => n[0]).join('').toUpperCase()}
                     </div>
-                    
-                    {/* Grid de Dias - 7 colunas */}
-                    {(() => {
-                      const startOfWeek = new Date(currentDate);
-                      const day = startOfWeek.getDay();
-                      startOfWeek.setDate(startOfWeek.getDate() - day);
-                      
-                      const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-                      const weekDays = [];
-                      
-                      for (let i = 0; i < 7; i++) {
-                        const date = new Date(startOfWeek);
-                        date.setDate(date.getDate() + i);
-                        const dateString = date.toISOString().split('T')[0];
-                        const daySessions = getSessionsForDate(dateString);
-                        const isToday = date.toDateString() === new Date().toDateString();
-                        
-                        weekDays.push(
-                          <div 
-                            key={i} 
-                            className={`flex flex-col border-r border-gray-200 ${isToday ? 'bg-blue-50' : 'bg-white'} ${
-                              dragOverDate === dateString ? 'bg-green-100 border-green-300' : ''
-                            }`}
-                            onDragOver={(e) => handleDragOver(e, dateString)}
-                            onDrop={(e) => handleDrop(e, dateString)}
-                            onDragLeave={handleDragLeave}
-                          >
-                            {/* Cabeçalho do Dia */}
-                            <div className="h-12 border-b border-gray-200 flex items-center justify-between px-2">
             <div>
-                                <div className="font-semibold text-gray-900 text-sm">{days[i]}</div>
-                                <div className="text-xs text-gray-600">{date.getDate()}</div>
-                              </div>
-                              {isEditMode && (
-                                <button
-                                  onClick={() => setShowNewSessionModal(true)}
-                                  className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-                                >
-                                  <Plus size={10} />
-                                </button>
-                              )}
-                            </div>
-                            
-                            {/* Grid de Horas - Alinhado com a coluna de horas */}
-                            <div 
-                              className="overflow-y-auto scrollable-column" 
-                              style={{ maxHeight: 'calc(100% - 48px)' }}
-                              onScroll={handleScroll}
-                            >
-                              {Array.from({ length: 18 }, (_, hourIndex) => {
-                                const hour = hourIndex + 6;
-                                const hourSessions = daySessions.filter(session => {
-                                  const sessionHour = parseInt(session.time.split(':')[0]);
-                                  return sessionHour === hour;
-                                });
-                                
-                                return (
-                                  <div key={hour} className="h-12 border-b border-gray-200 relative">
-                                    {hourSessions.map((session) => (
-                                      <div
-                                        key={session.id}
-                                        draggable={isEditMode}
-                                        onDragStart={() => handleDragStart(session)}
-                                        onDragEnd={handleDragEnd}
-                                        className={`absolute inset-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${
-                                          session.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                          session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                          'bg-red-100 text-red-800'
-                                        } ${isEditMode ? 'cursor-move' : ''} ${
-                                          draggedSession?.id === session.id ? 'opacity-50' : ''
-                                        }`}
-                                        onClick={() => !isEditMode && navigate(`/sessions/${session.id}`)}
-                                      >
-                                        <div className="p-1">
-                                          <div className="font-medium text-xs">{session.time}</div>
-                                          <div className="text-xs truncate">{session.patient}</div>
+                          <h3 className="font-semibold text-gray-900 text-sm">{session.patient}</h3>
+                          <p className="text-xs text-gray-600">{session.type}</p>
                                         </div>
                                       </div>
-                                    ))}
-                                  </div>
-                                );
-                              })}
-                            </div>
-            </div>
-                        );
-                      }
-                      
-                      return weekDays;
-                    })()}
-          </div>
-        </div>
-              )}
-              
-              {viewMode === 'day' && (
-                <div className="h-[600px] overflow-hidden">
-                  {/* Container único com grid de 2 colunas (1 para horas + 1 para dia) */}
-                  <div className="grid grid-cols-2 h-full">
-                    {/* Coluna de Horas com scroll */}
-                    <div 
-                      className="flex flex-col overflow-y-auto scrollable-column" 
-                      style={{ maxHeight: '600px' }}
-                      onScroll={handleScroll}
-                    >
-                      <div className="h-12 border-b border-gray-200 flex-shrink-0"></div>
-                      {Array.from({ length: 18 }, (_, i) => {
-                        const hour = i + 6; // 6h às 23h
-                        return (
-                          <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500 flex-shrink-0">
-                            {hour.toString().padStart(2, '0')}:00
-                          </div>
-                        );
-                      })}
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(session.status)}`}>
+                        {getStatusText(session.status)}
+                      </span>
                     </div>
                     
-                    {/* Área do Dia */}
-                    <div className="flex flex-col">
-                      {(() => {
-                        const dateString = currentDate.toISOString().split('T')[0];
-                        const daySessions = getSessionsForDate(dateString);
-                        
-                        return (
-                          <div 
-                            className={`h-full border border-gray-200 bg-white flex flex-col ${
-                              dragOverDate === dateString ? 'bg-green-100 border-green-300' : ''
-                            }`}
-                            onDragOver={(e) => handleDragOver(e, dateString)}
-                            onDrop={(e) => handleDrop(e, dateString)}
-                            onDragLeave={handleDragLeave}
-                          >
-                            {/* Cabeçalho do Dia */}
-                            <div className="h-12 border-b border-gray-200 flex items-center justify-between px-4">
-            <div>
-                                <div className="font-semibold text-gray-900 text-sm">
-                                  {currentDate.toLocaleDateString('pt-BR', { 
-                                    weekday: 'long', 
-                                    day: 'numeric',
-                                    month: 'short'
-                                  })}
+                    {/* Data e Hora */}
+                    <div className="space-y-2 mb-3">
+                      <div className="flex items-center space-x-2 text-sm text-gray-700">
+                        <Calendar size={14} className="text-gray-500" />
+                        <span>{formatDate(session.date)}</span>
                                 </div>
-                              </div>
-                              {isEditMode && (
-                                <button
-                                  onClick={() => setShowNewSessionModal(true)}
-                                  className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-                                >
-                                  <Plus size={10} />
-                                </button>
-                              )}
-            </div>
-                            
-                            {/* Grid de Horas - Alinhado com a coluna de horas */}
-                            {Array.from({ length: 18 }, (_, hourIndex) => {
-                              const hour = hourIndex + 6;
-                              const hourSessions = daySessions.filter(session => {
-                                const sessionHour = parseInt(session.time.split(':')[0]);
-                                return sessionHour === hour;
-                              });
-                              
-                              return (
-                                <div key={hour} className="h-12 border-b border-gray-200 relative">
-                                  {hourSessions.map((session) => (
-                                    <div
-                                      key={session.id}
-                                      draggable={isEditMode}
-                                      onDragStart={() => handleDragStart(session)}
-                                      onDragEnd={handleDragEnd}
-                                      className={`absolute inset-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${
-                                        session.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                        session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                        'bg-red-100 text-red-800'
-                                      } ${isEditMode ? 'cursor-move' : ''} ${
-                                        draggedSession?.id === session.id ? 'opacity-50' : ''
-                                      }`}
-                                      onClick={() => !isEditMode && navigate(`/sessions/${session.id}`)}
-                                    >
-                                      <div className="p-1">
-                                        <div className="font-medium text-xs">{session.time}</div>
-                                        <div className="text-xs truncate">{session.patient}</div>
-                                        <div className="text-xs opacity-75">{session.type}</div>
-          </div>
-        </div>
-                                  ))}
-                                </div>
-                              );
-                            })}
-            </div>
-                        );
-                      })()}
-          </div>
-        </div>
-      </div>
-              )}
+                      <div className="flex items-center space-x-2 text-sm text-gray-700">
+                        <Clock size={14} className="text-gray-500" />
+                        <span>{session.time} • {session.duration} min</span>
           </div>
         </div>
 
-          {/* Modal do Dia */}
-          {showDayModal && selectedDay && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 h-[80vh]" style={{ border: `2px solid ${roleColor.primary}` }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold" style={{ color: roleColor.primary }}>
-                    {new Date(selectedDay).toLocaleDateString('pt-BR', { 
-                      weekday: 'long', 
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric'
-                    })}
-                  </h3>
-                  <button
-                    onClick={closeDayModal}
-                    className="text-gray-500 hover:text-gray-700 transition-colors"
-                  >
-                    <Plus size={24} className="rotate-45" />
-                  </button>
-                </div>
-                
-                <div className="h-[calc(80vh-120px)] overflow-hidden">
-                  {/* Container único com grid de 2 colunas (1 para horas + 1 para dia) */}
-                  <div className="grid grid-cols-[80px_1fr] h-full">
-                    {/* Coluna de Horas com largura menor e scroll */}
-                    <div 
-                      className="flex flex-col overflow-y-auto scrollable-column" 
-                      style={{ maxHeight: '600px' }}
-                      onScroll={handleScroll}
-                    >
-                      <div className="h-12 border-b border-gray-200 flex-shrink-0"></div>
-                      {Array.from({ length: 18 }, (_, i) => {
-                        const hour = i + 6; // 6h às 23h
-                        return (
-                          <div key={hour} className="h-12 border-b border-gray-200 flex items-center justify-center text-xs text-gray-500 flex-shrink-0">
-                            {hour.toString().padStart(2, '0')}:00
+                    {/* Notas (se houver) */}
+                    {session.notes && session.notes.trim() !== '' && (
+                      <div className="mt-3 pt-3 border-t border-gray-100">
+                        <p className="text-xs text-gray-600 line-clamp-2">
+                          <span className="font-semibold">Obs:</span> {session.notes}
+                        </p>
                           </div>
-                        );
-                      })}
-                    </div>
-                    
-                    {/* Área do Dia */}
-                    <div className="flex flex-col">
-                      <div 
-                        className={`h-full border border-gray-200 bg-white flex flex-col ${
-                          dragOverDate === selectedDay ? 'bg-green-100 border-green-300' : ''
-                        }`}
-                        onDragOver={(e) => handleDragOver(e, selectedDay)}
-                        onDrop={(e) => handleDrop(e, selectedDay)}
-                        onDragLeave={handleDragLeave}
-                      >
-                        {/* Cabeçalho do Dia */}
-                        <div className="h-12 border-b border-gray-200 flex items-center justify-between px-4">
-                          <div>
-                            <div className="font-semibold text-gray-900 text-sm">
-                              {new Date(selectedDay).toLocaleDateString('pt-BR', { 
-                                weekday: 'long', 
-                                day: 'numeric',
-                                month: 'short'
-                              })}
-                            </div>
-                          </div>
-                          {isEditMode && (
-                            <button
-                              onClick={() => setShowNewSessionModal(true)}
-                              className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-                            >
-                              <Plus size={10} />
-                            </button>
-                          )}
-                        </div>
-                        
-                        {/* Grid de Horas - Alinhado com a coluna de horas */}
-                        {Array.from({ length: 12 }, (_, hourIndex) => {
-                          const hour = hourIndex + 8;
-                          const daySessions = getSessionsForDate(selectedDay);
-                          const hourSessions = daySessions.filter(session => {
-                            const sessionHour = parseInt(session.time.split(':')[0]);
-                            return sessionHour === hour;
-                          });
-                          
-                          return (
-                            <div key={hour} className="h-12 border-b border-gray-200 relative">
-                              {hourSessions.map((session) => (
-                                <div
-            key={session.id}
-                                  draggable={isEditMode}
-                                  onDragStart={() => handleDragStart(session)}
-                                  onDragEnd={handleDragEnd}
-                                  className={`absolute inset-1 rounded cursor-pointer hover:opacity-80 transition-opacity ${
-                                    session.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                    session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                    'bg-red-100 text-red-800'
-                                  } ${isEditMode ? 'cursor-move' : ''} ${
-                                    draggedSession?.id === session.id ? 'opacity-50' : ''
-                                  }`}
-                                  onClick={() => !isEditMode && navigate(`/sessions/${session.id}`)}
-                                >
-                                  <div className="p-1">
-                                    <div className="font-medium text-xs">{session.time}</div>
-                                    <div className="text-xs truncate">{session.patient}</div>
-                                    <div className="text-xs opacity-75">{session.type}</div>
-                                  </div>
+                    )}
                                 </div>
         ))}
-      </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-        </div>
-            </div>
-          )}
-
-          {/* Modal de Nova Sessão */}
-          {showNewSessionModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${roleColor.primary}` }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold" style={{ color: roleColor.primary }}>
-                    Nova Sessão
-          </h3>
-                  <button
-                    onClick={() => setShowNewSessionModal(false)}
-                    className="text-gray-500 hover:text-gray-700 transition-colors"
-                  >
-                    <Plus size={24} className="rotate-45" />
-                  </button>
-                </div>
-                
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  console.log('Nova sessão criada');
-                  setShowNewSessionModal(false);
-                }} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Paciente
-                      </label>
-                      <select
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        required
-                      >
-                        <option value="">Selecione um paciente</option>
-                        {patients.map(patient => (
-                          <option key={patient.id} value={patient.id}>
-                            {patient.name} ({patient.age} anos)
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Data
-                      </label>
-                      <input
-                        type="date"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        required
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Horário
-                      </label>
-                      <input
-                        type="time"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        required
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Duração (min)
-                      </label>
-                      <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                        <option value={30}>30 minutos</option>
-                        <option value={45}>45 minutos</option>
-                        <option value={60}>60 minutos</option>
-                        <option value={90}>90 minutos</option>
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Tipo de Sessão
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Ex: Sessão de Fonoaudiologia"
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      required
-                    />
-      </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Observações
-                    </label>
-                    <textarea
-                      placeholder="Observações sobre a sessão..."
-                      rows={3}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-      </div>
-
-                  <div className="flex justify-end space-x-3">
-                    <button
-                      type="button"
-                      onClick={() => setShowNewSessionModal(false)}
-                      className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                    >
-                      Cancelar
-                    </button>
-          <button
-                      type="submit"
-                      className="px-4 py-2 text-white rounded-lg transition-colors"
-            style={{ backgroundColor: roleColor.primary }}
-          >
-                      Agendar Sessão
-          </button>
-                  </div>
-                </form>
-              </div>
         </div>
       )}
+          </div>
         </div>
       </div>
     </div>

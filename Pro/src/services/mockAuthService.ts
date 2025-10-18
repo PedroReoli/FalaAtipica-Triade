@@ -1,6 +1,7 @@
 import type { ProfessionalType } from '../types';
 
 export interface MockUser {
+  id: string;
   email: string;
   password: string;
   name: string;
@@ -13,6 +14,7 @@ export interface MockUser {
 export const mockUsers: MockUser[] = [
   // Fonoaudiólogo
   {
+    id: 'prof_001',
     email: 'fono@teste.com',
     password: '123456',
     name: 'Dra. Maria Silva',
@@ -22,6 +24,7 @@ export const mockUsers: MockUser[] = [
   },
   // Psicólogo
   {
+    id: 'prof_002',
     email: 'psico@teste.com',
     password: '123456',
     name: 'Dr. João Santos',
@@ -31,6 +34,7 @@ export const mockUsers: MockUser[] = [
   },
   // Psiquiatra
   {
+    id: 'prof_003',
     email: 'psiqui@teste.com',
     password: '123456',
     name: 'Dra. Ana Costa',
@@ -40,6 +44,7 @@ export const mockUsers: MockUser[] = [
   },
   // Pedagogo
   {
+    id: 'prof_004',
     email: 'pedagogo@teste.com',
     password: '123456',
     name: 'Prof. Maria Santos',
@@ -49,6 +54,7 @@ export const mockUsers: MockUser[] = [
   },
   // Psicopedagogo
   {
+    id: 'prof_005',
     email: 'psicopedagogo@teste.com',
     password: '123456',
     name: 'Dra. Ana Costa',

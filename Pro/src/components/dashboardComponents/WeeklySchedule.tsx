@@ -17,14 +17,13 @@ interface WeeklyScheduleProps {
   onViewFullCalendar?: () => void
 }
 
-export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ appointments, professionalType, color, onViewFullCalendar }) => {
+export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ appointments, color, onViewFullCalendar }) => {
   const daysOfWeek = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
   const currentDate = new Date()
   const currentDay = currentDate.getDay()
 
   const getDayAppointments = (dayIndex: number) => {
     // Simular compromissos baseados no dia da semana
-    const dayName = daysOfWeek[dayIndex]
     return appointments.filter((_, index) => index % 7 === dayIndex).slice(0, 3)
   }
 
@@ -243,7 +242,6 @@ export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ appointments, pr
             const index = 6 // Domingo
             const dayAppointments = getDayAppointments(index)
             const isToday = index === currentDay
-            const dayName = daysOfWeek[index]
 
             return (
               <div className="bg-gray-50 rounded-lg p-3">

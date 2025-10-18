@@ -31,10 +31,11 @@ export const InternalNavbar: React.FC = () => {
       path: '/patients', 
       label: professionalData.type === 'pedagogo' ? 'Alunos' : 'Pacientes' 
     },
-    { 
-      path: '/sessions', 
-      label: professionalData.type === 'psiquiatra' ? 'Consultas' : 'Sessões' 
-    },
+    // DESABILITADO - Sistema de agenda
+    // { 
+    //   path: '/sessions', 
+    //   label: professionalData.type === 'psiquiatra' ? 'Consultas' : 'Sessões' 
+    // },
     { path: '/reports', label: 'Relatórios' },
     { path: '/settings', label: 'Configurações' }
   ];

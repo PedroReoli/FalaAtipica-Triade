@@ -81,6 +81,19 @@ class SocketService {
       this.emit('session-created', data);
     });
 
+    // DESABILITADO - Sistema de agenda
+    /*
+    // Escutar eventos de agenda criada
+    this.socket.on('agenda-created', (data: any) => {
+      this.emit('agenda-created', data);
+    });
+
+    // Escutar eventos de agenda atualizada
+    this.socket.on('agenda-updated', (data: any) => {
+      this.emit('agenda-updated', data);
+    });
+    */
+
     // Escutar eventos de usuário online
     this.socket.on('user-online', (data: any) => {
       this.emit('user-online', data);

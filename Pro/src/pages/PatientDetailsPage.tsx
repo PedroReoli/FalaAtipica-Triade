@@ -1,27 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Edit2, Trash2, Calendar, Smartphone, Mail, Users, Clock, FileText, Activity, Eye, FolderOpen, History } from 'lucide-react';
+import { ArrowLeft, Edit2, Trash2, Smartphone, Mail, Users, Clock, FileText, FolderOpen, History, Activity } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
 import { useProfessionalColors } from '../hooks/useProfessionalColors';
+import { uploadCacheService } from '../services/uploadCacheService';
 
-interface Session {
-  id: string;
-  date: string;
-  duration: number;
-  type: string;
-  notes: string;
-  status: 'completed' | 'scheduled' | 'cancelled';
-}
+// DESABILITADO - Sistema de agenda
+// interface Session {
+//   id: string;
+//   date: string;
+//   duration: number;
+//   type: string;
+//   notes: string;
+//   status: 'completed' | 'scheduled' | 'cancelled';
+// }
 
 const PatientDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { professionalType } = useProfessional();
   const colors = useProfessionalColors(professionalType);
-  const [activeTab, setActiveTab] = useState<'info' | 'sessions' | 'reports' | 'documents' | 'history'>('info');
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [activeTab, setActiveTab] = useState<'info' | 'reports' | 'documents' | 'history'>('info');
+  const [uploadedReports, setUploadedReports] = useState<any[]>([]);
+  const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
   const [showEditHistoryModal, setShowEditHistoryModal] = useState(false);
   const [showAddHistoryModal, setShowAddHistoryModal] = useState(false);
+
+  // Carregar arquivos do cache ao montar o componente
+  useEffect(() => {
+    if (id) {
+      const reports = uploadCacheService.getReportsByPatient(id);
+      const documents = uploadCacheService.getDocumentsByPatient(id);
+      setUploadedReports(reports);
+      setUploadedDocuments(documents);
+
+      const stats = uploadCacheService.getCacheStats();
+      console.log('📊 [CACHE] Estatísticas:', stats);
+    }
+  }, [id]);
 
   // Dados mockados do paciente
   const patient = {
@@ -51,24 +67,25 @@ const PatientDetailsPage: React.FC = () => {
     }
   };
 
-  const sessions: Session[] = [
-    {
-      id: '1',
-      date: '2024-01-15',
-      duration: 60,
-      type: 'Terapia Individual',
-      notes: 'Sessão focada em exercícios de articulação.',
-      status: 'completed'
-    },
-    {
-      id: '2',
-      date: '2024-01-22',
-      duration: 60,
-      type: 'Terapia Individual',
-      notes: 'Continuação dos exercícios anteriores.',
-      status: 'scheduled'
-    }
-  ];
+  // DESABILITADO - Sistema de agenda
+  // const sessions: Session[] = [
+  //   {
+  //     id: '1',
+  //     date: '2024-01-15',
+  //     duration: 60,
+  //     type: 'Terapia Individual',
+  //     notes: 'Sessão focada em exercícios de articulação.',
+  //     status: 'completed'
+  //   },
+  //   {
+  //     id: '2',
+  //     date: '2024-01-22',
+  //     duration: 60,
+  //     type: 'Terapia Individual',
+  //     notes: 'Continuação dos exercícios anteriores.',
+  //     status: 'scheduled'
+  //   }
+  // ];
 
   const handleEdit = () => {
     navigate(`/patients/${id}/edit`);
@@ -78,12 +95,24 @@ const PatientDetailsPage: React.FC = () => {
     navigate(`/patients/${id}/delete`);
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, type: 'report' | 'document') => {
     const files = event.target.files;
-    if (files) {
+    if (files && id) {
       const newFiles = Array.from(files);
-      setUploadedFiles(prev => [...prev, ...newFiles]);
-      console.log('Arquivos selecionados:', newFiles);
+      
+      // Adicionar cada arquivo ao cache
+      const cachedFiles = newFiles.map(file => 
+        uploadCacheService.addFile(id, file, type)
+      );
+
+      // Atualizar estado local
+      if (type === 'report') {
+        setUploadedReports(prev => [...cachedFiles, ...prev]);
+      } else {
+        setUploadedDocuments(prev => [...cachedFiles, ...prev]);
+      }
+
+      console.log(`✅ ${newFiles.length} arquivo(s) adicionado(s) ao cache como ${type}`);
     }
   };
 
@@ -111,17 +140,18 @@ const PatientDetailsPage: React.FC = () => {
   };
 
 
-  const handleViewSession = (sessionId: string) => {
-    navigate(`/sessions/${sessionId}`);
-  };
+  // DESABILITADO - Sistema de agenda
+  // const handleViewSession = (sessionId: string) => {
+  //   navigate(`/sessions/${sessionId}`);
+  // };
 
-  const handleEditSession = (sessionId: string) => {
-    navigate(`/sessions/${sessionId}/edit`);
-  };
+  // const handleEditSession = (sessionId: string) => {
+  //   navigate(`/sessions/${sessionId}/edit`);
+  // };
 
-  const handleEditSessionReport = (sessionId: string) => {
-    navigate(`/sessions/${sessionId}/report/edit`);
-  };
+  // const handleEditSessionReport = (sessionId: string) => {
+  //   navigate(`/sessions/${sessionId}/report/edit`);
+  // };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -149,31 +179,32 @@ const PatientDetailsPage: React.FC = () => {
     }
   };
 
-  const getSessionStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'scheduled':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800 border-red-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
+  // DESABILITADO - Sistema de agenda
+  // const getSessionStatusColor = (status: string) => {
+  //   switch (status) {
+  //     case 'completed':
+  //       return 'bg-green-100 text-green-800 border-green-200';
+  //     case 'scheduled':
+  //       return 'bg-blue-100 text-blue-800 border-blue-200';
+  //     case 'cancelled':
+  //       return 'bg-red-100 text-red-800 border-red-200';
+  //     default:
+  //       return 'bg-gray-100 text-gray-800 border-gray-200';
+  //   }
+  // };
 
-  const getSessionStatusText = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'Realizada';
-      case 'scheduled':
-        return 'Agendada';
-      case 'cancelled':
-        return 'Cancelada';
-      default:
-        return 'Agendada';
-    }
-  };
+  // const getSessionStatusText = (status: string) => {
+  //   switch (status) {
+  //     case 'completed':
+  //       return 'Realizada';
+  //     case 'scheduled':
+  //       return 'Agendada';
+  //     case 'cancelled':
+  //       return 'Cancelada';
+  //     default:
+  //       return 'Agendada';
+  //   }
+  // };
 
   return (
     <>
@@ -257,7 +288,8 @@ const PatientDetailsPage: React.FC = () => {
                     <span>Informações</span>
                   </div>
                 </button>
-                <button
+                {/* DESABILITADO - Sistema de agenda */}
+                {/* <button
                   onClick={() => setActiveTab('sessions')}
                   className={`flex-1 px-6 py-3 font-medium transition-colors ${
                     activeTab === 'sessions'
@@ -274,7 +306,7 @@ const PatientDetailsPage: React.FC = () => {
                     <Calendar size={18} />
                     <span>Sessões</span>
                   </div>
-                </button>
+                </button> */}
                 <button
                   onClick={() => setActiveTab('reports')}
                   className={`flex-1 px-6 py-3 font-medium transition-colors ${
@@ -338,7 +370,7 @@ const PatientDetailsPage: React.FC = () => {
                   id="document-upload"
                   multiple
                   accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
-                  onChange={handleFileUpload}
+                  onChange={(e) => handleFileUpload(e, 'document')}
                   className="hidden"
                 />
                 <input
@@ -346,7 +378,7 @@ const PatientDetailsPage: React.FC = () => {
                   id="report-upload"
                   multiple
                   accept=".pdf,.doc,.docx,.txt"
-                  onChange={handleFileUpload}
+                  onChange={(e) => handleFileUpload(e, 'report')}
                   className="hidden"
                 />
                 
@@ -435,8 +467,9 @@ const PatientDetailsPage: React.FC = () => {
                   </div>
                 )}
 
+                {/* DESABILITADO - Sistema de agenda */}
                 {/* Tab: Sessões */}
-                {activeTab === 'sessions' && (
+                {/* {activeTab === 'sessions' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
@@ -510,32 +543,49 @@ const PatientDetailsPage: React.FC = () => {
                       </div>
                     ))}
                   </div>
-                )}
+                )} */}
 
                 {/* Tab: Relatórios */}
                 {activeTab === 'reports' && (
                   <div className="space-y-6">
-                    {/* Arquivos recém-uploadados */}
-                    {uploadedFiles.length > 0 && (
+                    {/* Arquivos em cache */}
+                    {uploadedReports.length > 0 && (
                       <div className="mb-6">
                         <h4 className="text-md font-semibold mb-3" style={{ color: colors.primary }}>
-                          Relatórios Recém-Adicionados
+                          Relatórios Carregados
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {uploadedFiles.map((file, index) => (
-                            <div key={index} className="p-4 border border-green-200 rounded-lg bg-green-50 hover:shadow-md transition-shadow">
+                          {uploadedReports.map((cachedFile) => (
+                            <div key={cachedFile.id} className="p-4 border border-green-200 rounded-lg bg-green-50 hover:shadow-md transition-shadow">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
                                   <FileText size={24} className="text-green-500" />
                                   <div>
-                                    <p className="font-medium text-gray-900">{file.name}</p>
-                                    <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                                    <p className="text-xs text-gray-400">Agora</p>
+                                    <p className="font-medium text-gray-900">{cachedFile.file.name}</p>
+                                    <p className="text-sm text-gray-500">{(cachedFile.file.size / 1024 / 1024).toFixed(2)} MB</p>
+                                    <p className="text-xs text-gray-400">{new Date(cachedFile.uploadedAt).toLocaleString('pt-BR')}</p>
                                   </div>
                                 </div>
-                                <button className="px-3 py-1 text-xs bg-green-100 text-green-800 rounded hover:bg-green-200 transition-colors">
-                                  Download
-                                </button>
+                                <div className="flex items-center space-x-2">
+                                  {cachedFile.url && (
+                                    <a 
+                                      href={cachedFile.url} 
+                                      download={cachedFile.file.name}
+                                      className="px-3 py-1 text-xs bg-green-100 text-green-800 rounded hover:bg-green-200 transition-colors"
+                                    >
+                                      Download
+                                    </a>
+                                  )}
+                                  <button 
+                                    onClick={() => {
+                                      uploadCacheService.removeFile(cachedFile.id);
+                                      setUploadedReports(prev => prev.filter(f => f.id !== cachedFile.id));
+                                    }}
+                                    className="px-3 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200 transition-colors"
+                                  >
+                                    Remover
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           ))}
@@ -544,11 +594,11 @@ const PatientDetailsPage: React.FC = () => {
                     )}
 
                     {/* Empty state se não houver uploads */}
-                    {uploadedFiles.length === 0 && (
+                    {uploadedReports.length === 0 && (
                       <div className="text-center py-12">
                         <FileText size={64} className="mx-auto text-gray-400 mb-4" />
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                          Nenhum relatório enviado
+                          Nenhum relatório carregado
                         </h3>
                         <p className="text-gray-600 mb-6">
                           Faça upload de relatórios para este paciente
@@ -582,27 +632,44 @@ const PatientDetailsPage: React.FC = () => {
                       </button>
                     </div>
                     
-                    {/* Arquivos recém-uploadados */}
-                    {uploadedFiles.length > 0 && (
+                    {/* Arquivos em cache */}
+                    {uploadedDocuments.length > 0 && (
                       <div className="mb-6">
                         <h4 className="text-md font-semibold mb-3" style={{ color: colors.primary }}>
-                          Arquivos Recém-Adicionados
+                          Documentos Carregados
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {uploadedFiles.map((file, index) => (
-                            <div key={index} className="p-4 border border-green-200 rounded-lg bg-green-50 hover:shadow-md transition-shadow">
+                          {uploadedDocuments.map((cachedFile) => (
+                            <div key={cachedFile.id} className="p-4 border border-blue-200 rounded-lg bg-blue-50 hover:shadow-md transition-shadow">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
-                                  <FileText size={24} className="text-green-500" />
+                                  <FileText size={24} className="text-blue-500" />
                                   <div>
-                                    <p className="font-medium text-gray-900">{file.name}</p>
-                                    <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                                    <p className="text-xs text-gray-400">Agora</p>
+                                    <p className="font-medium text-gray-900">{cachedFile.file.name}</p>
+                                    <p className="text-sm text-gray-500">{(cachedFile.file.size / 1024 / 1024).toFixed(2)} MB</p>
+                                    <p className="text-xs text-gray-400">{new Date(cachedFile.uploadedAt).toLocaleString('pt-BR')}</p>
                                   </div>
                                 </div>
-                                <button className="px-3 py-1 text-xs bg-green-100 text-green-800 rounded hover:bg-green-200 transition-colors">
-                                  Download
-                                </button>
+                                <div className="flex flex-col space-y-1">
+                                  {cachedFile.url && (
+                                    <a 
+                                      href={cachedFile.url} 
+                                      download={cachedFile.file.name}
+                                      className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors text-center"
+                                    >
+                                      Download
+                                    </a>
+                                  )}
+                                  <button 
+                                    onClick={() => {
+                                      uploadCacheService.removeFile(cachedFile.id);
+                                      setUploadedDocuments(prev => prev.filter(f => f.id !== cachedFile.id));
+                                    }}
+                                    className="px-3 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200 transition-colors"
+                                  >
+                                    Remover
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           ))}
@@ -611,11 +678,11 @@ const PatientDetailsPage: React.FC = () => {
                     )}
 
                     {/* Empty state se não houver uploads */}
-                    {uploadedFiles.length === 0 && (
+                    {uploadedDocuments.length === 0 && (
                       <div className="text-center py-12">
                         <FolderOpen size={64} style={{ color: '#D1D5DB', margin: '0 auto 16px' }} />
                         <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                          Nenhum documento enviado
+                          Nenhum documento carregado
                         </h3>
                         <p className="text-gray-600 mb-6">
                           Faça upload de documentos para este paciente
