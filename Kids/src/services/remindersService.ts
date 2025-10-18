@@ -41,10 +41,12 @@ class RemindersService {
         throw new Error(result.error?.message || 'Erro ao buscar lembretes');
       }
 
-      console.log('✅ Lembretes carregados da API:', result.data.totalNaoLidos, 'não lidos');
+      // Log silencioso (apenas em desenvolvimento)
+      // console.log('✅ Lembretes carregados da API:', result.data.totalNaoLidos, 'não lidos');
       return result.data;
     } catch (error) {
-      console.log('⚠️ API erro - usando dados mockados locais');
+      // Log silencioso (apenas em desenvolvimento)
+      // console.log('⚠️ API erro - usando dados mockados locais');
       
       // FALLBACK: Carregar dados mockados locais
       try {
@@ -58,7 +60,8 @@ class RemindersService {
           const naoLidos = userReminders.filter(r => !r.lido);
           const lidos = userReminders.filter(r => r.lido);
           
-          console.log('✅ Lembretes carregados do mockup:', naoLidos.length, 'não lidos');
+          // Log silencioso (apenas em desenvolvimento)
+          // console.log('✅ Lembretes carregados do mockup:', naoLidos.length, 'não lidos');
           
           return {
             naoLidos,
@@ -68,7 +71,8 @@ class RemindersService {
           };
         }
       } catch (mockError) {
-        console.error('❌ Erro ao carregar mockup de lembretes:', mockError);
+        // Log silencioso (apenas em desenvolvimento)
+        // console.error('❌ Erro ao carregar mockup de lembretes:', mockError);
       }
       
       // Último fallback: retornar vazio
@@ -110,7 +114,8 @@ class RemindersService {
       const reminders = await this.getReminders();
       return reminders.totalNaoLidos;
     } catch (error) {
-      console.error('❌ Erro ao buscar contagem de lembretes:', error);
+      // Log silencioso (apenas em desenvolvimento)
+      // console.error('❌ Erro ao buscar contagem de lembretes:', error);
       return 0;
     }
   }

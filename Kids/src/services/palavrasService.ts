@@ -1,5 +1,32 @@
 import palavrasData from '../../mockup-data/palavras.json';
 
+// ✅ IMAGENS: Todas na pasta palavras/ (SEM subpastas!)
+// Usando APENAS imagens que já existem (sem gerar novas)
+
+const IMAGES: Record<string, any> = {
+  // Animais (9 imagens)
+  'gato.png': require('../assets/images/palavras/gato.png'),
+  'pato.png': require('../assets/images/palavras/pato.png'),
+  'sapo.png': require('../assets/images/palavras/sapo.png'),
+  'urso.png': require('../assets/images/palavras/urso.png'),
+  'cavalo.png': require('../assets/images/palavras/cavalo.png'),
+  'macaco.png': require('../assets/images/palavras/macaco.png'),
+  'cachorro.png': require('../assets/images/palavras/cachorro.png'),
+  'coelho.png': require('../assets/images/palavras/coelho.png'),
+  'elefante.png': require('../assets/images/palavras/elefante.png'),
+  
+  // Alimentos (4 imagens)
+  'ovo.png': require('../assets/images/palavras/ovo.png'),
+  'uva.png': require('../assets/images/palavras/uva.png'),
+  'arroz.png': require('../assets/images/palavras/arroz.png'),
+  'sorvete.png': require('../assets/images/palavras/sorvete.png'),
+  
+  // Objetos (3 imagens)
+  'mesa.png': require('../assets/images/palavras/mesa.png'),
+  'cama.png': require('../assets/images/palavras/cama.png'),
+  'sofa.png': require('../assets/images/palavras/sofa.png'),
+};
+
 export type TipoJogo = 'silabas' | 'completar' | 'ordenar';
 
 export interface PalavraJogo {
@@ -9,7 +36,8 @@ export interface PalavraJogo {
   letras?: string[];
   lacunas?: number[];
   opcoes?: string[];
-  imagem: string;
+  imagem: any; // ImageSourcePropType (require)
+  imagemNome: string; // Nome original do arquivo
   dificuldade: 1 | 2 | 3;
   tipo: TipoJogo;
 }
@@ -32,7 +60,28 @@ class PalavrasService {
   }
 
   getCategoria(categoriaId: string): CategoriaPalavras | undefined {
-    return this.categorias[categoriaId];
+    const categoria = this.categorias[categoriaId];
+    if (!categoria) return undefined;
+    
+    // Mapear imagens para cada nível
+    return {
+      ...categoria,
+      nivel1: this.mapPalavrasComImagens(categoria.nivel1),
+      nivel2: this.mapPalavrasComImagens(categoria.nivel2),
+      nivel3: this.mapPalavrasComImagens(categoria.nivel3),
+    };
+  }
+
+  private mapPalavrasComImagens(palavras: any[]): PalavraJogo[] {
+    return palavras.map(palavra => ({
+      ...palavra,
+      imagemNome: palavra.imagem,
+      imagem: this.getImageSource(palavra.imagem),
+    }));
+  }
+
+  private getImageSource(imageName: string): any {
+    return IMAGES[imageName as keyof typeof IMAGES] || null;
   }
 
   getCategorias(): string[] {
@@ -102,5 +151,3 @@ class PalavrasService {
 }
 
 export const palavrasService = new PalavrasService();
-
-

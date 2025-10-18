@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -665,8 +665,18 @@ export const PalavrasGameScreen: React.FC = () => {
 
         {/* Imagem */}
         <View style={styles.imageContainer}>
-          <ImageIcon size={140} color={COLORS.GREEN} strokeWidth={2.5} />
-          <Text style={styles.imageName}>{currentPalavra.imagem}</Text>
+          {currentPalavra.imagem ? (
+            <Image
+              source={currentPalavra.imagem}
+              style={styles.palavraImage}
+              resizeMode="contain"
+            />
+          ) : (
+            <>
+              <ImageIcon size={140} color={COLORS.GREEN} strokeWidth={2.5} />
+              <Text style={styles.imageName}>{currentPalavra.imagemNome}</Text>
+            </>
+          )}
         </View>
 
         {/* Área de Formação */}
@@ -780,7 +790,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
     marginBottom: 20,
-    padding: 24,
+    padding: 16,
     backgroundColor: COLORS.TEXT_WHITE,
     borderRadius: 20,
     borderWidth: 4,
@@ -790,6 +800,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 12,
     elevation: 6,
+    width: 220,
+    height: 220,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  palavraImage: {
+    width: 180,
+    height: 180,
   },
   imageName: {
     fontSize: 11,

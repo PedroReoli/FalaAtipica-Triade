@@ -11,7 +11,6 @@ const IMAGES = {
   'maca.png': require('../assets/images/adivinha/maca.png'),
   // Objetos
   'bola.png': require('../assets/images/adivinha/bola.png'),
-  'livro.png': require('../assets/images/adivinha/livro.png'),
 };
 
 export interface Alternativa {

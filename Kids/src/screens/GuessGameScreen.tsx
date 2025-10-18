@@ -30,7 +30,7 @@ export const GuessGameScreen: React.FC = () => {
   const [showResult, setShowResult] = useState(false);
   const [gameStartTime, setGameStartTime] = useState(Date.now());
   const [gameSequence, setGameSequence] = useState<ItemAdivinha[]>([]);
-  const totalRounds = 14;
+  const totalRounds = 12; // 6 itens × 2 repetições
 
   // Inicializar jogo
   useEffect(() => {

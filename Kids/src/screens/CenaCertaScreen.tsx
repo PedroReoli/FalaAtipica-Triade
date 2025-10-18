@@ -353,24 +353,6 @@ export const CenaCertaScreen: React.FC = () => {
           <Text style={styles.scoreText}>✨ {score} pontos</Text>
         </View>
 
-        {/* Indicador de nível */}
-        <View style={styles.levelIndicator}>
-          <View 
-            style={[
-              styles.levelBadge,
-              { backgroundColor: 
-                currentCena.dificuldade === 1 ? COLORS.GREEN :
-                currentCena.dificuldade === 2 ? COLORS.YELLOW :
-                COLORS.RED
-              }
-            ]}
-          >
-            <Text style={styles.levelText}>
-              Nível {currentCena.dificuldade}
-            </Text>
-          </View>
-        </View>
-
         {/* Pergunta */}
         <Text style={styles.questionText}>Qual frase combina com a cena?</Text>
 
@@ -504,21 +486,6 @@ const styles = StyleSheet.create({
     color: COLORS.BLUE,
   },
   
-  // Nível
-  levelIndicator: {
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  levelBadge: {
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  levelText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_WHITE,
-  },
   
   // Pergunta
   questionText: {

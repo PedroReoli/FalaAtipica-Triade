@@ -59,6 +59,66 @@
       "timeSpent": 89,
       "category": "animais",
       "timestamp": "2025-10-17T11:11:06.253Z"
+    },
+    {
+      "id": "progress_1760746869363_aelqkec",
+      "userId": "1",
+      "gameId": "igual-diferente",
+      "level": 1,
+      "score": 0,
+      "correctAnswers": 0,
+      "wrongAnswers": 3,
+      "timeSpent": 65,
+      "category": "geral",
+      "timestamp": "2025-10-18T00:21:09.363Z"
+    },
+    {
+      "id": "progress_1760751053820_oie71pn",
+      "userId": "1",
+      "gameId": "igual-diferente",
+      "level": 1,
+      "score": 88.9,
+      "correctAnswers": 8,
+      "wrongAnswers": 1,
+      "timeSpent": 56,
+      "category": "geral",
+      "timestamp": "2025-10-18T01:30:53.820Z"
+    },
+    {
+      "id": "progress_1760752685418_4zjgske",
+      "userId": "1",
+      "gameId": "palavras",
+      "level": 1,
+      "score": 100,
+      "correctAnswers": 5,
+      "wrongAnswers": 0,
+      "timeSpent": 44,
+      "category": "animais",
+      "timestamp": "2025-10-18T01:58:05.418Z"
+    },
+    {
+      "id": "progress_1760753849265_8akxzlr",
+      "userId": "1",
+      "gameId": "cena-certa",
+      "level": 1,
+      "score": 100,
+      "correctAnswers": 10,
+      "wrongAnswers": 0,
+      "timeSpent": 98,
+      "category": "geral",
+      "timestamp": "2025-10-18T02:17:29.265Z"
+    },
+    {
+      "id": "progress_1760753895251_bo9dyr3",
+      "userId": "1",
+      "gameId": "adivinha",
+      "level": 1,
+      "score": 92,
+      "correctAnswers": 11,
+      "wrongAnswers": 1,
+      "timeSpent": 42,
+      "category": "animais",
+      "timestamp": "2025-10-18T02:18:15.251Z"
     }
   ]
 }

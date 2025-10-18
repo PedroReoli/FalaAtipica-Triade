@@ -35,37 +35,9 @@
           "imagem": "urso.png",
           "dificuldade": 1,
           "tipo": "silabas"
-        },
-        {
-          "id": "peixe",
-          "palavra": "PEIXE",
-          "silabas": ["PEI", "XE"],
-          "imagem": "peixe.png",
-          "dificuldade": 1,
-          "tipo": "silabas"
         }
       ],
       "nivel2": [
-        {
-          "id": "vaca",
-          "palavra": "VACA",
-          "letras": ["V", "A", "C", "A"],
-          "lacunas": [1],
-          "imagem": "vaca.png",
-          "dificuldade": 2,
-          "tipo": "completar",
-          "opcoes": ["A", "E", "I", "O"]
-        },
-        {
-          "id": "porco",
-          "palavra": "PORCO",
-          "letras": ["P", "O", "R", "C", "O"],
-          "lacunas": [2],
-          "imagem": "porco.png",
-          "dificuldade": 2,
-          "tipo": "completar",
-          "opcoes": ["R", "L", "T", "N"]
-        },
         {
           "id": "cavalo",
           "palavra": "CAVALO",
@@ -119,14 +91,6 @@
       "cor": "#fbc02d",
       "nivel1": [
         {
-          "id": "pao",
-          "palavra": "PÃO",
-          "silabas": ["PÃO"],
-          "imagem": "pao.png",
-          "dificuldade": 1,
-          "tipo": "silabas"
-        },
-        {
           "id": "ovo",
           "palavra": "OVO",
           "silabas": ["O", "VO"],
@@ -141,55 +105,9 @@
           "imagem": "uva.png",
           "dificuldade": 1,
           "tipo": "silabas"
-        },
-        {
-          "id": "mel",
-          "palavra": "MEL",
-          "silabas": ["MEL"],
-          "imagem": "mel.png",
-          "dificuldade": 1,
-          "tipo": "silabas"
-        },
-        {
-          "id": "queijo",
-          "palavra": "QUEIJO",
-          "silabas": ["QUEI", "JO"],
-          "imagem": "queijo.png",
-          "dificuldade": 1,
-          "tipo": "silabas"
         }
       ],
       "nivel2": [
-        {
-          "id": "bolo",
-          "palavra": "BOLO",
-          "letras": ["B", "O", "L", "O"],
-          "lacunas": [2],
-          "imagem": "bolo.png",
-          "dificuldade": 2,
-          "tipo": "completar",
-          "opcoes": ["L", "R", "T", "N"]
-        },
-        {
-          "id": "suco",
-          "palavra": "SUCO",
-          "letras": ["S", "U", "C", "O"],
-          "lacunas": [1],
-          "imagem": "suco.png",
-          "dificuldade": 2,
-          "tipo": "completar",
-          "opcoes": ["U", "O", "A", "E"]
-        },
-        {
-          "id": "leite",
-          "palavra": "LEITE",
-          "letras": ["L", "E", "I", "T", "E"],
-          "lacunas": [3],
-          "imagem": "leite.png",
-          "dificuldade": 2,
-          "tipo": "completar",
-          "opcoes": ["T", "C", "P", "D"]
-        },
         {
           "id": "arroz",
           "palavra": "ARROZ",
@@ -209,22 +127,6 @@
           "imagem": "sorvete.png",
           "dificuldade": 3,
           "tipo": "ordenar"
-        },
-        {
-          "id": "laranja",
-          "palavra": "LARANJA",
-          "letras": ["L", "A", "R", "A", "N", "J", "A"],
-          "imagem": "laranja.png",
-          "dificuldade": 3,
-          "tipo": "ordenar"
-        },
-        {
-          "id": "banana",
-          "palavra": "BANANA",
-          "letras": ["B", "A", "N", "A", "N", "A"],
-          "imagem": "banana.png",
-          "dificuldade": 3,
-          "tipo": "ordenar"
         }
       ]
     },
@@ -232,14 +134,6 @@
       "nome": "Objetos",
       "cor": "#1e88e5",
       "nivel1": [
-        {
-          "id": "bola",
-          "palavra": "BOLA",
-          "silabas": ["BO", "LA"],
-          "imagem": "bola.png",
-          "dificuldade": 1,
-          "tipo": "silabas"
-        },
         {
           "id": "mesa",
           "palavra": "MESA",
@@ -263,88 +157,14 @@
           "imagem": "sofa.png",
           "dificuldade": 1,
           "tipo": "silabas"
-        },
-        {
-          "id": "luva",
-          "palavra": "LUVA",
-          "silabas": ["LU", "VA"],
-          "imagem": "luva.png",
-          "dificuldade": 1,
-          "tipo": "silabas"
         }
       ],
-      "nivel2": [
-        {
-          "id": "casa",
-          "palavra": "CASA",
-          "letras": ["C", "A", "S", "A"],
-          "lacunas": [0],
-          "imagem": "casa.png",
-          "dificuldade": 2,
-          "tipo": "completar",
-          "opcoes": ["C", "G", "K", "Q"]
-        },
-        {
-          "id": "carro",
-          "palavra": "CARRO",
-          "letras": ["C", "A", "R", "R", "O"],
-          "lacunas": [2, 3],
-          "imagem": "carro.png",
-          "dificuldade": 2,
-          "tipo": "completar",
-          "opcoes": ["R", "R", "L", "T"]
-        },
-        {
-          "id": "livro",
-          "palavra": "LIVRO",
-          "letras": ["L", "I", "V", "R", "O"],
-          "lacunas": [3],
-          "imagem": "livro.png",
-          "dificuldade": 2,
-          "tipo": "completar",
-          "opcoes": ["R", "L", "N", "M"]
-        },
-        {
-          "id": "caderno",
-          "palavra": "CADERNO",
-          "letras": ["C", "A", "D", "E", "R", "N", "O"],
-          "lacunas": [4],
-          "imagem": "caderno.png",
-          "dificuldade": 2,
-          "tipo": "completar",
-          "opcoes": ["R", "L", "T", "D"]
-        }
-      ],
-      "nivel3": [
-        {
-          "id": "cadeira",
-          "palavra": "CADEIRA",
-          "letras": ["C", "A", "D", "E", "I", "R", "A"],
-          "imagem": "cadeira.png",
-          "dificuldade": 3,
-          "tipo": "ordenar"
-        },
-        {
-          "id": "lampada",
-          "palavra": "LAMPADA",
-          "letras": ["L", "A", "M", "P", "A", "D", "A"],
-          "imagem": "lampada.png",
-          "dificuldade": 3,
-          "tipo": "ordenar"
-        },
-        {
-          "id": "janela",
-          "palavra": "JANELA",
-          "letras": ["J", "A", "N", "E", "L", "A"],
-          "imagem": "janela.png",
-          "dificuldade": 3,
-          "tipo": "ordenar"
-        }
-      ]
+      "nivel2": [],
+      "nivel3": []
     }
   },
   "configuracoes": {
-    "palavrasPorSessao": 8,
+    "palavrasPorSessao": 6,
     "tempoMaximoPorPalavra": 60000,
     "tentativasMaximas": 3,
     "mostrarDicaAposErros": 1,

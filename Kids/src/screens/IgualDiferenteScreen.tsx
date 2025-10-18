@@ -63,7 +63,8 @@ export const IgualDiferenteScreen: React.FC = () => {
     emitGameStarted('igual-diferente', 'Igual ou Diferente');
     setGameStartTime(Date.now());
     
-    const paresSelecionados = igualDiferenteService.getParesMisturados(config.totalRodadasPorSessao);
+    // ✅ NOVA LÓGICA: Gerar pares com 70% IGUAL / 30% DIFERENTE (TUDO MISTURADO)
+    const paresSelecionados = igualDiferenteService.gerarParesParaJogar('tudo', config.totalRodadasPorSessao);
     setPares(paresSelecionados);
     setCurrentIndex(0);
     setScore(0);
@@ -218,13 +219,6 @@ export const IgualDiferenteScreen: React.FC = () => {
     const percentualAcerto = (acertos / totalPares) * 100;
     const tempoMedio = respostas.reduce((sum, r) => sum + r.tempoResposta, 0) / totalPares;
     const promptsUsados = respostas.filter(r => r.usouPrompt).length;
-    
-    // Análise por nível
-    const porNivel = {
-      nivel1: respostas.filter(r => r.par.dificuldade === 1),
-      nivel2: respostas.filter(r => r.par.dificuldade === 2),
-      nivel3: respostas.filter(r => r.par.dificuldade === 3),
-    };
 
     return {
       totalPares,
@@ -233,20 +227,6 @@ export const IgualDiferenteScreen: React.FC = () => {
       percentualAcerto: percentualAcerto.toFixed(1),
       tempoMedio: Math.round(tempoMedio / 1000),
       promptsUsados,
-      porNivel: {
-        nivel1: {
-          total: porNivel.nivel1.length,
-          acertos: porNivel.nivel1.filter(r => r.correto).length,
-        },
-        nivel2: {
-          total: porNivel.nivel2.length,
-          acertos: porNivel.nivel2.filter(r => r.correto).length,
-        },
-        nivel3: {
-          total: porNivel.nivel3.length,
-          acertos: porNivel.nivel3.filter(r => r.correto).length,
-        },
-      }
     };
   };
 
@@ -260,7 +240,7 @@ export const IgualDiferenteScreen: React.FC = () => {
     
     return (
       <SafeAreaView style={styles.container}>
-        <InternalHeader title="Igual-Diferente" />
+        <InternalHeader title="Igual ou Diferente" />
         
         <View style={styles.resultContainer}>
           <View style={styles.resultCard}>
@@ -337,7 +317,7 @@ export const IgualDiferenteScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <InternalHeader 
-        title="Igual-Diferente" 
+        title="Igual ou Diferente" 
         showBackButton={true}
         onBack={() => navigation.navigate('Dashboard')}
       />
@@ -349,24 +329,6 @@ export const IgualDiferenteScreen: React.FC = () => {
             Par {currentIndex + 1} de {pares.length}
           </Text>
           <Text style={styles.scoreText}>✨ {score} pontos</Text>
-        </View>
-
-        {/* Indicador de nível */}
-        <View style={styles.levelIndicator}>
-          <View 
-            style={[
-              styles.levelBadge,
-              { backgroundColor: 
-                currentPar.dificuldade === 1 ? COLORS.GREEN :
-                currentPar.dificuldade === 2 ? COLORS.YELLOW :
-                COLORS.RED
-              }
-            ]}
-          >
-            <Text style={styles.levelText}>
-              Nível {currentPar.dificuldade}
-            </Text>
-          </View>
         </View>
 
         {/* Área dos Pares */}
@@ -507,22 +469,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: COLORS.BLUE,
-  },
-  
-  // Indicador de nível
-  levelIndicator: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  levelBadge: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 16,
-  },
-  levelText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: COLORS.TEXT_WHITE,
   },
   
   // Pares

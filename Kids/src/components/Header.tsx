@@ -29,8 +29,8 @@ export const Header: React.FC<HeaderProps> = ({
 
   useEffect(() => {
     loadUnreadCount();
-    // Atualizar a cada 30 segundos
-    const interval = setInterval(loadUnreadCount, 30000);
+    // Atualizar a cada 60 segundos (reduzido de 30s para evitar spam)
+    const interval = setInterval(loadUnreadCount, 60000);
     return () => clearInterval(interval);
   }, []);
 

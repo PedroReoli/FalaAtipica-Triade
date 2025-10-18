@@ -83,25 +83,12 @@
           "imagem": "bola.png",
           "alternativas": [
             { "id": "bola", "nome": "Bola", "imagem": "bola.png", "correta": true },
-            { "id": "livro", "nome": "Livro", "imagem": "livro.png", "correta": false },
             { "id": "lapis", "nome": "Lápis", "imagem": "lapis.png", "correta": false },
-            { "id": "caderno", "nome": "Caderno", "imagem": "caderno.png", "correta": false }
-          ]
-        },
-        {
-          "id": "livro",
-          "nome": "Livro",
-          "sombra": "sombra_livro.png",
-          "imagem": "livro.png",
-          "alternativas": [
-            { "id": "bola", "nome": "Bola", "imagem": "bola.png", "correta": false },
-            { "id": "livro", "nome": "Livro", "imagem": "livro.png", "correta": true },
-            { "id": "mochila", "nome": "Mochila", "imagem": "mochila.png", "correta": false },
-            { "id": "caderno", "nome": "Caderno", "imagem": "caderno.png", "correta": false }
+            { "id": "caderno", "nome": "Caderno", "imagem": "caderno.png", "correta": false },
+            { "id": "tesoura", "nome": "Tesoura", "imagem": "tesoura.png", "correta": false }
           ]
         }
       ]
     }
   ]
 }
-

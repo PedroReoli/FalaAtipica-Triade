@@ -1,57 +1,52 @@
 import igualDiferenteData from '../../mockup-data/igual-diferente.json';
 
-// ⚠️ NOVA LÓGICA: Comparar objetos SEMELHANTES (objeto.png vs objeto2.png)
-// Padrão de nomenclatura: sempre "objeto.png" e "objeto2.png"
+// ⚠️ NOVA LÓGICA: Mesmo objeto = IGUAL | Objetos diferentes = DIFERENTE
+// Estrutura: objetos com múltiplas variações (embaralha entre elas)
 
-// ⏳ TEMPORÁRIO: Imagens comentadas até serem geradas
-// Descomente após gerar todas as 21 imagens em Kids/src/assets/images/igual-diferente/
-
-const IMAGES = {
-  // // Nível 1 - Diferenças Grandes
-  // 'flor.png': require('../assets/images/igual-diferente/flor.png'),
-  // 'flor2.png': require('../assets/images/igual-diferente/flor2.png'),
-  // 'casa.png': require('../assets/images/igual-diferente/casa.png'),
-  // 'casa2.png': require('../assets/images/igual-diferente/casa2.png'),
-  // 'carro.png': require('../assets/images/igual-diferente/carro.png'),
-  // 'carro2.png': require('../assets/images/igual-diferente/carro2.png'),
-  // 'cachorro.png': require('../assets/images/igual-diferente/cachorro.png'),
+const IMAGES: Record<string, any> = {
+  // Nível 1
+  'casa.png': require('../assets/images/igual-diferente/casa.png'),
+  'realistas/casa2.png': require('../assets/images/igual-diferente/realistas/casa2.png'),
+  'realistas/casa3.png': require('../assets/images/igual-diferente/realistas/casa3.png'),
   
-  // // Nível 2 - Diferenças Médias
-  // 'arvore.png': require('../assets/images/igual-diferente/arvore.png'),
-  // 'arvore2.png': require('../assets/images/igual-diferente/arvore2.png'),
-  // 'bicicleta.png': require('../assets/images/igual-diferente/bicicleta.png'),
-  // 'bicicleta2.png': require('../assets/images/igual-diferente/bicicleta2.png'),
-  // 'passaro.png': require('../assets/images/igual-diferente/passaro.png'),
-  // 'passaro2.png': require('../assets/images/igual-diferente/passaro2.png'),
-  // 'bola.png': require('../assets/images/igual-diferente/bola.png'),
+  // Nível 2
+  'arvore-verde.png': require('../assets/images/igual-diferente/arvore-verde.png'),
+  'realistas/arvore2.png': require('../assets/images/igual-diferente/realistas/arvore2.png'),
+  'realistas/arvore3.png': require('../assets/images/igual-diferente/realistas/arvore3.png'),
+  'bicicleta_vermelha.png': require('../assets/images/igual-diferente/bicicleta_vermelha.png'),
+  'realistas/bicicleta2.png': require('../assets/images/igual-diferente/realistas/bicicleta2.png'),
+  'realistas/bicicleta3.png': require('../assets/images/igual-diferente/realistas/bicicleta3.png'),
   
-  // // Nível 3 - Diferenças Sutis
-  // 'borboleta.png': require('../assets/images/igual-diferente/borboleta.png'),
-  // 'borboleta2.png': require('../assets/images/igual-diferente/borboleta2.png'),
-  // 'estrela.png': require('../assets/images/igual-diferente/estrela.png'),
-  // 'estrela2.png': require('../assets/images/igual-diferente/estrela2.png'),
-  // 'gato.png': require('../assets/images/igual-diferente/gato.png'),
-  // 'gato2.png': require('../assets/images/igual-diferente/gato2.png'),
-  // 'livro.png': require('../assets/images/igual-diferente/livro.png'),
+  // Nível 3
+  'borboleta.png': require('../assets/images/igual-diferente/borboleta.png'),
+  'realistas/borboleta2.png': require('../assets/images/igual-diferente/realistas/borboleta2.png'),
+  'realistas/borboleta3.png': require('../assets/images/igual-diferente/realistas/borboleta3.png'),
 };
+
+export interface ObjetoComVariacoes {
+  id: string;
+  nome: string;
+  variacoes: string[];
+}
 
 export interface ParIgualDiferente {
   id: string;
   item1: {
-    imagem: any; // ImageSourcePropType (require)
+    imagem: any;
+    objetoId: string;
   };
   item2: {
-    imagem: any; // ImageSourcePropType (require)
+    imagem: any;
+    objetoId: string;
   };
   resposta: 'igual' | 'diferente';
   dificuldade: 1 | 2 | 3;
-  descricao: string;
 }
 
 export interface NivelJogo {
   nome: string;
   descricao: string;
-  pares: ParIgualDiferente[];
+  objetos: ObjetoComVariacoes[];
 }
 
 class IgualDiferenteService {
@@ -68,28 +63,47 @@ class IgualDiferenteService {
   }
 
   getNivel(nivel: 1 | 2 | 3): NivelJogo {
-    const nivelData = this.niveis[`nivel${nivel}`];
-    
-    // Mapear imagens
-    return {
-      ...nivelData,
-      pares: nivelData.pares.map(par => ({
-        ...par,
-        item1: {
-          imagem: this.getImageSource(par.item1.imagem)
-        },
-        item2: {
-          imagem: this.getImageSource(par.item2.imagem)
-        }
-      }))
-    };
+    return this.niveis[`nivel${nivel}`];
   }
 
-  getParesEmbaralhados(nivel: 1 | 2 | 3): ParIgualDiferente[] {
-    const nivelData = this.getNivel(nivel);
-    const pares = [...nivelData.pares];
+  /**
+   * Gera pares para jogar com 55% de chance de IGUAL e 45% de DIFERENTE
+   */
+  gerarParesParaJogar(nivel: 1 | 2 | 3 | 'tudo', quantidade: number = 10): ParIgualDiferente[] {
+    const config = this.config;
+    const porcentagemIguais = config.porcentagemIguais / 100;
+    const quantidadeIguais = Math.round(quantidade * porcentagemIguais);
+    const quantidadeDiferentes = quantidade - quantidadeIguais;
     
-    // Embaralhar (Fisher-Yates)
+    let objetosDisponiveis: ObjetoComVariacoes[] = [];
+    
+    // Selecionar objetos baseado no nível
+    if (nivel === 'tudo') {
+      objetosDisponiveis = [
+        ...this.niveis.nivel1.objetos,
+        ...this.niveis.nivel2.objetos,
+        ...this.niveis.nivel3.objetos,
+      ];
+    } else {
+      objetosDisponiveis = this.niveis[`nivel${nivel}`].objetos;
+    }
+    
+    const pares: ParIgualDiferente[] = [];
+    
+    // Gerar pares IGUAIS (55%)
+    for (let i = 0; i < quantidadeIguais; i++) {
+      const objetoAleatorio = objetosDisponiveis[Math.floor(Math.random() * objetosDisponiveis.length)];
+      const par = this.gerarParIgual(objetoAleatorio);
+      pares.push(par);
+    }
+    
+    // Gerar pares DIFERENTES (45%)
+    for (let i = 0; i < quantidadeDiferentes; i++) {
+      const par = this.gerarParDiferente(objetosDisponiveis);
+      pares.push(par);
+    }
+    
+    // Embaralhar pares
     for (let i = pares.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [pares[i], pares[j]] = [pares[j], pares[i]];
@@ -98,32 +112,80 @@ class IgualDiferenteService {
     return pares;
   }
 
-  getParesMisturados(quantidade: number = 12): ParIgualDiferente[] {
-    // Mistura pares de todos os níveis
-    const todosOsPares: any[] = [
-      ...this.niveis.nivel1.pares,
-      ...this.niveis.nivel2.pares,
-      ...this.niveis.nivel3.pares,
-    ];
-
-    // Mapear imagens
-    const paresMapeados = todosOsPares.map(par => ({
-      ...par,
+  /**
+   * Gera um par IGUAL (mesmo objeto, VARIAÇÕES DIFERENTES - nunca a mesma imagem!)
+   */
+  private gerarParIgual(objeto: ObjetoComVariacoes): ParIgualDiferente {
+    // Garantir que tem pelo menos 2 variações
+    if (objeto.variacoes.length < 2) {
+      console.warn(`⚠️ Objeto ${objeto.id} tem apenas 1 variação!`);
+    }
+    
+    // Selecionar 2 variações DIFERENTES
+    const indice1 = Math.floor(Math.random() * objeto.variacoes.length);
+    let indice2 = Math.floor(Math.random() * objeto.variacoes.length);
+    
+    // Garantir que são variações diferentes (não a mesma imagem!)
+    while (indice2 === indice1 && objeto.variacoes.length > 1) {
+      indice2 = Math.floor(Math.random() * objeto.variacoes.length);
+    }
+    
+    const variacaoAleatoria1 = objeto.variacoes[indice1];
+    const variacaoAleatoria2 = objeto.variacoes[indice2];
+    
+    return {
+      id: `${objeto.id}_igual_${Date.now()}_${Math.random()}`,
       item1: {
-        imagem: this.getImageSource(par.item1.imagem)
+        imagem: this.getImageSource(variacaoAleatoria1),
+        objetoId: objeto.id
       },
       item2: {
-        imagem: this.getImageSource(par.item2.imagem)
-      }
-    }));
+        imagem: this.getImageSource(variacaoAleatoria2),
+        objetoId: objeto.id
+      },
+      resposta: 'igual',
+      dificuldade: 1
+    };
+  }
 
-    // Embaralhar (Fisher-Yates)
-    for (let i = paresMapeados.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [paresMapeados[i], paresMapeados[j]] = [paresMapeados[j], paresMapeados[i]];
+  /**
+   * Gera um par DIFERENTE (objetos diferentes)
+   */
+  private gerarParDiferente(objetos: ObjetoComVariacoes[]): ParIgualDiferente {
+    if (objetos.length < 2) {
+      // Se tiver menos de 2 objetos, retorna um par igual mesmo
+      return this.gerarParIgual(objetos[0]);
     }
-
-    return paresMapeados.slice(0, quantidade) as ParIgualDiferente[];
+    
+    // Selecionar 2 objetos diferentes
+    const indices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].slice(0, objetos.length);
+    const indice1 = indices[Math.floor(Math.random() * indices.length)];
+    let indice2 = indices[Math.floor(Math.random() * indices.length)];
+    
+    // Garantir que são objetos diferentes
+    while (indice2 === indice1 && objetos.length > 1) {
+      indice2 = indices[Math.floor(Math.random() * indices.length)];
+    }
+    
+    const objeto1 = objetos[indice1];
+    const objeto2 = objetos[indice2];
+    
+    const variacaoAleatoria1 = objeto1.variacoes[Math.floor(Math.random() * objeto1.variacoes.length)];
+    const variacaoAleatoria2 = objeto2.variacoes[Math.floor(Math.random() * objeto2.variacoes.length)];
+    
+    return {
+      id: `${objeto1.id}_vs_${objeto2.id}_${Date.now()}_${Math.random()}`,
+      item1: {
+        imagem: this.getImageSource(variacaoAleatoria1),
+        objetoId: objeto1.id
+      },
+      item2: {
+        imagem: this.getImageSource(variacaoAleatoria2),
+        objetoId: objeto2.id
+      },
+      resposta: 'diferente',
+      dificuldade: 1
+    };
   }
 
   private getImageSource(imageName: string): any {
@@ -132,6 +194,15 @@ class IgualDiferenteService {
 
   getConfig() {
     return this.config;
+  }
+  
+  getNiveis() {
+    return [
+      { id: 1, nome: 'Nível 1 - Fácil', descricao: 'Objetos grandes e fáceis' },
+      { id: 2, nome: 'Nível 2 - Médio', descricao: 'Objetos com mais detalhes' },
+      { id: 3, nome: 'Nível 3 - Difícil', descricao: 'Objetos com detalhes sutis' },
+      { id: 'tudo', nome: 'Tudo Misturado', descricao: 'Todos os níveis juntos' },
+    ];
   }
 }
 

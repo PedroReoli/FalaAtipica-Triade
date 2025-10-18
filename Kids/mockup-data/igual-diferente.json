@@ -1,116 +1,65 @@
 {
   "jogos": {
     "nivel1": {
-      "nome": "Nível 1 - Diferenças Grandes",
-      "descricao": "Diferenças bem visíveis entre objetos semelhantes",
-      "pares": [
+      "nome": "Nível 1 - Fácil",
+      "descricao": "Objetos grandes e fáceis de comparar",
+      "objetos": [
         {
-          "id": "n1_01_flor",
-          "item1": { "imagem": "flor.png" },
-          "item2": { "imagem": "flor2.png" },
-          "resposta": "diferente",
-          "dificuldade": 1,
-          "descricao": "Flores com cores diferentes"
+          "id": "casa",
+          "nome": "Casa",
+          "variacoes": ["casa.png", "realistas/casa2.png", "realistas/casa3.png"]
         },
         {
-          "id": "n1_02_casa",
-          "item1": { "imagem": "casa.png" },
-          "item2": { "imagem": "casa2.png" },
-          "resposta": "diferente",
-          "dificuldade": 1,
-          "descricao": "Casas com telhados diferentes"
-        },
-        {
-          "id": "n1_03_carro",
-          "item1": { "imagem": "carro.png" },
-          "item2": { "imagem": "carro2.png" },
-          "resposta": "diferente",
-          "dificuldade": 1,
-          "descricao": "Carros com cores diferentes"
-        },
-        {
-          "id": "n1_04_cachorro",
-          "item1": { "imagem": "cachorro.png" },
-          "item2": { "imagem": "cachorro.png" },
-          "resposta": "igual",
-          "dificuldade": 1,
-          "descricao": "Dois cachorros idênticos"
+          "id": "arvore",
+          "nome": "Árvore",
+          "variacoes": ["arvore-verde.png", "realistas/arvore2.png", "realistas/arvore3.png"]
         }
       ]
     },
     "nivel2": {
-      "nome": "Nível 2 - Diferenças Médias",
-      "descricao": "Diferenças em detalhes e posições",
-      "pares": [
+      "nome": "Nível 2 - Médio",
+      "descricao": "Objetos com detalhes médios",
+      "objetos": [
         {
-          "id": "n2_01_arvore",
-          "item1": { "imagem": "arvore.png" },
-          "item2": { "imagem": "arvore2.png" },
-          "resposta": "diferente",
-          "dificuldade": 2,
-          "descricao": "Árvores com quantidade de folhas diferente"
+          "id": "casa",
+          "nome": "Casa",
+          "variacoes": ["casa.png", "realistas/casa2.png", "realistas/casa3.png"]
         },
         {
-          "id": "n2_02_bicicleta",
-          "item1": { "imagem": "bicicleta.png" },
-          "item2": { "imagem": "bicicleta2.png" },
-          "resposta": "diferente",
-          "dificuldade": 2,
-          "descricao": "Bicicletas com acessórios diferentes"
+          "id": "arvore",
+          "nome": "Árvore",
+          "variacoes": ["arvore-verde.png", "realistas/arvore2.png", "realistas/arvore3.png"]
         },
         {
-          "id": "n2_03_passaro",
-          "item1": { "imagem": "passaro.png" },
-          "item2": { "imagem": "passaro2.png" },
-          "resposta": "diferente",
-          "dificuldade": 2,
-          "descricao": "Pássaros com penas de cores diferentes"
-        },
-        {
-          "id": "n2_04_bola",
-          "item1": { "imagem": "bola.png" },
-          "item2": { "imagem": "bola.png" },
-          "resposta": "igual",
-          "dificuldade": 2,
-          "descricao": "Duas bolas idênticas"
+          "id": "bicicleta",
+          "nome": "Bicicleta",
+          "variacoes": ["bicicleta_vermelha.png", "realistas/bicicleta2.png", "realistas/bicicleta3.png"]
         }
       ]
     },
     "nivel3": {
-      "nome": "Nível 3 - Diferenças Sutis",
-      "descricao": "Diferenças mínimas e detalhes pequenos",
-      "pares": [
+      "nome": "Nível 3 - Difícil",
+      "descricao": "Objetos com detalhes sutis",
+      "objetos": [
         {
-          "id": "n3_01_borboleta",
-          "item1": { "imagem": "borboleta.png" },
-          "item2": { "imagem": "borboleta2.png" },
-          "resposta": "diferente",
-          "dificuldade": 3,
-          "descricao": "Borboletas com padrões sutilmente diferentes nas asas"
+          "id": "casa",
+          "nome": "Casa",
+          "variacoes": ["casa.png", "realistas/casa2.png", "realistas/casa3.png"]
         },
         {
-          "id": "n3_02_estrela",
-          "item1": { "imagem": "estrela.png" },
-          "item2": { "imagem": "estrela2.png" },
-          "resposta": "diferente",
-          "dificuldade": 3,
-          "descricao": "Estrelas com número de pontas diferente"
+          "id": "arvore",
+          "nome": "Árvore",
+          "variacoes": ["arvore-verde.png", "realistas/arvore2.png", "realistas/arvore3.png"]
         },
         {
-          "id": "n3_03_gato",
-          "item1": { "imagem": "gato.png" },
-          "item2": { "imagem": "gato2.png" },
-          "resposta": "diferente",
-          "dificuldade": 3,
-          "descricao": "Gatos com posições de cauda diferentes"
+          "id": "bicicleta",
+          "nome": "Bicicleta",
+          "variacoes": ["bicicleta_vermelha.png", "realistas/bicicleta2.png", "realistas/bicicleta3.png"]
         },
         {
-          "id": "n3_04_livro",
-          "item1": { "imagem": "livro.png" },
-          "item2": { "imagem": "livro.png" },
-          "resposta": "igual",
-          "dificuldade": 3,
-          "descricao": "Dois livros idênticos"
+          "id": "borboleta",
+          "nome": "Borboleta",
+          "variacoes": ["borboleta.png", "realistas/borboleta2.png", "realistas/borboleta3.png"]
         }
       ]
     }
@@ -119,7 +68,9 @@
     "tempoInatividade": 5000,
     "tempoDicaPrompt": 3000,
     "fadePromptAposAcertos": 2,
-    "totalRodadasPorSessao": 12,
-    "embaralharPares": true
+    "totalRodadasPorSessao": 10,
+    "embaralharPares": true,
+    "porcentagemIguais": 55,
+    "porcentagemDiferentes": 45
   }
 }

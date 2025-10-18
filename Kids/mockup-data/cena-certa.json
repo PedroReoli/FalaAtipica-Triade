@@ -10,8 +10,8 @@
           "descricao": "Gato sentado sobre uma caixa marrom",
           "fraseCerta": "O gato está sobre a caixa.",
           "frasesErradas": [
-            "A caixa está sobre o gato.",
-            "O gato está atrás da caixa."
+            "O gato está escondido.",
+            "Não há gato na imagem."
           ],
           "dificuldade": 1,
           "conceito": "sobre/embaixo"
@@ -34,8 +34,8 @@
           "descricao": "Menino de pé ao lado de uma árvore",
           "fraseCerta": "O menino está ao lado da árvore.",
           "frasesErradas": [
-            "O menino está longe da árvore.",
-            "A árvore está ao lado do menino."
+            "O menino está atrás da árvore.",
+            "O menino está longe da árvore."
           ],
           "dificuldade": 1,
           "conceito": "ao lado/longe"
@@ -64,7 +64,7 @@
           "descricao": "Menino chutando uma bola azul",
           "fraseCerta": "O menino chuta a bola.",
           "frasesErradas": [
-            "A bola chuta o menino.",
+            "O menino caiu no chão.",
             "O menino pega a bola."
           ],
           "dificuldade": 2,
@@ -76,8 +76,8 @@
           "descricao": "Cachorro correndo no parque",
           "fraseCerta": "O cachorro corre no parque.",
           "frasesErradas": [
-            "O cachorro dorme no parque.",
-            "O parque corre com o cachorro."
+            "O cachorro está brincando de bola.",
+            "O cachorro dorme no parque."
           ],
           "dificuldade": 2,
           "conceito": "correr/dormir"
@@ -88,8 +88,8 @@
           "descricao": "Menina pulando corda",
           "fraseCerta": "A menina pula corda.",
           "frasesErradas": [
-            "A corda pula a menina.",
-            "A menina segura a corda."
+            "A menina está correndo.",
+            "A menina está deitada."
           ],
           "dificuldade": 2,
           "conceito": "pular/segurar"
@@ -106,8 +106,8 @@
           "descricao": "Menino entregando uma maçã vermelha para a professora",
           "fraseCerta": "O menino dá uma maçã para a professora.",
           "frasesErradas": [
-            "A professora dá uma maçã para o menino.",
-            "O menino come a maçã da professora."
+            "A professora está ensinando.",
+            "O menino está chorando."
           ],
           "dificuldade": 3,
           "conceito": "dar/receber (objeto indireto)"
@@ -118,8 +118,8 @@
           "descricao": "Menina mostrando um desenho para a mãe",
           "fraseCerta": "A menina mostra o desenho para a mãe.",
           "frasesErradas": [
-            "A mãe mostra o desenho para a menina.",
-            "A menina esconde o desenho da mãe."
+            "A mãe está brigando com a menina.",
+            "A menina rasga o desenho da mãe."
           ],
           "dificuldade": 3,
           "conceito": "mostrar/esconder (objeto indireto)"
@@ -130,8 +130,8 @@
           "descricao": "Pai lendo um livro para a criança",
           "fraseCerta": "O pai lê um livro para a criança.",
           "frasesErradas": [
-            "A criança lê um livro para o pai.",
-            "O pai escreve um livro para a criança."
+            "A criança dorme com o pai.",
+            "A criança está comendo."
           ],
           "dificuldade": 3,
           "conceito": "ler/escrever (objeto indireto)"
@@ -142,8 +142,8 @@
           "descricao": "Avó entregando um presente embrulhado para o neto",
           "fraseCerta": "A avó entrega um presente para o neto.",
           "frasesErradas": [
-            "O neto entrega um presente para a avó.",
-            "A avó abre o presente do neto."
+            "A avó está cozinhando para o neto.",
+            "O neto está jogando bola com a avó."
           ],
           "dificuldade": 3,
           "conceito": "entregar/receber (objeto indireto)"
@@ -160,4 +160,3 @@
     "destacarElemento": true
   }
 }
-
