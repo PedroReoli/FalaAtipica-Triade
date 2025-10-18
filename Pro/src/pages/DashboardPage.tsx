@@ -10,10 +10,10 @@ import {
   Pill,
   BookOpen,
   Heart,
-  Filter,
+  // Filter,
   FileText,
   Smartphone,
-  Settings,
+  // Settings,
 } from "lucide-react"
 import { useProfessional } from "../contexts/ProfessionalContext"
 // import { ProgressSection } from "../components/dashboardComponents" // DESABILITADO
@@ -386,10 +386,10 @@ export const DashboardPage: React.FC = () => {
       color: "var(--purple)"
     },
     {
-      title: "Configurações",
-      description: "Ajuste suas preferências",
-      icon: Settings,
-      path: "/settings",
+      title: "Perfil",
+      description: "Visualize e edite seu perfil",
+      icon: Users,
+      path: "/profile",
       color: "var(--gray)"
     }
   ];
