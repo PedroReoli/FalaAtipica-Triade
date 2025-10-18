@@ -1,46 +1,51 @@
 import igualDiferenteData from '../../mockup-data/igual-diferente.json';
 
-// Importar imagens reutilizadas do Adivinha
-const IMAGES_FROM_ADIVINHA = {
-  'cachorro.png': require('../assets/images/adivinha/cachorro.png'),
-  'gato.png': require('../assets/images/adivinha/gato.png'),
-  'bola.png': require('../assets/images/adivinha/bola.png'),
-};
+// ⚠️ NOVA LÓGICA: Comparar objetos SEMELHANTES (objeto.png vs objeto2.png)
+// Padrão de nomenclatura: sempre "objeto.png" e "objeto2.png"
 
-// Imagens específicas do Igual-Diferente
-const IMAGES_IGUAL_DIFERENTE = {
-  'casa.png': require('../assets/images/igual-diferente/casa.png'),
-  'bolo_chocolate.png': require('../assets/images/igual-diferente/bolo_chocolate.png'),
-  'bolo_morango.png': require('../assets/images/igual-diferente/bolo_morango.png'),
-  'arvore_verde.png': require('../assets/images/igual-diferente/arvore-verde.png'), // Arquivo tem hífen
-  'cavalo.png': require('../assets/images/igual-diferente/cavalo.png'),
-  'flor.png': require('../assets/images/igual-diferente/flor.png'),
-  'cadeira_esquerda.png': require('../assets/images/igual-diferente/cadeira_esquerda.png'),
-  'cadeira_direita.png': require('../assets/images/igual-diferente/cadeira_direita.png'),
-  'bicicleta_vermelha.png': require('../assets/images/igual-diferente/bicicleta_vermelha.png'),
-  'elefante.png': require('../assets/images/igual-diferente/elefante.png'),
-  'borboleta.png': require('../assets/images/igual-diferente/borboleta.png'),
-  'formiga.png': require('../assets/images/igual-diferente/formiga.png'),
-};
+// ⏳ TEMPORÁRIO: Imagens comentadas até serem geradas
+// Descomente após gerar todas as 21 imagens em Kids/src/assets/images/igual-diferente/
 
-// Mesclar os dois objetos
-const ALL_IMAGES = {
-  ...IMAGES_FROM_ADIVINHA,
-  ...IMAGES_IGUAL_DIFERENTE,
+const IMAGES = {
+  // // Nível 1 - Diferenças Grandes
+  // 'flor.png': require('../assets/images/igual-diferente/flor.png'),
+  // 'flor2.png': require('../assets/images/igual-diferente/flor2.png'),
+  // 'casa.png': require('../assets/images/igual-diferente/casa.png'),
+  // 'casa2.png': require('../assets/images/igual-diferente/casa2.png'),
+  // 'carro.png': require('../assets/images/igual-diferente/carro.png'),
+  // 'carro2.png': require('../assets/images/igual-diferente/carro2.png'),
+  // 'cachorro.png': require('../assets/images/igual-diferente/cachorro.png'),
+  
+  // // Nível 2 - Diferenças Médias
+  // 'arvore.png': require('../assets/images/igual-diferente/arvore.png'),
+  // 'arvore2.png': require('../assets/images/igual-diferente/arvore2.png'),
+  // 'bicicleta.png': require('../assets/images/igual-diferente/bicicleta.png'),
+  // 'bicicleta2.png': require('../assets/images/igual-diferente/bicicleta2.png'),
+  // 'passaro.png': require('../assets/images/igual-diferente/passaro.png'),
+  // 'passaro2.png': require('../assets/images/igual-diferente/passaro2.png'),
+  // 'bola.png': require('../assets/images/igual-diferente/bola.png'),
+  
+  // // Nível 3 - Diferenças Sutis
+  // 'borboleta.png': require('../assets/images/igual-diferente/borboleta.png'),
+  // 'borboleta2.png': require('../assets/images/igual-diferente/borboleta2.png'),
+  // 'estrela.png': require('../assets/images/igual-diferente/estrela.png'),
+  // 'estrela2.png': require('../assets/images/igual-diferente/estrela2.png'),
+  // 'gato.png': require('../assets/images/igual-diferente/gato.png'),
+  // 'gato2.png': require('../assets/images/igual-diferente/gato2.png'),
+  // 'livro.png': require('../assets/images/igual-diferente/livro.png'),
 };
-
-export interface ItemComparacao {
-  conteudo: string | any; // string para texto, any (require) para imagem
-  tipo: 'texto' | 'imagem';
-}
 
 export interface ParIgualDiferente {
   id: string;
-  tipo: 'palavra-palavra' | 'imagem-imagem' | 'imagem-palavra';
-  item1: ItemComparacao;
-  item2: ItemComparacao;
+  item1: {
+    imagem: any; // ImageSourcePropType (require)
+  };
+  item2: {
+    imagem: any; // ImageSourcePropType (require)
+  };
   resposta: 'igual' | 'diferente';
   dificuldade: 1 | 2 | 3;
+  descricao: string;
 }
 
 export interface NivelJogo {
@@ -63,43 +68,34 @@ class IgualDiferenteService {
   }
 
   getNivel(nivel: 1 | 2 | 3): NivelJogo {
-    return this.niveis[`nivel${nivel}`];
+    const nivelData = this.niveis[`nivel${nivel}`];
+    
+    // Mapear imagens
+    return {
+      ...nivelData,
+      pares: nivelData.pares.map(par => ({
+        ...par,
+        item1: {
+          imagem: this.getImageSource(par.item1.imagem)
+        },
+        item2: {
+          imagem: this.getImageSource(par.item2.imagem)
+        }
+      }))
+    };
   }
 
   getParesEmbaralhados(nivel: 1 | 2 | 3): ParIgualDiferente[] {
     const nivelData = this.getNivel(nivel);
-    const pares: any[] = [...nivelData.pares];
+    const pares = [...nivelData.pares];
     
-    // Mapear imagens para requires
-    const paresMapeados = pares.map(par => ({
-      ...par,
-      item1: this.mapItemWithImage(par.item1),
-      item2: this.mapItemWithImage(par.item2),
-    }));
-    
-    // Embaralhar
-    for (let i = paresMapeados.length - 1; i > 0; i--) {
+    // Embaralhar (Fisher-Yates)
+    for (let i = pares.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [paresMapeados[i], paresMapeados[j]] = [paresMapeados[j], paresMapeados[i]];
+      [pares[i], pares[j]] = [pares[j], pares[i]];
     }
     
-    return paresMapeados as ParIgualDiferente[];
-  }
-
-  private mapItemWithImage(item: ItemComparacao): ItemComparacao {
-    if (item.tipo === 'imagem') {
-      const imageSource = this.getImageSource(item.conteudo);
-      return {
-        ...item,
-        conteudo: imageSource || item.conteudo
-      };
-    }
-    return item;
-  }
-
-  private getImageSource(imageName: string): any {
-    // Retornar a imagem real (do Adivinha ou Igual-Diferente)
-    return ALL_IMAGES[imageName as keyof typeof ALL_IMAGES] || null;
+    return pares;
   }
 
   getParesMisturados(quantidade: number = 12): ParIgualDiferente[] {
@@ -110,14 +106,18 @@ class IgualDiferenteService {
       ...this.niveis.nivel3.pares,
     ];
 
-    // Mapear imagens para requires
+    // Mapear imagens
     const paresMapeados = todosOsPares.map(par => ({
       ...par,
-      item1: this.mapItemWithImage(par.item1),
-      item2: this.mapItemWithImage(par.item2),
+      item1: {
+        imagem: this.getImageSource(par.item1.imagem)
+      },
+      item2: {
+        imagem: this.getImageSource(par.item2.imagem)
+      }
     }));
 
-    // Embaralhar
+    // Embaralhar (Fisher-Yates)
     for (let i = paresMapeados.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [paresMapeados[i], paresMapeados[j]] = [paresMapeados[j], paresMapeados[i]];
@@ -126,10 +126,13 @@ class IgualDiferenteService {
     return paresMapeados.slice(0, quantidade) as ParIgualDiferente[];
   }
 
+  private getImageSource(imageName: string): any {
+    return IMAGES[imageName as keyof typeof IMAGES] || null;
+  }
+
   getConfig() {
     return this.config;
   }
 }
 
 export const igualDiferenteService = new IgualDiferenteService();
-

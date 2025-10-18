@@ -44,10 +44,10 @@ export const mockDataService = {
       console.log('⚠️ [PATIENTS] API erro, usando fallback mockado');
     }
 
-    // Fallback: dados mockados
-    const patientsData = await import('../../Mockup/PRO/pacientes.json');
-    console.log('✅ [PATIENTS] Mockup carregado:', patientsData.pacientes?.length || 0, 'pacientes');
-    return { patients: patientsData.pacientes, total: patientsData.pacientes?.length || 0 };
+    // Fallback: dados mockados (KIDS = pacientes)
+    const kidsData = await import('../../../Mockup/KIDS/usuarios.json');
+    console.log('✅ [PATIENTS] Mockup carregado:', kidsData.usuarios?.length || 0, 'pacientes');
+    return { patients: kidsData.usuarios, total: kidsData.usuarios?.length || 0 };
   },
 
   async loadPatient(patientId: string): Promise<any> {
@@ -70,10 +70,11 @@ export const mockDataService = {
       console.log('⚠️ [PATIENT] API erro, usando fallback mockado');
     }
 
-    // Fallback: patient-details mockado
-    const patientDetails = await import('../../Mockup/PRO/patient-details.json');
-    console.log('✅ [PATIENT] Mockup carregado:', patientDetails.patient?.nome);
-    return patientDetails;
+    // Fallback: buscar nos dados do Kids
+    const kidsData = await import('../../../Mockup/KIDS/usuarios.json');
+    const patient = kidsData.usuarios?.find((u: any) => u.id === patientId);
+    console.log('✅ [PATIENT] Mockup carregado:', patient?.nome);
+    return { patient };
   },
 
   async savePatient(patientData: any): Promise<any> {
@@ -165,10 +166,9 @@ export const mockDataService = {
       console.log('⚠️ [SESSIONS] API erro, usando fallback mockado');
     }
 
-    // Fallback: shared/sessions.json
-    const sessionsData = await import('../../Mockup/shared/sessions.json');
-    console.log('✅ [SESSIONS] Mockup carregado');
-    return { sessions: sessionsData.sessions || [], total: sessionsData.sessions?.length || 0 };
+    // Fallback: retornar vazio (não há dados mockados de sessões)
+    console.log('✅ [SESSIONS] Mockup vazio');
+    return { sessions: [], total: 0 };
   },
 
   async saveSession(sessionData: any): Promise<any> {
@@ -224,10 +224,9 @@ export const mockDataService = {
       console.log('⚠️ [REPORTS] API erro, usando fallback mockado');
     }
 
-    // Fallback: relatorios.json
-    const reportsData = await import('../../Mockup/PRO/relatorios.json');
-    console.log('✅ [REPORTS] Mockup carregado');
-    return reportsData;
+    // Fallback: retornar vazio (não há dados mockados de relatórios)
+    console.log('✅ [REPORTS] Mockup vazio');
+    return { reports: [] };
   },
 
   /**
@@ -253,10 +252,9 @@ export const mockDataService = {
       console.log('⚠️ [MEDICATIONS] API erro, usando fallback mockado');
     }
 
-    // Fallback: medicamentos.json
-    const medicationsData = await import('../../Mockup/PRO/medicamentos.json');
-    console.log('✅ [MEDICATIONS] Mockup carregado');
-    return medicationsData;
+    // Fallback: retornar vazio (não há dados mockados de medicamentos)
+    console.log('✅ [MEDICATIONS] Mockup vazio');
+    return { medications: [] };
   },
 
   async saveMedication(medicationData: any): Promise<any> {
@@ -313,7 +311,7 @@ export const mockDataService = {
     }
 
     // Fallback: shared/agendas.json
-    const agendasData = await import('../../Mockup/shared/agendas.json');
+    const agendasData = await import('../../../Mockup/shared/agendas.json');
     const agendas = agendasData.agendas?.filter((a: any) => a.profissionalId === professionalId) || [];
     console.log('✅ [AGENDAS] Mockup carregado:', agendas.length, 'agendas');
     return { agendas, total: agendas.length };
@@ -343,7 +341,7 @@ export const mockDataService = {
     }
 
     // Fallback: shared/progress.json
-    const progressData = await import('../../Mockup/shared/progress.json');
+    const progressData = await import('../../../Mockup/shared/progress.json');
     const childProgress = progressData.progress?.filter((p: any) => p.userId === childId) || [];
     console.log('✅ [CHILD PROGRESS] Mockup carregado');
     return { progress: childProgress };

@@ -376,21 +376,17 @@ export const IgualDiferenteScreen: React.FC = () => {
           <View style={styles.pairsRow}>
             {/* Item 1 */}
             <View style={styles.itemCard}>
-              {currentPar.item1.tipo === 'texto' ? (
-                <Text style={styles.itemText}>{currentPar.item1.conteudo}</Text>
+              {currentPar.item1.imagem ? (
+                <Image
+                  source={currentPar.item1.imagem}
+                  style={styles.itemImage}
+                  resizeMode="contain"
+                />
               ) : (
-                currentPar.item1.conteudo ? (
-                  <Image
-                    source={currentPar.item1.conteudo}
-                    style={styles.itemImage}
-                    resizeMode="contain"
-                  />
-                ) : (
-                  <View style={styles.imagePlaceholder}>
-                    <ImageIcon size={60} color={COLORS.BLUE} />
-                    <Text style={styles.imageName}>Imagem não encontrada</Text>
-                  </View>
-                )
+                <View style={styles.imagePlaceholder}>
+                  <ImageIcon size={60} color={COLORS.BLUE} />
+                  <Text style={styles.imageName}>Imagem não encontrada</Text>
+                </View>
               )}
             </View>
 
@@ -399,21 +395,17 @@ export const IgualDiferenteScreen: React.FC = () => {
 
             {/* Item 2 */}
             <View style={styles.itemCard}>
-              {currentPar.item2.tipo === 'texto' ? (
-                <Text style={styles.itemText}>{currentPar.item2.conteudo}</Text>
+              {currentPar.item2.imagem ? (
+                <Image
+                  source={currentPar.item2.imagem}
+                  style={styles.itemImage}
+                  resizeMode="contain"
+                />
               ) : (
-                currentPar.item2.conteudo ? (
-                  <Image
-                    source={currentPar.item2.conteudo}
-                    style={styles.itemImage}
-                    resizeMode="contain"
-                  />
-                ) : (
-                  <View style={styles.imagePlaceholder}>
-                    <ImageIcon size={60} color={COLORS.BLUE} />
-                    <Text style={styles.imageName}>Imagem não encontrada</Text>
-                  </View>
-                )
+                <View style={styles.imagePlaceholder}>
+                  <ImageIcon size={60} color={COLORS.BLUE} />
+                  <Text style={styles.imageName}>Imagem não encontrada</Text>
+                </View>
               )}
             </View>
           </View>

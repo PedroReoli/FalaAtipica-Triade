@@ -35,53 +35,83 @@
 
 ---
 
-### **2. Jogo: Igual-Diferente** ⏳ FALTA GERAR
+### **2. Jogo: Igual-Diferente** ✅ REFATORADO - ⏳ GERAR IMAGENS
 
 ⚠️ **ATENÇÃO - MUDANÇA CRÍTICA PLANEJADA:** Ver `TODO.md` → "PRIORIDADE CRÍTICA"
+✅ **LÓGICA ATUALIZADA!** Agora compara objetos SEMELHANTES!
 
-**Como funciona:** Aparecem 2 itens lado a lado, criança decide se são IGUAIS ou DIFERENTES
+**Como funciona:** Aparecem 2 itens lado a lado (variações do MESMO objeto), criança decide se são IGUAIS ou DIFERENTES
 
-**⚠️ LÓGICA SERÁ ALTERADA:**
-- **Atual:** Compara objetos DIFERENTES (cachorro ≠ gato, bicicleta ≠ carro)
-- **Nova (a implementar):** Comparar objetos SEMELHANTES (flor1 vs flor2, casa_azul vs casa_vermelha)
-- **Motivo:** Melhor alinhamento pedagógico para crianças com atraso de fala
+**🎯 Nova Lógica Implementada:**
+- Compara objetos SEMELHANTES: `objeto.png` vs `objeto2.png`
+- Exemplo: Duas flores (uma amarela, uma vermelha)
+- Exemplo: Duas casas (telhados diferentes)
+- **Objetivo Pedagógico:** Ajudar crianças a identificar semelhanças e diferenças sutis
 
 **Pasta:** `Kids/src/assets/images/igual-diferente/` (todas as imagens na mesma pasta)
 
-**📝 Nota:** As imagens atuais serão substituídas quando a nova lógica for implementada
-
-#### **Imagens que JÁ EXISTEM no Adivinha (reutilizar):**
-- ✅ `cachorro.png` - Usar de `adivinha/cachorro.png`
-- ✅ `gato.png` - Usar de `adivinha/gato.png`
-- ✅ `bola.png` - Usar de `adivinha/bola.png`
-
-#### **Imagens NOVAS que precisam ser geradas (12 imagens):**
-
-**Pasta:** `Kids/src/assets/images/igual-diferente/`
-
-| # | Nome do Arquivo | Descrição EXATA | Nível | Tamanho |
-|---|----------------|----------------|-------|---------|
-| 1 | `casa.png` | Casa simples com telhado vermelho, porta azul, 1 janela de cada lado | 1 | 500x500px |
-| 2 | `bolo_chocolate.png` | Bolo redondo 2 andares com cobertura marrom chocolate e granulado | 2 | 500x500px |
-| 3 | `bolo_morango.png` | Bolo redondo 2 andares IDÊNTICO mas cobertura rosa morango com morangos | 2 | 500x500px |
-| 4 | `arvore_verde.png` | Árvore com copa redonda verde escuro, tronco marrom | 2 | 500x500px |
-| 5 | `cavalo.png` | Cavalo marrom de perfil para direita, crina preta | 2 | 500x500px |
-| 6 | `flor.png` | Flor amarela com 5 pétalas redondas, caule verde com 2 folhas | 2 | 500x500px |
-| 7 | `cadeira_esquerda.png` | Cadeira de madeira marrom com encosto (qualquer direção) | 3 | 500x500px |
-| 8 | `cadeira_direita.png` | MESMA cadeira IDÊNTICA (são consideradas IGUAIS no jogo) | 3 | 500x500px |
-| 9 | `bicicleta_vermelha.png` | Bicicleta vermelha infantil de perfil, rodas pretas | 3 | 500x500px |
-| 10 | `elefante.png` | Elefante cinza de perfil para direita, tromba levantada | 3 | 500x500px |
-| 11 | `borboleta.png` | Borboleta com asas abertas, cores: azul e laranja | 3 | 500x500px |
-| 12 | `formiga.png` | Formiga preta pequena de perfil, 6 patas visíveis | 3 | 500x500px |
-
-**Características de TODAS as imagens:**
+**⚠️ PADRÃO OBRIGATÓRIO DE NOMENCLATURA:**
+- Sempre `objeto.png` e `objeto2.png` (com "2" no final)
+- Tamanho: **500x500px** (padrão do projeto)
 - Formato: PNG com fundo transparente
-- Tamanho: **500x500px** (todas! mesmo padrão do Adivinha)
-- Estilo: Ilustrações simples, flat design, infantis
-- Cores: Vibrantes e claras
-- Fundo: TRANSPARENTE
-- **Exibição no app:** 130x130px (escala automaticamente)
-- **IMPORTANTE:** Para comparações "iguais", o código usa a MESMA imagem 2 vezes
+
+#### **NÍVEL 1 - Diferenças Grandes (4 pares = 7 imagens)**
+
+| # | Nome do Arquivo | Descrição EXATA | Status |
+|---|----------------|-----------------|--------|
+| 1 | `flor.png` | Flor amarela com 5 pétalas, caule verde | ⏳ Gerar |
+| 2 | `flor2.png` | Flor vermelha com 5 pétalas, caule verde (MESMA flor, cor diferente) | ⏳ Gerar |
+| 3 | `casa.png` | Casa branca com telhado triangular vermelho, porta azul | ⏳ Gerar |
+| 4 | `casa2.png` | Casa branca com telhado plano azul, porta azul (MESMA casa, telhado diferente) | ⏳ Gerar |
+| 5 | `carro.png` | Carro azul sedan, 4 portas | ⏳ Gerar |
+| 6 | `carro2.png` | Carro vermelho sedan, 4 portas (MESMO carro, cor diferente) | ⏳ Gerar |
+| 7 | `cachorro.png` | Cachorro marrom sentado (imagem repetida = IGUAL) | ⏳ Gerar |
+
+---
+
+#### **NÍVEL 2 - Diferenças Médias (4 pares = 7 imagens)**
+
+| # | Nome do Arquivo | Descrição EXATA | Status |
+|---|----------------|-----------------|--------|
+| 8 | `arvore.png` | Árvore verde com MUITAS folhas, copa cheia | ⏳ Gerar |
+| 9 | `arvore2.png` | Árvore verde com POUCAS folhas, copa rala (MESMA árvore, menos folhas) | ⏳ Gerar |
+| 10 | `bicicleta.png` | Bicicleta vermelha SEM cesta | ⏳ Gerar |
+| 11 | `bicicleta2.png` | Bicicleta vermelha COM cesta na frente (MESMA bike, cesta adicionada) | ⏳ Gerar |
+| 12 | `passaro.png` | Pássaro azul com asas abertas | ⏳ Gerar |
+| 13 | `passaro2.png` | Pássaro amarelo com asas abertas (MESMO formato, cor diferente) | ⏳ Gerar |
+| 14 | `bola.png` | Bola de futebol (imagem repetida = IGUAL) | ⏳ Gerar |
+
+---
+
+#### **NÍVEL 3 - Diferenças Sutis (4 pares = 7 imagens)**
+
+| # | Nome do Arquivo | Descrição EXATA | Status |
+|---|----------------|-----------------|--------|
+| 15 | `borboleta.png` | Borboleta com padrão de BOLINHAS nas asas | ⏳ Gerar |
+| 16 | `borboleta2.png` | Borboleta com padrão de LISTRAS nas asas (MESMA borboleta, padrão diferente) | ⏳ Gerar |
+| 17 | `estrela.png` | Estrela de 5 pontas amarela | ⏳ Gerar |
+| 18 | `estrela2.png` | Estrela de 6 pontas amarela (MESMA estrela, uma ponta a mais) | ⏳ Gerar |
+| 19 | `gato.png` | Gato laranja com cauda PARA CIMA | ⏳ Gerar |
+| 20 | `gato2.png` | Gato laranja com cauda PARA BAIXO (MESMO gato, cauda diferente) | ⏳ Gerar |
+| 21 | `livro.png` | Livro fechado azul (imagem repetida = IGUAL) | ⏳ Gerar |
+
+---
+
+**Características das Imagens:**
+- Formato: PNG com fundo transparente
+- Tamanho: **500x500px** (TODAS!)
+- Estilo: Ilustrações infantis, flat design, OBJETO ISOLADO
+- Cores: Vibrantes e claras (paleta do projeto: #1e88e5, #43a047, #e53935, #fbc02d)
+- **CRÍTICO:** Pares "diferentes" devem ser SEMELHANTES (mesmo objeto, pequenas variações)
+- **CRÍTICO:** Pares "iguais" usam a MESMA imagem 2 vezes (sem "2")
+- **Exibição no app:** 160x160px (escala automaticamente de 500x500px)
+
+**Total:** ⏳ **21 imagens únicas** para gerar
+
+**🎯 Estratégia de Variação:**
+- **Nível 1:** Cores diferentes, formas grandes diferentes (muito óbvio)
+- **Nível 2:** Acessórios adicionados/removidos, quantidade de elementos (médio)
+- **Nível 3:** Detalhes mínimos - padrões, posições, pequenas diferenças (difícil)
 
 ---
 

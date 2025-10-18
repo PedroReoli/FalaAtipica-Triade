@@ -152,24 +152,6 @@ router.get('/dashboard/:professionalId', async (req, res) => {
  *         description: Lista de pacientes retornada
  */
 router.get('/patients', async (req, res) => {
-
-/**
- * @swagger
- * /api/pro/patients:
- *   get:
- *     tags: [Pro]
- *     summary: Lista de pacientes do profissional
- *     parameters:
- *       - in: query
- *         name: professionalId
- *         schema:
- *           type: string
- *         example: prof_001
- *     responses:
- *       200:
- *         description: Lista de pacientes retornada
- */
-router.get('/patients', async (req, res) => {
   try {
     const { professionalId } = req.query;
     

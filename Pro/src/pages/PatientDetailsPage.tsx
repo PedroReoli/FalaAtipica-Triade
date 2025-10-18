@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Edit2, Trash2, Calendar, Phone, Mail, Users, Clock, FileText, Activity, Eye, FolderOpen, History } from 'lucide-react';
+import { ArrowLeft, Edit2, Trash2, Calendar, Smartphone, Mail, Users, Clock, FileText, Activity, Eye, FolderOpen, History } from 'lucide-react';
 import { useProfessional } from '../contexts/ProfessionalContext';
-import { useRoleColor } from '../hooks/useRoleColor';
-import { mockDataService } from '../services/mockDataService';
-import { socketService } from '../hooks/useAPIIntegration';
-import patientDetailsData from '../../../Mockup/PRO/paciente-detalhes.json';
+import { useProfessionalColors } from '../hooks/useProfessionalColors';
 
 interface Session {
   id: string;
@@ -16,105 +13,62 @@ interface Session {
   status: 'completed' | 'scheduled' | 'cancelled';
 }
 
-
-interface MobileApp {
-  name: string;
-  status: string;
-  devices: Array<{
-    id: string;
-    name: string;
-    os: string;
-    lastAccess: string;
-    status: string;
-  }>;
-  subscription: {
-    plan: string;
-    price: string;
-    status: string;
-    expires: string;
-  };
-  token: string;
-}
-
-interface Summary {
-  devices: number;
-  activeApps: number;
-  daysRemaining: number;
-  lastAccess: string;
-}
-
-export const PatientDetailsPage: React.FC = () => {
+const PatientDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { professionalType, professionalData } = useProfessional();
-  const roleColor = useRoleColor();
+  const { professionalType } = useProfessional();
+  const colors = useProfessionalColors(professionalType);
   const [activeTab, setActiveTab] = useState<'info' | 'sessions' | 'reports' | 'documents' | 'history' | 'mobile'>('info');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showEditHistoryModal, setShowEditHistoryModal] = useState(false);
   const [showAddHistoryModal, setShowAddHistoryModal] = useState(false);
-  const [showManagementModal, setShowManagementModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [patient, setPatient] = useState<any>(null);
-  const [sessions, setSessions] = useState<Session[]>([]);
-  const [mobileApps, setMobileApps] = useState<any>(null);
-  const [summary, setSummary] = useState<Summary | null>(null);
 
-  useEffect(() => {
-    loadPatientData();
-    setupRealtimeUpdates();
-
-    return () => {
-      socketService.off('patient-game-completed');
-      socketService.off('child-game-completed');
-    };
-  }, [id]);
-
-  const setupRealtimeUpdates = () => {
-    const currentUser = professionalData;
-    if (currentUser && !socketService.isSocketConnected()) {
-      socketService.connect(currentUser.id, currentUser.name);
-    }
-
-    // Atualizar quando paciente jogar
-    socketService.on('patient-game-completed', (data: any) => {
-      if (data.userId === id) {
-        console.log('🎮 Paciente jogou, atualizando dados...');
-        loadPatientData(); // Recarregar tudo
-      }
-    });
-
-    socketService.on('child-game-completed', (data: any) => {
-      if (data.userId === id) {
-        console.log('🎮 Criança jogou, atualizando dados...');
-        loadPatientData(); // Recarregar tudo
-      }
-    });
-  };
-
-  const loadPatientData = async () => {
-    try {
-      setIsLoading(true);
-      
-      // Carregar dados do paciente via API
-      const patientData = await mockDataService.loadPatient(id || '1');
-      
-      // Normalizar dados
-      setPatient(patientData.patient || { ...patientDetailsData.patient, id });
-      setSessions(patientData.sessions || patientDetailsData.sessions as Session[]);
-      setMobileApps(patientData.mobileApps || patientDetailsData.mobileApps);
-      setSummary(patientData.summary || patientDetailsData.summary as Summary);
-      
-    } catch (error) {
-      console.error('Erro ao carregar paciente:', error);
-      // Fallback completo
-      setPatient({ ...patientDetailsData.patient, id });
-      setSessions(patientDetailsData.sessions as Session[]);
-      setMobileApps(patientDetailsData.mobileApps);
-      setSummary(patientDetailsData.summary as Summary);
-    } finally {
-      setIsLoading(false);
+  // Dados mockados do paciente
+  const patient = {
+    id: id,
+    name: 'João Silva',
+    age: 8,
+    birthDate: '2016-05-15',
+    status: 'active',
+    registrationDate: '2024-01-10',
+    tutor: {
+      name: 'Carlos Silva',
+      phone: '(11) 99999-8888',
+      email: 'carlos.silva@email.com',
+      relationship: 'Pai'
+    },
+    address: {
+      street: 'Rua das Flores, 123',
+      city: 'São Paulo',
+      state: 'SP',
+      zipCode: '01234-567'
+    },
+    medicalInfo: {
+      diagnosis: 'Transtorno de Fala',
+      allergies: 'Nenhuma',
+      medications: 'Nenhuma',
+      observations: 'Paciente apresenta ótima evolução nas sessões.'
     }
   };
+
+  const sessions: Session[] = [
+    {
+      id: '1',
+      date: '2024-01-15',
+      duration: 60,
+      type: 'Terapia Individual',
+      notes: 'Sessão focada em exercícios de articulação.',
+      status: 'completed'
+    },
+    {
+      id: '2',
+      date: '2024-01-22',
+      duration: 60,
+      type: 'Terapia Individual',
+      notes: 'Continuação dos exercícios anteriores.',
+      status: 'scheduled'
+    }
+  ];
 
   const handleEdit = () => {
     navigate(`/patients/${id}/edit`);
@@ -154,11 +108,6 @@ export const PatientDetailsPage: React.FC = () => {
 
   const closeAddHistoryModal = () => {
     setShowAddHistoryModal(false);
-  };
-
-
-  const closeManagementModal = () => {
-    setShowManagementModal(false);
   };
 
 
@@ -227,12 +176,13 @@ export const PatientDetailsPage: React.FC = () => {
   };
 
   return (
-    <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
-      <div className="dashboard-content">
-        <div className="w-full min-h-full flex flex-col space-y-2">
+    <>
+      <div className="dashboard-wrapper" style={{ backgroundColor: "var(--background-white)" }}>
+        <div className="dashboard-content">
+          <div className="w-full min-h-full flex flex-col space-y-2">
           {/* Header */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
+            <div className="bg-white rounded-xl p-4 shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
               <div className="flex items-center justify-between mb-4">
                 <button
                   onClick={() => navigate('/patients')}
@@ -245,7 +195,7 @@ export const PatientDetailsPage: React.FC = () => {
                   <button
                     onClick={handleEdit}
                     className="p-2 rounded-lg text-white transition-colors"
-                    style={{ backgroundColor: roleColor.primary }}
+                    style={{ backgroundColor: colors.primary }}
                     title="Editar paciente"
                   >
                     <Edit2 size={18} />
@@ -264,7 +214,7 @@ export const PatientDetailsPage: React.FC = () => {
               <div className="flex items-center space-x-4">
                 <div
                   className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-2xl"
-                  style={{ backgroundColor: roleColor.primary }}
+                  style={{ backgroundColor: colors.primary }}
                 >
                   {patient.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </div>
@@ -287,7 +237,7 @@ export const PatientDetailsPage: React.FC = () => {
 
           {/* Tabs */}
           <div className="dashboard-spacing">
-            <div className="bg-white rounded-xl shadow-sm" style={{ border: `2px solid ${roleColor.primary}` }}>
+            <div className="bg-white rounded-xl shadow-sm" style={{ border: `2px solid ${colors.primary}` }}>
               <div className="flex border-b">
                 <button
                   onClick={() => setActiveTab('info')}
@@ -297,8 +247,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'info' ? roleColor.primary : 'transparent',
-                    backgroundColor: activeTab === 'info' ? roleColor.primary : 'transparent',
+                    borderBottomColor: activeTab === 'info' ? colors.primary : 'transparent',
+                    backgroundColor: activeTab === 'info' ? colors.primary : 'transparent',
                     color: activeTab === 'info' ? 'white' : undefined
                   }}
                 >
@@ -315,8 +265,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'sessions' ? roleColor.primary : 'transparent',
-                    backgroundColor: activeTab === 'sessions' ? roleColor.primary : 'transparent',
+                    borderBottomColor: activeTab === 'sessions' ? colors.primary : 'transparent',
+                    backgroundColor: activeTab === 'sessions' ? colors.primary : 'transparent',
                     color: activeTab === 'sessions' ? 'white' : undefined
                   }}
                 >
@@ -333,8 +283,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'reports' ? roleColor.primary : 'transparent',
-                    backgroundColor: activeTab === 'reports' ? roleColor.primary : 'transparent',
+                    borderBottomColor: activeTab === 'reports' ? colors.primary : 'transparent',
+                    backgroundColor: activeTab === 'reports' ? colors.primary : 'transparent',
                     color: activeTab === 'reports' ? 'white' : undefined
                   }}
                 >
@@ -351,8 +301,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'documents' ? roleColor.primary : 'transparent',
-                    backgroundColor: activeTab === 'documents' ? roleColor.primary : 'transparent',
+                    borderBottomColor: activeTab === 'documents' ? colors.primary : 'transparent',
+                    backgroundColor: activeTab === 'documents' ? colors.primary : 'transparent',
                     color: activeTab === 'documents' ? 'white' : undefined
                   }}
                 >
@@ -369,8 +319,8 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'history' ? roleColor.primary : 'transparent',
-                    backgroundColor: activeTab === 'history' ? roleColor.primary : 'transparent',
+                    borderBottomColor: activeTab === 'history' ? colors.primary : 'transparent',
+                    backgroundColor: activeTab === 'history' ? colors.primary : 'transparent',
                     color: activeTab === 'history' ? 'white' : undefined
                   }}
                 >
@@ -387,13 +337,13 @@ export const PatientDetailsPage: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                   style={{
-                    borderBottomColor: activeTab === 'mobile' ? roleColor.primary : 'transparent',
-                    backgroundColor: activeTab === 'mobile' ? roleColor.primary : 'transparent',
+                    borderBottomColor: activeTab === 'mobile' ? colors.primary : 'transparent',
+                    backgroundColor: activeTab === 'mobile' ? colors.primary : 'transparent',
                     color: activeTab === 'mobile' ? 'white' : undefined
                   }}
                 >
                   <div className="flex items-center justify-center space-x-2">
-                    <Activity size={18} />
+                    <Smartphone size={18} />
                     <span>Aplicações</span>
                   </div>
                 </button>
@@ -423,7 +373,7 @@ export const PatientDetailsPage: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Informações Pessoais */}
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
+                      <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
                         Informações Pessoais
                       </h3>
                       <div className="space-y-3">
@@ -447,7 +397,7 @@ export const PatientDetailsPage: React.FC = () => {
 
                     {/* Informações do Tutor */}
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
+                      <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
                         Informações do Tutor
                       </h3>
                       <div className="space-y-3">
@@ -461,7 +411,7 @@ export const PatientDetailsPage: React.FC = () => {
                         </div>
                         <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                           <div className="flex items-center space-x-2 mb-2">
-                            <Phone size={16} className="text-gray-500" />
+                            <Smartphone size={16} className="text-gray-500" />
                             <p className="text-xs text-gray-500">Telefone</p>
                           </div>
                           <p className="font-medium">{patient.tutor.phone}</p>
@@ -478,7 +428,7 @@ export const PatientDetailsPage: React.FC = () => {
 
                     {/* Informações Médicas */}
                     <div className="md:col-span-2 space-y-4">
-                      <h3 className="text-lg font-semibold mb-4" style={{ color: roleColor.primary }}>
+                      <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
                         Informações Médicas
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -507,18 +457,13 @@ export const PatientDetailsPage: React.FC = () => {
                 {activeTab === 'sessions' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
+                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
                         Histórico de Sessões
                       </h3>
                       <button
-                        onClick={() => navigate('/sessions/new', { 
-                          state: { 
-                            patientId: id, 
-                            patientName: patient.name 
-                          } 
-                        })}
+                        onClick={() => navigate('/sessions/new')}
                         className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: roleColor.primary }}
+                        style={{ backgroundColor: colors.primary }}
                       >
                         Nova Sessão
                       </button>
@@ -532,7 +477,7 @@ export const PatientDetailsPage: React.FC = () => {
                           <div className="flex items-center space-x-3">
                             <div
                               className="w-10 h-10 rounded-lg flex items-center justify-center"
-                              style={{ backgroundColor: roleColor.primary }}
+                              style={{ backgroundColor: colors.primary }}
                             >
                               <Activity size={18} className="text-white" />
                             </div>
@@ -553,7 +498,7 @@ export const PatientDetailsPage: React.FC = () => {
                               <button
                                 onClick={() => handleViewSession(session.id)}
                                 className="p-2 rounded-lg text-white transition-colors hover:opacity-80"
-                                style={{ backgroundColor: roleColor.primary }}
+                                style={{ backgroundColor: colors.primary }}
                                 title="Visualizar sessão"
                               >
                                 <Eye size={16} />
@@ -561,7 +506,7 @@ export const PatientDetailsPage: React.FC = () => {
                               <button
                                 onClick={() => handleEditSession(session.id)}
                                 className="p-2 rounded-lg text-white transition-colors hover:opacity-80"
-                                style={{ backgroundColor: roleColor.primary }}
+                                style={{ backgroundColor: colors.primary }}
                                 title="Editar sessão"
                               >
                                 <Edit2 size={16} />
@@ -570,7 +515,7 @@ export const PatientDetailsPage: React.FC = () => {
                                 <button
                                   onClick={() => handleEditSessionReport(session.id)}
                                   className="p-2 rounded-lg text-white transition-colors hover:opacity-80"
-                                  style={{ backgroundColor: roleColor.primary }}
+                                  style={{ backgroundColor: colors.primary }}
                                   title="Editar relatório"
                                 >
                                   <FileText size={16} />
@@ -591,7 +536,7 @@ export const PatientDetailsPage: React.FC = () => {
                     {/* Arquivos recém-uploadados */}
                     {uploadedFiles.length > 0 && (
                       <div className="mb-6">
-                        <h4 className="text-md font-semibold mb-3" style={{ color: roleColor.primary }}>
+                        <h4 className="text-md font-semibold mb-3" style={{ color: colors.primary }}>
                           Relatórios Recém-Adicionados
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -631,7 +576,7 @@ export const PatientDetailsPage: React.FC = () => {
                       <button
                         onClick={() => triggerFileUpload('report-upload')}
                         className="px-6 py-3 rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: roleColor.primary }}
+                        style={{ backgroundColor: colors.primary }}
                       >
                         Upload Relatório
                       </button>
@@ -643,13 +588,13 @@ export const PatientDetailsPage: React.FC = () => {
                 {activeTab === 'documents' && (
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
+                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
                         Documentos e Anexos
                       </h3>
                       <button
                         onClick={() => triggerFileUpload('document-upload')}
                         className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: roleColor.primary }}
+                        style={{ backgroundColor: colors.primary }}
                       >
                         <FolderOpen size={18} className="inline mr-2" />
                         Upload
@@ -659,7 +604,7 @@ export const PatientDetailsPage: React.FC = () => {
                     {/* Arquivos recém-uploadados */}
                     {uploadedFiles.length > 0 && (
                       <div className="mb-6">
-                        <h4 className="text-md font-semibold mb-3" style={{ color: roleColor.primary }}>
+                        <h4 className="text-md font-semibold mb-3" style={{ color: colors.primary }}>
                           Arquivos Recém-Adicionados
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -741,14 +686,14 @@ export const PatientDetailsPage: React.FC = () => {
                 {activeTab === 'history' && (
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
+                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
                         Histórico Médico Detalhado
                       </h3>
                       <div className="flex space-x-2">
                         <button
                           onClick={handleEditHistory}
                           className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                          style={{ backgroundColor: roleColor.primary }}
+                          style={{ backgroundColor: colors.primary }}
                         >
                           <Edit2 size={18} className="inline mr-2" />
                           Editar
@@ -756,7 +701,7 @@ export const PatientDetailsPage: React.FC = () => {
                         <button
                           onClick={handleAddHistory}
                           className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
-                          style={{ backgroundColor: roleColor.primary }}
+                          style={{ backgroundColor: colors.primary }}
                         >
                           <Activity size={18} className="inline mr-2" />
                           Adicionar Histórico
@@ -823,117 +768,116 @@ export const PatientDetailsPage: React.FC = () => {
 
                 {/* Tab: Aplicações Vinculadas */}
                 {activeTab === 'mobile' && (
-                  <div className="space-y-4">
-                    {/* Header Compacto */}
+                  <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
+                      <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
                         Aplicações Vinculadas
                       </h3>
                       <button
-                        className="px-3 py-2 text-sm rounded-lg text-white font-medium transition-colors"
-                        style={{ backgroundColor: roleColor.primary }}
+                        className="px-4 py-2 rounded-lg text-white font-medium transition-colors"
+                        style={{ backgroundColor: colors.primary }}
                       >
-                        <Activity size={16} className="inline mr-1" />
-                        Gerenciar
+                        <Activity size={18} className="inline mr-2" />
+                        Gerenciar Acessos
                       </button>
                     </div>
                     
-                    {/* Cards de Resumo Compactos */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                      <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                    {/* Resumo Geral */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                      <div className="bg-white p-2 rounded-lg border border-gray-200 shadow-sm" style={{ borderLeft: `4px solid ${colors.primary}` }}>
                         <div className="flex items-center space-x-2">
                           <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                            <Activity size={16} className="text-white" />
+                            <Smartphone size={16} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-xs font-medium text-gray-600">Dispositivos</p>
-                            <p className="text-lg font-bold" style={{ color: roleColor.primary }}>{summary.devices}</p>
+                            <p className="text-2xl font-bold text-gray-900">3</p>
+                            <p className="text-sm text-gray-600">Dispositivos</p>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                            <Activity size={16} className="text-white" />
+                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                            <Activity size={20} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-xs font-medium text-gray-600">Apps Ativos</p>
-                            <p className="text-lg font-bold" style={{ color: roleColor.primary }}>{summary.activeApps}</p>
+                            <p className="text-2xl font-bold text-gray-900">2</p>
+                            <p className="text-sm text-gray-600">Apps Ativos</p>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
-                            <Clock size={16} className="text-white" />
+                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                            <Clock size={20} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-xs font-medium text-gray-600">Dias Restantes</p>
-                            <p className="text-lg font-bold" style={{ color: roleColor.primary }}>{summary.daysRemaining}</p>
+                            <p className="text-2xl font-bold text-gray-900">15</p>
+                            <p className="text-sm text-gray-600">Dias Restantes</p>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                            <FileText size={16} className="text-white" />
+                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                            <FileText size={20} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-xs font-medium text-gray-600">Último Acesso</p>
-                            <p className="text-sm font-bold" style={{ color: roleColor.primary }}>{summary.lastAccess}</p>
+                            <p className="text-2xl font-bold text-gray-900">24h</p>
+                            <p className="text-sm text-gray-600">Último Acesso</p>
                           </div>
                         </div>
                       </div>
                     </div>
                     
-                    {/* Apps em Grid Compacto */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {/* Apps KIDS e TUTORS */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                       {/* App KIDS */}
-                      <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${roleColor.primary}` }}>
-                        <div className="p-6">
-                          <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-lg">K</span>
+                      <div className="bg-white rounded-lg shadow-sm border border-gray-200" style={{ borderLeft: `4px solid ${colors.primary}` }}>
+                        <div className="p-3">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-2">
+                              <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <span className="text-white font-bold text-base">K</span>
                               </div>
                               <div>
-                                <h4 className="text-lg font-semibold text-gray-900">App KIDS</h4>
-                                <p className="text-sm text-gray-600">Aplicativo para crianças</p>
+                                <h4 className="text-base font-semibold text-gray-900">App KIDS</h4>
+                                <p className="text-xs text-gray-600">Aplicativo para crianças</p>
                               </div>
                             </div>
-                            <span className="px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">
+                            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">
                               Ativo
                             </span>
                           </div>
                           
                           <div className="space-y-4">
-                            {/* Dispositivos Conectados */}
-                            <div className="border border-gray-200 rounded-lg p-4">
-                              <div className="flex items-center justify-between mb-3">
-                                <h5 className="font-semibold text-gray-900">Dispositivos Conectados</h5>
-                                <span className="text-xs text-gray-500">2 de 3 dispositivos</span>
-                              </div>
-                              <div className="space-y-2">
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                  <div className="flex items-center space-x-3">
-                                    <Phone size={18} className="text-blue-500" />
+                            {/* Dispositivos e Assinatura */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div className="border border-gray-200 rounded-lg p-2">
+                                <div className="flex items-center justify-between mb-2">
+                                  <h5 className="text-sm font-semibold text-gray-900">Dispositivos</h5>
+                                  <span className="text-xs text-gray-500">2 de 3</span>
+                                </div>
+                                <div className="space-y-1">
+                                <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-200">
+                                  <div className="flex items-center space-x-2">
+                                    <Smartphone size={16} className="text-blue-500" />
                                     <div>
                                       <p className="text-sm font-medium text-gray-900">iPhone 13</p>
-                                      <p className="text-xs text-gray-500">iOS 16.0 • Último acesso: 2h atrás</p>
+                                      <p className="text-xs text-gray-500">iOS 16.0 • 2h atrás</p>
                                     </div>
                                   </div>
-                                  <div className="flex items-center space-x-2">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                                    <span className="text-xs text-green-600 font-medium">Ativo</span>
-                                  </div>
+                                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">
+                                    Ativo
+                                  </span>
                                 </div>
                                 
                                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
                                   <div className="flex items-center space-x-3">
-                                    <Phone size={18} className="text-blue-500" />
+                                    <Smartphone size={18} className="text-blue-500" />
                                     <div>
                                       <p className="text-sm font-medium text-gray-900">iPad Air</p>
                                       <p className="text-xs text-gray-500">iOS 15.7 • Último acesso: 5 dias atrás</p>
@@ -947,42 +891,41 @@ export const PatientDetailsPage: React.FC = () => {
                               </div>
                             </div>
                             
-                            {/* Assinatura */}
-                            <div className="border border-gray-200 rounded-lg p-4">
-                              <h5 className="font-semibold text-gray-900 mb-3">Plano de Assinatura</h5>
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">{mobileApps.kids.subscription.plan}</p>
-                                  <p className="text-xs text-gray-500">{mobileApps.kids.subscription.price}</p>
+                              <div className="border border-gray-200 rounded-lg p-2">
+                                <div className="flex items-center justify-between mb-2">
+                                  <h5 className="text-sm font-semibold text-gray-900">Assinatura</h5>
+                                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">Ativa</span>
                                 </div>
-                                <div className="text-right">
-                                  <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded font-medium">Ativa</span>
-                                  <p className="text-xs text-gray-500 mt-1">Vence em 15/03/2024</p>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <div>
+                                    <p className="text-sm font-medium text-gray-900">Premium</p>
+                                    <p className="text-xs text-gray-500">R$ 29,90/mês</p>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="text-sm font-medium text-gray-900">3 dispositivos</p>
+                                    <p className="text-xs text-gray-500">Vence: 15/03/24</p>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
                             
                             {/* Token de Acesso */}
-                            <div className="border border-gray-200 rounded-lg p-4">
-                              <h5 className="font-semibold text-gray-900 mb-3">Token de Acesso</h5>
-                              <div className="space-y-3">
+                            <div className="border border-gray-200 rounded-lg p-2">
+                              <div className="flex items-center justify-between mb-2">
+                                <h5 className="text-sm font-semibold text-gray-900">Token de Acesso</h5>
+                                <button className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200 transition-colors">
+                                  Revogar
+                                </button>
+                              </div>
+                              <div className="space-y-2">
                                 <div className="flex items-center space-x-2">
                                   <input
                                     type="text"
-                                    value={mobileApps.kids.token}
+                                    value="KIDS-ABC123-XYZ789"
                                     readOnly
-                                    className="flex-1 p-3 text-sm bg-gray-100 border border-gray-300 rounded-lg font-mono"
+                                    className="flex-1 px-2 py-1 text-sm bg-gray-100 border border-gray-200 rounded-lg font-mono"
                                   />
-                                  <button className="px-4 py-3 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                                  <button className="px-3 py-1 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                                     Copiar
-                                  </button>
-                                </div>
-                                <div className="flex space-x-2">
-                                  <button className="flex-1 px-4 py-2 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                                    Gerar Novo Token
-                                  </button>
-                                  <button className="px-4 py-2 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                                    Revogar
                                   </button>
                                 </div>
                               </div>
@@ -992,16 +935,16 @@ export const PatientDetailsPage: React.FC = () => {
                       </div>
                       
                       {/* App TUTORS */}
-                      <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${roleColor.primary}` }}>
-                        <div className="p-6">
-                          <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-lg">T</span>
+                      <div className="bg-white rounded-lg shadow-sm border border-gray-200" style={{ border: `1px solid ${colors.primary}` }}>
+                        <div className="p-4">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center space-x-2">
+                              <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                                <span className="text-white font-bold text-base">T</span>
                               </div>
                               <div>
-                                <h4 className="text-lg font-semibold text-gray-900">App TUTORS</h4>
-                                <p className="text-sm text-gray-600">Aplicativo para tutores</p>
+                                <h4 className="text-base font-semibold text-gray-900">App TUTORS</h4>
+                                <p className="text-xs text-gray-600">Aplicativo para tutores</p>
                               </div>
                             </div>
                             <span className="px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">
@@ -1019,10 +962,10 @@ export const PatientDetailsPage: React.FC = () => {
                               <div className="space-y-2">
                                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
                                   <div className="flex items-center space-x-3">
-                                    <Phone size={18} className="text-green-500" />
+                                    <Smartphone size={18} className="text-green-500" />
                                     <div>
-                                      <p className="text-sm font-medium text-gray-900">{mobileApps.tutors.devices[0].name}</p>
-                                      <p className="text-xs text-gray-500">{mobileApps.tutors.devices[0].os} • {mobileApps.tutors.devices[0].lastAccess}</p>
+                                      <p className="text-sm font-medium text-gray-900">Samsung Galaxy S22</p>
+                                      <p className="text-xs text-gray-500">Android 13 • Último acesso: 1h atrás</p>
                                     </div>
                                   </div>
                                   <div className="flex items-center space-x-2">
@@ -1038,8 +981,8 @@ export const PatientDetailsPage: React.FC = () => {
                               <h5 className="font-semibold text-gray-900 mb-3">Plano de Assinatura</h5>
                               <div className="flex items-center justify-between">
                                 <div>
-                                  <p className="text-sm font-medium text-gray-900">{mobileApps.tutors.subscription.plan}</p>
-                                  <p className="text-xs text-gray-500">{mobileApps.tutors.subscription.price}</p>
+                                  <p className="text-sm font-medium text-gray-900">Básico</p>
+                                  <p className="text-xs text-gray-500">1 dispositivo • R$ 19,90/mês</p>
                                 </div>
                                 <div className="text-right">
                                   <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded font-medium">Ativa</span>
@@ -1055,7 +998,7 @@ export const PatientDetailsPage: React.FC = () => {
                                 <div className="flex items-center space-x-2">
                                   <input
                                     type="text"
-                                    value={mobileApps.tutors.token}
+                                    value="TUTORS-DEF456-UVW012"
                                     readOnly
                                     className="flex-1 p-3 text-sm bg-gray-100 border border-gray-300 rounded-lg font-mono"
                                   />
@@ -1079,18 +1022,17 @@ export const PatientDetailsPage: React.FC = () => {
                     </div>
                     
                     {/* Ações Gerais */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ border: `2px solid ${roleColor.primary}` }}>
-                      <div className="p-6">
-                        <h4 className="font-semibold text-gray-900 mb-4" style={{ color: roleColor.primary }}>
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200" style={{ borderLeft: `4px solid ${colors.primary}` }}>
+                      <div className="p-3">
+                        <h4 className="text-sm font-semibold text-gray-900 mb-3" style={{ color: colors.primary }}>
                           Ações de Gerenciamento
                         </h4>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <button className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center hover:border-red-300">
-                            <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center mx-auto mb-3">
-                              <Phone size={20} className="text-white" />
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                          <button className="p-2 bg-white rounded-lg border border-gray-200 hover:shadow-sm transition-shadow text-center hover:border-red-300 flex flex-col items-center">
+                            <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center mb-1">
+                              <Smartphone size={16} className="text-white" />
                             </div>
-                            <p className="text-sm font-medium text-gray-900 mb-1">Revogar Todos os Tokens</p>
-                            <p className="text-xs text-gray-500">Forçar logout em todos os dispositivos</p>
+                            <p className="text-xs font-medium text-gray-900">Revogar Tokens</p>
                           </button>
                           
                           <button className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center hover:border-yellow-300">
@@ -1112,137 +1054,22 @@ export const PatientDetailsPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
+                  {/* Applications tab content end */}
+                </div>
                 )}
-
               </div>
             </div>
           </div>
-        </div>
-
-      {/* Modal de Gerenciamento de Acessos */}
-      {showManagementModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-4xl w-full mx-4" style={{ border: `2px solid ${roleColor.primary}` }}>
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold" style={{ color: roleColor.primary }}>
-                Gerenciar Acessos das Aplicações
-              </h3>
-              <button
-                onClick={closeManagementModal}
-                className="text-gray-500 hover:text-gray-700 transition-colors"
-              >
-                <Activity size={24} />
-              </button>
-            </div>
-            
-            <div className="space-y-6">
-              {/* Ações Gerais */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h4 className="font-semibold text-gray-900 mb-4">Ações Gerais</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <button className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center hover:border-red-300">
-                    <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <Trash2 size={20} className="text-white" />
-                    </div>
-                    <p className="text-sm font-medium text-gray-900 mb-1">Revogar Todos os Tokens</p>
-                    <p className="text-xs text-gray-500">Desconectar todos os dispositivos</p>
-                  </button>
-                  
-                  <button className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center hover:border-yellow-300">
-                    <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <Activity size={20} className="text-white" />
-                    </div>
-                    <p className="text-sm font-medium text-gray-900 mb-1">Histórico de Acessos</p>
-                    <p className="text-xs text-gray-500">Ver logs de login e logout</p>
-                  </button>
-                  
-                  <button className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center hover:border-purple-300">
-                    <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <FileText size={20} className="text-white" />
-                    </div>
-                    <p className="text-sm font-medium text-gray-900 mb-1">Relatório de Uso</p>
-                    <p className="text-xs text-gray-500">Estatísticas de uso dos apps</p>
-                  </button>
-                </div>
-              </div>
-              
-              {/* Ações por App */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* App KIDS */}
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                      <span className="text-white font-bold">K</span>
-                    </div>
-                    <div>
-                      <h5 className="font-semibold text-gray-900">App KIDS</h5>
-                      <p className="text-sm text-gray-600">Gerenciar acessos</p>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <button className="w-full px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                      Gerar Novo Token
-                    </button>
-                    <button className="w-full px-4 py-2 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                      Revogar Token Atual
-                    </button>
-                    <button className="w-full px-4 py-2 text-sm bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors">
-                      Ver Histórico de Acessos
-                    </button>
-                  </div>
-                </div>
-                
-                {/* App TUTORS */}
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                      <span className="text-white font-bold">T</span>
-                    </div>
-                    <div>
-                      <h5 className="font-semibold text-gray-900">App TUTORS</h5>
-                      <p className="text-sm text-gray-600">Gerenciar acessos</p>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <button className="w-full px-4 py-2 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                      Gerar Novo Token
-                    </button>
-                    <button className="w-full px-4 py-2 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                      Revogar Token Atual
-                    </button>
-                    <button className="w-full px-4 py-2 text-sm bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors">
-                      Ver Histórico de Acessos
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex justify-end space-x-3 mt-6">
-              <button
-                onClick={closeManagementModal}
-                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={closeManagementModal}
-                className="px-4 py-2 text-white rounded-lg transition-colors"
-                style={{ backgroundColor: roleColor.primary }}
-              >
-                Salvar Alterações
-              </button>
-            </div>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Modal de Editar Histórico */}
       {showEditHistoryModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${roleColor.primary}` }}>
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${colors.primary}` }}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
+              <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
                 Editar Histórico Médico
               </h3>
               <button
@@ -1298,7 +1125,7 @@ export const PatientDetailsPage: React.FC = () => {
               <button
                 onClick={closeEditHistoryModal}
                 className="px-4 py-2 text-white rounded-lg transition-colors"
-                style={{ backgroundColor: roleColor.primary }}
+                style={{ backgroundColor: colors.primary }}
               >
                 Salvar Alterações
               </button>
@@ -1310,9 +1137,9 @@ export const PatientDetailsPage: React.FC = () => {
       {/* Modal de Adicionar Histórico */}
       {showAddHistoryModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${roleColor.primary}` }}>
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4" style={{ border: `2px solid ${colors.primary}` }}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold" style={{ color: roleColor.primary }}>
+              <h3 className="text-lg font-semibold" style={{ color: colors.primary }}>
                 Adicionar Novo Evento ao Histórico
               </h3>
               <button
@@ -1381,7 +1208,7 @@ export const PatientDetailsPage: React.FC = () => {
               <button
                 onClick={closeAddHistoryModal}
                 className="px-4 py-2 text-white rounded-lg transition-colors"
-                style={{ backgroundColor: roleColor.primary }}
+                style={{ backgroundColor: colors.primary }}
               >
                 Adicionar Evento
               </button>
@@ -1389,9 +1216,8 @@ export const PatientDetailsPage: React.FC = () => {
           </div>
         </div>
       )}
-      </div>
-    </div>
+    </>
   );
 };
 
-
+export { PatientDetailsPage };

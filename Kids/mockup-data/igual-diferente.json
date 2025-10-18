@@ -2,187 +2,115 @@
   "jogos": {
     "nivel1": {
       "nome": "Nível 1 - Diferenças Grandes",
-      "descricao": "Pares com diferenças bem visíveis",
+      "descricao": "Diferenças bem visíveis entre objetos semelhantes",
       "pares": [
         {
-          "id": "n1_palavra_01",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "GATO", "tipo": "texto" },
-          "item2": { "conteudo": "PATO", "tipo": "texto" },
+          "id": "n1_01_flor",
+          "item1": { "imagem": "flor.png" },
+          "item2": { "imagem": "flor2.png" },
           "resposta": "diferente",
-          "dificuldade": 1
+          "dificuldade": 1,
+          "descricao": "Flores com cores diferentes"
         },
         {
-          "id": "n1_palavra_02",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "CASA", "tipo": "texto" },
-          "item2": { "conteudo": "MESA", "tipo": "texto" },
+          "id": "n1_02_casa",
+          "item1": { "imagem": "casa.png" },
+          "item2": { "imagem": "casa2.png" },
           "resposta": "diferente",
-          "dificuldade": 1
+          "dificuldade": 1,
+          "descricao": "Casas com telhados diferentes"
         },
         {
-          "id": "n1_palavra_03",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "BOLA", "tipo": "texto" },
-          "item2": { "conteudo": "BOLA", "tipo": "texto" },
+          "id": "n1_03_carro",
+          "item1": { "imagem": "carro.png" },
+          "item2": { "imagem": "carro2.png" },
+          "resposta": "diferente",
+          "dificuldade": 1,
+          "descricao": "Carros com cores diferentes"
+        },
+        {
+          "id": "n1_04_cachorro",
+          "item1": { "imagem": "cachorro.png" },
+          "item2": { "imagem": "cachorro.png" },
           "resposta": "igual",
-          "dificuldade": 1
-        },
-        {
-          "id": "n1_imagem_01",
-          "tipo": "imagem-imagem",
-          "item1": { "conteudo": "cachorro.png", "tipo": "imagem" },
-          "item2": { "conteudo": "gato.png", "tipo": "imagem" },
-          "resposta": "diferente",
-          "dificuldade": 1
-        },
-        {
-          "id": "n1_mista_01",
-          "tipo": "imagem-palavra",
-          "item1": { "conteudo": "bola.png", "tipo": "imagem" },
-          "item2": { "conteudo": "BOLA", "tipo": "texto" },
-          "resposta": "igual",
-          "dificuldade": 1
-        },
-        {
-          "id": "n1_mista_02",
-          "tipo": "imagem-palavra",
-          "item1": { "conteudo": "gato.png", "tipo": "imagem" },
-          "item2": { "conteudo": "PATO", "tipo": "texto" },
-          "resposta": "diferente",
-          "dificuldade": 1
-        },
-        {
-          "id": "n1_mista_03",
-          "tipo": "imagem-palavra",
-          "item1": { "conteudo": "casa.png", "tipo": "imagem" },
-          "item2": { "conteudo": "CASA", "tipo": "texto" },
-          "resposta": "igual",
-          "dificuldade": 1
+          "dificuldade": 1,
+          "descricao": "Dois cachorros idênticos"
         }
       ]
     },
     "nivel2": {
       "nome": "Nível 2 - Diferenças Médias",
-      "descricao": "Pares com troca de uma letra ou detalhes sutis",
+      "descricao": "Diferenças em detalhes e posições",
       "pares": [
         {
-          "id": "n2_palavra_01",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "CACHORRO", "tipo": "texto" },
-          "item2": { "conteudo": "CACHORO", "tipo": "texto" },
+          "id": "n2_01_arvore",
+          "item1": { "imagem": "arvore.png" },
+          "item2": { "imagem": "arvore2.png" },
           "resposta": "diferente",
-          "dificuldade": 2
+          "dificuldade": 2,
+          "descricao": "Árvores com quantidade de folhas diferente"
         },
         {
-          "id": "n2_palavra_02",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "PRATO", "tipo": "texto" },
-          "item2": { "conteudo": "PLATO", "tipo": "texto" },
+          "id": "n2_02_bicicleta",
+          "item1": { "imagem": "bicicleta.png" },
+          "item2": { "imagem": "bicicleta2.png" },
           "resposta": "diferente",
-          "dificuldade": 2
+          "dificuldade": 2,
+          "descricao": "Bicicletas com acessórios diferentes"
         },
         {
-          "id": "n2_palavra_03",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "CARRO", "tipo": "texto" },
-          "item2": { "conteudo": "CARRO", "tipo": "texto" },
+          "id": "n2_03_passaro",
+          "item1": { "imagem": "passaro.png" },
+          "item2": { "imagem": "passaro2.png" },
+          "resposta": "diferente",
+          "dificuldade": 2,
+          "descricao": "Pássaros com penas de cores diferentes"
+        },
+        {
+          "id": "n2_04_bola",
+          "item1": { "imagem": "bola.png" },
+          "item2": { "imagem": "bola.png" },
           "resposta": "igual",
-          "dificuldade": 2
-        },
-        {
-          "id": "n2_imagem_01",
-          "tipo": "imagem-imagem",
-          "item1": { "conteudo": "bolo_chocolate.png", "tipo": "imagem" },
-          "item2": { "conteudo": "bolo_morango.png", "tipo": "imagem" },
-          "resposta": "diferente",
-          "dificuldade": 2
-        },
-        {
-          "id": "n2_mista_01",
-          "tipo": "imagem-palavra",
-          "item1": { "conteudo": "cavalo.png", "tipo": "imagem" },
-          "item2": { "conteudo": "CAVALO", "tipo": "texto" },
-          "resposta": "igual",
-          "dificuldade": 2
-        },
-        {
-          "id": "n2_mista_02",
-          "tipo": "imagem-palavra",
-          "item1": { "conteudo": "cachorro.png", "tipo": "imagem" },
-          "item2": { "conteudo": "CAVALO", "tipo": "texto" },
-          "resposta": "diferente",
-          "dificuldade": 2
-        },
-        {
-          "id": "n2_mista_03",
-          "tipo": "imagem-palavra",
-          "item1": { "conteudo": "flor.png", "tipo": "imagem" },
-          "item2": { "conteudo": "FLOR", "tipo": "texto" },
-          "resposta": "igual",
-          "dificuldade": 2
+          "dificuldade": 2,
+          "descricao": "Duas bolas idênticas"
         }
       ]
     },
     "nivel3": {
       "nome": "Nível 3 - Diferenças Sutis",
-      "descricao": "Pares quase idênticos (ditongos, acentos, detalhes mínimos)",
+      "descricao": "Diferenças mínimas e detalhes pequenos",
       "pares": [
         {
-          "id": "n3_palavra_01",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "AVÓ", "tipo": "texto" },
-          "item2": { "conteudo": "AVO", "tipo": "texto" },
+          "id": "n3_01_borboleta",
+          "item1": { "imagem": "borboleta.png" },
+          "item2": { "imagem": "borboleta2.png" },
           "resposta": "diferente",
-          "dificuldade": 3
+          "dificuldade": 3,
+          "descricao": "Borboletas com padrões sutilmente diferentes nas asas"
         },
         {
-          "id": "n3_palavra_02",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "PRANTA", "tipo": "texto" },
-          "item2": { "conteudo": "PLANTA", "tipo": "texto" },
+          "id": "n3_02_estrela",
+          "item1": { "imagem": "estrela.png" },
+          "item2": { "imagem": "estrela2.png" },
           "resposta": "diferente",
-          "dificuldade": 3
+          "dificuldade": 3,
+          "descricao": "Estrelas com número de pontas diferente"
         },
         {
-          "id": "n3_palavra_03",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "LIVRO", "tipo": "texto" },
-          "item2": { "conteudo": "LIVRO", "tipo": "texto" },
+          "id": "n3_03_gato",
+          "item1": { "imagem": "gato.png" },
+          "item2": { "imagem": "gato2.png" },
+          "resposta": "diferente",
+          "dificuldade": 3,
+          "descricao": "Gatos com posições de cauda diferentes"
+        },
+        {
+          "id": "n3_04_livro",
+          "item1": { "imagem": "livro.png" },
+          "item2": { "imagem": "livro.png" },
           "resposta": "igual",
-          "dificuldade": 3
-        },
-        {
-          "id": "n3_palavra_04",
-          "tipo": "palavra-palavra",
-          "item1": { "conteudo": "CAFÉ", "tipo": "texto" },
-          "item2": { "conteudo": "CAFE", "tipo": "texto" },
-          "resposta": "diferente",
-          "dificuldade": 3
-        },
-        {
-          "id": "n3_imagem_01",
-          "tipo": "imagem-imagem",
-          "item1": { "conteudo": "cadeira_esquerda.png", "tipo": "imagem" },
-          "item2": { "conteudo": "cadeira_direita.png", "tipo": "imagem" },
-          "resposta": "igual",
-          "dificuldade": 3
-        },
-        {
-          "id": "n3_mista_01",
-          "tipo": "imagem-palavra",
-          "item1": { "conteudo": "elefante.png", "tipo": "imagem" },
-          "item2": { "conteudo": "ELEFANTE", "tipo": "texto" },
-          "resposta": "igual",
-          "dificuldade": 3
-        },
-        {
-          "id": "n3_mista_02",
-          "tipo": "imagem-palavra",
-          "item1": { "conteudo": "borboleta.png", "tipo": "imagem" },
-          "item2": { "conteudo": "FORMIGA", "tipo": "texto" },
-          "resposta": "diferente",
-          "dificuldade": 3
+          "dificuldade": 3,
+          "descricao": "Dois livros idênticos"
         }
       ]
     }

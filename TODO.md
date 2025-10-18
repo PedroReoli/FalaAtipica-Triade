@@ -144,33 +144,29 @@
 
 ## 🚨 PRIORIDADE CRÍTICA
 
-### 🔴 **MUDANÇA DE LÓGICA - Jogo "Igual ou Diferente" (Kids)** ⚠️
+### 🔴 **MUDANÇA DE LÓGICA - Jogo "Igual ou Diferente" (Kids)** ✅ COMPLETO
 
-**CRÍTICO:** Refatorar completamente a mecânica do jogo!
+**✅ REFATORAÇÃO CONCLUÍDA!**
 
-**Problema Atual:**
-- Compara objetos DIFERENTES (ex: cachorro vs gato, bicicleta vs carro)
-- Não é adequado para o objetivo pedagógico do jogo
+**O que foi feito:**
+- [X] Atualizar `Kids/mockup-data/igual-diferente.json` com nova estrutura
+- [X] Atualizar `Kids/src/services/igualDiferenteService.ts` (apenas imagens)
+- [X] Atualizar `Kids/src/screens/IgualDiferenteScreen.tsx` (remover lógica de texto)
+- [X] Documentar novos pares em `docs/IMAGENS-NECESSARIAS.md`
 
-**Nova Lógica (a implementar):**
-- Comparar imagens SEMELHANTES do mesmo objeto
-- Exemplo: `flor1.png` vs `flor2.png` (cores diferentes, detalhes sutis)
-- Exemplo: `cachorro_sentado.png` vs `cachorro_em_pe.png`
-- Exemplo: `casa_azul.png` vs `casa_vermelha.png`
+**Nova Lógica Implementada:**
+- ✅ Compara objetos SEMELHANTES: `objeto.png` vs `objeto2.png`
+- ✅ 3 níveis de dificuldade (Grandes, Médias, Sutis)
+- ✅ 12 pares no total (4 por nível)
+- ✅ 21 imagens únicas necessárias
 
-**Ações Necessárias:**
-- [ ] Gerar novas imagens em pares semelhantes (mantendo 500x500px)
-- [ ] Atualizar `Kids/mockup-data/igual-diferente.json` com nova estrutura
-- [ ] Atualizar `Kids/src/services/igualDiferenteService.ts` 
-- [ ] Documentar novos pares em `docs/IMAGENS-NECESSARIAS.md`
-- [ ] Testar novas comparações com público-alvo
+**Próximo Passo:**
+- ⏳ **Gerar 21 imagens** seguindo especificações em `docs/IMAGENS-NECESSARIAS.md`
 
 **Impacto:** 
 - 🎯 Melhora significativa na eficácia pedagógica
-- 🖼️ Requer geração de novos assets
-- 💻 Mínimo impacto no código (apenas troca de dados)
-
-**Estimativa:** 2-3 horas (incluindo geração de imagens)
+- 🖼️ Requer geração de 21 novos assets (500x500px)
+- ✅ Código 100% refatorado e pronto
 
 ---
 
@@ -201,7 +197,6 @@
   - [X] Progresso - sincronizado com 4 jogos do Kids
 - [X] **Melhorias de UX:**
   - [X] Renomear "Dicas" para nome mais apropriado ("Dicas e Recursos")
-  - [ ] Implementar download de dicas em PDF
   - [X] Melhorar separação visual na página de Suporte
   - [X] Substituir TODOS os emojis por ícones Lucide
 - [X] **Atualizar informações:**
@@ -504,7 +499,6 @@ FalaAtipica-Triade/
 - [X] Fallback offline - Completo
 - [X] **Refatoração e Melhorias Pendentes:**
   - [X] Remover dados hardcoded (Perfil já usa mockAuthService)
-  - [ ] Implementar funcionalidade de baixar dicas em PDF
   - [X] Renomear seção "Dicas" para "Dicas e Recursos"
   - [X] Melhorar separação visual na página de Suporte
   - [X] Substituir emojis por ícones da lib (Lucide)

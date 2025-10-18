@@ -23,7 +23,18 @@
       "status": "claimed",
       "claimedBy": "prof_002",
       "claimedAt": "2025-01-15T10:30:00.000Z"
+    },
+    {
+      "id": "token_1760745941806_rrxfdp8",
+      "token": "PARCERIA_fu9sf3aq3mjmgvio7qm",
+      "professionalId": "prof_001",
+      "professionalName": "Dra. Maria Silva",
+      "professionalType": "fonoaudiologo",
+      "createdAt": "2025-10-18T00:05:41.806Z",
+      "expiresAt": "2025-10-25T00:05:41.806Z",
+      "status": "pending",
+      "claimedBy": null,
+      "claimedAt": null
     }
   ]
 }
-
