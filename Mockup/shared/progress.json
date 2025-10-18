@@ -155,6 +155,18 @@
       "timeSpent": 35,
       "category": "animais",
       "timestamp": "2025-10-17T19:40:46.447Z"
+    },
+    {
+      "id": "progress_1760784010222_xx0r6my",
+      "userId": "1",
+      "gameId": "palavras",
+      "level": 1,
+      "score": 100,
+      "correctAnswers": 5,
+      "wrongAnswers": 0,
+      "timeSpent": 41,
+      "category": "animais",
+      "timestamp": "2025-10-18T10:40:10.222Z"
     }
   ]
 }
