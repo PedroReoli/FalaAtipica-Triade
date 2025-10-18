@@ -43,7 +43,7 @@ import { mockDataService } from "../services/mockDataService"
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate()
   const { professionalType, professionalData } = useProfessional()
-  const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'quarter'>('week')
+  // const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'quarter'>('week') // REMOVIDO - não usado mais
   const [dashboardStats, setDashboardStats] = useState<any>(null)
   // DESABILITADO - Sistema de agenda
   // const [appointments, setAppointments] = useState<any[]>([])
@@ -290,20 +290,6 @@ export const DashboardPage: React.FC = () => {
 
   const config = getProfessionalConfig()
 
-  // Dados de resumo por período
-  const getSummaryData = () => {
-    const baseStats = config.stats
-    
-    return baseStats.map(stat => ({
-      ...stat,
-      value: selectedPeriod === 'week' 
-        ? stat.value 
-        : selectedPeriod === 'month' 
-          ? Math.round(parseInt(stat.value) * 1.2).toString()
-          : Math.round(parseInt(stat.value) * 1.5).toString()
-    }))
-  }
-
 
   // Mensagens motivacionais para a semana
   const getMotivationalMessage = () => {
@@ -315,6 +301,65 @@ export const DashboardPage: React.FC = () => {
       "🚀 Esta semana trará novos desafios e conquistas. Você está preparado para o sucesso!"
     ];
     return messages[Math.floor(Math.random() * messages.length)];
+  };
+
+  // Dicas de bem-estar
+  const getWellnessTip = () => {
+    const tips = [
+      "🌱 Lembre-se de fazer uma pausa a cada 2 horas de trabalho. Seu bem-estar é fundamental!",
+      "💧 Mantenha-se hidratado! Beba água regularmente durante o dia para manter a energia.",
+      "🧘‍♀️ Pratique 5 minutos de respiração profunda entre as sessões para recarregar as energias.",
+      "🚶‍♂️ Faça uma caminhada de 10 minutos durante o almoço. O movimento ajuda a clarear a mente.",
+      "😴 Durma pelo menos 7-8 horas por noite. O descanso é essencial para sua performance.",
+      "🍎 Alimente-se de forma equilibrada. Evite pular refeições durante o dia de trabalho.",
+      "📱 Desconecte-se do trabalho após o expediente. O tempo de lazer é sagrado!",
+      "🌿 Respire ar fresco sempre que possível. Abra as janelas e renove o ambiente."
+    ];
+    return tips[Math.floor(Math.random() * tips.length)];
+  };
+
+  // Dicas profissionais específicas por tipo
+  const getProfessionalTip = () => {
+    const tips = {
+      fonoaudiologo: [
+        "🎯 Use exercícios de respiração para ajudar pacientes com ansiedade durante as sessões.",
+        "📝 Documente cada progresso, por menor que seja. Isso motiva tanto você quanto o paciente.",
+        "🎵 A música pode ser uma ferramenta poderosa para exercícios de fala e linguagem.",
+        "👥 Envolva a família nos exercícios. O apoio em casa acelera o progresso.",
+        "🎭 Use jogos e brincadeiras para tornar as sessões mais envolventes para crianças."
+      ],
+      psicologo: [
+        "💙 Pratique a escuta ativa. Às vezes, o silêncio é mais poderoso que as palavras.",
+        "📊 Mantenha registros detalhados das sessões. Isso ajuda no acompanhamento do progresso.",
+        "🤝 Estabeleça limites claros com os pacientes desde o início da terapia.",
+        "🔄 Adapte suas técnicas conforme a personalidade e necessidades de cada paciente.",
+        "💪 Lembre-se: você não pode resolver todos os problemas, mas pode guiar o caminho."
+      ],
+      psiquiatra: [
+        "⚖️ Equilibre medicação com terapia. O tratamento ideal é sempre multidisciplinar.",
+        "📋 Monitore efeitos colaterais regularmente. A comunicação com o paciente é crucial.",
+        "🧠 Mantenha-se atualizado com as últimas pesquisas em neurociência e farmacologia.",
+        "👨‍👩‍👧‍👦 Considere o contexto familiar e social do paciente nas decisões clínicas.",
+        "⏰ Reserve tempo para explicar o tratamento. Pacientes informados aderem melhor."
+      ],
+      pedagogo: [
+        "🎨 Use diferentes métodos de ensino. Cada aluno aprende de uma forma única.",
+        "📚 Adapte o conteúdo ao nível de desenvolvimento de cada criança.",
+        "🤝 Mantenha comunicação constante com os pais. A parceria é fundamental.",
+        "🎯 Estabeleça objetivos claros e mensuráveis para acompanhar o progresso.",
+        "💡 Transforme dificuldades em oportunidades de crescimento e aprendizado."
+      ],
+      psicopedagogo: [
+        "🔍 Faça avaliações detalhadas antes de iniciar qualquer intervenção.",
+        "🎯 Desenvolva estratégias personalizadas baseadas no perfil de aprendizagem.",
+        "📊 Monitore o progresso regularmente e ajuste as estratégias conforme necessário.",
+        "👥 Trabalhe em equipe com outros profissionais para um atendimento integral.",
+        "💪 Foque nas potencialidades do aluno, não apenas nas dificuldades."
+      ]
+    };
+    
+    const professionalTips = tips[professionalType as keyof typeof tips] || tips.fonoaudiologo;
+    return professionalTips[Math.floor(Math.random() * professionalTips.length)];
   };
 
   // Acessos rápidos
@@ -372,49 +417,49 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Resumos Visuais - Cards Grandes */}
+          {/* Dicas de Bem-estar e Profissionais */}
           <div className="dashboard-spacing">
             <div className="bg-white rounded-2xl p-6 shadow-lg" style={{ border: `3px solid ${config.color}` }}>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold" style={{ color: "var(--text-black)" }}>
-                  Seus Números 📊
+                  Dicas do Dia 💡
                 </h2>
                 <div className="flex items-center space-x-2">
-                  <Filter size={20} className="text-gray-500" />
-                  <select
-                    value={selectedPeriod}
-                    onChange={(e) => setSelectedPeriod(e.target.value as 'week' | 'month' | 'quarter')}
-                    className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="week">Esta Semana</option>
-                    <option value="month">Este Mês</option>
-                    <option value="quarter">Este Trimestre</option>
-                  </select>
+                  <Brain size={20} className="text-gray-500" />
+                  <span className="text-sm text-gray-600">Atualizadas diariamente</span>
                 </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {getSummaryData().map((stat, index) => {
-                  const Icon = stat.icon;
-                  return (
-                    <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border-2 border-gray-200 hover:shadow-md transition-shadow">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-lg text-gray-600 mb-2">{stat.title}</p>
-                          <p className="text-4xl font-bold mb-2" style={{ color: stat.color }}>
-                            {stat.value}
-                          </p>
-                          <p className="text-sm text-green-600 font-medium">
-                            {stat.change} vs período anterior
-                          </p>
-                        </div>
-                        <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg" style={{ backgroundColor: `${stat.color}20` }}>
-                          <Icon size={32} style={{ color: stat.color }} />
-                        </div>
-                      </div>
+                {/* Dicas de Bem-estar */}
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200 hover:shadow-md transition-shadow">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-green-100">
+                      <Heart size={24} className="text-green-600" />
                     </div>
-                  );
-                })}
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-green-800 mb-2">Bem-estar</h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        {getWellnessTip()}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dicas Profissionais */}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200 hover:shadow-md transition-shadow">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-blue-100">
+                      <Brain size={24} className="text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-800 mb-2">Profissional</h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        {getProfessionalTip()}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
