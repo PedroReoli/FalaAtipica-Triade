@@ -519,6 +519,7 @@ router.post('/agenda', async (req, res) => {
     const agendaData = {
       id: generateId('agenda'),
       ...req.body,
+      status: 'pendente', // Status inicial sempre pendente
       criadoEm: new Date().toISOString()
     };
     
@@ -532,19 +533,17 @@ router.post('/agenda', async (req, res) => {
     agendasFile.agendas.push(agendaData);
     await jsonService.writeJSON('shared/agendas.json', agendasFile);
     
-    // Emitir evento para tutor
+    // Emitir evento completo para tutor
     const io = req.app.get('io');
-    if (agendaData.tutorId) {
-      io.to(`user_${agendaData.tutorId}`).emit('agenda-created', {
-        agendaId: agendaData.id,
-        criancaNome: agendaData.criancaNome,
-        data: agendaData.data,
-        horario: agendaData.horario,
-        tipo: agendaData.tipo
+    if (io) {
+      io.emit('agenda-created', {
+        tutorId: agendaData.tutorId,
+        agenda: agendaData,
       });
+      console.log('🔔 Evento agenda-created emitido para Tutors');
     }
     
-    console.log(`📅 Agenda criada: ${agendaData.criancaNome} - ${agendaData.data} ${agendaData.horario}`);
+    console.log(`📅 Agenda criada (pendente): ${agendaData.criancaNome} - ${agendaData.data} ${agendaData.horario}`);
     
     res.status(201).json(successResponse(
       agendaData,

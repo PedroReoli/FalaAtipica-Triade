@@ -479,16 +479,6 @@ export const ProgressScreen: React.FC = () => {
             </View>
           </View>
           
-          <View style={[styles.statCard, { borderColor: COLORS.GREEN }]}>
-            <View style={[styles.statIconContainer, { backgroundColor: COLORS.GREEN + '15' }]}>
-              <Clock size={18} color={COLORS.GREEN} />
-            </View>
-            <View style={styles.statInfo}>
-              <Text style={styles.statValue}>{progressData.statistics.totalTimeMinutes} minutos</Text>
-              <Text style={styles.statLabel}>Tempo Total de Jogo</Text>
-            </View>
-          </View>
-
           <View style={[styles.statCard, { borderColor: COLORS.YELLOW }]}>
             <View style={[styles.statIconContainer, { backgroundColor: COLORS.YELLOW + '15' }]}>
               <BarChart3 size={18} color={COLORS.YELLOW} />
@@ -566,11 +556,6 @@ export const ProgressScreen: React.FC = () => {
                     ) : (
                       // Jogo foi jogado - mostrar estatísticas
                       <>
-                        {/* Última vez jogado */}
-                        <Text style={styles.lastPlayedExpanded}>
-                          Última vez: {formatLastPlayed(game.lastPlayed)}
-                        </Text>
-
                         {/* Estatísticas do Jogo */}
                         <View style={styles.gameStatsGrid}>
                           <View style={styles.gameStatBox}>
@@ -580,10 +565,6 @@ export const ProgressScreen: React.FC = () => {
                           <View style={styles.gameStatBox}>
                             <Text style={styles.gameStatValue}>{game.bestScore}%</Text>
                             <Text style={styles.gameStatLabel}>Melhor</Text>
-                          </View>
-                          <View style={styles.gameStatBox}>
-                            <Text style={styles.gameStatValue}>{game.totalTime}min</Text>
-                            <Text style={styles.gameStatLabel}>Tempo</Text>
                           </View>
                         </View>
 

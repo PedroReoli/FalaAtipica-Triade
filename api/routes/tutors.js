@@ -485,5 +485,56 @@ function getGameName(gameId) {
   return names[gameId] || gameId;
 }
 
+// PUT /api/tutors/agenda/:agendaId/confirmar - Confirmar agenda pendente
+router.put('/agenda/:agendaId/confirmar', async (req, res) => {
+  try {
+    const { agendaId } = req.params;
+    const io = req.app.get('io');
+    
+    // Buscar agendas
+    const agendasData = await jsonService.readJSON('shared/agendas.json');
+    const agendas = agendasData.agendas || [];
+    
+    // Encontrar agenda
+    const agendaIndex = agendas.findIndex(a => a.id === agendaId);
+    
+    if (agendaIndex === -1) {
+      return res.status(404).json(
+        errorResponse('AGENDA_NOT_FOUND', 'Agenda não encontrada')
+      );
+    }
+    
+    // Atualizar status para confirmada
+    agendas[agendaIndex].status = 'confirmada';
+    agendas[agendaIndex].confirmedAt = new Date().toISOString();
+    
+    // Salvar no arquivo
+    await jsonService.writeJSON('shared/agendas.json', { agendas });
+    
+    // Emitir evento Socket.IO para o Pro saber que foi confirmada
+    if (io) {
+      io.emit('agenda-confirmed', {
+        agendaId,
+        agenda: agendas[agendaIndex],
+        professionalId: agendas[agendaIndex].profissionalId,
+        confirmedAt: agendas[agendaIndex].confirmedAt,
+      });
+      console.log('🔔 Evento agenda-confirmed emitido para Pro');
+    }
+    
+    console.log('✅ Agenda confirmada:', agendaId);
+    res.json(successResponse({
+      agenda: agendas[agendaIndex],
+      message: 'Agenda confirmada com sucesso'
+    }));
+    
+  } catch (error) {
+    console.error('❌ Erro ao confirmar agenda:', error);
+    res.status(500).json(
+      errorResponse('CONFIRM_ERROR', 'Erro ao confirmar agenda', error.message)
+    );
+  }
+});
+
 module.exports = router;
 

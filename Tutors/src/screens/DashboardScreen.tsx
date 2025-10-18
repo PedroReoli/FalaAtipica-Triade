@@ -293,10 +293,9 @@ export const DashboardScreen: React.FC = () => {
           <View style={styles.childrenList}>
             {criancas.length > 0 ? (
               criancas.map((crianca) => (
-                <TouchableOpacity 
+                <View 
                   key={crianca.id}
                   style={styles.childCard}
-                  onPress={() => navigation.navigate('ChildProfile', { childId: crianca.id })}
                 >
                   <View style={styles.childImage}>
                     <User size={20} color={COLORS.TEXT_WHITE} />
@@ -315,7 +314,7 @@ export const DashboardScreen: React.FC = () => {
                       <Text style={styles.progressText}>{crianca.progressoGeral}%</Text>
                     </View>
                   </View>
-                </TouchableOpacity>
+                </View>
               ))
             ) : (
               <View style={styles.emptyState}>

@@ -10,6 +10,7 @@ import { Footer } from '../components/Footer';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import { ChildSelector } from '../components/ChildSelector';
 import { mockAuthService } from '../services/mockAuthService';
+import { socketService } from '../services/socketService';
 import { API_BASE_URL } from '../config/api';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -32,7 +33,7 @@ interface Agenda {
   horario: string;
   duracao: number;
   tipo: string;
-  status: 'agendada' | 'confirmada' | 'concluida' | 'cancelada';
+  status: 'pendente' | 'confirmada' | 'concluida' | 'cancelada';
   observacoes: string;
   local: string;
   criadoEm: string;
@@ -43,7 +44,7 @@ export const AgendaScreen: React.FC = () => {
   const [agendas, setAgendas] = useState<Agenda[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [filter, setFilter] = useState<'todas' | 'proximas' | 'concluidas'>('proximas');
+  const [filter, setFilter] = useState<'todas' | 'proximas' | 'concluidas' | 'pendentes'>('proximas');
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [selectedChild, setSelectedChild] = useState<string>('');
   const [availableChildren, setAvailableChildren] = useState<Child[]>([]);
@@ -51,6 +52,20 @@ export const AgendaScreen: React.FC = () => {
   useEffect(() => {
     loadAvailableChildren();
     loadAgendas();
+    
+    // Socket.IO: escutar novas agendas criadas pelo Pro
+    socketService.on('agenda-created', (data: any) => {
+      console.log('📅 Nova agenda recebida do Pro:', data);
+      const currentUser = mockAuthService.getCurrentUser();
+      if (currentUser && data.tutorId === currentUser.id) {
+        // Adicionar nova agenda na lista
+        setAgendas(prevAgendas => [data.agenda, ...prevAgendas]);
+      }
+    });
+
+    return () => {
+      socketService.off('agenda-created');
+    };
   }, []);
 
   useEffect(() => {
@@ -143,39 +158,23 @@ export const AgendaScreen: React.FC = () => {
           }
         }
       } catch (apiError) {
-        console.log('⚠️ API erro - usando dados mockados do perfil');
+        console.log('⚠️ API erro - usando dados do arquivo shared/agendas.json');
       }
 
-      // Fallback: carregar dados mockados do perfil (agendas foram movidas para shared)
-      // Como não temos acesso direto ao shared, vamos usar dados do perfil
+      // Fallback: carregar dados do arquivo mockup-data/agendas.json
       try {
-        const perfilData = require('../../mockup-data/perfil.json');
+        const agendasData = require('../../mockup-data/agendas.json');
+        const todasAgendas = agendasData.agendas || [];
         
-        // Criar agendas mockadas baseadas nas crianças do perfil
-        const mockAgendas = perfilData.criancas?.flatMap((crianca: any) => [
-          {
-            id: `agenda_mock_${crianca.id}_1`,
-            criancaId: crianca.id,
-            criancaNome: crianca.nome,
-            tutorId: currentUser.id,
-            tutorNome: currentUser.nome,
-            profissionalId: 'prof_001',
-            profissionalNome: 'Dra. Ana Paula Santos',
-            data: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            horario: '14:00',
-            duracao: 60,
-            tipo: 'Consulta Presencial',
-            status: 'agendada',
-            observacoes: 'Sessão de acompanhamento mensal',
-            local: 'Clínica FalaAtípica',
-            criadoEm: new Date().toISOString()
-          }
-        ]) || [];
+        // Filtrar agendas do tutor atual
+        const agendasDoTutor = todasAgendas.filter((agenda: any) => 
+          agenda.tutorId === currentUser.id
+        );
 
-        // Filtrar por criança selecionada
+        // Filtrar por criança selecionada se houver
         const agendasFiltradas = childIdToFilter
-          ? mockAgendas.filter((agenda: any) => agenda.criancaId === childIdToFilter)
-          : mockAgendas;
+          ? agendasDoTutor.filter((agenda: any) => agenda.criancaId === childIdToFilter)
+          : agendasDoTutor;
         
         console.log('✅ Agendas mockadas carregadas:', agendasFiltradas.length);
         setAgendas(agendasFiltradas);
@@ -207,20 +206,39 @@ export const AgendaScreen: React.FC = () => {
 
     switch (filter) {
       case 'proximas':
+        // Apenas confirmadas E futuras (data >= hoje)
         return agendas.filter(agenda => {
           const dataAgenda = new Date(agenda.data);
-          return (
-            (agenda.status === 'agendada' || agenda.status === 'confirmada') &&
-            dataAgenda >= hoje
-          );
+          dataAgenda.setHours(0, 0, 0, 0);
+          return agenda.status === 'confirmada' && dataAgenda >= hoje;
         }).sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
       
+      case 'pendentes':
+        // Apenas pendentes (independente da data)
+        return agendas.filter(agenda => agenda.status === 'pendente')
+          .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+      
       case 'concluidas':
-        return agendas.filter(agenda => 
-          agenda.status === 'concluida' || agenda.status === 'cancelada'
-        ).sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
+        // Histórico: concluídas, canceladas OU qualquer agenda que já passou (exceto pendentes)
+        return agendas.filter(agenda => {
+          const dataAgenda = new Date(agenda.data);
+          dataAgenda.setHours(0, 0, 0, 0);
+          
+          // Já marcadas como concluídas ou canceladas
+          if (agenda.status === 'concluida' || agenda.status === 'cancelada') {
+            return true;
+          }
+          
+          // Confirmadas que já passaram vão para histórico automaticamente
+          if (agenda.status === 'confirmada' && dataAgenda < hoje) {
+            return true;
+          }
+          
+          return false;
+        }).sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
       
       default:
+        // Todas (ordenadas por data, mais recentes primeiro)
         return agendas.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
     }
   };
@@ -240,15 +258,15 @@ export const AgendaScreen: React.FC = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'confirmada':
-        return <CheckCircle size={18} color={COLORS.GREEN} />;
-      case 'agendada':
-        return <AlertCircle size={18} color={COLORS.YELLOW} />;
+        return <CheckCircle size={18} color={COLORS.TEXT_WHITE} />;
+      case 'pendente':
+        return <AlertCircle size={18} color={COLORS.TEXT_WHITE} />;
       case 'concluida':
-        return <CheckCircle size={18} color={COLORS.BLUE} />;
+        return <CheckCircle size={18} color={COLORS.TEXT_WHITE} />;
       case 'cancelada':
-        return <XCircle size={18} color={COLORS.RED} />;
+        return <XCircle size={18} color={COLORS.TEXT_WHITE} />;
       default:
-        return <Calendar size={18} color={COLORS.TEXT_BLACK} />;
+        return <Calendar size={18} color={COLORS.TEXT_WHITE} />;
     }
   };
 
@@ -256,7 +274,7 @@ export const AgendaScreen: React.FC = () => {
     switch (status) {
       case 'confirmada':
         return COLORS.GREEN;
-      case 'agendada':
+      case 'pendente':
         return COLORS.YELLOW;
       case 'concluida':
         return COLORS.BLUE;
@@ -271,8 +289,8 @@ export const AgendaScreen: React.FC = () => {
     switch (status) {
       case 'confirmada':
         return 'Confirmada';
-      case 'agendada':
-        return 'Agendada';
+      case 'pendente':
+        return 'Aguardando Confirmação';
       case 'concluida':
         return 'Concluída';
       case 'cancelada':
@@ -280,6 +298,44 @@ export const AgendaScreen: React.FC = () => {
       default:
         return status;
     }
+  };
+
+  const handleConfirmarAgenda = async (agendaId: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/tutors/agenda/${agendaId}/confirmar`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        signal: AbortSignal.timeout(5000),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          // Atualizar estado local
+          setAgendas(prevAgendas =>
+            prevAgendas.map(agenda =>
+              agenda.id === agendaId
+                ? { ...agenda, status: 'confirmada', confirmedAt: new Date().toISOString() }
+                : agenda
+            )
+          );
+          console.log('✅ Agenda confirmada com sucesso!');
+          return;
+        }
+      }
+    } catch (error) {
+      console.log('⚠️ API erro ao confirmar - atualizando localmente');
+    }
+
+    // Fallback: atualizar apenas localmente se API falhar
+    setAgendas(prevAgendas =>
+      prevAgendas.map(agenda =>
+        agenda.id === agendaId
+          ? { ...agenda, status: 'confirmada', confirmedAt: new Date().toISOString() }
+          : agenda
+      )
+    );
+    console.log('✅ Agenda confirmada localmente (sem API)');
   };
 
   const handleHome = () => {
@@ -320,6 +376,14 @@ export const AgendaScreen: React.FC = () => {
         >
           <Text style={[styles.filterText, filter === 'proximas' && styles.filterTextActive]}>
             Próximas
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.filterButton, filter === 'pendentes' && styles.filterButtonActive]}
+          onPress={() => setFilter('pendentes')}
+        >
+          <Text style={[styles.filterText, filter === 'pendentes' && styles.filterTextActive]}>
+            Pendentes
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -423,6 +487,20 @@ export const AgendaScreen: React.FC = () => {
                         <Text style={styles.observacoesText}>{agenda.observacoes}</Text>
                       </View>
                     )}
+
+                    {/* Botão Confirmar - Apenas para agendas pendentes */}
+                    {agenda.status === 'pendente' && (
+                      <TouchableOpacity
+                        style={styles.confirmarButton}
+                        onPress={(e) => {
+                          e.stopPropagation();
+                          handleConfirmarAgenda(agenda.id);
+                        }}
+                      >
+                        <CheckCircle size={20} color={COLORS.TEXT_WHITE} />
+                        <Text style={styles.confirmarButtonText}>Confirmar Agenda</Text>
+                      </TouchableOpacity>
+                    )}
                   </View>
                 )}
               </TouchableOpacity>
@@ -445,7 +523,8 @@ export const AgendaScreen: React.FC = () => {
               <Calendar size={72} color={COLORS.BLUE} opacity={0.3} />
               <Text style={styles.emptyStateTitle}>Nenhuma agenda encontrada</Text>
               <Text style={styles.emptyStateText}>
-                {filter === 'proximas' && 'Não há consultas agendadas no momento.\nNovas agendas aparecerão aqui.'}
+                {filter === 'proximas' && 'Não há consultas confirmadas no momento.\nAgendas confirmadas aparecerão aqui.'}
+                {filter === 'pendentes' && 'Não há agendas aguardando confirmação.\nAgendas criadas pelo profissional aparecerão aqui.'}
                 {filter === 'concluidas' && 'Não há histórico de consultas.\nConsultas concluídas aparecerão aqui.'}
                 {filter === 'todas' && 'Não há agendas cadastradas.\nEntre em contato com o profissional.'}
               </Text>
@@ -693,6 +772,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 40,
     lineHeight: 22,
+  },
+  confirmarButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.GREEN,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 15,
+    gap: 8,
+  },
+  confirmarButtonText: {
+    color: COLORS.TEXT_WHITE,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 
