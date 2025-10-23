@@ -529,15 +529,17 @@ export default function ParceriasPage() {
                 </div>
 
                     <div className="text-center">
-                      <Button 
+                      <button 
                         type="submit" 
-                        variant="primary" 
-                        size="lg"
                         disabled={isSubmitting}
-                        className={isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}
+                        className={`px-6 py-3 text-lg font-medium rounded-lg border-2 transition-all duration-300 ${
+                          isSubmitting 
+                            ? 'opacity-50 cursor-not-allowed bg-gray-300 text-gray-500 border-gray-300' 
+                            : 'bg-[#1e88e5] text-white border-[#1e88e5] hover:bg-[#1976d2] hover:border-[#1976d2] hover:scale-105'
+                        }`}
                       >
                         {isSubmitting ? 'Enviando...' : 'Enviar Solicitação de Parceria'}
-                      </Button>
+                      </button>
                     </div>
               </form>
             </div>
@@ -569,7 +571,7 @@ export default function ParceriasPage() {
       </section>
       
       {/* Toast Container */}
-      <ToastContainer toasts={toasts} onClose={removeToast} />
+      <ToastContainer toasts={toasts.map(toast => ({ ...toast, onClose: removeToast }))} onClose={removeToast} />
     </main>
   )
 }

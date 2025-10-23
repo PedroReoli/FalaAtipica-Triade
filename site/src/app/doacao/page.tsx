@@ -67,16 +67,15 @@ export default function DoacaoPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                variant="primary" 
-                size="lg" 
+              <a
                 href="https://ko-fi.com/pedroreoli"
                 target="_blank"
-                className="bg-[#fbc02d] text-[#054776] border-[#fbc02d] hover:bg-[#f9a825] hover:border-[#f9a825]"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium rounded-lg bg-[#fbc02d] text-[#054776] border-2 border-[#fbc02d] hover:bg-[#f9a825] hover:border-[#f9a825] transition-all duration-300"
               >
                 <Coffee className="w-5 h-5 mr-2" />
                 Apoiar Financeiramente
-              </Button>
+              </a>
               
               <Button 
                 variant="secondary" 
@@ -249,16 +248,15 @@ export default function DoacaoPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                variant="primary" 
-                size="lg" 
+              <a
                 href="https://ko-fi.com/pedroreoli"
                 target="_blank"
-                className="bg-[#fbc02d] text-[#054776] border-[#fbc02d] hover:bg-[#f9a825] hover:border-[#f9a825]"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium rounded-lg bg-[#fbc02d] text-[#054776] border-2 border-[#fbc02d] hover:bg-[#f9a825] hover:border-[#f9a825] transition-all duration-300"
               >
                 <Coffee className="w-5 h-5 mr-2" />
                 Apoiar Agora
-              </Button>
+              </a>
               
               <Button 
                 variant="secondary" 

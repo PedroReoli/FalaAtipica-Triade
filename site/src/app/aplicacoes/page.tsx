@@ -243,7 +243,7 @@ export default function AplicacoesPage() {
                               <Text size="sm" weight="semibold" color="primary">
                                 Público
                               </Text>
-                              <Text size="xs" color="gray">
+                              <Text size="sm" color="gray">
                                 {app.audience.split(',')[0]}
                               </Text>
                             </div>
@@ -251,7 +251,7 @@ export default function AplicacoesPage() {
                               <Text size="sm" weight="semibold" color="primary">
                                 Status
                               </Text>
-                              <Text size="xs" color="gray">
+                              <Text size="sm" color="gray">
                                 {app.status}
                               </Text>
                             </div>
