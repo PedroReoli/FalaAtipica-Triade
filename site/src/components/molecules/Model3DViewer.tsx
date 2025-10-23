@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 // @ts-ignore
 import * as THREE from 'three'
 // @ts-ignore
@@ -10,9 +10,17 @@ export function Model3DViewer() {
   const containerRef = useRef<HTMLDivElement>(null)
   const sceneRef = useRef<THREE.Scene | null>(null)
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
+  const animationIdRef = useRef<number | null>(null)
+  const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
-    if (!containerRef.current) return
+    if (!containerRef.current || isInitialized) return
+
+    // Limpar container antes de inicializar
+    if (containerRef.current.hasChildNodes()) {
+      containerRef.current.innerHTML = ''
+    }
 
     // Setup Scene
     const scene = new THREE.Scene()
@@ -26,12 +34,14 @@ export function Model3DViewer() {
       1000
     )
     camera.position.set(0, 0, 5)
+    cameraRef.current = camera
 
     // Setup Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     rendererRef.current = renderer
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setClearColor(0x000000, 0) // Fundo transparente
     containerRef.current.appendChild(renderer.domElement)
 
     // Lighting
@@ -66,34 +76,39 @@ export function Model3DViewer() {
     )
 
     // Animation Loop
-    let animationId: number
     function animate() {
-      animationId = requestAnimationFrame(animate)
+      animationIdRef.current = requestAnimationFrame(animate)
       
       if (model) {
         model.rotation.y += 0.005
       }
       
-      renderer.render(scene, camera)
+      if (rendererRef.current && cameraRef.current && sceneRef.current) {
+        rendererRef.current.render(sceneRef.current, cameraRef.current)
+      }
     }
     animate()
 
     // Handle Resize
     const handleResize = () => {
-      if (!containerRef.current) return
+      if (!containerRef.current || !cameraRef.current || !rendererRef.current) return
       
-      camera.aspect = containerRef.current.clientWidth / containerRef.current.clientHeight
-      camera.updateProjectionMatrix()
-      renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
+      cameraRef.current.aspect = containerRef.current.clientWidth / containerRef.current.clientHeight
+      cameraRef.current.updateProjectionMatrix()
+      rendererRef.current.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
     }
     window.addEventListener('resize', handleResize)
 
+    setIsInitialized(true)
+
     // Cleanup
     return () => {
-      cancelAnimationFrame(animationId)
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current)
+      }
       window.removeEventListener('resize', handleResize)
       
-      if (rendererRef.current && containerRef.current) {
+      if (rendererRef.current && containerRef.current && containerRef.current.contains(rendererRef.current.domElement)) {
         containerRef.current.removeChild(rendererRef.current.domElement)
         rendererRef.current.dispose()
       }
@@ -113,6 +128,20 @@ export function Model3DViewer() {
           }
         })
       }
+      
+      // Reset refs
+      sceneRef.current = null
+      rendererRef.current = null
+      cameraRef.current = null
+      animationIdRef.current = null
+      setIsInitialized(false)
+    }
+  }, [])
+
+  // Reset quando o componente é desmontado e remontado
+  useEffect(() => {
+    return () => {
+      setIsInitialized(false)
     }
   }, [])
 

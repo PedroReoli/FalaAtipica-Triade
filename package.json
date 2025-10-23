@@ -8,7 +8,8 @@
     "tutors": "cd Tutors && npm start",
     "tutors:t": "cd Tutors && npx expo start --tunnel",
     "pro": "cd Pro && npm run dev",
-    "site": "cd site && npm run dev"
+    "site": "cd site && npm run dev",
+    "build:site": "cd site && npm run build"
   },
   "dependencies": {
     "react-native-gesture-handler": "~2.16.1",

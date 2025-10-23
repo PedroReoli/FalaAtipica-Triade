@@ -30,16 +30,17 @@ export const FutureSection: React.FC = () => {
   ]
   
   return (
-    <section className="py-20 bg-[#f4f6ff]">
+        <section className="py-20 bg-[#f4f6ff]">
       <Container maxWidth="xl">
         <div className="space-y-12">
           <div className="text-center space-y-4">
             <Heading level={2} color="primary">
-              O Futuro da Voz
+              A voz é o primeiro passo para a inclusão
             </Heading>
             
             <Text size="lg" color="gray" className="max-w-3xl mx-auto">
-              O projeto segue em expansão e já está em fase de testes com instituições parceiras
+              O FalaAtípica não nasceu apenas para ensinar palavras. Ele nasceu para reconectar 
+              o mundo das crianças com o mundo das possibilidades.
             </Text>
           </div>
           
@@ -67,16 +68,19 @@ export const FutureSection: React.FC = () => {
           {/* CTA Final */}
           <div className="bg-gradient-to-r from-[#054776] to-[#1e88e5] rounded-2xl p-12 shadow-2xl text-center space-y-6">
             <Heading level={3} color="white">
-              Transformando silêncio em voz, isolamento em vínculo, tecnologia em inclusão
+              Acompanhar o desenvolvimento do projeto
             </Heading>
             
             <Text size="lg" color="white" weight="light" className="max-w-3xl mx-auto leading-relaxed">
-              A voz é o primeiro passo para a inclusão. E cada passo dado por uma criança é uma vitória para todos nós.
+              Junte-se às clínicas, escolas e famílias que acreditam que toda voz merece ser ouvida.
             </Text>
             
-            <div className="flex justify-center">
-              <Button variant="secondary" size="lg" href="/apresentacao">
-                Ver Apresentação Completa
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button variant="secondary" size="lg" href="/parcerias">
+                Fazer Parceria
+              </Button>
+              <Button variant="outline" size="lg" href="/timeline">
+                Acompanhar Novidades
               </Button>
             </div>
           </div>

@@ -16,7 +16,7 @@ export const LandingPageTemplate: React.FC = () => {
       <AboutSection />
       <EcosystemSection />
       <ChallengesSection />
-      <MethodologySection />
+      {/* <MethodologySection /> */}
       <AchievementsSection />
       <ImpactSection />
       <FutureSection />

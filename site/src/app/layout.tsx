@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
+import { Navbar } from '@/components/layout/Navbar'
+import { FaviconHead } from '@/components/layout/FaviconHead'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -27,10 +29,14 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
   },
   icons: {
-    icon: '/images/falaatipica-logo.png',
-    shortcut: '/images/falaatipica-logo.png',
-    apple: '/images/falaatipica-logo.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
+  manifest: '/manifest.json',
 }
 
 export default function RootLayout({
@@ -40,7 +46,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <FaviconHead />
+      </head>
       <body className={`${inter.variable} ${poppins.variable} font-poppins`} suppressHydrationWarning>
+        <Navbar />
         {children}
       </body>
     </html>

@@ -28,6 +28,12 @@ export const ImpactSection: React.FC = () => {
                 colaborativa que transforma a fala em aprendizado e o aprendizado em inclusão.
               </Text>
               
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/20">
+                <Text size="lg" color="white" weight="medium" className="text-center">
+                  O módulo INSTITUTION está em planejamento para gestão de grupos e relatórios coletivos.
+                </Text>
+              </div>
+              
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border-2 border-white/20">
                 <blockquote className="space-y-4">
                   <Text size="xl" color="white" weight="medium" className="italic text-center leading-relaxed">

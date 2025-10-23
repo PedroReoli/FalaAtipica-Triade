@@ -5,6 +5,10 @@ import { Text } from '../atoms/Text'
 import { Lightbulb, TrendingUp, Gamepad2, Zap, BookOpen } from 'lucide-react'
 
 export const MethodologySection: React.FC = () => {
+  // Seção comentada - Metodologia e Fundamentação removida temporariamente
+  return null
+  
+  /* 
   const methodologies = [
     {
       icon: <Lightbulb className="w-8 h-8 text-[#1e88e5]" />,
@@ -73,5 +77,6 @@ export const MethodologySection: React.FC = () => {
       </Container>
     </section>
   )
+  */
 }
 

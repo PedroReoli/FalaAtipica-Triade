@@ -24,7 +24,7 @@ export const AchievementsSection: React.FC = () => {
     {
       icon: <MessageCircle className="w-10 h-10 text-[#e53935]" />,
       title: 'Em negociação com parceiros',
-      description: 'Clínicas e escolas do Estado do Rio de Janeiro'
+      description: 'Clínicas e escolas de Volta Redonda e região'
     },
     {
       icon: <Rocket className="w-10 h-10 text-[#1e88e5]" />,
@@ -34,12 +34,12 @@ export const AchievementsSection: React.FC = () => {
   ]
   
   return (
-    <section className="py-20 bg-white">
+        <section className="py-20 bg-[#f4f6ff]">
       <Container maxWidth="xl">
         <div className="space-y-12">
           <div className="text-center space-y-4">
             <Heading level={2} color="primary">
-              Conquistas e Reconhecimento
+              De um TCC à transformação social
             </Heading>
             
             <Text size="lg" color="gray" className="max-w-3xl mx-auto">

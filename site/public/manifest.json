@@ -1,0 +1,21 @@
+{
+  "name": "FalaAtípica",
+  "short_name": "FalaAtípica",
+  "description": "Sistema completo de auxílio para crianças com atraso de fala",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#054776",
+  "theme_color": "#1e88e5",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "any",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
