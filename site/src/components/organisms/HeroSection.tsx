@@ -6,6 +6,7 @@ import { Heading } from '../atoms/Heading'
 import { Text } from '../atoms/Text'
 import { Button } from '../atoms/Button'
 import { Model3DViewer } from '../molecules/Model3DViewer'
+import { AnimatedSection } from '../atoms/AnimatedSection'
 
 export const HeroSection: React.FC = () => {
   return (
@@ -13,33 +14,27 @@ export const HeroSection: React.FC = () => {
       <Container maxWidth="xl">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Texto à esquerda */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <Heading level={1} color="primary" className="leading-tight">
-                E se a tecnologia pudesse dar voz a quem ainda não consegue se expressar?
-              </Heading>
+          <AnimatedSection delay={0.2}>
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <Heading level={1} color="primary" className="leading-tight">
+                  E se a tecnologia pudesse ser a ponte para quem ainda não consegue se comunicar?
+                </Heading>
+                
+                <Text size="lg" color="dark" weight="light" className="leading-relaxed">
+                  Inspirado por essa reflexão, surgiu o <span className="text-[#054776] font-semibold">FalaAtípica</span> — uma solução tecnológica voltada a <span className="text-[#43a047] font-semibold">crianças com atraso de fala</span>, promovendo a <span className="text-[#1e88e5] font-semibold">expressão verbal</span> de forma <span className="text-[#fbc02d] font-semibold">lúdica, acessível e afetiva</span>.
+                </Text>
+              </div>
               
-              <Text size="lg" color="dark" weight="light" className="leading-relaxed">
-                Essa pergunta inspirou o nascimento do FalaAtípica, um ecossistema de aplicativos 
-                criado para ajudar crianças com atraso de fala a se comunicarem de forma lúdica, 
-                acessível e acolhedora.
-              </Text>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="primary" size="lg" href="/apresentacao">
-                Ver Apresentação
-              </Button>
-              <Button variant="secondary" size="lg" href="#sobre">
-                Conhecer Mais
-              </Button>
-            </div>
-          </div>
+          </AnimatedSection>
           
           {/* Modelo 3D à direita */}
-          <div className="h-[400px] lg:h-[500px]">
-            <Model3DViewer />
-          </div>
+          <AnimatedSection delay={0.4}>
+            <div className="h-[400px] lg:h-[500px]">
+              <Model3DViewer />
+            </div>
+          </AnimatedSection>
         </div>
       </Container>
     </section>
