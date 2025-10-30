@@ -1,67 +1,51 @@
-'use client'
+"use client"
 
-import React, { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-// Registrar ScrollTrigger
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
-}
+import React from "react"
+import { motion } from "framer-motion"
 
 interface AnimatedSectionProps {
   children: React.ReactNode
   delay?: number
   className?: string
+  direction?: "up" | "down" | "left" | "right"
 }
 
-export const AnimatedSection: React.FC<AnimatedSectionProps> = ({ 
-  children, 
-  delay = 0, 
-  className = '' 
+export const AnimatedSection: React.FC<AnimatedSectionProps> = ({
+  children,
+  delay = 0,
+  className = "",
+  direction = "up",
 }) => {
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!ref.current) return
-
-    const element = ref.current
-
-    // Animação de entrada
-    gsap.fromTo(element, 
-      { 
-        opacity: 0, 
-        y: 50,
-        scale: 0.95
-      },
-      { 
-        opacity: 1, 
-        y: 0,
-        scale: 1,
-        duration: 1,
-        ease: "power2.out",
-        delay,
-        scrollTrigger: {
-          trigger: element,
-          start: "top 80%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    )
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === element) {
-          trigger.kill()
-        }
-      })
-    }
-  }, [delay])
+  const directionVariants = {
+    up: { y: 50 },
+    down: { y: -50 },
+    left: { x: 50 },
+    right: { x: -50 },
+  }
 
   return (
-    <div ref={ref} className={className}>
+    <motion.div
+      className={className}
+      initial={{
+        opacity: 0,
+        ...directionVariants[direction],
+        scale: 0.95,
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+      }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{
+        duration: 0.8,
+        delay,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }}
+    >
       {children}
-    </div>
+    </motion.div>
   )
 }
 
@@ -71,53 +55,43 @@ interface StaggeredAnimationProps {
   className?: string
 }
 
-export const StaggeredAnimation: React.FC<StaggeredAnimationProps> = ({ 
-  children, 
-  staggerDelay = 0.2, 
-  className = '' 
+export const StaggeredAnimation: React.FC<StaggeredAnimationProps> = ({
+  children,
+  staggerDelay = 0.1,
+  className = "",
 }) => {
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!ref.current) return
-
-    const element = ref.current
-    const children = element.children
-
-    // Animação escalonada para os filhos
-    gsap.fromTo(children, 
-      { 
-        opacity: 0, 
-        y: 30,
-        scale: 0.9
-      },
-      { 
-        opacity: 1, 
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: staggerDelay,
-        scrollTrigger: {
-          trigger: element,
-          start: "top 80%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    )
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === element) {
-          trigger.kill()
-        }
-      })
-    }
-  }, [staggerDelay])
-
   return (
-    <div ref={ref} className={className}>
-      {children}
-    </div>
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={{
+        visible: {
+          transition: {
+            staggerChildren: staggerDelay,
+          },
+        },
+      }}
+    >
+      {React.Children.map(children, (child, index) => (
+        <motion.div
+          variants={{
+            hidden: { opacity: 0, y: 30, scale: 0.9 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              transition: {
+                duration: 0.6,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              },
+            },
+          }}
+        >
+          {child}
+        </motion.div>
+      ))}
+    </motion.div>
   )
 }

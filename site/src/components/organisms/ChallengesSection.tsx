@@ -14,21 +14,21 @@ export const ChallengesSection: React.FC = () => {
 
   const challenges = [
     {
-      icon: <Users className="w-8 h-8 text-[#e53935]" />,
+      icon: <Users className="w-6 h-6 text-[#e53935]" />,
       value: "2M",
       title: "Crianças com Atraso de Fala",
       description: "2 milhões de crianças brasileiras têm algum tipo de atraso de fala",
       color: "#e53935",
     },
     {
-      icon: <AlertTriangle className="w-8 h-8 text-[#e53935]" />,
+      icon: <AlertTriangle className="w-6 h-6 text-[#e53935]" />,
       value: "30%",
       title: "Famílias Buscam Apoio",
       description: "Apenas 30% das famílias brasileiras buscam apoio profissional nos primeiros sinais",
       color: "#e53935",
     },
     {
-      icon: <Smartphone className="w-8 h-8 text-[#e53935]" />,
+      icon: <Smartphone className="w-6 h-6 text-[#e53935]" />,
       value: "25-35%",
       title: "Sem Fala Funcional",
       description: "25% a 35% das crianças com TEA no Brasil não desenvolvem fala funcional",
@@ -38,21 +38,21 @@ export const ChallengesSection: React.FC = () => {
 
   const opportunities = [
     {
-      icon: <TrendingUp className="w-8 h-8 text-[#43a047]" />,
+      icon: <TrendingUp className="w-6 h-6 text-[#43a047]" />,
       value: "47%",
       title: "Comunicação Funcional",
       description: "47% das crianças com atraso severo alcançam comunicação funcional com estímulos adequados",
       color: "#43a047",
     },
     {
-      icon: <Heart className="w-8 h-8 text-[#43a047]" />,
+      icon: <Heart className="w-6 h-6 text-[#43a047]" />,
       value: "40%",
       title: "Aceleração no Progresso",
       description: "40% de aceleração no progresso usando recursos visuais e tecnológicos",
       color: "#43a047",
     },
     {
-      icon: <Clock className="w-8 h-8 text-[#43a047]" />,
+      icon: <Clock className="w-6 h-6 text-[#43a047]" />,
       value: "60%",
       title: "Melhora Significativa",
       description: "60% dos pais relatam melhora significativa na fala após acompanhamento contínuo",
@@ -73,12 +73,7 @@ export const ChallengesSection: React.FC = () => {
           type: "spring",
           stiffness: 100,
         }}
-        whileHover={{
-          scale: 1.05,
-          y: -10,
-          transition: { duration: 0.3 },
-        }}
-        className={`relative bg-white border-3 rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer ${
+        className={`relative bg-white border-3 rounded-xl p-4 shadow-lg transition-all duration-300 group cursor-pointer ${
           isChallenge ? "border-[#e53935]" : "border-[#43a047]"
         }`}
       >
@@ -89,32 +84,30 @@ export const ChallengesSection: React.FC = () => {
           }`}
         />
 
-        <div className="relative z-10 text-center space-y-4">
-          <motion.div
-            whileHover={{ scale: 1.2, rotate: 360 }}
-            transition={{ duration: 0.6 }}
-            className={`w-16 h-16 rounded-xl flex items-center justify-center mx-auto ${
+        <div className="relative z-10 text-center space-y-3">
+          <div
+            className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto ${
               isChallenge ? "bg-[#e53935]/10" : "bg-[#43a047]/10"
             }`}
           >
             {stat.icon}
-          </motion.div>
+          </div>
 
           <motion.div
             initial={{ scale: 0 }}
             animate={isInView ? { scale: 1 } : {}}
             transition={{ delay: index * 0.15 + 0.3, type: "spring", stiffness: 200 }}
-            className={`text-5xl font-bold ${isChallenge ? "text-[#e53935]" : "text-[#43a047]"}`}
+            className={`text-3xl font-bold ${isChallenge ? "text-[#e53935]" : "text-[#43a047]"}`}
           >
             {stat.value}
           </motion.div>
 
-          <div className="space-y-2">
-            <Heading level={4} color="primary" className="text-lg group-hover:scale-105 transition-transform">
+          <div className="space-y-1.5">
+            <Heading level={4} color="primary" className="text-base">
               {stat.title}
             </Heading>
 
-            <Text size="sm" color="gray" className="leading-relaxed">
+            <Text size="xs" color="gray" className="leading-relaxed">
               {stat.description}
             </Text>
           </div>
@@ -160,7 +153,7 @@ export const ChallengesSection: React.FC = () => {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden min-h-screen bg-gradient-to-br from-[#054776] to-[#1e88e5] flex items-center py-20"
+      className="relative overflow-hidden bg-gradient-to-br from-[#054776] to-[#1e88e5] flex items-center py-12"
     >
       {/* Animated background */}
       <motion.div
@@ -180,7 +173,7 @@ export const ChallengesSection: React.FC = () => {
       />
 
       <Container maxWidth="xl">
-        <div className="space-y-16 relative z-10">
+        <div className="space-y-10 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}

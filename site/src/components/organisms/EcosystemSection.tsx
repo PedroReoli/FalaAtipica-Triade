@@ -1,17 +1,14 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
 import { Container } from "../atoms/Container"
 import { Heading } from "../atoms/Heading"
 import { Text } from "../atoms/Text"
 import { Button } from "../atoms/Button"
-import { motion, AnimatePresence } from "framer-motion"
-import { Smartphone, Users, Stethoscope, BarChart3, ArrowRight, Check, Sparkles } from "lucide-react"
+import { motion } from "framer-motion"
+import { Smartphone, Users, Stethoscope, BarChart3, Check, Sparkles } from "lucide-react"
 
 export const EcosystemSection: React.FC = () => {
-  const [activeApp, setActiveApp] = useState<number | null>(null)
-
   const apps = [
     {
       id: "kids",
@@ -89,9 +86,9 @@ export const EcosystemSection: React.FC = () => {
   ]
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-white to-[#f4f6ff] flex items-center py-20">
+    <section className="min-h-screen bg-gradient-to-b from-white to-[#f4f6ff] flex items-center py-12">
       <Container maxWidth="xl">
-        <div className="space-y-16">
+        <div className="space-y-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -121,7 +118,6 @@ export const EcosystemSection: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {apps.map((app, index) => {
               const Icon = app.icon
-              const isActive = activeApp === index
 
               return (
                 <motion.div
@@ -130,14 +126,10 @@ export const EcosystemSection: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  onHoverStart={() => setActiveApp(index)}
-                  onHoverEnd={() => setActiveApp(null)}
                   className="relative"
                 >
-                  <motion.div
-                    className={`relative bg-white ${app.borderColor} border-3 rounded-2xl p-8 shadow-lg overflow-hidden cursor-pointer`}
-                    whileHover={{ scale: 1.02, y: -5 }}
-                    transition={{ duration: 0.3 }}
+                  <div
+                    className={`relative bg-white ${app.borderColor} border-3 rounded-2xl p-6 shadow-lg overflow-hidden`}
                   >
                     {/* Coming Soon Badge */}
                     {app.comingSoon && (
@@ -152,25 +144,14 @@ export const EcosystemSection: React.FC = () => {
                       </motion.div>
                     )}
 
-                    {/* Background Gradient */}
-                    <motion.div
-                      className={`absolute inset-0 ${app.bgColor} opacity-0`}
-                      animate={{ opacity: isActive ? 0.05 : 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
-
                     {/* Content */}
-                    <div className="relative z-10 space-y-6">
+                    <div className="relative z-10 space-y-4">
                       {/* Header */}
                       <div className="flex items-start justify-between">
-                        <div className="flex items-center space-x-4">
-                          <motion.div
-                            className={`w-16 h-16 ${app.bgColor} rounded-xl flex items-center justify-center`}
-                            whileHover={{ rotate: 360 }}
-                            transition={{ duration: 0.6 }}
-                          >
-                            <Icon className="w-8 h-8 text-white" />
-                          </motion.div>
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-12 h-12 ${app.bgColor} rounded-xl flex items-center justify-center`}>
+                            <Icon className="w-6 h-6 text-white" />
+                          </div>
 
                           <div>
                             <Heading level={3} color="primary" className="text-2xl">
@@ -184,30 +165,23 @@ export const EcosystemSection: React.FC = () => {
                       </div>
 
                       {/* Description */}
-                      <Text size="base" color="gray" className="leading-relaxed">
+                      <Text size="sm" color="gray" className="leading-relaxed">
                         {app.description}
                       </Text>
 
                       {/* Features */}
-                      <div className="space-y-2">
+                      <div className="space-y-1.5">
                         {app.features.map((feature, featureIndex) => (
-                          <motion.div
-                            key={featureIndex}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: featureIndex * 0.1 }}
-                            className="flex items-center space-x-3"
-                          >
+                          <div key={featureIndex} className="flex items-center space-x-2">
                             <div
-                              className={`w-5 h-5 ${app.bgColor} rounded-full flex items-center justify-center flex-shrink-0`}
+                              className={`w-4 h-4 ${app.bgColor} rounded-full flex items-center justify-center flex-shrink-0`}
                             >
-                              <Check className="w-3 h-3 text-white" />
+                              <Check className="w-2.5 h-2.5 text-white" />
                             </div>
-                            <Text size="sm" color="gray">
+                            <Text size="xs" color="gray">
                               {feature}
                             </Text>
-                          </motion.div>
+                          </div>
                         ))}
                       </div>
 
@@ -232,25 +206,8 @@ export const EcosystemSection: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Hover Arrow */}
-                      <AnimatePresence>
-                        {isActive && (
-                          <motion.div
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -10 }}
-                            className="flex items-center space-x-2"
-                            style={{ color: app.color }}
-                          >
-                            <Text size="sm" weight="semibold">
-                              Saiba mais
-                            </Text>
-                            <ArrowRight className="w-4 h-4" />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
                     </div>
-                  </motion.div>
+                  </div>
                 </motion.div>
               )
             })}
