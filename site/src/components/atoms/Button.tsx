@@ -13,6 +13,7 @@ interface ButtonProps {
   href?: string
   loading?: boolean
   disabled?: boolean
+  style?: React.CSSProperties
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -24,6 +25,7 @@ export const Button: React.FC<ButtonProps> = ({
   href,
   loading = false,
   disabled = false,
+  style,
 }) => {
   const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([])
 
@@ -106,6 +108,7 @@ export const Button: React.FC<ButtonProps> = ({
       <motion.a
         href={href}
         className={combinedStyles}
+        style={style}
         onClick={handleClick}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -119,6 +122,7 @@ export const Button: React.FC<ButtonProps> = ({
     <motion.button
       onClick={handleClick}
       className={combinedStyles}
+      style={style}
       disabled={disabled || loading}
       whileHover={!disabled && !loading ? { scale: 1.05 } : {}}
       whileTap={!disabled && !loading ? { scale: 0.95 } : {}}
