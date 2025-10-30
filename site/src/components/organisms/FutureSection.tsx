@@ -30,7 +30,7 @@ export const FutureSection: React.FC = () => {
   ]
   
   return (
-        <section className="py-20 bg-[#f4f6ff]">
+        <section className="min-h-screen bg-[#f4f6ff] flex items-center py-20">
       <Container maxWidth="xl">
         <div className="space-y-12">
           <div className="text-center space-y-4">

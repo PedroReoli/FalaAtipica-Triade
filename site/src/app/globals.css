@@ -16,3 +16,18 @@ body {
 .border-3 {
   border-width: 3px;
 }
+
+@keyframes fade-in-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.8s cubic-bezier(0.45,0,0.55,1);
+}

@@ -8,10 +8,12 @@ import { AchievementsSection } from '../organisms/AchievementsSection'
 import { ImpactSection } from '../organisms/ImpactSection'
 import { FutureSection } from '../organisms/FutureSection'
 import { FooterSection } from '../organisms/FooterSection'
+import { Navbar } from '../layout/Navbar'
 
 export const LandingPageTemplate: React.FC = () => {
   return (
     <main className="min-h-screen">
+      <Navbar />
       <HeroSection />
       <AboutSection />
       <EcosystemSection />

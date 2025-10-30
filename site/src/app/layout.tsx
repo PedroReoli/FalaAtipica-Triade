@@ -50,7 +50,7 @@ export default function RootLayout({
         <FaviconHead />
       </head>
       <body className={`${inter.variable} ${poppins.variable} font-poppins`} suppressHydrationWarning>
-        <Navbar />
+        {/* Navbar removido, será inserido apenas nas seções após AboutSection */}
         {children}
       </body>
     </html>

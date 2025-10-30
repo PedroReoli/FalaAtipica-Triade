@@ -6,7 +6,7 @@ import { Heart } from 'lucide-react'
 
 export const ImpactSection: React.FC = () => {
   return (
-    <section className="py-20 bg-gradient-to-br from-[#054776] to-[#1e88e5]">
+    <section className="min-h-screen bg-gradient-to-br from-[#054776] to-[#1e88e5] flex items-center py-20">
       <Container maxWidth="lg">
         <div className="space-y-12">
           <div className="text-center space-y-6">
