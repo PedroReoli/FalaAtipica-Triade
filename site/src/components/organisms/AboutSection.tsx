@@ -209,7 +209,7 @@ export const AboutSection: React.FC = () => {
                     transition={{ delay: 0.3 }}
                     className="bg-white/10 backdrop-blur-md rounded-3xl p-12 border-2 border-white/20"
                   >
-                    <Text size="2xl" color="white" weight="medium" className="italic leading-relaxed mb-6">
+                    <Text size="xl" color="white" weight="medium" className="italic leading-relaxed mb-6">
                       "{slides[currentSlide].quote}"
                     </Text>
                     <Text size="lg" color="white" className="opacity-90">

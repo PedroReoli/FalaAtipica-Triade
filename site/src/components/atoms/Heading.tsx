@@ -5,13 +5,15 @@ interface HeadingProps {
   children: React.ReactNode
   className?: string
   color?: 'primary' | 'secondary' | 'dark' | 'white'
+  style?: React.CSSProperties
 }
 
 export const Heading: React.FC<HeadingProps> = ({
   level,
   children,
   className = '',
-  color = 'dark'
+  color = 'dark',
+  style
 }) => {
   const Tag = `h${level}` as keyof JSX.IntrinsicElements
   
@@ -32,7 +34,7 @@ export const Heading: React.FC<HeadingProps> = ({
   }
   
   return (
-    <Tag className={`${levelStyles[level]} ${colorStyles[color]} ${className}`}>
+    <Tag className={`${levelStyles[level]} ${colorStyles[color]} ${className}`} style={style}>
       {children}
     </Tag>
   )

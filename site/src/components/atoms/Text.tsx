@@ -2,10 +2,11 @@ import React from 'react'
 
 interface TextProps {
   children: React.ReactNode
-  size?: 'sm' | 'base' | 'lg' | 'xl'
+  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
   weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold'
   className?: string
   color?: 'primary' | 'secondary' | 'dark' | 'white' | 'gray'
+  style?: React.CSSProperties
 }
 
 export const Text: React.FC<TextProps> = ({
@@ -13,9 +14,11 @@ export const Text: React.FC<TextProps> = ({
   size = 'base',
   weight = 'normal',
   className = '',
-  color = 'dark'
+  color = 'dark',
+  style
 }) => {
   const sizeStyles = {
+    xs: 'text-xs md:text-sm',
     sm: 'text-sm md:text-base',
     base: 'text-base md:text-lg',
     lg: 'text-lg md:text-xl',
@@ -39,7 +42,7 @@ export const Text: React.FC<TextProps> = ({
   }
   
   return (
-    <p className={`${sizeStyles[size]} ${weightStyles[weight]} ${colorStyles[color]} ${className}`}>
+    <p className={`${sizeStyles[size]} ${weightStyles[weight]} ${colorStyles[color]} ${className}`} style={style}>
       {children}
     </p>
   )
