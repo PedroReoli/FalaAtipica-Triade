@@ -47,7 +47,7 @@ export const AchievementsSection: React.FC = () => {
   ]
 
   return (
-    <section ref={ref} className="min-h-screen bg-[#f4f6ff] flex items-center py-20 relative overflow-hidden">
+    <section ref={ref} className="min-h-screen bg-[#f4f6ff] flex items-center justify-center py-12 md:py-16 lg:py-20 relative overflow-hidden">
       {/* Background decoration */}
       <motion.div
         initial={{ opacity: 0, scale: 0 }}
@@ -59,7 +59,7 @@ export const AchievementsSection: React.FC = () => {
       </motion.div>
 
       <Container maxWidth="xl">
-        <div className="space-y-12 relative z-10">
+        <div className="space-y-8 md:space-y-10 lg:space-y-12 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
-import { Navbar } from '@/components/layout/Navbar'
+import { ScrollToTop } from '@/components/layout/ScrollToTop'
 import { FaviconHead } from '@/components/layout/FaviconHead'
 
 const inter = Inter({ 
@@ -50,8 +50,8 @@ export default function RootLayout({
         <FaviconHead />
       </head>
       <body className={`${inter.variable} ${poppins.variable} font-poppins`} suppressHydrationWarning>
-        {/* Navbar removido, será inserido apenas nas seções após AboutSection */}
         {children}
+        <ScrollToTop />
       </body>
     </html>
   )

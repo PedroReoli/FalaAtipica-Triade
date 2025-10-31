@@ -4,13 +4,14 @@ import type React from "react"
 import { Container } from "../atoms/Container"
 import { Heading } from "../atoms/Heading"
 import { Text } from "../atoms/Text"
+import { Navbar } from "../layout/Navbar"
 import { Model3DViewer } from "../molecules/Model3DViewer"
 import { motion } from "framer-motion"
-import { Sparkles, Heart, Zap } from "lucide-react"
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="min-h-screen bg-white flex items-center py-20 relative overflow-hidden">
+    <section className="min-h-screen bg-white flex items-center justify-center py-12 md:py-16 lg:py-20 relative overflow-hidden">
+      <Navbar />
       {/* Background decorative elements */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -23,25 +24,15 @@ export const HeroSection: React.FC = () => {
       </motion.div>
 
       <Container maxWidth="xl">
-        <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center relative z-10">
           {/* Texto à esquerda */}
-          <div className="space-y-8">
+          <div className="space-y-4 md:space-y-6 lg:space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="space-y-4"
             >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="inline-flex items-center space-x-2 bg-[#1e88e5]/10 px-4 py-2 rounded-full"
-              >
-                <Sparkles className="w-5 h-5 text-[#1e88e5]" />
-                <span className="text-[#054776] font-semibold">Tecnologia Assistiva Inovadora</span>
-              </motion.div>
-
               <Heading level={1} color="primary" className="leading-tight">
                 E se a tecnologia pudesse ser a ponte para quem ainda não consegue se comunicar?
               </Heading>
@@ -60,36 +51,6 @@ export const HeroSection: React.FC = () => {
                 </Text>
               </motion.div>
             </motion.div>
-
-            {/* Stats badges */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="flex flex-wrap gap-4"
-            >
-              <motion.div
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="flex items-center space-x-2 bg-gradient-to-r from-[#1e88e5]/10 to-[#1e88e5]/5 px-4 py-3 rounded-xl border-2 border-[#1e88e5]/20"
-              >
-                <Heart className="w-5 h-5 text-[#e53935]" />
-                <div>
-                  <div className="text-2xl font-bold text-[#054776]">2M+</div>
-                  <div className="text-xs text-gray-600">Crianças impactadas</div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="flex items-center space-x-2 bg-gradient-to-r from-[#43a047]/10 to-[#43a047]/5 px-4 py-3 rounded-xl border-2 border-[#43a047]/20"
-              >
-                <Zap className="w-5 h-5 text-[#fbc02d]" />
-                <div>
-                  <div className="text-2xl font-bold text-[#054776]">47%</div>
-                  <div className="text-xs text-gray-600">Melhora comprovada</div>
-                </div>
-              </motion.div>
-            </motion.div>
           </div>
 
           {/* Modelo 3D à direita */}
@@ -97,7 +58,7 @@ export const HeroSection: React.FC = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 1, ease: "easeOut" }}
-            className="h-[400px] lg:h-[500px]"
+            className="h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px]"
           >
             <Model3DViewer />
           </motion.div>

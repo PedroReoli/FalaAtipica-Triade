@@ -1,5 +1,6 @@
 export { Button } from './Button'
 export { Heading } from './Heading'
+export { StatCard } from './StatCard'
 export { Text } from './Text'
 export { Container } from './Container'
 export { AnimatedSection, StaggeredAnimation } from './AnimatedSection'

@@ -251,9 +251,9 @@ export default function ParceriasPage() {
 
   return (
     <main className="min-h-screen bg-[#f4f6ff]">
-      <Navbar />
       {/* Hero - Compacto */}
-      <section className="pt-24 pb-12 bg-gradient-to-br from-[#054776] to-[#1e88e5]">
+      <section className="pt-24 pb-12 bg-gradient-to-br from-[#054776] to-[#1e88e5] relative">
+        <Navbar />
         <Container maxWidth="lg">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4">
             <Heading level={1} color="white">

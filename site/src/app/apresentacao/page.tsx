@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Navbar } from '@/components/layout/Navbar'
 import { Brain, Users, Stethoscope, Smartphone, Monitor, Heart, Palette, Lightbulb, Target } from 'lucide-react'
 
 export default function ApresentacaoPage() {
@@ -332,7 +331,6 @@ export default function ApresentacaoPage() {
 
   return (
     <main className="h-screen w-screen overflow-hidden bg-[#f4f6ff] flex flex-col">
-      <Navbar />
       {/* Slide Container */}
       <div className="flex-1 flex items-center justify-center p-8 lg:p-16">
         <div className="w-full h-full max-w-7xl">

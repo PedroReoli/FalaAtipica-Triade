@@ -20,7 +20,7 @@ export const AboutSection: React.FC = () => {
       title: "Quando inovação encontra propósito",
       subtitle: "A história por trás do FalaAtípica",
       content:
-        "Idealizado por Pedro Lucas Reis, o FalaAtípica nasceu como um Trabalho de Conclusão de Curso em Sistemas de Informação pelo UniFOA, conquistando nota máxima e elogios da banca por integrar tecnologia assistiva, design empático e impacto social real.",
+        "Idealizado por Pedro Lucas Reis, o FalaAtípica nasceu como um Trabalho de Conclusão de Curso em Sistemas de Informação pelo UniFOA, conquistando elogios da banca por integrar tecnologia assistiva, design empático e impacto social real.",
       highlight: "De um TCC à transformação de vidas",
     },
     {
@@ -38,7 +38,6 @@ export const AboutSection: React.FC = () => {
         "Uma proposta inovadora e emocionalmente poderosa que demonstra como a tecnologia pode ser uma ferramenta de inclusão e desenvolvimento.",
       author: "Banca Avaliadora UniFOA",
       stats: [
-        { label: "Nota", value: "10.0" },
         { label: "Aprovação", value: "Excelência" },
       ],
     },
@@ -101,7 +100,7 @@ export const AboutSection: React.FC = () => {
         className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"
       />
 
-      <div className="relative z-10 min-h-screen flex items-center py-20">
+      <div className="relative z-10 min-h-screen flex items-center justify-center py-12 md:py-16 lg:py-20">
         <Container maxWidth="xl">
           <AnimatePresence mode="wait">
             <motion.div
@@ -110,20 +109,11 @@ export const AboutSection: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}
               transition={{ duration: 0.5 }}
-              className="min-h-[600px] flex items-center"
+              className="min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex items-center"
             >
               {/* Intro Slide */}
               {slides[currentSlide].type === "intro" && (
                 <div className="text-center space-y-8 max-w-4xl mx-auto">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring" }}
-                    className="inline-flex items-center justify-center w-24 h-24 bg-white/10 backdrop-blur-sm rounded-full border-2 border-white/30 text-[#fbc02d]"
-                  >
-                    {slides[currentSlide].icon}
-                  </motion.div>
-
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -195,15 +185,6 @@ export const AboutSection: React.FC = () => {
               {slides[currentSlide].type === "quote" && (
                 <div className="text-center space-y-8 max-w-4xl mx-auto">
                   <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring" }}
-                    className="inline-flex items-center justify-center w-20 h-20 bg-[#fbc02d] rounded-full text-[#054776]"
-                  >
-                    {slides[currentSlide].icon}
-                  </motion.div>
-
-                  <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
@@ -241,15 +222,6 @@ export const AboutSection: React.FC = () => {
               {/* Impact Slide */}
               {slides[currentSlide].type === "impact" && (
                 <div className="text-center space-y-12 max-w-5xl mx-auto">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring" }}
-                    className="inline-flex items-center justify-center w-24 h-24 bg-white/10 backdrop-blur-sm rounded-full border-2 border-white/30 text-[#fbc02d]"
-                  >
-                    {slides[currentSlide].icon}
-                  </motion.div>
-
                   <Heading level={2} color="white">
                     {slides[currentSlide].title}
                   </Heading>
@@ -279,15 +251,6 @@ export const AboutSection: React.FC = () => {
               {/* Vision Slide */}
               {slides[currentSlide].type === "vision" && (
                 <div className="text-center space-y-8 max-w-4xl mx-auto">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1, rotate: 360 }}
-                    transition={{ delay: 0.2, duration: 0.8 }}
-                    className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-[#fbc02d] to-[#f9a825] rounded-full text-[#054776]"
-                  >
-                    {slides[currentSlide].icon}
-                  </motion.div>
-
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

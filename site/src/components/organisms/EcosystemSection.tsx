@@ -86,9 +86,9 @@ export const EcosystemSection: React.FC = () => {
   ]
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-white to-[#f4f6ff] flex items-center py-12">
+    <section className="min-h-screen bg-gradient-to-b from-white to-[#f4f6ff] flex items-center justify-center py-8 md:py-12 lg:py-16">
       <Container maxWidth="xl">
-        <div className="space-y-10">
+        <div className="space-y-6 md:space-y-8 lg:space-y-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}

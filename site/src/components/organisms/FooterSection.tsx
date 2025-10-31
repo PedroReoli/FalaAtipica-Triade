@@ -7,7 +7,7 @@ import { Button } from "../atoms/Button"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { MapPin, User, Calendar, Heart, Star } from "lucide-react"
+import { MapPin, Star } from "lucide-react"
 
 export const FooterSection: React.FC = () => {
   const quickLinks = [
@@ -34,7 +34,7 @@ export const FooterSection: React.FC = () => {
               className="lg:col-span-2 space-y-6"
             >
               <div className="flex items-center space-x-4">
-                <motion.div whileHover={{ scale: 1.1, rotate: 5 }} transition={{ duration: 0.3 }}>
+                <div>
                   <Image
                     src="/images/logos/falaatipica-logo.png"
                     alt="FalaAtípica"
@@ -42,7 +42,7 @@ export const FooterSection: React.FC = () => {
                     height={60}
                     className="rounded-lg"
                   />
-                </motion.div>
+                </div>
                 <div>
                   <h3 className="text-3xl font-bold text-white">FalaAtípica</h3>
                   <Text size="base" color="white" weight="light">
@@ -128,47 +128,6 @@ export const FooterSection: React.FC = () => {
               </div>
             </motion.div>
           </div>
-
-          {/* Informações do Projeto */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-white/10 rounded-2xl p-6 backdrop-blur-sm"
-          >
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div className="space-y-2">
-                <User className="w-8 h-8 text-white mx-auto" />
-                <Text size="sm" weight="semibold" color="white">
-                  Autor: Pedro Lucas Reis
-                </Text>
-                <Text size="sm" color="white" weight="light">
-                  Sistemas de Informação - UniFOA
-                </Text>
-              </div>
-
-              <div className="space-y-2">
-                <Calendar className="w-8 h-8 text-white mx-auto" />
-                <Text size="sm" weight="semibold" color="white">
-                  Apresentado em 2025
-                </Text>
-                <Text size="sm" color="white" weight="light">
-                  TCC com excelência
-                </Text>
-              </div>
-
-              <div className="space-y-2">
-                <Heart className="w-8 h-8 text-white mx-auto" />
-                <Text size="sm" weight="semibold" color="white">
-                  Impacto Social
-                </Text>
-                <Text size="sm" color="white" weight="light">
-                  Tecnologia assistiva inclusiva
-                </Text>
-              </div>
-            </div>
-          </motion.div>
 
           {/* Copyright */}
           <motion.div

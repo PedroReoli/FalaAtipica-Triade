@@ -44,9 +44,9 @@ export const ImpactSection: React.FC = () => {
   ]
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-[#f4f6ff] to-white flex items-center py-20">
+    <section className="min-h-screen bg-gradient-to-b from-[#f4f6ff] to-white flex items-center justify-center py-12 md:py-16 lg:py-20">
       <Container maxWidth="xl">
-        <div className="space-y-16">
+        <div className="space-y-10 md:space-y-12 lg:space-y-16">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}

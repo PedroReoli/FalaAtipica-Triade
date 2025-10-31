@@ -41,7 +41,7 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <motion.div whileHover={{ rotate: 360, scale: 1.1 }} transition={{ duration: 0.6 }}>
+            <div>
               <Image
                 src="/images/logos/falaatipica-logo.png"
                 alt="FalaAtípica"
@@ -49,7 +49,7 @@ export const Navbar: React.FC = () => {
                 height={50}
                 className="rounded-lg"
               />
-            </motion.div>
+            </div>
             <span className="text-2xl font-bold text-[#054776] group-hover:text-[#1e88e5] transition-colors duration-300">
               FalaAtípica
             </span>

@@ -24,7 +24,7 @@ export default function SobrePage() {
   ]
 
   const achievements = [
-    { icon: Award, title: "Aprovado com Excelência", desc: "Nota máxima na banca do UniFOA", color: "#1e88e5" },
+    { icon: Award, title: "Aprovado com Excelência", desc: "Aprovado na banca do UniFOA", color: "#1e88e5" },
     { icon: Brain, title: "Case de Inovação", desc: "Reconhecido em tecnologia assistiva", color: "#43a047" },
     { icon: Users, title: "Parcerias em Andamento", desc: "Clínicas e escolas do RJ", color: "#fbc02d" },
     { icon: Award, title: "Expansão Nacional", desc: "Prevista para 2026", color: "#e53935" },
@@ -32,9 +32,9 @@ export default function SobrePage() {
 
   return (
     <main className="min-h-screen bg-[#f4f6ff]">
-      <Navbar />
       {/* Hero - Compacto */}
-      <section className="pt-24 pb-12 bg-gradient-to-br from-[#054776] to-[#1e88e5]">
+      <section className="pt-24 pb-12 bg-gradient-to-br from-[#054776] to-[#1e88e5] relative">
+        <Navbar />
         <Container maxWidth="lg">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4">
             <Heading level={1} color="white">
@@ -43,7 +43,7 @@ export default function SobrePage() {
 
             <Text size="lg" color="white" weight="light" className="max-w-3xl mx-auto">
               Criado por Pedro Lucas Reis, o FalaAtípica nasceu como um TCC em Sistemas de Informação pelo UniFOA,
-              conquistando nota máxima e elogios por unir tecnologia assistiva, design empático e impacto social real.
+              conquistando elogios por unir tecnologia assistiva, design empático e impacto social real.
             </Text>
           </motion.div>
         </Container>

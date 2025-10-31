@@ -5,7 +5,8 @@ import { useRef } from "react"
 import { Container } from "../atoms/Container"
 import { Heading } from "../atoms/Heading"
 import { Text } from "../atoms/Text"
-import { Users, AlertTriangle, Smartphone, TrendingUp, Heart, Clock, ArrowRight, ArrowLeft } from "lucide-react"
+import { StatCard } from "../atoms/StatCard"
+import { AlertTriangle, TrendingUp } from "lucide-react"
 import { motion, useInView } from "framer-motion"
 
 export const ChallengesSection: React.FC = () => {
@@ -14,45 +15,39 @@ export const ChallengesSection: React.FC = () => {
 
   const challenges = [
     {
-      icon: <Users className="w-6 h-6 text-[#e53935]" />,
       value: "2M",
       title: "Crianças com Atraso de Fala",
       description: "2 milhões de crianças brasileiras têm algum tipo de atraso de fala",
       color: "#e53935",
     },
     {
-      icon: <AlertTriangle className="w-6 h-6 text-[#e53935]" />,
       value: "30%",
       title: "Famílias Buscam Apoio",
       description: "Apenas 30% das famílias brasileiras buscam apoio profissional nos primeiros sinais",
       color: "#e53935",
     },
     {
-      icon: <Smartphone className="w-6 h-6 text-[#e53935]" />,
-      value: "25-35%",
+      value: "30%",
       title: "Sem Fala Funcional",
-      description: "25% a 35% das crianças com TEA no Brasil não desenvolvem fala funcional",
+      description: "Em média 30% das crianças com TEA no Brasil não desenvolvem fala funcional",
       color: "#e53935",
     },
   ]
 
   const opportunities = [
     {
-      icon: <TrendingUp className="w-6 h-6 text-[#43a047]" />,
       value: "47%",
       title: "Comunicação Funcional",
       description: "47% das crianças com atraso severo alcançam comunicação funcional com estímulos adequados",
       color: "#43a047",
     },
     {
-      icon: <Heart className="w-6 h-6 text-[#43a047]" />,
       value: "40%",
       title: "Aceleração no Progresso",
       description: "40% de aceleração no progresso usando recursos visuais e tecnológicos",
       color: "#43a047",
     },
     {
-      icon: <Clock className="w-6 h-6 text-[#43a047]" />,
       value: "60%",
       title: "Melhora Significativa",
       description: "60% dos pais relatam melhora significativa na fala após acompanhamento contínuo",
@@ -60,100 +55,11 @@ export const ChallengesSection: React.FC = () => {
     },
   ]
 
-  const StatCard = ({ stat, index, type }: { stat: any; index: number; type: "challenge" | "opportunity" }) => {
-    const isChallenge = type === "challenge"
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, x: isChallenge ? -100 : 100, y: 20 }}
-        animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
-        transition={{
-          delay: index * 0.15,
-          duration: 0.6,
-          type: "spring",
-          stiffness: 100,
-        }}
-        className={`relative bg-white border-3 rounded-xl p-4 shadow-lg transition-all duration-300 group cursor-pointer ${
-          isChallenge ? "border-[#e53935]" : "border-[#43a047]"
-        }`}
-      >
-        {/* Animated background on hover */}
-        <motion.div
-          className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-5 transition-opacity duration-300 ${
-            isChallenge ? "bg-[#e53935]" : "bg-[#43a047]"
-          }`}
-        />
-
-        <div className="relative z-10 text-center space-y-3">
-          <div
-            className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto ${
-              isChallenge ? "bg-[#e53935]/10" : "bg-[#43a047]/10"
-            }`}
-          >
-            {stat.icon}
-          </div>
-
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={isInView ? { scale: 1 } : {}}
-            transition={{ delay: index * 0.15 + 0.3, type: "spring", stiffness: 200 }}
-            className={`text-3xl font-bold ${isChallenge ? "text-[#e53935]" : "text-[#43a047]"}`}
-          >
-            {stat.value}
-          </motion.div>
-
-          <div className="space-y-1.5">
-            <Heading level={4} color="primary" className="text-base">
-              {stat.title}
-            </Heading>
-
-            <Text size="xs" color="gray" className="leading-relaxed">
-              {stat.description}
-            </Text>
-          </div>
-
-          {/* Animated arrow on hover */}
-          <motion.div
-            initial={{ opacity: 0, x: 0 }}
-            whileHover={{ opacity: 1, x: isChallenge ? 5 : -5 }}
-            className={`flex items-center justify-center space-x-2 pt-2 ${
-              isChallenge ? "text-[#e53935]" : "text-[#43a047]"
-            }`}
-          >
-            {isChallenge ? (
-              <>
-                <Text size="xs" weight="semibold">
-                  Transformar
-                </Text>
-                <ArrowRight className="w-4 h-4" />
-              </>
-            ) : (
-              <>
-                <ArrowLeft className="w-4 h-4" />
-                <Text size="xs" weight="semibold">
-                  Alcançar
-                </Text>
-              </>
-            )}
-          </motion.div>
-
-          {/* Progress bar animation */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : {}}
-            transition={{ delay: index * 0.15 + 0.5, duration: 0.8 }}
-            className={`h-1 rounded-full ${isChallenge ? "bg-[#e53935]" : "bg-[#43a047]"}`}
-            style={{ transformOrigin: "left" }}
-          />
-        </div>
-      </motion.div>
-    )
-  }
 
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden bg-gradient-to-br from-[#054776] to-[#1e88e5] flex items-center py-12"
+      className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#054776] to-[#1e88e5] flex items-center justify-center py-12 md:py-16 lg:py-20"
     >
       {/* Animated background */}
       <motion.div
@@ -190,7 +96,7 @@ export const ChallengesSection: React.FC = () => {
             </Text>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-8">
             {/* Coluna de Desafios */}
             <div className="space-y-8">
               <motion.div
@@ -210,9 +116,17 @@ export const ChallengesSection: React.FC = () => {
                 </Text>
               </motion.div>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {challenges.map((challenge, index) => (
-                  <StatCard key={index} stat={challenge} index={index} type="challenge" />
+                  <StatCard
+                    key={index}
+                    value={challenge.value}
+                    title={challenge.title}
+                    description={challenge.description}
+                    type="challenge"
+                    index={index}
+                    isInView={isInView}
+                  />
                 ))}
               </div>
             </div>
@@ -236,9 +150,17 @@ export const ChallengesSection: React.FC = () => {
                 </Text>
               </motion.div>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {opportunities.map((opportunity, index) => (
-                  <StatCard key={index} stat={opportunity} index={index} type="opportunity" />
+                  <StatCard
+                    key={index}
+                    value={opportunity.value}
+                    title={opportunity.title}
+                    description={opportunity.description}
+                    type="opportunity"
+                    index={index}
+                    isInView={isInView}
+                  />
                 ))}
               </div>
             </div>

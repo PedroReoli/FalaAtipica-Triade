@@ -43,7 +43,7 @@ export default function TimelinePage() {
       date: "Junho 2025",
       title: "Apresentação na Banca - Sucesso Total",
       description:
-        "Apresentação do projeto para a banca avaliadora do UniFOA, conquistando nota máxima e elogios unânimes. O projeto foi aprovado com excelência.",
+        "Apresentação do projeto para a banca avaliadora do UniFOA, conquistando elogios unânimes. O projeto foi aprovado com excelência.",
       icon: Award,
       category: "Aprovação",
       color: "#43a047",
@@ -63,9 +63,9 @@ export default function TimelinePage() {
 
   return (
     <main className="min-h-screen bg-[#f4f6ff]">
-      <Navbar />
       {/* Hero Section - Compacto */}
-      <section className="pt-24 pb-12 bg-gradient-to-br from-[#054776] to-[#1e88e5]">
+      <section className="pt-24 pb-12 bg-gradient-to-br from-[#054776] to-[#1e88e5] relative">
+        <Navbar />
         <Container maxWidth="lg">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

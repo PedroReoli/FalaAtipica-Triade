@@ -41,9 +41,9 @@ export const FutureSection: React.FC = () => {
   ]
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-white to-[#f4f6ff] flex items-center py-20">
+    <section className="min-h-screen bg-gradient-to-b from-white to-[#f4f6ff] flex items-center justify-center py-12 md:py-16 lg:py-20">
       <Container maxWidth="xl">
-        <div className="space-y-16">
+        <div className="space-y-10 md:space-y-12 lg:space-y-16">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
