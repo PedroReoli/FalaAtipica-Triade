@@ -31,6 +31,33 @@
 
 ---
 
+## 🔧 **ORGANIZAÇÃO - REORGANIZAÇÃO DE PASTAS**
+
+### **4. Mover Pastas para Apps/**
+**Objetivo:** Reorganizar estrutura movendo `api/`, `Kids/`, `logs/`, `Mockup/`, `Pro/`, `Tutors/` para `Apps/`
+
+**⚠️ ATENÇÃO:** Após mover, os seguintes arquivos precisam ser atualizados:
+
+- [ ] **`package.json` (root)** - Ajustar scripts `cd api`, `cd ../Kids`, etc. para `cd Apps/api`, `cd Apps/Kids`
+- [ ] **`api/services/jsonService.js`** (linha 7) - Mudar `'../../Mockup'` para `'../../Apps/Mockup'`
+- [ ] **`Pro/src/services/mockDataService.ts`** (4 ocorrências):
+  - [ ] Linha 48: `'../../../Mockup/KIDS/usuarios.json'` → `'../../../Apps/Mockup/KIDS/usuarios.json'`
+  - [ ] Linha 74: `'../../../Mockup/KIDS/usuarios.json'` → `'../../../Apps/Mockup/KIDS/usuarios.json'`
+  - [ ] Linha 314: `'../../../Mockup/shared/agendas.json'` → `'../../../Apps/Mockup/shared/agendas.json'`
+  - [ ] Linha 344: `'../../../Mockup/shared/progress.json'` → `'../../../Apps/Mockup/shared/progress.json'`
+- [ ] **`api/src/utils/logger.js`** (linha 7) - Mudar `'../../..', 'logs'` para `'../../..', 'Apps/logs'`
+
+**✅ Arquivos que NÃO precisam ser atualizados:**
+- Kids e Tutors usam `mockup-data/` local (dentro de cada app)
+
+**📌 Próximos Passos:**
+1. Criar pasta `Apps/` na raiz
+2. Mover pastas: `api/`, `Kids/`, `logs/`, `Mockup/`, `Pro/`, `Tutors/` → `Apps/`
+3. Atualizar os 4 arquivos listados acima
+4. Testar se todos os imports/caminhos funcionam
+
+---
+
 ## 📝 **NOTAS**
 
 ### **✅ Completado Recentemente:**
