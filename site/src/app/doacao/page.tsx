@@ -4,6 +4,7 @@ import { Container } from "@/components/atoms/Container"
 import { Heading } from "@/components/atoms/Heading"
 import { Text } from "@/components/atoms/Text"
 import { Button } from "@/components/atoms/Button"
+import { Navbar } from "@/components/layout/Navbar"
 import { Coffee, Share2, Users } from "lucide-react"
 
 export default function DoacaoPage() {
@@ -30,6 +31,7 @@ export default function DoacaoPage() {
 
   return (
     <main className="min-h-screen bg-[#f4f6ff]">
+      <Navbar />
       {/* Hero - Compacto */}
       <section className="pt-24 pb-12 bg-gradient-to-br from-[#054776] to-[#1e88e5]">
         <Container maxWidth="lg">

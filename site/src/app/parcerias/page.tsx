@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { Container } from "@/components/atoms/Container"
 import { Heading } from "@/components/atoms/Heading"
 import { Text } from "@/components/atoms/Text"
+import { Navbar } from "@/components/layout/Navbar"
 import { Users, Heart, Mail, Search, Edit3, MapPin } from "lucide-react"
 import { submitParceriasForm, validateFormData, formatFormData } from "@/services/parceriasFormService"
 import { FormData } from "@/config/formConfig"
@@ -250,6 +251,7 @@ export default function ParceriasPage() {
 
   return (
     <main className="min-h-screen bg-[#f4f6ff]">
+      <Navbar />
       {/* Hero - Compacto */}
       <section className="pt-24 pb-12 bg-gradient-to-br from-[#054776] to-[#1e88e5]">
         <Container maxWidth="lg">
