@@ -126,17 +126,17 @@ export const EcosystemSection: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative"
+                  className="relative h-full"
                 >
                   <div
-                    className={`relative bg-white ${app.borderColor} border-3 rounded-2xl p-6 shadow-lg overflow-hidden`}
+                    className={`relative bg-white ${app.borderColor} border-3 rounded-2xl p-6 shadow-lg h-full flex flex-col`}
                   >
                     {/* Coming Soon Badge */}
                     {app.comingSoon && (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="absolute -top-3 -right-3 z-10"
+                        className="absolute -top-3 -right-3 z-50"
                       >
                         <span className="bg-[#fbc02d] text-[#054776] text-xs font-bold px-4 py-2 rounded-full shadow-lg">
                           EM BREVE
@@ -145,7 +145,7 @@ export const EcosystemSection: React.FC = () => {
                     )}
 
                     {/* Content */}
-                    <div className="relative z-10 space-y-4">
+                    <div className="relative z-10 space-y-4 flex-1 flex flex-col">
                       {/* Header */}
                       <div className="flex items-start justify-between">
                         <div className="flex items-center space-x-3">
@@ -186,7 +186,7 @@ export const EcosystemSection: React.FC = () => {
                       </div>
 
                       {/* Progress Bar */}
-                      <div className="space-y-2">
+                      <div className="space-y-2 mt-auto">
                         <div className="flex items-center justify-between">
                           <Text size="sm" weight="semibold" color="primary">
                             {app.status}
