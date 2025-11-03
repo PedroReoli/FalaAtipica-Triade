@@ -98,7 +98,7 @@ def gerar_sugestao():
         return "Sistema excelente! Recomendo para todos."
     return random.choice(SUGESTOES_DISPONIVEIS)
 
-def enviar_formulario(numero, sugestoes_usadas):
+def enviar_formulario(numero, total, sugestoes_usadas):
     """Envia um formulário preenchido"""
     if not NOMES:
         print("[ERRO] Lista de nomes vazia!")
@@ -147,21 +147,17 @@ def enviar_formulario(numero, sugestoes_usadas):
         response = requests.post(FORM_URL, data=form_data)
         
         if response.status_code == 200:
-            print(f"[OK] Formulario {numero}/30 enviado: {nome} ({email})")
+            print(f"[OK] Formulario {numero}/{total} enviado: {nome} ({email})")
             return True
         else:
-            print(f"[AVISO] Formulario {numero}/30 falhou: {nome} - Status: {response.status_code}")
+            print(f"[AVISO] Formulario {numero}/{total} falhou: {nome} - Status: {response.status_code}")
             return False
     except Exception as e:
-        print(f"[ERRO] Erro ao enviar formulario {numero}/30: {str(e)}")
+        print(f"[ERRO] Erro ao enviar formulario {numero}/{total}: {str(e)}")
         return False
 
 def main():
     """Função principal"""
-    print("Iniciando preenchimento automatico do formulario de usabilidade...")
-    print(f"Gerando {30} respostas")
-    print("=" * 60)
-    
     # Validar dados carregados
     if not NOMES:
         print("[ERRO] Nenhum nome foi carregado. Verifique o arquivo data/nomes.json")
@@ -171,6 +167,13 @@ def main():
         print("[ERRO] Nenhuma sugestão foi carregada. Verifique o arquivo data/sugestoes.json")
         return
     
+    # Calcular total de respostas baseado no número de nomes
+    total_respostas = len(NOMES)
+    
+    print("Iniciando preenchimento automatico do formulario de usabilidade...")
+    print(f"Gerando {total_respostas} respostas")
+    print("=" * 60)
+    
     print(f"[INFO] {len(NOMES)} nomes carregados")
     print(f"[INFO] {len(SUGESTOES_DISPONIVEIS)} sugestoes carregadas")
     print()
@@ -179,21 +182,21 @@ def main():
     falhas = 0
     sugestoes_usadas = set()
     
-    for i in range(1, 31):
-        sucesso = enviar_formulario(i, sugestoes_usadas)
+    for i in range(1, total_respostas + 1):
+        sucesso = enviar_formulario(i, total_respostas, sugestoes_usadas)
         if sucesso:
             sucessos += 1
         else:
             falhas += 1
         
         # Esperar um pouco entre cada envio para não sobrecarregar
-        if i < 30:
+        if i < total_respostas:
             time.sleep(1)
     
     print("=" * 60)
     print(f"\nRelatorio Final:")
-    print(f"   [OK] Sucessos: {sucessos}/30")
-    print(f"   [ERRO] Falhas: {falhas}/30")
+    print(f"   [OK] Sucessos: {sucessos}/{total_respostas}")
+    print(f"   [ERRO] Falhas: {falhas}/{total_respostas}")
     print(f"\nProcesso concluido!")
 
 if __name__ == "__main__":
