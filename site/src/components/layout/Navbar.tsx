@@ -50,6 +50,7 @@ export const Navbar: React.FC = () => {
       links: [
         { href: "/parcerias", label: "Parcerias" },
         { href: "/usabilidade", label: "Usabilidade", icon: ClipboardCheck },
+        { href: "/usabilidade/analise", label: "Análise de Usabilidade", icon: ClipboardCheck },
       ],
     },
   ]
