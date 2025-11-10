@@ -1,10 +1,10 @@
 # Documentação - FalaAtípica
 
 ## Visão Geral
-- [Regras de Negócio](./[REGRAS-DE-NEGOCIO].md) – resumo das regras globais do ecossistema
-- [Plano de Migração Supabase](./migracao-supabase.md) – estratégia para substituir os dados mockados
-- [Apresentação (Slides)](./apresentacao-powerpoint.md) – roteiro para apresentações do projeto
-- [Paleta de Cores](./cores.md) – design system oficial
+- [Regras de Negócio](./[REGRAS-DE-NEGOCIO].md)
+- [Plano de Migração Supabase](./[MIGRACAO-SUPABASE].md)
+- [Apresentação (Slides)](./[APRESENTACAO].md)
+- [Paleta de Cores](./[CORES].md)
 
 ## Aplicações
 
@@ -24,14 +24,5 @@
 - [Conteúdo da Landing Page](../Apps/site/docs/conteudo-landing-page.md)
 - [Guia de Deploy](../Apps/site/docs/DEPLOY.md)
 
-## API e Integrações
+## API
 - [Documentação da API](./[API].md)
-
-## Sprints e Planejamento
-- [Acompanhamento de Sprints](./sprints/sprints-tracking.md)
-- [TODO Geral (Sprints e backlog)](../TODO.md)
-
-## Outros Recursos
-- [Mockups e Wireframes](./mockups/design-mockups.md)
-- [Logs e Auditoria](./logs-sistema.md)
-- [Registros de Imagens](./Relatórios-IMAGENS.md)
