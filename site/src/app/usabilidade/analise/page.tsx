@@ -17,20 +17,24 @@ export default function UsabilidadeAnalisePage() {
   const susDistribution = calculateSUSDistribution(usabilidadeResponses)
 
   // Preparar dados para gráfico de barras por questão
-  // Usar números curtos para labels e texto completo no tooltip
+  // Para questões negativas, já estão normalizadas (invertidas) no cálculo
+  // Valores normalizados: quanto maior, melhor (1-5)
   const questionBarData = questoes.map((questao, index) => ({
     questaoNum: `Q${index + 1}`,
     questaoCompleta: questao.label,
     media: questionMeans[questao.key],
-    tipo: questao.positive ? "Positiva" : "Negativa",
+    tipo: questao.positive ? "Positiva" : "Negativa (Normalizada)",
+    cor: questao.positive ? colors.success : colors.primary,
   }))
 
-  // Preparar dados para gráfico de distribuição SUS
-  const susDistributionData = Object.entries(susDistribution).map(([name, value]) => ({
-    name,
-    value,
-    percentage: Math.round((value / usabilidadeResponses.length) * 100),
-  }))
+  // Preparar dados para gráfico de distribuição SUS (filtrar categorias vazias)
+  const susDistributionData = Object.entries(susDistribution)
+    .filter(([name, value]) => value > 0) // Remover categorias vazias
+    .map(([name, value]) => ({
+      name,
+      value,
+      percentage: Math.round((value / usabilidadeResponses.length) * 100),
+    }))
 
   // Preparar dados para gráfico de linha (histórico de scores)
   const susScoresData = usabilidadeResponses.map((response, index) => ({
@@ -211,26 +215,56 @@ export default function UsabilidadeAnalisePage() {
                   Distribuição de Scores SUS
                 </Heading>
               </div>
-              <ResponsiveContainer width="100%" height={400}>
-                <PieChart>
-                  <Pie
-                    data={susDistributionData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percentage }) => `${name}: ${percentage}%`}
-                    outerRadius={120}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {susDistributionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS_PIE[index % COLORS_PIE.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+              {susDistributionData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={400}>
+                  <PieChart>
+                    <Pie
+                      data={susDistributionData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percentage }) => `${name}: ${percentage}%`}
+                      outerRadius={120}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {susDistributionData.map((entry, index) => {
+                        // Cores baseadas na categoria
+                        let color = COLORS_PIE[index % COLORS_PIE.length]
+                        if (entry.name.includes("Ruim")) color = "#e53935"
+                        else if (entry.name.includes("OK")) color = "#fbc02d"
+                        else if (entry.name.includes("Bom")) color = "#1e88e5"
+                        else if (entry.name.includes("Excelente")) color = "#43a047"
+                        else if (entry.name.includes("Excepcional")) color = "#054776"
+                        return <Cell key={`cell-${index}`} fill={color} />
+                      })}
+                    </Pie>
+                    <Tooltip 
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          const data = payload[0].payload
+                          return (
+                            <div className="bg-white border-2 border-[#1e88e5] rounded-lg p-3 shadow-lg">
+                              <p className="font-semibold text-[#054776]">{data.name}</p>
+                              <p className="text-base font-bold text-[#1e88e5]">
+                                {data.value} participante{data.value !== 1 ? 's' : ''} ({data.percentage}%)
+                              </p>
+                            </div>
+                          )
+                        }
+                        return null
+                      }}
+                    />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="text-center py-12">
+                  <Text size="base" color="gray">
+                    Nenhum dado disponível para exibição
+                  </Text>
+                </div>
+              )}
             </motion.div>
 
             {/* Gráfico de Linha - Scores Individuais */}
@@ -267,11 +301,17 @@ export default function UsabilidadeAnalisePage() {
               transition={{ delay: 0.2 }}
               className="bg-white border-2 border-[#1e88e5] rounded-xl p-6 shadow-lg"
             >
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-4">
                 <BarChart3 className="w-6 h-6 text-[#1e88e5]" />
                 <Heading level={3} color="primary">
-                  Média por Questão (Normalizada)
+                  Média por Questão
                 </Heading>
+              </div>
+              <div className="mb-4 p-3 bg-blue-50 border-l-4 border-[#1e88e5] rounded">
+                <Text size="xs" color="gray" className="leading-relaxed">
+                  <strong>Nota:</strong> Questões negativas foram normalizadas para comparação. 
+                  Valores maiores indicam melhor avaliação (escala 1-5, onde 5 é o melhor).
+                </Text>
               </div>
               <ResponsiveContainer width="100%" height={500}>
                 <BarChart data={questionBarData}>
@@ -301,17 +341,38 @@ export default function UsabilidadeAnalisePage() {
                             <p className="text-xs text-gray-500 mt-1">
                               Tipo: {data.tipo}
                             </p>
+                            {data.tipo.includes("Normalizada") && (
+                              <p className="text-xs text-blue-600 mt-1 italic">
+                                * Questão negativa normalizada (quanto maior, melhor)
+                              </p>
+                            )}
                           </div>
                         )
                       }
                       return null
                     }}
                   />
-                  <Legend />
                   <Bar 
                     dataKey="media" 
-                    fill={colors.primary}
                     radius={[4, 4, 0, 0]}
+                  >
+                    {questionBarData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.cor} />
+                    ))}
+                  </Bar>
+                  <Legend 
+                    content={({ payload }) => (
+                      <div className="flex justify-center gap-6 mt-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded" style={{ backgroundColor: colors.success }}></div>
+                          <span className="text-sm text-gray-700">Questões Positivas</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded" style={{ backgroundColor: colors.primary }}></div>
+                          <span className="text-sm text-gray-700">Questões Negativas (Normalizadas)</span>
+                        </div>
+                      </div>
+                    )}
                   />
                 </BarChart>
               </ResponsiveContainer>
