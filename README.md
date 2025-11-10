@@ -127,33 +127,21 @@ Este projeto nasceu da observação de uma realidade dolorosa: **crianças brilh
 
 ```
 FalaAtipica-Triade/
-├── 🎮 Kids/                    # App para crianças (React Native)
-│   ├── src/screens/           # Telas (Dashboard, Jogos, Login)
-│   ├── src/components/        # Componentes reutilizáveis
-│   ├── src/services/          # Autenticação e dados
-│   └── mockup-data/           # Dados locais de teste
+├── 📁 Apps/
+│   ├── 🎮 Kids/            # App para crianças (React Native)
+│   │   ├── src/screens/
+│   │   ├── src/components/
+│   │   ├── src/services/
+│   │   └── mockup-data/
+│   ├── 👨‍👩‍👧 Tutors/        # App para pais (React Native)
+│   ├── 💼 Pro/             # App para profissionais (React Web)
+│   ├── 🌐 site/           # Site institucional (Next.js)
+│   ├── 🗂️ Mockup/          # Dados centralizados (fase pré-backend)
+│   └── 📝 logs/            # Logs da API
 │
-├── 💼 Pro/                     # App para profissionais (React Web)
-│   ├── src/pages/             # 26 páginas implementadas
-│   ├── src/components/        # Componentes e layouts
-│   ├── src/hooks/             # useRoleColor, useToast, etc
-│   └── src/services/          # Autenticação mockada
-│
-├── 👨‍👩‍👧 Tutors/                  # App para pais (React Native)
-│   └── [Em desenvolvimento]
-│
-├── 📂 Mockup/                  # Dados centralizados (fase pré-backend)
-│   ├── KIDS/                  # usuários, jogos, categorias
-│   ├── TUTORS/                # relatórios simples, conquistas
-│   └── PRO/                   # pacientes, sessões, relatórios
-│
-├── 📚 docs/                    # Documentação viva
-│   ├── pro/                   # Status, telas, regras
-│   ├── kids/                  # Status dos jogos
-│   ├── RegraDeNegocios/       # Regras de negócio
-│   └── cores.md               # Identidade visual
-│
-└── 🤖 auto/                    # Automações em Python
+├── 📚 docs/                # Documentação viva
+├── 🤖 auto/                # Automações em Python
+└── README.md
 ```
 
 ### Stack Tecnológica
@@ -323,8 +311,11 @@ Este projeto nasceu nas madrugadas de estudo, nas conversas com fonoaudiólogos,
 git clone [url-do-repo]
 cd FalaAtipica-Triade
 
+# Instalação centralizada (scripts atualizados)
+npm run install:all
+
 # KIDS App
-cd Kids
+cd Apps/Kids
 npm install
 npm run expo        # Menu do Expo
 npm run web         # Web browser
@@ -334,7 +325,7 @@ cd ../Pro
 npm install
 npm run dev         # Desenvolvimento
 
-# TUTORS App (em breve)
+# TUTORS App
 cd ../Tutors
 npm install
 npm run expo

@@ -4,7 +4,7 @@ const path = require('path');
 
 class Logger {
   constructor() {
-    this.logsDir = path.join(__dirname, '../../..', 'logs');
+    this.logsDir = path.join(__dirname, '../../..', 'Apps', 'logs');
     this.ensureLogsDirectory();
   }
 

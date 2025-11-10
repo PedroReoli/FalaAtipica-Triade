@@ -1,1 +1,5 @@
-/api/node_modules
+/Apps/api/node_modules
+/Apps/Kids/node_modules
+/Apps/Pro/node_modules
+/Apps/site/node_modules
+/Apps/Tutors/node_modules
