@@ -3,6 +3,7 @@
 ## Visão Geral
 - [Regras de Negócio](./[REGRAS-DE-NEGOCIO].md)
 - [Plano de Migração Supabase](./[MIGRACAO-SUPABASE].md)
+- [Visão Institucional](./[INSTITUCIONAL]-VisaoGeral.md)
 - [Apresentação (Slides)](./[APRESENTACAO].md)
 - [Paleta de Cores](./[CORES].md)
 

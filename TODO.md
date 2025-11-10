@@ -29,6 +29,70 @@
 - [ ] Classificar tarefas por módulo e estimativa
 - [ ] Vincular responsáveis e dependências
 
+### Tutores – Biblioteca do Tutor
+- [ ] Definir estrutura da nova área (“Biblioteca do Tutor”) com categorias
+- [ ] Implementar upload/listagem de PDFs e vídeos educativos
+- [ ] Adicionar marcador “Recomendado pelo seu profissional”
+- [ ] Criar filtros por tipo de conteúdo (leitura, vídeo, atividade prática)
+
+### Pro – Evolução Clínica
+#### Dashboard Inteligente
+- [ ] Adicionar visão analítica por eixo terapêutico (linguagem, cognitivo, social, motor)
+- [ ] Criar gráficos interativos com taxa de progresso (Kids), engajamento familiar (Tutors) e alertas de regressão
+- [ ] Implementar ranking de pacientes que mais evoluíram por período
+
+#### Relatórios Dinâmicos
+- [ ] Gerar relatórios interativos (dados de jogos, feedbacks, observações do profissional)
+- [ ] Permitir exportar PDF com design profissional e versão web para tutor
+- [ ] Manter opção de anexar PDF tradicional
+
+#### Prontuário Inteligente
+- [ ] Construir histórico clínico cronológico com tags automáticas
+- [ ] Disponibilizar busca semântica (ex.: “última sessão com regressão na fala”)
+
+#### Sessões com Gamificação Terapêutica
+- [ ] Associar atividades do Kids a metas terapêuticas no Pro
+- [ ] Registrar automaticamente resultados das atividades nas sessões
+- [ ] Exibir barra de progresso da meta clínica
+
+#### Agenda Colaborativa
+- [ ] Enviar notificações automáticas para tutores (push/email) após agendamento
+- [ ] Criar visualização multi-profissional para crianças atendidas por várias áreas
+
+#### Comunicação Tutor ↔ Profissional
+- [ ] Implementar chat leve com mensagens curtas, emojis e anexos
+- [ ] Registrar conversa diretamente no prontuário
+- [ ] Categorizar mensagens (elogio, dúvida, alerta)
+
+#### Indicadores Preditivos
+- [ ] Processar dados (Kids + Tutors) para previsão de progresso semanal
+- [ ] Identificar padrões de regressão/estagnação e alertar com cores de risco
+
+### Institucional – Módulo Next.js (após concluir itens acima)
+1. **Descoberta e Design**
+   - [ ] Refinar personas (escola, clínica, ONG) e jornadas principais
+   - [ ] Criar wireframes/fluxos iniciais do dashboard e gestão de grupos
+2. **Arquitetura e Setup**
+   - [ ] Definir se será app dedicado (`Apps/institution`) ou extensão do site
+   - [ ] Configurar projeto Next.js com roteamento, autenticação e theming
+   - [ ] Modelar Supabase (tabelas: institutions, institution_users, institution_groups, institution_reports, billing)
+3. **MVP de Dashboard**
+   - [ ] Implementar cards de indicadores agregados (evolução média, engajamento, alertas)
+   - [ ] Criar filtros por turma, profissional, faixa etária
+4. **Gestão Operacional**
+   - [ ] Cadastro e vinculação de profissionais internos e crianças/grupos
+   - [ ] Registrar observações institucionais (sem expor dados sigilosos)
+   - [ ] Integração com Pro para autorizar dados compartilhados
+5. **Financeiro / Licenças**
+   - [ ] Implementar controle de licenças (quantidade de usuários/crianças)
+   - [ ] Criar painel de boletos/pagamentos (futuro) com histórico
+6. **Comunicação e Segurança**
+   - [ ] Criar canal de recados institucionais (elogio, alerta, dúvida) vinculado ao prontuário
+   - [ ] Garantir logs completos e níveis de acesso por perfil
+7. **Validação e Deploy**
+   - [ ] Validar MVP com parceiros (escola piloto, clínica)
+   - [ ] Ajustar documentação e processos de billing
+
 ---
 
 ## 🔧 Organização & Acompanhamento
