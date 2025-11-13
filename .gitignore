@@ -6,3 +6,12 @@
 /.cursor
 .expo
 /.expo
+/api/node_modules
+/Kids/node_modules
+/logs
+/Pro/dist
+/Pro/node_modules
+/site/.next
+/site/node_modules
+/site/out
+/Tutors/node_modules
